@@ -22,40 +22,15 @@ const OrderHistoryPage = React.lazy(() => import('./layouts/pages/OrderHistoryPa
 
 
 const ErrorPage = React.lazy(() => import('./layouts/pages/ErrorPage'));
-
-// Spinner Component
-const GlobalSpinner = () => (
-  <VStack 
-    height="100vh" 
-    justifyContent="center" 
-    alignItems="center"
-  >
-    <Spinner
-      thickness ="4px"
-      speed="0.65s"
-      emptyColor="gray.200"
-      color="blue.500"
-      size="xl"
-    />
-  </VStack>
-);
-
-// Root Layout Component
-const RootLayout = () => {
-  return (
-    <Box minHeight="100vh" display="flex" flexDirection="column">
-      {/* Optional: Add Header/Navigation here */}
-      <Box as="main" flex={1}>
-        <Suspense fallback={<GlobalSpinner />}>
-          <Outlet />
-        </Suspense>
-      </Box>
-      {/* Add Footer here */}
-    </Box>
-  );
-};
-
 import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
+import LoadingSpinner from './features/helpers/LoadingSpinner';
+import RootLayout from './layouts/RootLayout';
+
+
+
+
+
+
 
 function App() {
   const router = createBrowserRouter([
@@ -122,7 +97,7 @@ function App() {
   ]);
 
   return (
-    <Suspense fallback={<GlobalSpinner />}>
+    <Suspense fallback={<LoadingSpinner />}>
       <RouterProvider router={router} />
     </Suspense>
   );
