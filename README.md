@@ -1,50 +1,33 @@
-# React + TypeScript + Vite
+Soto E-commerce Platform project! This application is designed to provide a seamless online shopping experience for users, featuring a comprehensive product catalog, cart functionality, and a robust admin dashboard for product and order management. Built with React and leveraging Chakra UI for a responsive and intuitive user interface, this project aims to be a scalable solution for e-commerce needs.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+About the Project
+This e-commerce application provides a user-friendly interface for customers to browse products, add items to their cart, and proceed to checkout. The admin panel offers functionalities for managing products, processing orders, and monitoring customer activity. This app is designed to be modular, scalable, and easily extendable.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Technologies Used
+Frontend: React, Chakra UI, TypeScript
+Routing: react-router-dom v6
+State Management: React Context (or consider Redux if needed)
+Build Tool: Vite 
+Http Client : Axios
+Styling: Chakra UI for responsive and theme-based styling
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-- Configure the top-level `parserOptions` property like this:
+Prerequisites
+Node.js (v17 or newer)
+npm or yarn
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Running the project
+git clone https://github.com/preciousemmanuel/soto-web.git
+cd soto/soto-fe
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+npm install
+# or
+yarn install
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+npm run dev
+# or
+yarn dev
+
