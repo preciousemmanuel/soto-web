@@ -1,12 +1,107 @@
-// import { Text } from '@chakra-ui/react'
+import React, { Suspense } from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
+// Lazy-loaded page components
+const HomePage = React.lazy(() => import("./layouts/pages/HomePage"));
+const ProductsPage = React.lazy(
+  () => import("./layouts/pages/ProductDetailsPage")
+);
+const ProductDetailPage = React.lazy(
+  () => import("./layouts/pages/ProductDetailsPage")
+);
+const CartPage = React.lazy(() => import("./layouts/pages/CartPage"));
+const CheckoutPage = React.lazy(() => import("./layouts/pages/CheckoutPage"));
+const AuthPage = React.lazy(() => import("./layouts/pages/AuthPage"));
+const ProfilePage = React.lazy(() => import("./layouts/pages/ProfilePage"));
+const OrderHistoryPage = React.lazy(
+  () => import("./layouts/pages/OrderHistoryPage")
+);
+const Contact = React.lazy(() => import("./layouts/pages/ContactUs"));
+
+const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
+import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
+import LoadingSpinner from "./features/helpers/LoadingSpinner";
+import RootLayout from "./layouts/RootLayout";
+import AuthLayout from "./layouts/AuthLayout";
 
 const App = () => {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <RootLayout />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />,
+        },
+        {
+          path: "products",
+          children: [
+            {
+              index: true,
+              element: <ProductsPage />,
+            },
+            {
+              path: ":productId",
+              element: <ProductDetailPage />,
+            },
+          ],
+        },
+        {
+          path: "cart",
+          element: <CartPage />,
+        },
+        {
+          path: "contact",
+          element: <Contact />,
+        },
+        {
+          path: "checkout",
+          element: (
+            <ProtectedRoute>
+              <CheckoutPage />
+            </ProtectedRoute>
+          ),
+        },
+
+        {
+          path: "profile",
+          element: (
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          ),
+        },
+        {
+          path: "orders",
+          element: (
+            <ProtectedRoute>
+              <OrderHistoryPage />
+            </ProtectedRoute>
+          ),
+        },
+        // {
+        //   path: "*",
+        //   element: <ErrorPage />,
+        // },
+      ],
+    },
+    {
+      path: "/", // Pages without Navbar and Footer
+      element: <AuthLayout />,
+      errorElement: <ErrorPage />,
+      children: [
+        { path: "auth", element: <AuthPage /> },
+        { path: "*", element: <ErrorPage /> },
+      ],
+    },
+  ]);
+
   return (
-    <>
-      <h3>Hello</h3>
-      {/* <Text>Yello</Text> */}
-    </>
+    <Suspense fallback={<LoadingSpinner />}>
+      <RouterProvider router={router} />
+    </Suspense>
   );
 };
 
