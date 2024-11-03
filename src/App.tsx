@@ -15,8 +15,10 @@ const AuthPage = React.lazy(() => import("./layouts/pages/AuthPage"));
 const ProfilePage = React.lazy(() => import("./layouts/pages/ProfilePage"));
 const OrderHistoryPage = React.lazy(
   () => import("./layouts/pages/OrderHistoryPage")
+
 );
 const Contact = React.lazy(() => import("./layouts/pages/ContactUs"));
+const Wishlist = React.lazy(()=> import("./layouts/pages/Wishlist"))
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
@@ -74,17 +76,17 @@ const App = () => {
           ),
         },
         {
-          path: "orders",
+          path: "my-orders",
           element: (
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <OrderHistoryPage />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           ),
         },
-        // {
-        //   path: "*",
-        //   element: <ErrorPage />,
-        // },
+        {
+          path: "wishlist",
+          element: <Wishlist />,
+        },
       ],
     },
     {
