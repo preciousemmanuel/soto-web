@@ -69,7 +69,7 @@ function OrderHistoryPage() {
   const { status, action } = renderStatusAndAction();
 
   return (
-    <Box p={4} bg="#FBF5F5" minH="100vh" textAlign="center" mt={120}>
+    <Box p={4}  minH="100vh" textAlign="center" mt={120}>
       {/* Page Title */}
       <Heading
         size="lg"
@@ -85,6 +85,7 @@ function OrderHistoryPage() {
       </Heading>
 
       {/* Order Status Buttons */}
+      <Flex justifyContent={"left"} alignItems={"left"}>
       <SimpleGrid
         columns={[2, 2, 4]}
         spacing={4}
@@ -101,17 +102,20 @@ function OrderHistoryPage() {
             borderRadius="full"
             size="md"
             onClick={() => setActiveStatus(status)}
+            justifyContent={"left"
+            }
           >
             {status}
           </Button>
         ))}
       </SimpleGrid>
+      </Flex>
 
       {/* Headings for Order Details */}
       <Flex justifyContent="center">
         <SimpleGrid
           columns={[2, 2, 6]}
-          spacing={4}
+          spacing={8}
           maxW="850px"
           textAlign="center"
           fontWeight="bold"
@@ -131,9 +135,10 @@ function OrderHistoryPage() {
         {products.map((product) => (
           <SimpleGrid
             columns={[2, 2, 6]}
-            spacing={4}
+            spacing={8}
             key={product.id}
             textAlign="center"
+            py={4}
           >
             <Text>{product.name}</Text>
             <Text>{product.id}</Text>

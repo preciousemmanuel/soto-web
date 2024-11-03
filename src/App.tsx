@@ -19,6 +19,7 @@ const OrderHistoryPage = React.lazy(
 );
 const Contact = React.lazy(() => import("./layouts/pages/ContactUs"));
 const Wishlist = React.lazy(()=> import("./layouts/pages/Wishlist"))
+const CustomOrder = React.lazy(()=> import("./layouts/pages/CustomOrder"))
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
@@ -70,9 +71,9 @@ const App = () => {
         {
           path: "profile",
           element: (
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <ProfilePage />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           ),
         },
         {
@@ -86,6 +87,10 @@ const App = () => {
         {
           path: "wishlist",
           element: <Wishlist />,
+        },
+        {
+          path: "custom-order",
+          element: <CustomOrder />,
         },
       ],
     },
