@@ -26,8 +26,8 @@ const ForgetPassword = React.lazy(()=> import("./components/ForgetPassword"))
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 // import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
 import LoadingSpinner from "./features/helpers/LoadingSpinner";
-import RootLayout from "./layouts/RootLayout";
-import AuthLayout from "./layouts/AuthLayout";
+import RootLayout from "./_layout/RootLayout";
+import AuthLayout from "./_layout/AuthLayout";
 
 const App = () => {
   const router = createBrowserRouter([
