@@ -15,14 +15,16 @@ const AuthPage = React.lazy(() => import("./layouts/pages/AuthPage"));
 const ProfilePage = React.lazy(() => import("./layouts/pages/ProfilePage"));
 const OrderHistoryPage = React.lazy(
   () => import("./layouts/pages/OrderHistoryPage")
-
 );
 const Contact = React.lazy(() => import("./layouts/pages/ContactUs"));
-const Wishlist = React.lazy(()=> import("./layouts/pages/Wishlist"))
-const CustomOrder = React.lazy(()=> import("./layouts/pages/CustomOrder"))
+const Wishlist = React.lazy(() => import("./layouts/pages/Wishlist"));
+const CustomOrder = React.lazy(() => import("./layouts/pages/CustomOrder"));
+const LoginPage = React.lazy(()=> import("./components/Login"))
+const SignUpPage = React.lazy(()=> import("./components/SignUp"))
+const ForgetPassword = React.lazy(()=> import("./components/ForgetPassword"))
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
-import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
+// import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
 import LoadingSpinner from "./features/helpers/LoadingSpinner";
 import RootLayout from "./layouts/RootLayout";
 import AuthLayout from "./layouts/AuthLayout";
@@ -62,9 +64,9 @@ const App = () => {
         {
           path: "checkout",
           element: (
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <CheckoutPage />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           ),
         },
 
@@ -72,7 +74,7 @@ const App = () => {
           path: "profile",
           element: (
             // <ProtectedRoute>
-              <ProfilePage />
+            <ProfilePage />
             // </ProtectedRoute>
           ),
         },
@@ -80,7 +82,7 @@ const App = () => {
           path: "my-orders",
           element: (
             // <ProtectedRoute>
-              <OrderHistoryPage />
+            <OrderHistoryPage />
             // </ProtectedRoute>
           ),
         },
@@ -99,7 +101,9 @@ const App = () => {
       element: <AuthLayout />,
       errorElement: <ErrorPage />,
       children: [
-        { path: "auth", element: <AuthPage /> },
+        { path: "auth", element: <LoginPage /> },
+        { path: "signup", element: <SignUpPage /> },
+        { path: "forget-password", element: <ForgetPassword /> },
         { path: "*", element: <ErrorPage /> },
       ],
     },
