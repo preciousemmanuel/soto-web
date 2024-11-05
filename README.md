@@ -7,7 +7,7 @@ This e-commerce application provides a user-friendly interface for customers to 
 Technologies Used
 Frontend: React, Chakra UI, TypeScript
 Routing: react-router-dom v6
-State Management: React Context (or consider Redux if needed)
+State Management: React Context
 Build Tool: Vite 
 Http Client : Axios
 Styling: Chakra UI for responsive and theme-based styling

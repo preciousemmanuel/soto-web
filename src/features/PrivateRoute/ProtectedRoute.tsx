@@ -1,5 +1,5 @@
 // src/features/PrivateRoute/ProtectedRoute.tsx
-import React, { useEffect } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../layouts/hooks/useAuth";
 import IdleTimer from "../helpers/IdleTimer";

@@ -14,7 +14,7 @@ const IdleTimer = ({ timeout = 120000 }) => {
       status: 'warning',
       duration: 3000,
       isClosable: true,
-      position: 'top',
+      position: 'top-right',
     });
   }, [toast]);
 
