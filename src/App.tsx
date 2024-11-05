@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter,useNavigate } from "react-router-dom";
 
 // Lazy-loaded page components
 const HomePage = React.lazy(() => import("./layouts/pages/HomePage"));
@@ -28,6 +28,9 @@ const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 import LoadingSpinner from "./features/helpers/LoadingSpinner";
 import RootLayout from "./_layout/RootLayout";
 import AuthLayout from "./_layout/AuthLayout";
+
+
+
 
 const App = () => {
   const router = createBrowserRouter([

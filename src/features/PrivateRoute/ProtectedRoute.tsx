@@ -1,8 +1,8 @@
 // src/features/PrivateRoute/ProtectedRoute.tsx
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../layouts/hooks/useAuth';
-
+import React, { useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../../layouts/hooks/useAuth";
+import IdleTimer from "../helpers/IdleTimer";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -19,7 +19,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <IdleTimer timeout={120000} />
+      {children}
+    </>
+  );
 };
 
 export default ProtectedRoute;
