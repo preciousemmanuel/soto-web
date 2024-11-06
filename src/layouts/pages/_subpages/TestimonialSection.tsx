@@ -57,12 +57,13 @@ const TestimonialsSection = () => {
               px={{ base: 4, md: 8 }}
               py={{ base: 6, md: 8 }}
               textAlign={{ base: "center", md: "left" }}
+              gap={8}
             >
               {/* Testimonial Image */}
               <Image
                 src={test}
-                w={{ base: "80%", md: "150px" }}
-                h={{ base: "80%", md: "150px" }}
+                w={{ base: "", md: "" }}
+                h={{ base: "", md: "" }}
                 mb={{ base: 4, md: 0 }}
                 mr={{ md: 4 }}
                 objectFit="cover"
@@ -73,13 +74,13 @@ const TestimonialsSection = () => {
               {/* Changing Image */}
               <Image
                 src={currentImage}
-                w={{ base: "80%", md: "150px" }}
-                h={{ base: "80%", md: "150px" }}
+                w={{ base: "", md: "" }}
+                h={{ base: "", md: "" }}
                 mt={{ base: 4, md: 0 }}
                 ml={{ md: 4 }}
                 objectFit="cover"
                 borderRadius="md"
-                boxShadow="md"
+                // boxShadow="md"
               />
             </Flex>
           </SwiperSlide>

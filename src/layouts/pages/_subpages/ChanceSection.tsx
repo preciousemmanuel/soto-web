@@ -16,7 +16,7 @@ const Chance = () => {
 
   return (
     <Flex
-      px={{ base: 4, md: 14 }}
+      px={{ base: 0, md: 14 }}
       py={{ base: 8, md: 14 }}
       mt={{ base: 10, md: 20 }}
       bgImage={Chancebg}
@@ -27,8 +27,8 @@ const Chance = () => {
       ml={{ base: 0, md: 10 }}
     >
       {/* Text Box */}
-      <Box flex="1" pr={{ base: 0, md: 8 }} mb={{ base: 8, md: 0 }}>
-        <Img src={Chanc} w={{ base: "80%", md: "100%" }} mx="auto" />
+      <Box flex="1" pr={{ base: 2, md: 8 }} mb={{ base: 8, md: 0 }}>
+        <Img src={Chanc} w={{ base: "", md: "100%" }} height={"220px"} mx="" />
       </Box>
 
       {/* Swiper Box */}

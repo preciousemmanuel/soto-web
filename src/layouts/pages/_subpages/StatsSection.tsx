@@ -1,6 +1,8 @@
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
-const StatsSection = () => (
+const StatsSection = () => {
+  
+  return (
   <Flex
     bg="white"
     py={{ base: 8, md: 12 }}
@@ -42,5 +44,6 @@ const StatsSection = () => (
     ))}
   </Flex>
 );
+}
 
 export default StatsSection;
