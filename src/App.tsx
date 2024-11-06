@@ -17,12 +17,20 @@ const OrderHistoryPage = React.lazy(
   () => import("./layouts/pages/OrderHistoryPage")
 );
 const Contact = React.lazy(() => import("./layouts/pages/ContactUs"));
+const Wishlist = React.lazy(() => import("./layouts/pages/Wishlist"));
+const CustomOrder = React.lazy(() => import("./layouts/pages/CustomOrder"));
+const LoginPage = React.lazy(()=> import("./components/Login"))
+const SignUpPage = React.lazy(()=> import("./components/SignUp"))
+const ForgetPassword = React.lazy(()=> import("./components/ForgetPassword"))
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
-import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
+// import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
 import LoadingSpinner from "./features/helpers/LoadingSpinner";
-import RootLayout from "./layouts/RootLayout";
-import AuthLayout from "./layouts/AuthLayout";
+import RootLayout from "./_layout/RootLayout";
+import AuthLayout from "./_layout/AuthLayout";
+
+
+
 
 const App = () => {
   const router = createBrowserRouter([
@@ -59,32 +67,36 @@ const App = () => {
         {
           path: "checkout",
           element: (
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <CheckoutPage />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           ),
         },
 
         {
           path: "profile",
           element: (
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            <ProfilePage />
+            // </ProtectedRoute>
           ),
         },
         {
-          path: "orders",
+          path: "my-orders",
           element: (
-            <ProtectedRoute>
-              <OrderHistoryPage />
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            <OrderHistoryPage />
+            // </ProtectedRoute>
           ),
         },
-        // {
-        //   path: "*",
-        //   element: <ErrorPage />,
-        // },
+        {
+          path: "wishlist",
+          element: <Wishlist />,
+        },
+        {
+          path: "custom-order",
+          element: <CustomOrder />,
+        },
       ],
     },
     {
@@ -92,7 +104,9 @@ const App = () => {
       element: <AuthLayout />,
       errorElement: <ErrorPage />,
       children: [
-        { path: "auth", element: <AuthPage /> },
+        { path: "auth", element: <LoginPage /> },
+        { path: "signup", element: <SignUpPage /> },
+        { path: "forget-password", element: <ForgetPassword /> },
         { path: "*", element: <ErrorPage /> },
       ],
     },

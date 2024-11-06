@@ -36,7 +36,7 @@ const Navbar = () => {
   const handleCollapse = () => setIsExpanded(false);
 
   return (
-    <Box bg="#FFF2ED">
+    <Box bg="#FFF2ED" position={"fixed"} width={"100%"} zIndex={"1000"}>
       {/* Top bar with contact link, location, and language */}
       <Flex
         py={2}
@@ -117,10 +117,11 @@ const Navbar = () => {
                 placeholder="Enter your list"
                 onClick={handleExpand}
                 onBlur={handleCollapse}
-                bg="white"
+                bg={isExpanded ? "white" : "#FFF2ED"}
                 borderRadius="md"
                 width={isExpanded ? "100%" : "150px"}
                 transition="width 0.3s ease"
+                fontSize={"12px"}
               />
             </InputGroup>
           </Box>
