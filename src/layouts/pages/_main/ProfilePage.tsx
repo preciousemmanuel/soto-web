@@ -1,9 +1,9 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { useState } from "react";
-import ProfileHeader from "./_subpages/ProfileHeader";
-import ProfileInfoBox from "./_subpages/ProfileInfoBox";
-import HelpCenter from "./_subpages/HelpCenter";
-import ProfileDetailsForm from "./_subpages/ProfileDetailsForm";
+import ProfileHeader from "../_subpages/ProfileHeader";
+import ProfileInfoBox from "../_subpages/ProfileInfoBox";
+import HelpCenter from "../_subpages/HelpCenter";
+import ProfileDetailsForm from "../_subpages/ProfileDetailsForm";
 
 
 const ProfilePage = () => {
