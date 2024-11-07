@@ -12,7 +12,7 @@ const ProductDetailPage = React.lazy(
 const CartPage = React.lazy(() => import("./layouts/pages/CartPage"));
 const CheckoutPage = React.lazy(() => import("./layouts/pages/CheckoutPage"));
 const AuthPage = React.lazy(() => import("./layouts/pages/AuthPage"));
-const ProfilePage = React.lazy(() => import("./layouts/pages/ProfilePage"));
+const ProfilePage = React.lazy(() => import("./layouts/pages/_main/ProfilePage"));
 const OrderHistoryPage = React.lazy(
   () => import("./layouts/pages/OrderHistoryPage")
 );
@@ -28,6 +28,7 @@ const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 import LoadingSpinner from "./features/helpers/LoadingSpinner";
 import RootLayout from "./_layout/RootLayout";
 import AuthLayout from "./_layout/AuthLayout";
+import SellerLayout from "./_layout/SellerLayout";
 
 
 
@@ -108,6 +109,16 @@ const App = () => {
         { path: "signup", element: <SignUpPage /> },
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "*", element: <ErrorPage /> },
+      ],
+    },
+    {
+      path: "/seller", // Seller-specific pages
+      element: <SellerLayout />, // Use the Seller layout for these routes
+      errorElement: <ErrorPage />,
+      children: [
+        // { path: "dashboard", element: <SellerDashboard /> },
+        // { path: "orders", element: <SellerOrders /> },
+        // Add other seller-specific routes here
       ],
     },
   ]);
