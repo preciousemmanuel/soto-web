@@ -21,6 +21,8 @@ import {
   import { useState } from "react";
   import AccountModal from "../features/modals/AccountModal";
   import NotificationModal from "../features/modals/NotificationModal";
+import { CiLocationOn } from "react-icons/ci";
+import { TbWorld } from "react-icons/tb";
   
   const SellerNavbar = () => {
    
@@ -35,7 +37,33 @@ import {
     
   
     return (
-      <Box bg="#FFF2ED" position={"fixed"} width={"100%"} zIndex={"1000"}>
+      <Box bg="#FFF2ED" position={"fixed"} width={"100%"} zIndex={"1000"} top={"0"}>
+           <Flex
+        py={2}
+        px={4}
+        justifyContent="space-between"
+        alignItems="center"
+        flexWrap="wrap"
+        fontSize={{ base: "12px", md: "14px" }}
+      >
+        <Link to="/contact">
+          <Text color="#FF5733" fontWeight="bold" as="u">
+            Contact us
+          </Text>
+        </Link>
+
+        <Flex alignItems="center" gap={{ base: 4, md: 8 }}>
+          <Flex gap={2} alignItems="center">
+            <CiLocationOn color="gray" />
+            <Text color="gray.500">Location</Text>
+          </Flex>
+          <Flex gap={2} alignItems="center">
+            <TbWorld color="gray" />
+            <Text color="gray.500">ENG</Text>
+          </Flex>
+          <Text color="gray.500">Buy & sell on Soto</Text>
+        </Flex>
+      </Flex>
         {/* Main navigation bar */}
         <Flex
           py={4}
@@ -56,22 +84,22 @@ import {
             gap={6}
             alignItems="center"
           >
-            <Link to="/overview">
+            <Link to="/vendor-overview">
               <Text color="gray.500" _hover={{ color: "#FF5733" }}>
                 Overview
               </Text>
             </Link>
-            <Link to="/orders">
+            <Link to="/vendor-orders">
               <Text color="gray.500" _hover={{ color: "#FF5733" }}>
                 Orders
               </Text>
             </Link>
-            <Link to="/wallet">
+            <Link to="/vendor-wallet">
               <Text color="gray.500" _hover={{ color: "#FF5733" }}>
                 Wallet
               </Text>
             </Link>
-            <Link to="/insight">
+            <Link to="/vendor-insight">
               <Text color="gray.500" _hover={{ color: "#FF5733" }}>
                 Insight
               </Text>

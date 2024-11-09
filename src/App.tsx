@@ -22,6 +22,9 @@ const CustomOrder = React.lazy(() => import("./layouts/pages/CustomOrder"));
 const LoginPage = React.lazy(()=> import("./components/Login"))
 const SignUpPage = React.lazy(()=> import("./components/SignUp"))
 const ForgetPassword = React.lazy(()=> import("./components/ForgetPassword"))
+const VendorOverview = React.lazy(()=> import("./layouts/pages/Vendor/VendorOverview"))
+const VendorInsight = React.lazy(()=> import("./layouts/pages/Vendor/VendorInsight"))
+const VendorWallet = React.lazy(()=> import("./layouts/pages/Vendor/VendorWallet"))
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 // import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
@@ -29,6 +32,7 @@ import LoadingSpinner from "./features/helpers/LoadingSpinner";
 import RootLayout from "./_layout/RootLayout";
 import AuthLayout from "./_layout/AuthLayout";
 import SellerLayout from "./_layout/SellerLayout";
+import VendorOrder from "./layouts/pages/Vendor/VendorOrder";
 
 
 
@@ -113,11 +117,14 @@ const App = () => {
     },
     {
       path: "/seller", // Seller-specific pages
-      element: <SellerLayout />, // Use the Seller layout for these routes
+      element: <SellerLayout />, //  Seller layout for these routes
       errorElement: <ErrorPage />,
       children: [
-        // { path: "dashboard", element: <SellerDashboard /> },
-        // { path: "orders", element: <SellerOrders /> },
+        { index: true, element: <VendorOverview /> },
+        { path: "vendor-orders", element: <VendorOrder /> },
+        { path: "vendor-wallet", element: <VendorWallet /> },
+        { path: "vendor-insight", element: <VendorInsight /> },
+        { path: "vendor-overview", element: <VendorOverview /> },
         // Add other seller-specific routes here
       ],
     },
