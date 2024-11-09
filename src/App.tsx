@@ -124,6 +124,7 @@ const App = () => {
         { path: "vendor-orders", element: <VendorOrder /> },
         { path: "vendor-wallet", element: <VendorWallet /> },
         { path: "vendor-insight", element: <VendorInsight /> },
+        { path: "vendor-overview", element: <VendorOverview /> },
         // Add other seller-specific routes here
       ],
     },

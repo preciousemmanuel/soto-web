@@ -22,12 +22,21 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { HiChevronRight } from "react-icons/hi";
+import VendorTransactions from "./VendorTransactions";
+import VendorInventory from "./VendorInventory";
 
 // Dummy data for products and graph
 const products = [
   { id: 1, name: "Product 1", price: "$100", qty: "5 in stock" },
   { id: 2, name: "Product 2", price: "$200", qty: "Out of stock" },
   { id: 3, name: "Product 3", price: "$150", qty: "8 in stock" },
+];
+
+const transactions = [
+  { id: "TXN001", title: "Order Payment", date: "2024-11-01", amount: "$100", status: "Completed" },
+  { id: "TXN002", title: "Refund", date: "2024-10-28", amount: "$50", status: "Pending" },
+  { id: "TXN003", title: "Subscription", date: "2024-10-15", amount: "$20", status: "Failed" },
+  { id: "TXN004", title: "Order Payment", date: "2024-09-30", amount: "$75", status: "Completed" },
 ];
 
 const orders = [
@@ -282,6 +291,17 @@ const VendorOverview = () => {
               </Box>
             </TabPanel>
             {/* Additional TabPanels for Inventory and Transactions */}
+            {/* TabPanel for Transactions */}
+          <TabPanel>
+            {/* <TransactionsTable transactions={transactions} /> */}
+            {/* <Text>inventory</Text> */}
+            <VendorInventory />
+          </TabPanel>
+          {/* TabPanel for Transactions */}
+          <TabPanel>
+            <VendorTransactions transactions={transactions} />
+            {/* <Text>transactions</Text> */}
+          </TabPanel>
           </TabPanels>
         </Tabs>
       </Box>
