@@ -1,6 +1,7 @@
 // InventoryTable.js
 
 import { Box, Table, Thead, Th, Tr, Tbody, Td } from "@chakra-ui/react";
+import { Key, ReactElement, JSXElementConstructor, ReactNode, ReactPortal } from "react";
 
 const InventoryTable = ({ inventory }: any) => {
   return (
@@ -17,7 +18,7 @@ const InventoryTable = ({ inventory }: any) => {
           </Tr>
         </Thead>
         <Tbody>
-          {inventory.map((item, index) => (
+          {inventory.map((item: { id: Key | null | undefined; orderDate: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; deliveredTo: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; in: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; out: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; balance: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined; }, index: number) => (
             <Tr key={item.id}>
               <Td>{index + 1}</Td>
               <Td>{item.orderDate}</Td>

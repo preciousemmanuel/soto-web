@@ -1,6 +1,6 @@
 // InventoryPage.js
 
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { Box, Flex } from "@chakra-ui/react";
 import SortModal from "../../../features/modals/SortModal";
 import SummaryBoxes from "../_subpages/SummaryBox";
@@ -18,7 +18,7 @@ const VendorInventory = () => {
     // ... other inventory items
   ];
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: SetStateAction<number>) => {
     setCurrentPage(newPage);
     // fetch new page data here if necessary
   };
