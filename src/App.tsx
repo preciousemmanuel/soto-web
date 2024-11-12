@@ -116,7 +116,7 @@ const App = () => {
       ],
     },
     {
-      path: "/seller", // Seller-specific pages
+      path: "/", // Seller-specific pages
       element: <SellerLayout />, //  Seller layout for these routes
       errorElement: <ErrorPage />,
       children: [
@@ -125,6 +125,7 @@ const App = () => {
         { path: "vendor-wallet", element: <VendorWallet /> },
         { path: "vendor-insight", element: <VendorInsight /> },
         { path: "vendor-overview", element: <VendorOverview /> },
+        { path: "seller", element: <VendorOverview /> },
         // Add other seller-specific routes here
       ],
     },
