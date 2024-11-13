@@ -25,6 +25,9 @@ const ForgetPassword = React.lazy(()=> import("./components/ForgetPassword"))
 const VendorOverview = React.lazy(()=> import("./layouts/pages/Vendor/VendorOverview"))
 const VendorInsight = React.lazy(()=> import("./layouts/pages/Vendor/VendorInsight"))
 const VendorWallet = React.lazy(()=> import("./layouts/pages/Vendor/VendorWallet"))
+const VendorListOfTransactions = React.lazy(()=> import("./layouts/pages/Vendor/VendorListOfTransaction"))
+const VendorWithdraw = React.lazy(()=> import("./layouts/pages/Vendor/VendorWithdraw"))
+const VendorRequest = React.lazy(()=> import("./layouts/pages/Vendor/VendorRequest"))
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 // import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
@@ -125,6 +128,9 @@ const App = () => {
         { path: "vendor-wallet", element: <VendorWallet /> },
         { path: "vendor-insight", element: <VendorInsight /> },
         { path: "vendor-overview", element: <VendorOverview /> },
+        { path: "vendor-transcactions", element: <VendorListOfTransactions /> },
+        { path: "vendor-request", element: <VendorRequest /> },
+        { path: "vendor-withdraw", element: <VendorWithdraw /> },
         { path: "seller", element: <VendorOverview /> },
         // Add other seller-specific routes here
       ],
