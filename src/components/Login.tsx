@@ -1,3 +1,4 @@
+// src/components/Login.js
 import {
   Box,
   Flex,
@@ -10,7 +11,7 @@ import {
   Divider,
   Icon,
   Image,
-  Link
+  Link,
 } from "@chakra-ui/react";
 import {
   FaFacebook,
@@ -22,36 +23,41 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import AuthImage from "../assets/auth.png";
 import Logo from "../assets/soto.png";
 import { FcGoogle } from "react-icons/fc";
-import {  Link as RouterLink } from "react-router-dom";
+import { useAuth } from "../layouts/hooks/useAuth";
+
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { login } = useAuth();
+
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
+  const handleLogin = async () => {
+      try {
+        await login({
+          email_or_phone_number: emailOrPhone,
+          password,
+          userType: "USER",
+        });
+      } catch (error) {
+        console.log("Login Failed" + " " + error);
+        
+      }
+  };
 
   return (
     <Box minHeight="100vh">
       {/* Navbar */}
-      <Flex
-        bg="#FFF2ED"
-        px={4}
-        py={4}
-        justify="space-between"
-        align="center"
-        fontSize="sm"
-        flexDirection={{ base: "column", md: "row" }} // Stack on smaller screens
-        textAlign={{ base: "center", md: "left" }} // Center-align text on smaller screens
-      >
-        <Text fontWeight="500" color="gray" mb={{ base: 2, md: 0 }}>
-          20% off store
-        </Text>
-        <Flex
-          align="center"
-          gap={4}
-          justifyContent={{ base: "center", md: "flex-end" }}
-        >
+      <Flex bg="#FFF2ED" px={4} py={4} justify="space-between" align="center" fontSize="sm">
+        <Text fontWeight="500" color="gray">20% off store</Text>
+        <Flex align="center" gap={4}>
           <Flex align="center" color="gray">
             <Icon as={FaMapMarkerAlt} mr={1} />
             <Text>Location</Text>
@@ -60,50 +66,19 @@ const Login = () => {
             <Icon as={FaGlobe} mr={1} />
             <Text>ENG</Text>
           </Flex>
-          <Text fontWeight="500" color="#FF5733">
-            Buy & sell on Soto
-          </Text>
+          <Text fontWeight="500" color="#FF5733">Buy & sell on Soto</Text>
         </Flex>
       </Flex>
 
-      {/* <Box boxSize="sm"> */}
-      <Image src={Logo} alt="Dan Abramov" py={8} px={8} width="120px" />
-      {/* </Box> */}
+      <Image src={Logo} alt="Logo" py={8} px={8} width="120px" />
 
       {/* Main Content */}
-      <Flex
-        direction={{ base: "column", md: "row" }} // Stack vertically on smaller screens
-        minHeight="calc(100vh - 56px)" // Take full height minus navbar height
-      >
-        {/* Left Image Section */}
-        <Box
-          flex="1"
-          bgImage={AuthImage}
-          bgSize="cover"
-          bgPosition="center"
-          display={{ base: "none", md: "block" }} // Hide image on mobile
-        />
+      <Flex direction={{ base: "column", md: "row" }} minHeight="calc(100vh - 56px)">
+        <Box flex="1" bgImage={AuthImage} bgSize="cover" bgPosition="center" display={{ base: "none", md: "block" }} />
 
-        {/* Right Login Form Section */}
-        <Box
-          flex="1"
-          p={8}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          py={6}
-          px={6}
-          bg={"#FFFAF8"}
-        >
+        <Box flex="1" p={8} display="flex" alignItems="center" justifyContent="center" py={6} px={6} bg="#FFFAF8">
           <Box width="100%" maxWidth="400px">
-            <Text
-              fontSize="3xl"
-              fontWeight="600"
-              mb={2}
-              textAlign="center"
-              fontFamily="Poppins"
-              color="#FF5733"
-            >
+            <Text fontSize="3xl" fontWeight="600" mb={2} textAlign="center" fontFamily="Poppins" color="#FF5733">
               Login
             </Text>
             <Text color="black" mb={6} textAlign="center" fontFamily="Poppins">
@@ -111,45 +86,22 @@ const Login = () => {
             </Text>
 
             <Flex mb={4} gap={4} flexDirection={{ base: "column", sm: "row" }}>
-              <Button
-                flex="1"
-                leftIcon={<Icon as={FaFacebook} color="blue" />}
-                bg="#FEF0EA"
-                borderRadius="full"
-                height="48px"
-                color="gray"
-                fontWeight="400"
-                fontSize="sm"
-              >
+              <Button flex="1" leftIcon={<Icon as={FaFacebook} color="blue" />} bg="#FEF0EA" color="gray">
                 Facebook
               </Button>
-              <Button
-                flex="1"
-                leftIcon={<Icon as={FcGoogle} />}
-                bg="#FEF0EA"
-                borderRadius="full"
-                height="48px"
-                color="gray"
-                fontWeight="400"
-                fontSize="sm"
-                mt={{ base: 2, sm: 0 }} // Add spacing for mobile
-              >
+              <Button flex="1" leftIcon={<Icon as={FcGoogle} />} bg="#FEF0EA" color="gray" mt={{ base: 2, sm: 0 }}>
                 Google
               </Button>
             </Flex>
 
             <Flex alignItems="center" mb={4}>
               <Divider />
-              <Text px={2} color="gray.500">
-                or
-              </Text>
+              <Text px={2} color="gray.500">or</Text>
               <Divider />
             </Flex>
 
             <Box mb={4}>
-              <Text mb={1} color="gray">
-                Email/Name
-              </Text>
+              <Text mb={1} color="gray">Email/Name</Text>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
                   <Icon as={FaUser} color="gray.500" />
@@ -161,14 +113,14 @@ const Login = () => {
                   outline="none"
                   borderRadius="xl"
                   fontSize="sm"
+                  value={emailOrPhone}
+                  onChange={(e) => setEmailOrPhone(e.target.value)}
                 />
               </InputGroup>
             </Box>
 
             <Box mb={4} mt={4}>
-              <Text mb={1} color="gray">
-                Password
-              </Text>
+              <Text mb={1} color="gray">Password</Text>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
                   <Icon as={FaLock} color="gray" />
@@ -181,22 +133,14 @@ const Login = () => {
                   outline="none"
                   borderRadius="xl"
                   fontSize="sm"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
-                <InputRightElement
-                  onClick={togglePasswordVisibility}
-                  cursor="pointer"
-                >
+                <InputRightElement onClick={togglePasswordVisibility} cursor="pointer">
                   <Icon as={showPassword ? FaEyeSlash : FaEye} color="gray" />
                 </InputRightElement>
               </InputGroup>
-
-              <Text
-                color="#FF5753"
-                textAlign="right"
-                fontWeight="500"
-                fontSize="sm"
-                mt={2}
-              >
+              <Text color="#FF5753" textAlign="right" fontWeight="500" fontSize="sm" mt={2}>
                 <Link as={RouterLink} to="/forget-password">Forgot password?</Link>
               </Text>
             </Box>
@@ -208,18 +152,15 @@ const Login = () => {
               width="100%"
               borderRadius="full"
               mb={4}
+              onClick={handleLogin}
+              // isLoading={loading}
             >
               Login
             </Button>
 
             <Text textAlign="center" color="gray.600">
               New to Soto?{" "}
-              <Link
-                as={RouterLink}
-                to="/signup"
-                color="#FF5733"
-                fontWeight="500"
-              >
+              <Link as={RouterLink} to="/signup" color="#FF5733" fontWeight="500">
                 Create an account
               </Link>
             </Text>

@@ -36,7 +36,11 @@ import RootLayout from "./_layout/RootLayout";
 import AuthLayout from "./_layout/AuthLayout";
 import SellerLayout from "./_layout/SellerLayout";
 import VendorOrder from "./layouts/pages/Vendor/VendorOrder";
+import 'react-toastify/dist/ReactToastify.css';
 
+ const env = import.meta.env.VITE_APP_BASE_URL
+  console.log(env);
+  
 
 
 
@@ -59,7 +63,7 @@ const App = () => {
           path: "products",
           children: [
             {
-              index: true,
+              // index: true,
               element: (
                 <ProtectedRoute>
                   <ProductsPage />
@@ -131,11 +135,11 @@ const App = () => {
       ],
     },
     {
-      path: "/", // Pages without Navbar and Footer
+      path: "/auth", // Pages without Navbar and Footer
       element: <AuthLayout />,
       errorElement: <ErrorPage />,
       children: [
-        { path: "auth", element: <LoginPage /> },
+        { index: true, element: <LoginPage /> },
         { path: "signup", element: <SignUpPage /> },
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "*", element: <ErrorPage /> },
