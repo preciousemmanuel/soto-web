@@ -13,12 +13,17 @@ import {
     Td,
     Stack,
     useBreakpointValue,
+    IconButton,
+    HStack,
   } from "@chakra-ui/react";
   import { useState } from "react";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
   
   const VendorRequest = () => {
     const [requestedAmount, setRequestedAmount] = useState("");
     const [wallet, setWallet] = useState("");
+    const navigate = useNavigate();
   
     const handleRequestSubmit = () => {
       // handle request submission logic here
@@ -38,6 +43,17 @@ import {
   
     return (
       <Stack direction={isMobile ? "column" : "row"} spacing={8} p={8} mt={32}>
+
+<HStack spacing={2} mb={4}>
+        <IconButton
+          icon={<FaArrowLeft />}
+          aria-label="Back"
+          onClick={() => navigate(-1)}
+          variant="ghost"
+          size={useBreakpointValue({ base: "sm", md: "md" })}
+        />
+        <Text fontSize={["27px", "xl"]} fontWeight="500">Request Fund</Text>
+      </HStack>
         {/* Withdrawal Request Box */}
         <Box
           p={6}
@@ -107,7 +123,7 @@ import {
               {requestHistory.map((request, index) => (
                 <Tr
                   key={request.id}
-                  bg={index % 2 === 0 ? "gray.100" : "white"}
+                  bg={index % 2 === 0 ? "#E1E7EC" : "white"}
                 >
                   <Td>{request.fundTo}</Td>
                   <Td>{request.date}</Td>
