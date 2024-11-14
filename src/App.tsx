@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter,Navigate } from "react-router-dom";
 
 // Lazy-loaded page components
 const HomePage = React.lazy(() => import("./layouts/pages/HomePage"));
@@ -44,9 +44,7 @@ const App = () => {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: (<ProtectedRoute>
-                    <RootLayout />
-             </ProtectedRoute>) ,
+      element: <RootLayout />,
       errorElement: <ErrorPage />,
       children: [
         {
@@ -62,68 +60,73 @@ const App = () => {
           children: [
             {
               index: true,
-              element:(<ProtectedRoute>
-                <ProductsPage />
-              </ProtectedRoute>) ,
+              element: (
+                <ProtectedRoute>
+                  <ProductsPage />
+                </ProtectedRoute>
+              ),
             },
             {
               path: ":productId",
-              element:(<ProtectedRoute>
-                <ProductDetailPage />
-              </ProtectedRoute>) ,
+              element: (
+                <ProtectedRoute>
+                  <ProductDetailPage />
+                </ProtectedRoute>
+              ),
             },
           ],
         },
         {
           path: "cart",
-          element: ( <ProtectedRoute>
-            <CartPage />
-          </ProtectedRoute>),
+          element: (
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "contact",
-          element:(
-            <ProtectedRoute>
-              <Contact />
-            </ProtectedRoute>
-          ) ,
+          element: <Contact />,
         },
         {
           path: "checkout",
           element: (
             <ProtectedRoute>
               <CheckoutPage />
-             </ProtectedRoute>
+            </ProtectedRoute>
           ),
         },
-
         {
           path: "profile",
           element: (
             <ProtectedRoute>
-            <ProfilePage />
-             </ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
           ),
         },
         {
           path: "my-orders",
           element: (
             <ProtectedRoute>
-            <OrderHistoryPage />
-             </ProtectedRoute>
+              <OrderHistoryPage />
+            </ProtectedRoute>
           ),
         },
         {
           path: "wishlist",
-          element:(<ProtectedRoute>
-            <Wishlist />
-          </ProtectedRoute>) ,
+          element: (
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "custom-order",
-          element: (<ProtectedRoute>
-             <CustomOrder />
-          </ProtectedRoute>),
+          element: (
+            <ProtectedRoute>
+              <CustomOrder />
+            </ProtectedRoute>
+          ),
         },
       ],
     },
@@ -138,6 +141,7 @@ const App = () => {
         { path: "*", element: <ErrorPage /> },
       ],
     },
+  
     // {
     //   path: "/", // Seller-specific pages
     //   element: <SellerLayout />, //  Seller layout for these routes
