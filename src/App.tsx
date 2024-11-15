@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter,Navigate } from "react-router-dom";
 
 // Lazy-loaded page components
 const HomePage = React.lazy(() => import("./layouts/pages/HomePage"));
@@ -25,15 +25,22 @@ const ForgetPassword = React.lazy(()=> import("./components/ForgetPassword"))
 const VendorOverview = React.lazy(()=> import("./layouts/pages/Vendor/VendorOverview"))
 const VendorInsight = React.lazy(()=> import("./layouts/pages/Vendor/VendorInsight"))
 const VendorWallet = React.lazy(()=> import("./layouts/pages/Vendor/VendorWallet"))
+const VendorListOfTransactions = React.lazy(()=> import("./layouts/pages/Vendor/VendorListOfTransaction"))
+const VendorWithdraw = React.lazy(()=> import("./layouts/pages/Vendor/VendorWithdraw"))
+const VendorRequest = React.lazy(()=> import("./layouts/pages/Vendor/VendorRequest"))
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
-// import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
+import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
 import LoadingSpinner from "./features/helpers/LoadingSpinner";
 import RootLayout from "./_layout/RootLayout";
 import AuthLayout from "./_layout/AuthLayout";
 import SellerLayout from "./_layout/SellerLayout";
 import VendorOrder from "./layouts/pages/Vendor/VendorOrder";
+import 'react-toastify/dist/ReactToastify.css';
 
+ const env = import.meta.env.VITE_APP_BASE_URL
+  console.log(env);
+  
 
 
 
@@ -46,24 +53,40 @@ const App = () => {
       children: [
         {
           index: true,
-          element: <HomePage />,
+          element: (
+            // <ProtectedRoute>
+              <HomePage />
+            // </ProtectedRoute>
+          ),
         },
         {
           path: "products",
           children: [
             {
-              index: true,
-              element: <ProductsPage />,
+              // index: true,
+              element: (
+                <ProtectedRoute>
+                  <ProductsPage />
+                </ProtectedRoute>
+              ),
             },
             {
               path: ":productId",
-              element: <ProductDetailPage />,
+              element: (
+                <ProtectedRoute>
+                  <ProductDetailPage />
+                </ProtectedRoute>
+              ),
             },
           ],
         },
         {
           path: "cart",
-          element: <CartPage />,
+          element: (
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "contact",
@@ -72,62 +95,74 @@ const App = () => {
         {
           path: "checkout",
           element: (
-            // <ProtectedRoute>
+            <ProtectedRoute>
               <CheckoutPage />
-            // </ProtectedRoute>
+            </ProtectedRoute>
           ),
         },
-
         {
           path: "profile",
           element: (
-            // <ProtectedRoute>
-            <ProfilePage />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
           ),
         },
         {
           path: "my-orders",
           element: (
-            // <ProtectedRoute>
-            <OrderHistoryPage />
-            // </ProtectedRoute>
+            <ProtectedRoute>
+              <OrderHistoryPage />
+            </ProtectedRoute>
           ),
         },
         {
           path: "wishlist",
-          element: <Wishlist />,
+          element: (
+            <ProtectedRoute>
+              <Wishlist />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "custom-order",
-          element: <CustomOrder />,
+          element: (
+            <ProtectedRoute>
+              <CustomOrder />
+            </ProtectedRoute>
+          ),
         },
       ],
     },
     {
-      path: "/", // Pages without Navbar and Footer
+      path: "/auth", // Pages without Navbar and Footer
       element: <AuthLayout />,
       errorElement: <ErrorPage />,
       children: [
-        { path: "auth", element: <LoginPage /> },
+        { index: true, element: <LoginPage /> },
         { path: "signup", element: <SignUpPage /> },
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "*", element: <ErrorPage /> },
       ],
     },
-    {
-      path: "/seller", // Seller-specific pages
-      element: <SellerLayout />, //  Seller layout for these routes
-      errorElement: <ErrorPage />,
-      children: [
-        { index: true, element: <VendorOverview /> },
-        { path: "vendor-orders", element: <VendorOrder /> },
-        { path: "vendor-wallet", element: <VendorWallet /> },
-        { path: "vendor-insight", element: <VendorInsight /> },
-        { path: "vendor-overview", element: <VendorOverview /> },
-        // Add other seller-specific routes here
-      ],
-    },
+  
+    // {
+    //   path: "/", // Seller-specific pages
+    //   element: <SellerLayout />, //  Seller layout for these routes
+    //   errorElement: <ErrorPage />,
+    //   children: [
+    //     { index: true, element: <VendorOverview /> },
+    //     { path: "vendor-orders", element: <VendorOrder /> },
+    //     { path: "vendor-wallet", element: <VendorWallet /> },
+    //     { path: "vendor-insight", element: <VendorInsight /> },
+    //     { path: "vendor-overview", element: <VendorOverview /> },
+    //     { path: "vendor-transcactions", element: <VendorListOfTransactions /> },
+    //     { path: "vendor-request", element: <VendorRequest /> },
+    //     { path: "vendor-withdraw", element: <VendorWithdraw /> },
+    //     { path: "seller", element: <VendorOverview /> },
+    //     // Add other seller-specific routes here
+    //   ],
+    // },
   ]);
 
   return (
