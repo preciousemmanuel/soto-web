@@ -38,8 +38,7 @@ import SellerLayout from "./_layout/SellerLayout";
 import VendorOrder from "./layouts/pages/Vendor/VendorOrder";
 import 'react-toastify/dist/ReactToastify.css';
 
- const env = import.meta.env.VITE_APP_BASE_URL
-  console.log(env);
+
   
 
 
