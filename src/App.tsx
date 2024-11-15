@@ -54,9 +54,9 @@ const App = () => {
         {
           index: true,
           element: (
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <HomePage />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           ),
         },
         {

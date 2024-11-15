@@ -141,7 +141,7 @@ const Login = () => {
                 </InputRightElement>
               </InputGroup>
               <Text color="#FF5753" textAlign="right" fontWeight="500" fontSize="sm" mt={2}>
-                <Link as={RouterLink} to="/forget-password">Forgot password?</Link>
+                <Link as={RouterLink} to="/auth/forget-password">Forgot password?</Link>
               </Text>
             </Box>
 
@@ -160,7 +160,7 @@ const Login = () => {
 
             <Text textAlign="center" color="gray.600">
               New to Soto?{" "}
-              <Link as={RouterLink} to="/signup" color="#FF5733" fontWeight="500">
+              <Link as={RouterLink} to="/auth/signup" color="#FF5733" fontWeight="500">
                 Create an account
               </Link>
             </Text>

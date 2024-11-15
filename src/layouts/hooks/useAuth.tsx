@@ -101,10 +101,73 @@ export const useAuth = () => {
     }
   }, []);
 
+  const requestOtp = async (email_or_phone_number: { email_or_phone_number: string }) => {
+    setLoading(true);
+    try {
+      const response = await apiClient.post("/user/change-password-request", email_or_phone_number);
+      if (response.status === 200) {
+        const { otp, token, email } = response.data.data;
+        toast({
+          title: "OTP Sent Successfully",
+          description: `An OTP has been sent to ${email}.`,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+
+        // Return data for further use in the component
+        return { otp, token };
+      }
+    } catch (error) {
+      console.error("Error requesting OTP:", error);
+      toast({
+        title: "Failed to Request OTP",
+        description: "Please check the email or phone number and try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetPassword = async (payload: { new_password: string; otp: string }) => {
+    setLoading(true);
+    try {
+      const response = await apiClient.put("/user/reset-password", payload);
+      if (response.status === 200) {
+        toast({
+          title: "Password Reset Successfully",
+          description: "Your password has been reset. Please log in with your new credentials.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+
+        // Redirect to login page
+        navigate("/auth");
+      }
+    } catch (error) {
+      console.error("Password reset failed:", error);
+      toast({
+        title: "Failed to Reset Password",
+        description: "Please check the OTP and try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     isAuthenticated,
     login,
     logout,
     signup,
+    requestOtp,
+    resetPassword
   };
 };
