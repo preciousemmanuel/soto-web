@@ -1,11 +1,11 @@
 import { Button, Flex, Heading } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 const ProfileHeader = () => {
+  const { switchToVendor } = useAuth();
   const navigate = useNavigate();
-  function handleNavigate(): void {
-    navigate("/seller");
-  }
+
 
   return (
     <Flex justify="space-between" align="center" p={4} mb={6} bg="#FFEFEB">
@@ -17,7 +17,7 @@ const ProfileHeader = () => {
         bg="black"
         color={"white"}
         borderRadius="full"
-        onClick={handleNavigate}
+        onClick={switchToVendor}
       >
         Switch to Seller
       </Button>

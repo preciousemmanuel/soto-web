@@ -4,17 +4,21 @@ import { useToast } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const useAuth = () => {
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const location = useLocation();
 
+  // Separate states for user and vendor authentication
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return !!localStorage.getItem("token");
+    return !!localStorage.getItem("userToken");
+  });
+  
+  const [isVendorAuthenticated, setIsVendorAuthenticated] = useState(() => {
+    return !!localStorage.getItem("vendorToken");
   });
 
-  // Function to call the login API
+  // User login
   const login = async (credentials: {
     email_or_phone_number: string;
     password: string;
@@ -25,14 +29,9 @@ export const useAuth = () => {
       const response = await apiClient.post("/user/login", credentials);
       if (response.status === 200) {
         const { Token } = response.data.data;
-
-        // Store token in local storage
-        localStorage.setItem("token", Token);
-
-        // Set authentication status
+        localStorage.setItem("userToken", Token);
         setIsAuthenticated(true);
-
-        // Show success toast
+        
         toast({
           title: "Login Successful",
           description: "Welcome back!",
@@ -42,7 +41,6 @@ export const useAuth = () => {
           position: "top-right",
         });
 
-        // Navigate to home or attempted page
         const origin = location.state?.from?.pathname || "/";
         navigate(origin);
       }
@@ -74,34 +72,86 @@ export const useAuth = () => {
 
       if (response.status === 201) {
         toast({
-          title: "Useer Created Successful",
+          title: "User Created Successfully",
+          description: "Welcome! Please login to continue.",
+          status: "success",
+          duration: 7000,
+          isClosable: true,
+          position: "top-right",
+        });
+        navigate("/auth");
+      }
+    } catch (error) {
+      console.error("Signup failed:", error);
+      toast({
+        title: "Signup Failed",
+        description: "Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
+  // Vendor login
+  const vendorLogin = async (credentials: {
+    email_or_phone_number: string;
+    password: string;
+    userType: "VENDOR";
+  }) => {
+    setLoading(true);
+    try {
+      const response = await apiClient.post("/user/login", credentials);
+      if (response.status === 200) {
+        const { Token } = response.data.data;
+        localStorage.setItem("vendorToken", Token);
+        setIsVendorAuthenticated(true);
+
+        toast({
+          title: "Vendor Login Successful",
           description: "Welcome back!",
           status: "success",
           duration: 7000,
           isClosable: true,
           position: "top-right",
         });
+
+        navigate("/vendor-overview");
       }
     } catch (error) {
-      console.error("Signup failed:", error);
+      console.error("Vendor login failed:", error);
+      toast({
+        title: "Login Failed",
+        description: "Please check your credentials and try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
+  // User logout
   const logout = () => {
-
-    setProfile(null);
-    localStorage.removeItem("token");
+    localStorage.removeItem("userToken");
     setIsAuthenticated(false);
     navigate("/auth");
   };
 
-  useEffect(() => {
-    // Check if token exists in localStorage on component mount
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
+  // Vendor logout
+  const vendorLogout = () => {
+    localStorage.removeItem("vendorToken");
+    setIsVendorAuthenticated(false);
+    navigate("/auth/vendor-login");
+  };
+
+  // Switch to vendor
+  const switchToVendor = () => {
+    localStorage.removeItem("userToken");
+    setIsAuthenticated(false);
+    navigate("/auth/vendor-login");
+  };
 
   const requestOtp = async (email_or_phone_number: {
     email_or_phone_number: string;
@@ -122,7 +172,6 @@ export const useAuth = () => {
           isClosable: true,
         });
 
-        // Return data for further use in the component
         return { otp, token };
       }
     } catch (error) {
@@ -156,7 +205,6 @@ export const useAuth = () => {
           isClosable: true,
         });
 
-        // Redirect to login page
         navigate("/auth");
       }
     } catch (error) {
@@ -173,14 +221,25 @@ export const useAuth = () => {
     }
   };
 
- 
+  useEffect(() => {
+    const userToken = localStorage.getItem("userToken");
+    const vendorToken = localStorage.getItem("vendorToken");
+    
+    if (userToken) setIsAuthenticated(true);
+    if (vendorToken) setIsVendorAuthenticated(true);
+  }, []);
 
   return {
     isAuthenticated,
+    isVendorAuthenticated,
+    loading,
     login,
+    vendorLogin,
     logout,
+    vendorLogout,
     signup,
+    switchToVendor,
     requestOtp,
-    resetPassword,
+    resetPassword
   };
 };

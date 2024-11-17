@@ -28,6 +28,8 @@ const VendorWallet = React.lazy(()=> import("./layouts/pages/Vendor/VendorWallet
 const VendorListOfTransactions = React.lazy(()=> import("./layouts/pages/Vendor/VendorListOfTransaction"))
 const VendorWithdraw = React.lazy(()=> import("./layouts/pages/Vendor/VendorWithdraw"))
 const VendorRequest = React.lazy(()=> import("./layouts/pages/Vendor/VendorRequest"))
+const VendorSignup = React.lazy(()=> import("./components/VendorSignup"))
+const VendorLogin = React.lazy(()=> import( "./components/VendorLogin"))
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
@@ -37,6 +39,7 @@ import AuthLayout from "./_layout/AuthLayout";
 import SellerLayout from "./_layout/SellerLayout";
 import VendorOrder from "./layouts/pages/Vendor/VendorOrder";
 import 'react-toastify/dist/ReactToastify.css';
+
 
 
   
@@ -141,27 +144,30 @@ const App = () => {
         { index: true, element: <LoginPage /> },
         { path: "signup", element: <SignUpPage /> },
         { path: "forget-password", element: <ForgetPassword /> },
+        { path: "vendor-signup", element: <VendorSignup /> },
+        { path: "vendor-login", element: <VendorLogin /> },
         { path: "*", element: <ErrorPage /> },
       ],
     },
   
-    // {
-    //   path: "/", // Seller-specific pages
-    //   element: <SellerLayout />, //  Seller layout for these routes
-    //   errorElement: <ErrorPage />,
-    //   children: [
-    //     { index: true, element: <VendorOverview /> },
-    //     { path: "vendor-orders", element: <VendorOrder /> },
-    //     { path: "vendor-wallet", element: <VendorWallet /> },
-    //     { path: "vendor-insight", element: <VendorInsight /> },
-    //     { path: "vendor-overview", element: <VendorOverview /> },
-    //     { path: "vendor-transcactions", element: <VendorListOfTransactions /> },
-    //     { path: "vendor-request", element: <VendorRequest /> },
-    //     { path: "vendor-withdraw", element: <VendorWithdraw /> },
-    //     { path: "seller", element: <VendorOverview /> },
-    //     // Add other seller-specific routes here
-    //   ],
-    // },
+    {
+      path: "/", // Seller-specific pages
+      element: <SellerLayout />, //  Seller layout for these routes
+      errorElement: <ErrorPage />,
+      children: [
+        { index: true, element: <VendorOverview /> },
+        { path: "vendor-orders", element: <VendorOrder /> },
+        { path: "vendor-wallet", element: <VendorWallet /> },
+        { path: "vendor-insight", element: <VendorInsight /> },
+        { path: "vendor-overview", element: <VendorOverview /> },
+        { path: "vendor-transcactions", element: <VendorListOfTransactions /> },
+        { path: "vendor-request", element: <VendorRequest /> },
+        { path: "vendor-withdraw", element: <VendorWithdraw /> },
+        { path: "seller", element: <VendorOverview /> },
+       
+        // Add other seller-specific routes here
+      ],
+    },
   ]);
 
   return (
