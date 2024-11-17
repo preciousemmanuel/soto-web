@@ -12,15 +12,21 @@ const apiClient = axios.create({
 // Request interceptor
 apiClient.interceptors.request.use(
   (config) => {
-    // Attach the token to every request if it exists
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+    // Check for custom property in config to determine which token to use
+    const isVendor = config.isVendorRequest;
+    
+    const userToken = localStorage.getItem('userToken');
+    const vendorToken = localStorage.getItem('vendorToken');
+    
+    if (isVendor) {
+      config.headers['Authorization'] = `Bearer ${vendorToken}`;
+    } else {
+      config.headers['Authorization'] = `Bearer ${userToken}`;
     }
+    
     return config;
   },
   (error) => {
-    // Handle request errors
     return Promise.reject(error);
   }
 );
