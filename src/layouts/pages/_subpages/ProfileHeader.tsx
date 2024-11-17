@@ -4,7 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 const ProfileHeader = () => {
   const { switchToVendor } = useAuth();
-  const navigate = useNavigate();
+  
 
 
   return (

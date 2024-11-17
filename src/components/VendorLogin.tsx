@@ -44,7 +44,7 @@ import {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const toast = useToast();
-    const { vendorlogin } = useAuth();
+    const { vendorLogin } = useAuth();
   
     const togglePasswordVisibility = () => setShowPassword(!showPassword);
   
@@ -61,7 +61,7 @@ import {
             userType: "VENDOR" // Hardcoding userType as VENDOR
           };
   
-          await vendorlogin (loginData);
+          await vendorLogin (loginData);
           
           toast({
             title: "Login Successful",

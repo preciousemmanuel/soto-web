@@ -39,6 +39,7 @@ import AuthLayout from "./_layout/AuthLayout";
 import SellerLayout from "./_layout/SellerLayout";
 import VendorOrder from "./layouts/pages/Vendor/VendorOrder";
 import 'react-toastify/dist/ReactToastify.css';
+import VendorProtectedRoute from "./features/PrivateRoute/VendorProtectedRoute";
 
 
 
@@ -155,15 +156,15 @@ const App = () => {
       element: <SellerLayout />, //  Seller layout for these routes
       errorElement: <ErrorPage />,
       children: [
-        { index: true, element: <VendorOverview /> },
-        { path: "vendor-orders", element: <VendorOrder /> },
-        { path: "vendor-wallet", element: <VendorWallet /> },
-        { path: "vendor-insight", element: <VendorInsight /> },
-        { path: "vendor-overview", element: <VendorOverview /> },
-        { path: "vendor-transcactions", element: <VendorListOfTransactions /> },
-        { path: "vendor-request", element: <VendorRequest /> },
-        { path: "vendor-withdraw", element: <VendorWithdraw /> },
-        { path: "seller", element: <VendorOverview /> },
+        { index: true, element:(<VendorProtectedRoute><VendorOverview /></VendorProtectedRoute>)  },
+        { path: "vendor-orders", element:(<VendorProtectedRoute><VendorOrder /></VendorProtectedRoute>)  },
+        { path: "vendor-wallet", element:(<VendorProtectedRoute> <VendorWallet /></VendorProtectedRoute>) },
+        { path: "vendor-insight", element:(<VendorProtectedRoute> <VendorInsight /> </VendorProtectedRoute>)},
+        { path: "vendor-overview", element:(<VendorProtectedRoute><VendorOverview /></VendorProtectedRoute>)  },
+        { path: "vendor-transcactions", element:(<VendorProtectedRoute><VendorListOfTransactions /></VendorProtectedRoute>)  },
+        { path: "vendor-request", element: (<VendorProtectedRoute><VendorRequest /></VendorProtectedRoute>)  },
+        { path: "vendor-withdraw", element:(<VendorProtectedRoute><VendorWithdraw /></VendorProtectedRoute>)  },
+        // { path: "seller", element: <VendorOverview /> },
        
         // Add other seller-specific routes here
       ],

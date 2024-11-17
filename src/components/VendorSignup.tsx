@@ -96,7 +96,7 @@ import apiClient from "../services/axios";
       } catch (error) {
         toast({
           title: "Registration Failed",
-          description: error.response?.data?.message || "An error occurred during registration",
+          description: "An error occurred during registration",
           status: "error",
           duration: 7000,
           isClosable: true,
