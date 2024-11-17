@@ -53,7 +53,7 @@ apiClient.interceptors.response.use(
       case 401:
         console.error('Unauthorized:', error.response.data);
         localStorage.removeItem('token');
-        window.location.href = '/login'; // Redirect to login page
+        window.location.href = '/auth'; // Redirect to login page
         break;
 
       default:
