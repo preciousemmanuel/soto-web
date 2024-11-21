@@ -13,12 +13,12 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // Check for custom property in config to determine which token to use
-    const isVendor = config.isVendorRequest;
+    // const isVendor = config.isVendorRequest;
     
     const userToken = localStorage.getItem('userToken');
     const vendorToken = localStorage.getItem('vendorToken');
     
-    if (isVendor) {
+    if (vendorToken) {
       config.headers['Authorization'] = `Bearer ${vendorToken}`;
     } else {
       config.headers['Authorization'] = `Bearer ${userToken}`;

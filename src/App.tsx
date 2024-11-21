@@ -1,5 +1,9 @@
 import React, { Suspense } from "react";
-import { RouterProvider, createBrowserRouter,Navigate } from "react-router-dom";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  Navigate,
+} from "react-router-dom";
 
 // Lazy-loaded page components
 const HomePage = React.lazy(() => import("./layouts/pages/HomePage"));
@@ -12,24 +16,38 @@ const ProductDetailPage = React.lazy(
 const CartPage = React.lazy(() => import("./layouts/pages/CartPage"));
 const CheckoutPage = React.lazy(() => import("./layouts/pages/CheckoutPage"));
 const AuthPage = React.lazy(() => import("./layouts/pages/AuthPage"));
-const ProfilePage = React.lazy(() => import("./layouts/pages/_main/ProfilePage"));
+const ProfilePage = React.lazy(
+  () => import("./layouts/pages/_main/ProfilePage")
+);
 const OrderHistoryPage = React.lazy(
   () => import("./layouts/pages/OrderHistoryPage")
 );
 const Contact = React.lazy(() => import("./layouts/pages/ContactUs"));
 const Wishlist = React.lazy(() => import("./layouts/pages/Wishlist"));
 const CustomOrder = React.lazy(() => import("./layouts/pages/CustomOrder"));
-const LoginPage = React.lazy(()=> import("./components/Login"))
-const SignUpPage = React.lazy(()=> import("./components/SignUp"))
-const ForgetPassword = React.lazy(()=> import("./components/ForgetPassword"))
-const VendorOverview = React.lazy(()=> import("./layouts/pages/Vendor/VendorOverview"))
-const VendorInsight = React.lazy(()=> import("./layouts/pages/Vendor/VendorInsight"))
-const VendorWallet = React.lazy(()=> import("./layouts/pages/Vendor/VendorWallet"))
-const VendorListOfTransactions = React.lazy(()=> import("./layouts/pages/Vendor/VendorListOfTransaction"))
-const VendorWithdraw = React.lazy(()=> import("./layouts/pages/Vendor/VendorWithdraw"))
-const VendorRequest = React.lazy(()=> import("./layouts/pages/Vendor/VendorRequest"))
-const VendorSignup = React.lazy(()=> import("./components/VendorSignup"))
-const VendorLogin = React.lazy(()=> import( "./components/VendorLogin"))
+const LoginPage = React.lazy(() => import("./components/Login"));
+const SignUpPage = React.lazy(() => import("./components/SignUp"));
+const ForgetPassword = React.lazy(() => import("./components/ForgetPassword"));
+const VendorOverview = React.lazy(
+  () => import("./layouts/pages/Vendor/VendorOverview")
+);
+const VendorInsight = React.lazy(
+  () => import("./layouts/pages/Vendor/VendorInsight")
+);
+const VendorWallet = React.lazy(
+  () => import("./layouts/pages/Vendor/VendorWallet")
+);
+const VendorListOfTransactions = React.lazy(
+  () => import("./layouts/pages/Vendor/VendorListOfTransaction")
+);
+const VendorWithdraw = React.lazy(
+  () => import("./layouts/pages/Vendor/VendorWithdraw")
+);
+const VendorRequest = React.lazy(
+  () => import("./layouts/pages/Vendor/VendorRequest")
+);
+const VendorSignup = React.lazy(() => import("./components/VendorSignup"));
+const VendorLogin = React.lazy(() => import("./components/VendorLogin"));
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
@@ -38,14 +56,8 @@ import RootLayout from "./_layout/RootLayout";
 import AuthLayout from "./_layout/AuthLayout";
 import SellerLayout from "./_layout/SellerLayout";
 import VendorOrder from "./layouts/pages/Vendor/VendorOrder";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 import VendorProtectedRoute from "./features/PrivateRoute/VendorProtectedRoute";
-
-
-
-  
-
-
 
 const App = () => {
   const router = createBrowserRouter([
@@ -58,7 +70,7 @@ const App = () => {
           index: true,
           element: (
             // <ProtectedRoute>
-              <HomePage />
+            <HomePage />
             // </ProtectedRoute>
           ),
         },
@@ -150,22 +162,88 @@ const App = () => {
         { path: "*", element: <ErrorPage /> },
       ],
     },
-  
+
     {
       path: "/", // Seller-specific pages
       element: <SellerLayout />, //  Seller layout for these routes
       errorElement: <ErrorPage />,
       children: [
-        { index: true, element:(<VendorProtectedRoute><VendorOverview /></VendorProtectedRoute>)  },
-        { path: "vendor-orders", element:(<VendorProtectedRoute><VendorOrder /></VendorProtectedRoute>)  },
-        { path: "vendor-wallet", element:(<VendorProtectedRoute> <VendorWallet /></VendorProtectedRoute>) },
-        { path: "vendor-insight", element:(<VendorProtectedRoute> <VendorInsight /> </VendorProtectedRoute>)},
-        { path: "vendor-overview", element:(<VendorProtectedRoute><VendorOverview /></VendorProtectedRoute>)  },
-        { path: "vendor-transcactions", element:(<VendorProtectedRoute><VendorListOfTransactions /></VendorProtectedRoute>)  },
-        { path: "vendor-request", element: (<VendorProtectedRoute><VendorRequest /></VendorProtectedRoute>)  },
-        { path: "vendor-withdraw", element:(<VendorProtectedRoute><VendorWithdraw /></VendorProtectedRoute>)  },
+        {
+          index: true,
+          element: (
+            <VendorProtectedRoute>
+              <VendorOverview />
+            </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "vendor-orders",
+          element: (
+            <VendorProtectedRoute>
+              <VendorOrder />
+            </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "vendor-wallet",
+          element: (
+            <VendorProtectedRoute>
+              {" "}
+              <VendorWallet />
+            </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "vendor-insight",
+          element: (
+            <VendorProtectedRoute>
+              {" "}
+              <VendorInsight />{" "}
+            </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "vendor-overview",
+          element: (
+            <VendorProtectedRoute>
+              <VendorOverview />
+            </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "vendor-transcactions",
+          element: (
+            <VendorProtectedRoute>
+              <VendorListOfTransactions />
+            </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "vendor-request",
+          element: (
+            <VendorProtectedRoute>
+              <VendorRequest />
+            </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "vendor-withdraw",
+          element: (
+            <VendorProtectedRoute>
+              <VendorWithdraw />
+            </VendorProtectedRoute>
+          ),
+        },
         // { path: "seller", element: <VendorOverview /> },
-       
+        {
+          path: "vendor-profile",
+          element: (
+            <VendorProtectedRoute>
+              <ProfilePage />
+            </VendorProtectedRoute>
+          ),
+        },
+
         // Add other seller-specific routes here
       ],
     },
