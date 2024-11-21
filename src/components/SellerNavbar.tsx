@@ -23,6 +23,7 @@ import {
   import NotificationModal from "../features/modals/NotificationModal";
 import { CiLocationOn } from "react-icons/ci";
 import { TbWorld } from "react-icons/tb";
+import VendorModal from "../features/modals/VendorModal";
   
   const SellerNavbar = () => {
    
@@ -146,22 +147,22 @@ import { TbWorld } from "react-icons/tb";
             <DrawerHeader>Menu</DrawerHeader>
             <DrawerBody>
               <VStack align="start" spacing={4}>
-                <Link to="/overview" onClick={onDrawerClose}>
+                <Link to="/vendor-overview" onClick={onDrawerClose}>
                   <Text color="gray.500" _hover={{ color: "#FF5733" }}>
                     Overview
                   </Text>
                 </Link>
-                <Link to="/orders" onClick={onDrawerClose}>
+                <Link to="/vendor-orders" onClick={onDrawerClose}>
                   <Text color="gray.500" _hover={{ color: "#FF5733" }}>
                     Orders
                   </Text>
                 </Link>
-                <Link to="/wallet" onClick={onDrawerClose}>
+                <Link to="/vendor-wallet" onClick={onDrawerClose}>
                   <Text color="gray.500" _hover={{ color: "#FF5733" }}>
                     Wallet
                   </Text>
                 </Link>
-                <Link to="/insight" onClick={onDrawerClose}>
+                <Link to="/vendor-insight" onClick={onDrawerClose}>
                   <Text color="gray.500" _hover={{ color: "#FF5733" }}>
                     Insight
                   </Text>
@@ -175,7 +176,7 @@ import { TbWorld } from "react-icons/tb";
         <NotificationModal isOpen={isNotificationOpen} onClose={onNotificationClose} />
   
         {/* Render AccountModal */}
-        <AccountModal isOpen={isOpen} onClose={onClose} />
+        <VendorModal isOpen={isOpen} onClose={onClose} />
       </Box>
     );
   };

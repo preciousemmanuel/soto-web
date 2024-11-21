@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Avatar,
@@ -16,55 +16,53 @@ import {
   FaPowerOff,
   FaAngleRight,
 } from "react-icons/fa";
-import apiClient from "../../../services/axios";
 import { useAuth } from "../../hooks/useAuth";
 
 const ProfileInfoBox = ({ onSelectOption }) => {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const { logout } = useAuth();
+  const { user, fetchProfile, logout } = useAuth(); // Fetch profile function and logout from context
+  const [loading, setLoading] = React.useState(true);
   const toast = useToast();
 
-  const fetchProfile = async () => {
+  // Fetch Profile Data on Component Mount
+  const handleFetch = async () => {
     try {
-      const response = await apiClient.get("/user/profile");
-      if (response.status === 200) {
-        const { FirstName, LastName, Email } = response.data.data;
-        setProfile({ FirstName, LastName, Email });
-
-        toast({
-          title: "Profile Loaded Successfully",
-          description: `Welcome, ${FirstName}!`,
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
-      }
+      await fetchProfile(); // Fetch profile data
     } catch (error) {
       toast({
-        title: "Failed to Load Profile",
-        description: "Unable to fetch profile data. Please try again.",
+        title: "Error fetching profile",
+        description: "There was an error fetching your profile data.",
         status: "error",
         duration: 5000,
         isClosable: true,
       });
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading state to false
     }
   };
 
   useEffect(() => {
-    fetchProfile(); // Fetch profile data on component mount
+    handleFetch(); // Call fetch function on mount
   }, []);
 
+  // Handle Loading State
   if (loading) {
-    return <Spinner size="xl" />;
+    return (
+      <Flex justify="center" align="center" minH="200px">
+        <Spinner size="xl" />
+      </Flex>
+    );
   }
 
-  if (!profile) {
-    return <Text>No profile data available.</Text>;
+  // If User Data is Not Available
+  if (!user) {
+    return (
+      <Box p={6} textAlign="center">
+        <Text>No profile data available.</Text>
+      </Box>
+    );
   }
 
+  // Render Profile Data
   return (
     <Box
       p={6}
@@ -74,11 +72,11 @@ const ProfileInfoBox = ({ onSelectOption }) => {
       width={{ base: "100%", md: "45%" }}
     >
       <Flex align="center" mb={4}>
-        <Avatar size="md" name={`${profile.FirstName} ${profile.LastName}`} />
+        <Avatar size="md" name={`${user.FirstName} ${user.LastName}`} />
         <Box ml={4}>
-          <Text fontWeight="bold">{`${profile.FirstName} ${profile.LastName}`}</Text>
+          <Text fontWeight="bold">{`${user.FirstName} ${user.LastName}`}</Text>
           <Text color="gray.500" fontSize={"sm"}>
-            {profile.Email}
+            {user.Email}
           </Text>
           <Button
             size="xs"
@@ -117,7 +115,6 @@ const ProfileInfoBox = ({ onSelectOption }) => {
                   duration: 5000,
                   isClosable: true,
                 });
-                // Handle logout logic here if needed
               } else {
                 onSelectOption(item);
               }

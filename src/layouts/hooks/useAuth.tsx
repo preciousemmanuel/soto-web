@@ -8,15 +8,45 @@ export const useAuth = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const location = useLocation();
+  const [user, setUser] = useState(null)
+  const [error, setError] = useState(null);
 
   // Separate states for user and vendor authentication
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return !!localStorage.getItem("userToken");
+    return !!(localStorage.getItem("userToken") || localStorage.getItem("token"));;
   });
   
   const [isVendorAuthenticated, setIsVendorAuthenticated] = useState(() => {
     return !!localStorage.getItem("vendorToken");
   });
+
+
+
+
+  const fetchProfile = async () => {
+    setLoading(true); // Start loading state
+    try {
+      const response = await apiClient.get("/user/profile");
+      
+      // Log response status and data for debugging
+      console.log("Response Status:", response.status);
+      console.log("Response Data:", response.data);
+  
+      if (response.status === 200) {
+        const { FirstName, LastName, Email } = response.data.data;
+        setUser({ FirstName, LastName, Email }); // Update user context
+        return { FirstName, LastName, Email }; // Return user data
+      } else {
+        throw new Error(`Unexpected response code: ${response.status}`);
+      }
+    } catch (error) {
+      setError(error); // Set error state
+      console.error("Error fetching profile:", error); // Log error for debugging
+      throw error; // Rethrow error for further handling if needed
+    } finally {
+      setLoading(false); // End loading state
+    }
+  };
 
   // User login
   const login = async (credentials: {
@@ -222,10 +252,13 @@ export const useAuth = () => {
   };
 
   useEffect(() => {
-    const userToken = localStorage.getItem("userToken");
+    const userToken = localStorage.getItem("userToken") || localStorage.getItem("token");
+    if (userToken) {
+      setIsAuthenticated(true);
+    }
     const vendorToken = localStorage.getItem("vendorToken");
     
-    if (userToken) setIsAuthenticated(true);
+   
     if (vendorToken) setIsVendorAuthenticated(true);
   }, []);
 
@@ -240,6 +273,9 @@ export const useAuth = () => {
     signup,
     switchToVendor,
     requestOtp,
-    resetPassword
+    resetPassword,
+    fetchProfile,
+    setUser,
+    user
   };
 };
