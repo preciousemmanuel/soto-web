@@ -23,15 +23,18 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const notDiscount = !product.discount_price;
+  const notDiscount = product?.discount_price === undefined;
   const isOnSale =
-    product.is_discounted && product.discount_price < product.unit_price;
+    product?.is_discounted &&
+    product?.discount_price !== undefined &&
+    product?.unit_price !== undefined &&
+    product?.discount_price < product?.unit_price;
   const navigate = useNavigate();
   const handleProductClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest("button")) {
       return;
     }
-    navigate(`/products/${product._id}`);
+    navigate(`/products/${product?._id}`);
   };
 
   return (
@@ -48,8 +51,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       >
         <Box position="relative" height="150px">
           <Image
-            src={product.images[0]}
-            alt={product.product_name}
+            src={product?.images ? product?.images[0] : ""}
+            alt={product?.product_name}
             w="full"
             h="160px"
             objectFit="contain"
@@ -78,7 +81,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   fontWeight="medium"
                   mr={2}
                 >
-                  <Text>-{product.discount_price}%</Text>
+                  <Text>-{product?.discount_price}%</Text>
                 </Box>
               )}
             </Box>
@@ -117,16 +120,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </Box>
       <Stack mt={4} spacing={2}>
         <Text fontWeight="normal" textAlign="left" fontSize="lg">
-          {product.product_name}
+          {product?.product_name}
         </Text>
 
         <Flex gap={4} alignItems="center">
           <Text color={isOnSale ? "#FF5733" : "#FF5733"} fontWeight="normal">
-            ₦{isOnSale ? product.discount_price : product.unit_price}
+            ₦{isOnSale ? product?.discount_price : product?.unit_price}
           </Text>
           {isOnSale && (
             <Text as="s" color="#FF5743" fontSize="sm">
-              ₦{product.unit_price}
+              ₦{product?.unit_price}
             </Text>
           )}
         </Flex>
@@ -158,7 +161,7 @@ export default function WishListPage() {
         </Text>
         <SimpleGrid columns={[1, 2, 3]} spacing={0.5}>
           {products?.map((product: Product) => (
-            <ProductCard key={product._id} product={product} />
+            <ProductCard key={product?._id} product={product} />
           ))}
         </SimpleGrid>
       </Box>
