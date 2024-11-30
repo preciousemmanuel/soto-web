@@ -21,16 +21,16 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const isOutOfStock = !product.in_stock;
   const isOnSale =
-    product.is_discounted &&
-    product.discount_price &&
-    product.unit_price &&
-    product.discount_price < product.unit_price;
+    product?.is_discounted &&
+    product?.discount_price &&
+    product?.unit_price &&
+    product?.discount_price < product?.unit_price;
   const navigate = useNavigate();
   const handleProductClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest("button")) {
       return;
     }
-    navigate(`/products/${product._id}`);
+    navigate(`/products/${product?._id}`);
   };
 
   return (
