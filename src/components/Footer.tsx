@@ -16,31 +16,29 @@ import Logo from "../assets/soto.png";
 
 const Footer = () => {
   return (
-    <Box bg="#FFF2ED" py={10} px={5}>
+    <Box bg="#FFF2ED" py={10} minH="400px">
       <Flex
+        px={12}
         direction={{ base: "column", md: "row" }}
         justify="space-between"
         align={{ base: "center", md: "start" }}
         mb={10}
         gap={{ base: 10, md: 20 }}
+        position="relative"
       >
         {/* First Section: Logo and Subscription */}
         <VStack spacing={4} align="start" w={{ base: "100%", md: "25%" }}>
           <Image src={Logo} alt="Logo" boxSize="50px" mb={4} />
-          <Flex
-            as="form"
-            w="100%"
-            bg="white"
-            rounded="full"
-            overflow="hidden"
-            boxShadow="md"
-          >
+          <Flex gap={2}>
             <Input
               placeholder="Enter your email"
               bg="white"
               variant="unstyled"
               px={4}
               flex="1"
+              w="250px"
+              rounded="full"
+              overflow="hidden"
             />
             <Button
               bg={"#FF5733"}
@@ -54,13 +52,22 @@ const Footer = () => {
             </Button>
           </Flex>
         </VStack>
+        <Box
+          w="1px"
+          position="absolute"
+          top={-10}
+          bottom={-10}
+          left={450}
+          bg="#FB9984"
+          mx={4}
+          display={{ base: "none", md: "block" }}
+        />
 
-        {/* Second Section: Links */}
         <Flex
           wrap="wrap"
           justify="space-between"
           w={{ base: "100%", md: "60%" }}
-          gap={8}
+          gap={6}
         >
           {/* Example Link Group */}
           {[
@@ -112,11 +119,11 @@ const Footer = () => {
         direction={{ base: "column", md: "row" }}
         align="center"
         justify="space-between"
-        borderTop="1px solid #e0e0e0"
-        pt={5}
+        borderTop="1px solid #FB9984"
         spacing={5}
+        pt={6}
       >
-        <HStack spacing={4}>
+        <HStack spacing={4} pl={12}>
           <Link fontSize="sm" color="gray.500" _hover={{ color: "orange.500" }}>
             Terms & Conditions
           </Link>
@@ -158,7 +165,7 @@ const Footer = () => {
           />
         </HStack>
 
-        <Text fontSize="sm" color="gray.500" textAlign="center">
+        <Text fontSize="sm" color="gray.500" textAlign="center" pr={12}>
           Soto© 2024 All rights reserved
         </Text>
       </Stack>

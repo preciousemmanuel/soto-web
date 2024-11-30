@@ -18,33 +18,14 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
 
-const ProfileInfoBox = ({ onSelectOption }) => {
-  const { user, fetchProfile, logout } = useAuth(); // Fetch profile function and logout from context
-  const [loading, setLoading] = React.useState(true);
+const ProfileInfoBox = ({ onSelectOption }: any) => {
+  const { user, refetchProfile, logout, loading } = useAuth();
   const toast = useToast();
 
-  // Fetch Profile Data on Component Mount
-  const handleFetch = async () => {
-    try {
-      await fetchProfile(); // Fetch profile data
-    } catch (error) {
-      toast({
-        title: "Error fetching profile",
-        description: "There was an error fetching your profile data.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setLoading(false); // Set loading state to false
-    }
-  };
-
   useEffect(() => {
-    handleFetch(); // Call fetch function on mount
+    refetchProfile();
   }, []);
 
-  // Handle Loading State
   if (loading) {
     return (
       <Flex justify="center" align="center" minH="200px">
@@ -53,7 +34,6 @@ const ProfileInfoBox = ({ onSelectOption }) => {
     );
   }
 
-  // If User Data is Not Available
   if (!user) {
     return (
       <Box p={6} textAlign="center">

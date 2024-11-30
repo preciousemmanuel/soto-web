@@ -7,15 +7,13 @@ import {
 
 // Lazy-loaded page components
 const HomePage = React.lazy(() => import("./layouts/pages/HomePage"));
-const ProductsPage = React.lazy(
-  () => import("./layouts/pages/ProductDetailsPage")
-);
+const ProductsPage = React.lazy(() => import("./layouts/pages/ProductPage"));
 const ProductDetailPage = React.lazy(
   () => import("./layouts/pages/ProductDetailsPage")
 );
 const CartPage = React.lazy(() => import("./layouts/pages/CartPage"));
 const CheckoutPage = React.lazy(() => import("./layouts/pages/CheckoutPage"));
-const AuthPage = React.lazy(() => import("./layouts/pages/AuthPage"));
+// const AuthPage = React.lazy(() => import("./layouts/pages/AuthPage"));
 const ProfilePage = React.lazy(
   () => import("./layouts/pages/_main/ProfilePage")
 );
@@ -48,6 +46,9 @@ const VendorRequest = React.lazy(
 );
 const VendorSignup = React.lazy(() => import("./components/VendorSignup"));
 const VendorLogin = React.lazy(() => import("./components/VendorLogin"));
+const AddProduct = React.lazy(
+  () => import("./layouts/pages/product/addProduct")
+);
 
 const ErrorPage = React.lazy(() => import("./layouts/pages/ErrorPage"));
 import ProtectedRoute from "./features/PrivateRoute/ProtectedRoute";
@@ -58,8 +59,12 @@ import SellerLayout from "./_layout/SellerLayout";
 import VendorOrder from "./layouts/pages/Vendor/VendorOrder";
 import "react-toastify/dist/ReactToastify.css";
 import VendorProtectedRoute from "./features/PrivateRoute/VendorProtectedRoute";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import SuccessMessage from "./layouts/pages/product/alertPage";
+import VendorProductList from "./layouts/pages/Vendor/VendorProductList";
 
 const App = () => {
+  const queryClient = new QueryClient();
   const router = createBrowserRouter([
     {
       path: "/",
@@ -94,6 +99,14 @@ const App = () => {
               ),
             },
           ],
+        },
+        {
+          path: "product-list",
+          element: (
+            <ProtectedRoute>
+              <ProductsPage />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "cart",
@@ -243,7 +256,30 @@ const App = () => {
             </VendorProtectedRoute>
           ),
         },
-
+        {
+          path: "add-product",
+          element: (
+            <VendorProtectedRoute>
+              <AddProduct />
+            </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "vendor-product-list",
+          element: (
+            <VendorProtectedRoute>
+              <VendorProductList />
+            </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "alert-success",
+          element: (
+            <VendorProtectedRoute>
+              <SuccessMessage />
+            </VendorProtectedRoute>
+          ),
+        },
         // Add other seller-specific routes here
       ],
     },
@@ -251,7 +287,9 @@ const App = () => {
 
   return (
     <Suspense fallback={<LoadingSpinner />}>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </Suspense>
   );
 };

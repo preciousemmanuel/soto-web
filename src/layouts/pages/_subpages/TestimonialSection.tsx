@@ -6,16 +6,16 @@ import "swiper/css/navigation";
 import { Pagination } from "swiper/modules"; // import Pagination from modules
 import { Autoplay } from "swiper/modules";
 import { useEffect, useState } from "react";
-import Bestdlv from "../../../assets/quickdlv.png"
-import qualityprod from "../../../assets/qualityprod.png"
-import bestprc from "../../../assets/bestprc.png"
+import Bestdlv from "../../../assets/quickdlv.png";
+import qualityprod from "../../../assets/qualityprod.png";
+import bestprc from "../../../assets/bestprc.png";
 import man1 from "../../../assets/man1.png";
 import man2 from "../../../assets/man2.png";
 import woman from "../../../assets/woman.png";
 
 const TestimonialsSection = () => {
   const [currentImage, setCurrentImage] = useState(qualityprod);
-  const Testimonials = [man1,man2,woman]
+  const Testimonials = [man1, man2, woman];
 
   useEffect(() => {
     const images = [bestprc, Bestdlv];
@@ -34,7 +34,7 @@ const TestimonialsSection = () => {
       {/* Heading */}
       <Heading
         textAlign={{ base: "center", md: "left" }}
-        px={{ base: 4, md: 8 }}
+        px={{ base: 4, md: 16 }}
         fontFamily="Poppins"
         size={{ base: "md", md: "lg" }}
         mb={{ base: 4, md: 6 }}

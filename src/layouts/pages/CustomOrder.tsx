@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Key, useState } from "react";
 import {
   Box,
   Heading,
@@ -10,100 +10,154 @@ import {
   SimpleGrid,
   Flex,
   HStack,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { FaEye } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { useOrder } from "../hooks/useOrder";
 
 function CustomOrder() {
-  const [step, setStep] = useState<number | string >(1); // 1: Create Order, 2: Add Order, 3: Review Order
-  const [orders, setOrders] = useState([]);
+  const [step, setStep] = useState<number | string>(1);
+  const { orders } = useOrder();
+  const allOrder = orders;
+  const order = allOrder?.data?.data;
 
-  // Save and Submit button handler
-  const handleSaveSubmit = () => {
-    // Save logic (mocked)
-    setOrders([...orders, {}]);
-    setStep(step === 1 ? 2 : 3); // Move to the next step
-  };
+  const CreateOrder = () => {
+    const { register, handleSubmit } = useForm();
+    const { createOrder, isCreatingOrder, orderSuccess, refetchOrders } =
+      useOrder();
 
-  // Initial Form Layout (Create Order)
-  const CreateOrder = () => (
-    <Box w="full" maxW="600px" mx="auto" p={6} bg="" rounded="lg" boxShadow="">
-      <Heading
-        size="lg"
-        textAlign="center"
-        color={"#FF5733"}
-        mb={4}
-        mt={8}
-        bg={"#FFF2ED"}
-        px={6}
-        py={4}
-        fontFamily={"Poppins"}
-        width={"100%"}
-        fontWeight={"bold"}
-        fontSize={"22px"}
-      >
-        Create Order
-      </Heading>
-      <Text textAlign="center" mb={8} color={"gray"}>
-        Kindly enter your order details
-      </Text>
-      {renderFormFields()}
-      <Flex mt={6} justify="space-between">
-        <Button colorScheme="orange" variant="outline">
-          Save & Add
-        </Button>
-        <Button colorScheme="orange" onClick={handleSaveSubmit}>
-          Save & Submit
-        </Button>
-      </Flex>
-    </Box>
-  );
+    const onSubmit = async (data: any) => {
+      try {
+        await createOrder(data);
+        if (orderSuccess) {
+          await refetchOrders();
 
-  // Second Step Layout (Add Order)
-  const AddOrder = () => (
-    <Box textAlign="center" w="full" maxW="600px" mx="auto" p={6} rounded="lg">
-      <Flex
-        justifyContent="space-between"
-        alignItems="center"
-        mb={8}
-        bg={"#FFF2ED"}
-        px={6}
-        py={4}
-      >
+          setStep(3);
+        }
+      } catch (error) {
+        console.error("Order creation failed:", error);
+      }
+    };
+
+    return (
+      <Box w="full" mx="auto" bg="" rounded="lg" boxShadow="">
         <Heading
           size="lg"
+          textAlign="center"
           color={"#FF5733"}
+          mb={4}
+          mt={8}
+          bg={"#FFF2ED"}
+          px={6}
+          py={6}
           fontFamily={"Poppins"}
           width={"100%"}
           fontWeight={"bold"}
           fontSize={"22px"}
         >
-          Add Order
+          Create Order
         </Heading>
-        <Button
-          bg={"black"}
-          color="white"
-          fontSize={"14px"}
-          onClick={() => setStep(3)}
+        <Text textAlign="center" mb={8} color={"gray"}>
+          Kindly enter your order details
+        </Text>
+        <Box px={{ base: "30px", md: "30px", lg: "300px" }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {renderFormFields(register)}
+            <Button
+              isLoading={isCreatingOrder}
+              loadingText="Submitting..."
+              bg="#FF5733"
+              color="white"
+              h="50px"
+              borderRadius="xl"
+              variant="outline"
+              type="submit"
+              mt={6}
+            >
+              Save & Submit
+            </Button>
+          </form>
+        </Box>
+      </Box>
+    );
+  };
+
+  // Second Step Layout (Add Order)
+  const AddOrder = () => {
+    const { register, handleSubmit } = useForm();
+    const { createOrder, isCreatingOrder, orderSuccess, refetchOrders } =
+      useOrder();
+
+    const onSubmit = async (data: any) => {
+      try {
+        await createOrder(data);
+        if (orderSuccess) {
+          await refetchOrders();
+          setStep(3);
+        }
+      } catch (error) {
+        console.error("Order creation failed:", error);
+      }
+    };
+    return (
+      <Box w="full" mx="auto" p={6} rounded="lg">
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          mb={8}
+          bg={"#FFF2ED"}
+          px={6}
+          py={4}
         >
-          Review Order
-        </Button>
-      </Flex>
-      <Text mb={4} color={"gray"}>
-        Kindly enter your order details
-      </Text>
-      {renderFormFields()}
-      <Flex mt={6} justify="space-between">
-        <Button colorScheme="orange" variant="outline">
-          Save & Add
-        </Button>
-        <Button colorScheme="orange" onClick={handleSaveSubmit}>
-          Save & Submit
-        </Button>
-      </Flex>
-    </Box>
-  );
+          <Heading
+            size="lg"
+            color={"#FF5733"}
+            fontFamily={"Poppins"}
+            width={"100%"}
+            fontWeight={"bold"}
+            fontSize={"22px"}
+          >
+            Add Order
+          </Heading>
+          <Button
+            bg={"black"}
+            color="white"
+            fontSize={"14px"}
+            onClick={() => setStep(3)}
+          >
+            Review Order
+          </Button>
+        </Flex>
+        <Text mb={4} textAlign="center" color={"gray"}>
+          Kindly enter your order details
+        </Text>
+        <Box px={{ base: "30px", md: "30px", lg: "300px" }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {renderFormFields(register)}
+            <Button
+              isLoading={isCreatingOrder}
+              loadingText="Submitting..."
+              bg="#FF5733"
+              color="white"
+              h="50px"
+              borderRadius="xl"
+              variant="outline"
+              type="submit"
+              mt={6}
+            >
+              Save & Submit
+            </Button>
+          </form>
+        </Box>
+      </Box>
+    );
+  };
 
   // Review Order Layout
-  const ReviewOrder = () => (
+  const ReviewOrder = ({ order }: { order: any }) => (
     <Box mt={8}>
       <Heading
         size="lg"
@@ -119,41 +173,139 @@ function CustomOrder() {
         Review Order
       </Heading>
       <Flex justifyContent="space-between" alignItems="center" mb={6} px={10}>
-        <Text fontWeight="" fontSize="17px"  fontFamily={"Poppins"} color={"gray"}>
+        <Text
+          fontWeight=""
+          fontSize="17px"
+          fontFamily={"Poppins"}
+          color={"gray"}
+        >
           Recently Added
         </Text>
         <Button rounded="full">Select All</Button>
       </Flex>
-      <SimpleGrid columns={[1, 3]} spacing={6} mb={8}>
-        {orders.map((_order, index) => (
-          <Box key={index} p={4} bg="gray.100" rounded="md" shadow="sm">
-            <Text>Product Name: Example</Text>
-            <Text>Brand: Example</Text>
-            <Text>Size: Large</Text>
-            <Text>Color: Red</Text>
-            <Text>Quantity: 2</Text>
-            <HStack spacing={2} mt={4}>
-              <Button size="sm" colorScheme="blue">
-                Edit Order
-              </Button>
-              <Button size="sm" colorScheme="blackAlpha" color="white">
-                Review Order
-              </Button>
-              <Button size="sm" colorScheme="red">
-                Delete Order
-              </Button>
-            </HStack>
-          </Box>
-        ))}
-      </SimpleGrid>
-      <Button colorScheme="blackAlpha" color="white" w="full">
-        Submit
-      </Button>
+      <Flex
+        bg="pink.50"
+        p={5}
+        borderRadius="md"
+        justify="space-between"
+        align="center"
+      >
+        <Box
+          bg="white"
+          p={3}
+          borderRadius="md"
+          borderWidth="2px"
+          borderColor="#908D8D"
+          boxShadow="sm"
+        >
+          <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+            <GridItem>
+              <Text fontWeight="medium" color="#616060" fontSize="md">
+                Product Name
+              </Text>
+              <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+                {order.product_name}
+              </Text>
+            </GridItem>
+            <GridItem>
+              <Text fontWeight="medium" color="#616060" fontSize="md">
+                Product Brand
+              </Text>
+              <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+                {order.brand || "N/A"}
+              </Text>
+            </GridItem>
+            <GridItem>
+              <Text fontWeight="medium" color="#616060" fontSize="md">
+                Type
+              </Text>
+              <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+                {order.type}
+              </Text>
+            </GridItem>
+
+            <GridItem>
+              <Text fontWeight="medium" color="#616060" fontSize="md">
+                Size
+              </Text>
+              <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+                {order.size}
+              </Text>
+            </GridItem>
+            <GridItem>
+              <Text fontWeight="medium" color="#616060" fontSize="md">
+                Color
+              </Text>
+              <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+                {order.color}
+              </Text>
+            </GridItem>
+            <GridItem>
+              <Text fontWeight="medium" color="#616060" fontSize="md">
+                Qty
+              </Text>
+              <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+                {order.quantity}
+              </Text>
+            </GridItem>
+
+            <GridItem>
+              <Text fontWeight="medium" color="#616060" fontSize="md">
+                Price Range
+              </Text>
+              <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+                {order.min_price} - {order.max_price}
+              </Text>
+            </GridItem>
+          </Grid>
+        </Box>
+        <Flex
+          direction="column"
+          bg="gray.800"
+          p={5}
+          color="white"
+          align="center"
+          justify="space-around"
+        >
+          <Button
+            leftIcon={<EditIcon />}
+            color="white"
+            variant="solid"
+            mb={2}
+            size="sm"
+            bg="gray.800"
+            _hover="gray.800"
+          >
+            Edit Order
+          </Button>
+          <Button
+            leftIcon={<FaEye />}
+            bg="gray.800"
+            color="white"
+            variant="solid"
+            mb={2}
+            size="sm"
+            _hover="gray.800"
+          >
+            Review Order
+          </Button>
+          <Button
+            leftIcon={<DeleteIcon />}
+            bg="gray.800"
+            color="red"
+            variant="solid"
+            size="sm"
+            _hover="gray.800"
+          >
+            Delete Order
+          </Button>
+        </Flex>
+      </Flex>
     </Box>
   );
 
   // Shared Form Fields
-  const renderFormFields = () => (
+  const renderFormFields = (register: any) => (
     <VStack
       spacing={4}
       align="start"
@@ -163,51 +315,151 @@ function CustomOrder() {
       py={6}
       borderRadius={"md"}
     >
-      {[
-        "Product Name",
-        "Product Brand",
-        "Size",
-        "Color",
-        "Quantity",
-        "Type",
-        "Type",
-      ].map((label) => (
-        <Box key={label} w="full">
-          <Text fontSize="sm" mb={2} color={"gray"}>
-            {label}
+      <Box w="full">
+        <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
+          Product Name
+        </Text>
+        <Input
+          placeholder="Gaming Keyboard"
+          h="50px"
+          rounded="full"
+          bg="white"
+          {...register("product_name")}
+        />
+      </Box>
+      <SimpleGrid columns={[1, 2, 3]} spacing={6}>
+        <Box w="full">
+          <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
+            Size
           </Text>
           <Input
-            placeholder={label}
+            placeholder="Compact"
             rounded="full"
             bg="white"
             _placeholder={{ color: "gray.500" }}
+            h="50px"
+            {...register("size")}
           />
         </Box>
-      ))}
+        <Box w="full">
+          <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
+            Color
+          </Text>
+          <Input
+            placeholder="White"
+            rounded="full"
+            bg="white"
+            _placeholder={{ color: "gray.500" }}
+            h="50px"
+            {...register("color")}
+          />
+        </Box>
+        <Box w="full">
+          <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
+            Type
+          </Text>
+          <Input
+            placeholder="Mechanical"
+            rounded="full"
+            bg="white"
+            _placeholder={{ color: "gray.500" }}
+            h="50px"
+            {...register("type")}
+          />
+        </Box>
+        <Box w="full">
+          <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
+            Quantity
+          </Text>
+          <Input
+            type="number"
+            placeholder="1"
+            rounded="full"
+            bg="white"
+            _placeholder={{ color: "gray.500" }}
+            h="50px"
+            {...register("quantity")}
+          />
+        </Box>
+      </SimpleGrid>
       <Box w="full">
-        <Text fontSize="sm" mb={2} color={"gray"}>
+        <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
           Price Range
         </Text>
         <HStack spacing={4}>
-          <Input placeholder="Minimum" rounded="full" bg="white" />
-          <Input placeholder="Maximum" rounded="full" bg="white" />
+          <Input
+            placeholder="Minimum Price"
+            h="50px"
+            rounded="full"
+            bg="white"
+            {...register("min_price")}
+          />
+          <Input
+            placeholder="Maximum Price"
+            h="50px"
+            rounded="full"
+            bg="white"
+            {...register("max_price")}
+          />
         </HStack>
       </Box>
       <Box w="full">
-        <Text fontSize="sm" mb={2} color={"gray"}>
-          Message
+        <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
+          Phone Number
         </Text>
-        <Textarea placeholder="Enter message" rounded="lg" bg="white" />
+        <Input
+          placeholder="9876543210"
+          h="50px"
+          rounded="full"
+          bg="white"
+          {...register("phone_number")}
+        />
+      </Box>
+      <Box w="full">
+        <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
+          Email
+        </Text>
+        <Input
+          type="email"
+          placeholder="user@example.com"
+          h="50px"
+          rounded="full"
+          bg="white"
+          {...register("email")}
+        />
+      </Box>
+      <Box w="full">
+        <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
+          Note
+        </Text>
+        <Textarea
+          placeholder="Please include a wrist rest if available."
+          h="150px"
+          rounded="lg"
+          bg="white"
+          {...register("note")}
+        />
       </Box>
     </VStack>
   );
 
   return (
     <Box p={6} minH="100vh" mt={20}>
-      {/* Conditional Rendering for each step */}
       {step === 1 && <CreateOrder />}
       {step === 2 && <AddOrder />}
-      {step === 3 && <ReviewOrder />}
+      {step === 3 && (
+        <>
+          {!order || order.length === 0 ? (
+            <Text textAlign="center" color="gray" mt={120}>
+              No orders to review.
+            </Text>
+          ) : (
+            order?.map((orderItem: { _id: string }) => (
+              <ReviewOrder key={orderItem._id} order={orderItem} />
+            ))
+          )}
+        </>
+      )}
     </Box>
   );
 }

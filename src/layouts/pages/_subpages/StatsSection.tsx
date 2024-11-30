@@ -10,11 +10,11 @@ const StatsSection = () => {
     justify="center"
     align="center"
     wrap="wrap"
-    gap={6} // Add space between items for responsiveness
+    gap={12} // Add space between items for responsiveness
     textAlign="center"
   >
     {[
-      { text: "1000+", subtext: "Durable Products" },
+      { text: "OVER 1000+", subtext: "Durable Products" },
       { text: "99%", subtext: "Customer Satisfaction Rate" },
       { text: "24/7", subtext: "Shopping Convenience" },
       { text: "50K+", subtext: "Customer Reviews" },
@@ -22,22 +22,26 @@ const StatsSection = () => {
       <Box
         key={index}
         p={{ base: 4, md: 6 }}
-        boxShadow="lg"
-        borderRadius="md"
+        border="1px"
+        borderColor="gray.100"
+        borderRadius="14px"
         bg="white"
-        width={{ base: "100%", sm: "270px" }} // Full width on small screens, 270px on larger screens
+        width={{ base: "100%", sm: "270px" }}
         maxW="300px"
         mb={{ base: 4, md: 6 }}
+        textAlign="left"
       >
         <Heading
           color="black"
-          size={{ base: "lg", md: "xl" }}
+          // size={{ base: "md", md: "lg" }}
+          fontSize={{base:"20px", md:"26px"}}
           fontFamily="Poppins"
           fontWeight="600"
+          
         >
           {item.text}
         </Heading>
-        <Text mt={2} color="gray.600" fontFamily="Poppins" fontSize={{ base: "md", md: "lg" }}>
+        <Text mt={2} color="gray.600" fontFamily="Poppins" fontSize={{ base: "14px", md: "16px" }}>
           {item.subtext}
         </Text>
       </Box>

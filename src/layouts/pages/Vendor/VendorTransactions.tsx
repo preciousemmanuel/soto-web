@@ -1,10 +1,47 @@
 // TransactionsTable.js
 
-import { Box, Text, Table, Thead, Th, Tr, Tbody, Td, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Table,
+  Thead,
+  Th,
+  Tr,
+  Tbody,
+  Td,
+  Button,
+} from "@chakra-ui/react";
 
-const VendorTransactions = ({ transactions }) => {
+interface Transaction {
+  _id: string;
+  reference: string;
+  amount: number;
+  user: string;
+  type: "DEBIT" | "CREDIT";
+  status: "SUCCESSFUL" | "PENDING" | "FAILED";
+  currency: string;
+  narration: string;
+  narration_id: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const VendorTransactions = ({
+  transactions,
+}: {
+  transactions: Transaction[];
+}) => {
   return (
-    <Box bg="white" boxShadow="lg" border="1px" borderColor="gray.200" borderRadius="md" p={4} overflowX="auto" mt={6}>
+    <Box
+      bg="white"
+      boxShadow="lg"
+      border="1px"
+      borderColor="gray.200"
+      borderRadius="md"
+      p={4}
+      overflowX="auto"
+      mt={6}
+    >
       <Text fontSize="lg" fontWeight="500" mb={4}>
         Recent Transactions
       </Text>
@@ -20,20 +57,38 @@ const VendorTransactions = ({ transactions }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {transactions.map((transaction) => (
-            <Tr key={transaction.id}>
-              <Td>{transaction.id}</Td>
-              <Td>{transaction.title}</Td>
-              <Td>{transaction.date}</Td>
-              <Td>{transaction.amount}</Td>
-              <Td color={transaction.status === "Completed" ? "green.500" : transaction.status === "Pending" ? "yellow.500" : "red.500"}>
-                {transaction.status}
-              </Td>
-              <Td>
-                <Button size="sm">View</Button>
+          {transactions?.length === 0 ? (
+            <Tr>
+              <Td colSpan={6} textAlign="center">
+                No transactions available
               </Td>
             </Tr>
-          ))}
+          ) : (
+            transactions?.map((transaction: Transaction) => (
+              <Tr key={transaction?._id}>
+                <Td>{transaction?.reference}</Td>
+                <Td>{transaction?.narration}</Td>
+                <Td>{new Date(transaction?.createdAt).toLocaleDateString()}</Td>
+                <Td>
+                  {transaction?.amount} {transaction?.currency}
+                </Td>
+                <Td
+                  color={
+                    transaction?.status === "SUCCESSFUL"
+                      ? "green.500"
+                      : transaction?.status === "PENDING"
+                      ? "yellow.500"
+                      : "red.500"
+                  }
+                >
+                  {transaction?.status}
+                </Td>
+                {/* <Td>
+                <Button size="sm">View</Button>
+              </Td> */}
+              </Tr>
+            ))
+          )}
         </Tbody>
       </Table>
     </Box>
