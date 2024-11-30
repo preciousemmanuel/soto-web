@@ -324,7 +324,7 @@ const Vendorsignup: React.FC = () => {
                       {...formik.getFieldProps("adress")}
                     />
                   </InputGroup>
-                  <FormErrorMessage>{formik.errors.address}</FormErrorMessage>
+                  <FormErrorMessage>{formik.errors.adress}</FormErrorMessage>
                 </FormControl>
 
                 {/* Password Field */}
@@ -443,7 +443,7 @@ const Vendorsignup: React.FC = () => {
                   width="100%"
                   borderRadius="full"
                   mb={4}
-                  onClick={formik.handleSubmit}
+                  onClick={() => formik.handleSubmit()}
                   isLoading={signupMutation.isPending}
                   loadingText="Creating Business..."
                 >

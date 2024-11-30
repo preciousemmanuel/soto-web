@@ -288,7 +288,7 @@ const VendorOverview = () => {
                             wrap="wrap"
                           >
                             <Image
-                              src={product?.images[0]}
+                              src={product?.images && product?.images[0]}
                               boxSize="50px"
                               alt={product?.product_name}
                             />
@@ -297,7 +297,9 @@ const VendorOverview = () => {
                                 {product?.product_name}
                               </Text>
                               <Text fontSize="sm" color="gray.500">
-                                {`$${(product?.unit_price / 100).toFixed(2)}`}
+                                {product?.unit_price
+                                  ? `$${(product?.unit_price / 100).toFixed(2)}`
+                                  : "N/A"}
                               </Text>
                             </Box>
                             <Button

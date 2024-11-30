@@ -11,8 +11,8 @@ const ProductDetailsPage = () => {
   const { useSingleProduct } = useProduct();
   const oneProduct = useSingleProduct(productId as string);
 
-  const product = oneProduct?.data?.data.product;
-
+  const products = oneProduct.data?.data;
+  const product = products?.product;
   return (
     <Box>
       <Flex
@@ -29,14 +29,22 @@ const ProductDetailsPage = () => {
         <Box w={{ base: "100%", md: "55%" }}>
           <ProductDetails
             product={{
+              vendor: product?.vendor || "",
+              height: product?.height || 0,
+              width: product?.width || 0,
+              weight: product?.weight || 0,
               product_name: product?.product_name || "",
               unit_price: product?.unit_price || 0,
               description: product?.description || "",
               product_quantity: product?.product_quantity || 0,
-              category: product?.category.name,
-              images: [],
+              category: product?.category?.name,
               rating: product?.rating,
               in_stock: false,
+              images: product?.images || [],
+              is_discounted: product?.is_discounted || false,
+              is_verified: product?.is_verified || false,
+              is_deleted: product?.is_deleted || false,
+              total_quantity_sold: product?.total_quantity_sold || 0,
             }}
             sizes={["XS", "L", "XL"]}
             colors={["teal", "gray.400", "green.500"]}
