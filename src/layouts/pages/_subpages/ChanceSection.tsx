@@ -1,51 +1,64 @@
-import { Flex, Box, Image as Img } from "@chakra-ui/react";
+import { Flex, Box, Image as Img, Heading, Text } from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { EffectFade } from "swiper/modules";
+import "swiper/css/effect-fade";
 import { Pagination } from "swiper/modules";
 import { Autoplay } from "swiper/modules";
 import Chancebg from "../../../assets/chancebg.png";
-import Chanc from "../../../assets/chance.png";
-import Slide1 from "../../../assets/chair.png";
-import Slide2 from "../../../assets/headset.png";
-import Slide3 from "../../../assets/pod.png";
+
+import Slide1 from "../../../assets/slide1.png";
+import Slide2 from "../../../assets/slide2.png";
+import Slide3 from "../../../assets/slide3.png";
 
 const Chance = () => {
   const swiperImages = [Slide1, Slide2, Slide3];
 
   return (
     <Flex
-      px={{ base: 0, md: 14 }}
       py={{ base: 8, md: 14 }}
       mt={{ base: 10, md: 20 }}
       bgImage={Chancebg}
       bgRepeat="no-repeat"
       bgSize="cover"
-      direction={{ base: "column", md: "row" }}
-      align="center"
-      ml={{ base: 0, md: 10 }}
+      mx={{ base: 10, md: 16 }}
     >
       {/* Text Box */}
-      <Box flex="1" pr={{ base: 2, md: 8 }} mb={{ base: 8, md: 0 }}>
-        <Img src={Chanc} w={{ base: "", md: "100%" }} height={"220px"} mx="" />
+      <Box flex="1" p={{ base: 2, md: 20 }} mb={{ base: 8, md: 0 }}>
+        <Heading fontSize="40px" mb={2}>
+          One last chance
+        </Heading>
+        <Text color="gray.600" fontSize="24px" mb={2}>
+          Save up to
+        </Text>
+        <Heading fontSize="120px" color="#FF5733" mb={2}>
+          30%
+        </Heading>
       </Box>
 
       {/* Swiper Box */}
-      <Box flex="1" w="100%">
+      <Box flex="1" w="100%" overflow="hidden">
         <Swiper
-          direction="vertical"
-          pagination={{ clickable: true }}
+          effect="fade"
           autoplay={{ delay: 3000 }}
-          modules={[Pagination, Autoplay]}
+          modules={[Pagination, Autoplay, EffectFade]}
           style={{
-            height: "300px",
+            height: "400px",
             borderRadius: "8px",
+            maxWidth: "100%",
           }}
         >
           {swiperImages.map((image, index) => (
             <SwiperSlide key={index}>
-              <Img src={image} alt={`Slide ${index + 1}`} objectFit="cover" />
+              <Img
+                src={image}
+                alt={`Slide ${index + 1}`}
+                objectFit="contain"
+                maxH="100%"
+                maxW="100%"
+              />
             </SwiperSlide>
           ))}
         </Swiper>

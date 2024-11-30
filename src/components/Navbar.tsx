@@ -23,17 +23,47 @@ import { IoCartOutline } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 import { Search2Icon } from "@chakra-ui/icons";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AccountModal from "../features/modals/AccountModal";
 import CategoriesPopover from "../features/modals/CategoriesPopover";
+import { CartItem } from "../layouts/pages/_subpages/CategoriesSection";
 
 const Navbar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onClose: onDrawerClose } = useDisclosure();
+  const {
+    isOpen: isDrawerOpen,
+    onOpen: onDrawerOpen,
+    onClose: onDrawerClose,
+  } = useDisclosure();
+  const cart: CartItem[] = JSON.parse(localStorage.getItem("cart") || "[]");
 
   const handleExpand = () => setIsExpanded(true);
   const handleCollapse = () => setIsExpanded(false);
+
+  const [cartQuantity, setCartQuantity] = useState(0);
+
+  useEffect(() => {
+    updateCartQuantity();
+
+    window.addEventListener("storage", updateCartQuantity);
+
+    window.addEventListener("cartUpdated", updateCartQuantity);
+
+    return () => {
+      window.removeEventListener("storage", updateCartQuantity);
+      window.removeEventListener("cartUpdated", updateCartQuantity);
+    };
+  }, []);
+
+  const updateCartQuantity = () => {
+    const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+    const quantity = cartItems.reduce(
+      (total: number, item: any) => total + item.quantity,
+      0
+    );
+    setCartQuantity(quantity);
+  };
 
   return (
     <Box bg="#FFF2ED" position={"fixed"} width={"100%"} zIndex={"1000"}>
@@ -87,7 +117,11 @@ const Navbar = () => {
         </Box>
 
         {/* Navigation links for larger screens */}
-        <Flex display={{ base: "none", md: "flex" }} gap={6} alignItems="center">
+        <Flex
+          display={{ base: "none", md: "flex" }}
+          gap={6}
+          alignItems="center"
+        >
           <Link to="/">
             <Text color="gray.500" _hover={{ color: "#FF5733" }}>
               Home
@@ -107,7 +141,12 @@ const Navbar = () => {
         </Flex>
 
         {/* Search, Cart, and Account Icons */}
-        <Flex gap={{ base: 4, md: 8 }} alignItems="center" mt={{ base: 4, md: 0 }} display={{ base: "none", md: "flex" }}>
+        <Flex
+          gap={{ base: 4, md: 8 }}
+          alignItems="center"
+          mt={{ base: 4, md: 0 }}
+          display={{ base: "none", md: "flex" }}
+        >
           <Box maxW="200px" width="100%">
             <InputGroup>
               <InputLeftElement pointerEvents="none">
@@ -127,8 +166,32 @@ const Navbar = () => {
           </Box>
 
           <Link to="/cart">
-            <Flex flexDirection="column" alignItems="center" cursor="pointer">
-              <IoCartOutline color="gray" size={25} />
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              cursor="pointer"
+              position="relative"
+            >
+              <Box position="relative">
+                <IoCartOutline color="gray" size={25} />
+                <Box
+                  position="absolute"
+                  top="-8px"
+                  right="-8px"
+                  bg="#FF5733"
+                  color="white"
+                  borderRadius="full"
+                  minW="18px"
+                  height="18px"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  fontSize="10px"
+                  fontWeight="bold"
+                >
+                  {cartQuantity}
+                </Box>
+              </Box>
               <Text color="gray.500" fontSize="12px">
                 Cart
               </Text>
@@ -157,18 +220,30 @@ const Navbar = () => {
           <DrawerBody pt={10}>
             <Flex flexDirection="column" gap={6}>
               <Link to="/">
-                <Text color="gray.500" _hover={{ color: "#FF5733" }} onClick={onDrawerClose}>
+                <Text
+                  color="gray.500"
+                  _hover={{ color: "#FF5733" }}
+                  onClick={onDrawerClose}
+                >
                   Home
                 </Text>
               </Link>
               <CategoriesPopover />
               <Link to="/custom-order">
-                <Text color="gray.500" _hover={{ color: "#FF5733" }} onClick={onDrawerClose}>
+                <Text
+                  color="gray.500"
+                  _hover={{ color: "#FF5733" }}
+                  onClick={onDrawerClose}
+                >
                   Custom Order
                 </Text>
               </Link>
               <Link to="/my-orders">
-                <Text color="gray.500" _hover={{ color: "#FF5733" }} onClick={onDrawerClose}>
+                <Text
+                  color="gray.500"
+                  _hover={{ color: "#FF5733" }}
+                  onClick={onDrawerClose}
+                >
                   My Orders
                 </Text>
               </Link>

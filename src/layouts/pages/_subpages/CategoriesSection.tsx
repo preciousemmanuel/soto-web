@@ -1,77 +1,193 @@
-import { Box, Flex, Heading, Text, Link, Icon, Image } from "@chakra-ui/react";
-import { FaChevronRight } from "react-icons/fa";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { Autoplay } from "swiper/modules";
-import { Link as RouterLink } from "react-router-dom";
-import Watch from "../../../assets/watch.png";
-import Shoe from "../../../assets/shoe.png";
+import React from "react";
+import {
+  Box,
+  Grid,
+  Heading,
+  Text,
+  Image,
+  Button,
+  HStack,
+  Flex,
+  IconButton,
+} from "@chakra-ui/react";
+import { ArrowForwardIcon, StarIcon } from "@chakra-ui/icons";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Product, useProduct } from "../../hooks/useProduct";
+import { useNavigate } from "react-router-dom";
 
-export const CategoriesSection = () => {
-  const image = [Watch, Shoe, Watch, Shoe, Watch];
+export interface CartItem {
+  productId: string;
+  productName: string;
+  price: number;
+  image: string;
+  quantity: number;
+}
 
+const ProductCard: React.FC<{
+  product: Product;
+  onAddToCart: (productId: string) => void;
+}> = ({ product, onAddToCart }) => {
+  const navigate = useNavigate();
+  const [isWishlisted, setIsWishlisted] = React.useState(false);
+  const { addToWishlist, removeFromWishlist } = useProduct();
+
+  const handleWishlistClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      if (isWishlisted) {
+        await removeFromWishlist?.(product._id);
+      } else {
+        await addToWishlist?.(product._id);
+      }
+      setIsWishlisted(!isWishlisted);
+    } catch (error) {
+      console.error("Error updating wishlist:", error);
+    }
+  };
+
+  const handleProductClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("button")) {
+      return;
+    }
+    navigate(`/products/${product._id}`);
+  };
   return (
-    <Box py={{ base: 8, md: 12 }} bg="gray.50">
-      {/* Header Section */}
-      <Flex
-        justify="space-between"
-        align="center"
-        px={{ base: 4, md: 8 }}
-        direction={{ base: "column", md: "row" }}
-        textAlign={{ base: "center", md: "left" }}
-        mb={{ base: 6, md: 8 }}
-      >
-        <Box mb={{ base: 4, md: 0 }}>
-          <Heading size={{ base: "md", md: "lg" }} fontFamily="Poppins">
-            Popular Categories
-          </Heading>
-          <Text py={2} color="gray.600" fontSize={{ base: "sm", md: "md" }}>
-            You have a choice to shop based on categories
-          </Text>
+    <Box
+      borderRadius="lg"
+      overflow="hidden"
+      p={4}
+      transition="all 0.2s ease-in-out"
+      _hover={{
+        shadow: "lg",
+        transform: "scale(1.01)",
+      }}
+      cursor="pointer"
+      onClick={handleProductClick}
+    >
+      <Flex justify="space-between" align="start">
+        <Box position="relative" w="full" mb={4}>
+          <Image
+            src={product.images[0]}
+            alt={product.product_name}
+            w="full"
+            h="160px"
+            objectFit="contain"
+          />
         </Box>
-        <Link
-          as={RouterLink}
-          to="/categories"
-          color="orange.400"
-          fontSize={{ base: "sm", md: "md" }}
-        >
-          View More <Icon as={FaChevronRight} />
-        </Link>
       </Flex>
-
-      {/* Swiper Section */}
-      <Swiper
-        spaceBetween={16}
-        slidesPerView={1} // Starts with one slide
-        breakpoints={{
-          640: { slidesPerView: 2 }, // Two slides on screens 640px+
-          768: { slidesPerView: 3 }, // Three slides on screens 768px+
-          1024: { slidesPerView: 4 }, // Four slides on screens 1024px+
-          1280: { slidesPerView: 5 }, // Five slides on screens 1280px+
-        }}
-        autoplay={{ delay: 2500 }}
-        modules={[Autoplay]}
-        style={{ padding: "20px" }}
-      >
-        {image.map((img, i) => (
-          <SwiperSlide key={i}>
-            <Box
-              w="100%"
-              h={{ base: "200px", md: "250px", lg: "300px" }}
-              bg="gray.300"
-              borderRadius="lg"
-              overflow="hidden"
-              boxShadow="md"
-            >
-              <Image src={img} w="100%" h="100%" objectFit="cover" />
-            </Box>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+      <Box fontFamily="poppins">
+        <Flex justify="space-between" align="start">
+          <Box>
+            <Text fontSize="sm" mb={1}>
+              {product.product_name}
+            </Text>
+            <HStack spacing={2} mb={2}>
+              <Text fontWeight="500">₦{product.unit_price}</Text>
+              {product.is_discounted && (
+                <Text
+                  fontSize="sm"
+                  color="gray.500"
+                  textDecoration="line-through"
+                >
+                  ₦{product.discount_price}
+                </Text>
+              )}
+            </HStack>
+          </Box>
+          <IconButton
+            aria-label="Add to wishlist"
+            icon={
+              isWishlisted ? (
+                <FaHeart fill="#FF5733" fontSize={20} />
+              ) : (
+                <FaRegHeart fill="gray" fontSize={20} />
+              )
+            }
+            size="md"
+            rounded="full"
+            onClick={handleWishlistClick}
+            colorScheme="gray"
+          />
+        </Flex>
+        <HStack spacing={1} my={4}>
+          {Array(5)
+            .fill("")
+            .map((_, i) => (
+              <StarIcon
+                key={i}
+                color={i < 5 ? "#FF8A00" : "gray.200"}
+                fontSize="sm"
+              />
+            ))}
+        </HStack>
+        <Button
+          color="#FF5733"
+          borderWidth={1}
+          borderColor="#FF5733"
+          variant="outline"
+          size="md"
+          width="full"
+          h="40px"
+          onClick={() => onAddToCart(product._id)}
+          _hover={{
+            background: "#FF5733",
+            color: "white",
+          }}
+        >
+          Add to Cart
+        </Button>
+      </Box>
     </Box>
   );
 };
 
-export default CategoriesSection;
+const BestSelling: React.FC = () => {
+  const { products, handleAddToCart } = useProduct();
+  const navigate = useNavigate();
+  return (
+    <Box py={8} px={{ base: 6, md: 16 }}>
+      <Flex justify="space-between" align="center" mb={6}>
+        <Box>
+          <Heading fontSize="30px" mb={2}>
+            Best Selling
+          </Heading>
+          <Text color="gray.600" fontSize="20px" mb={4}>
+            You have a choice to shop based on categories
+          </Text>
+        </Box>
+        <Button
+          onClick={() => navigate("/product-list")}
+          rightIcon={
+            <Box as="span" fontSize="lg">
+              <ArrowForwardIcon />
+            </Box>
+          }
+          variant="link"
+          color="#FF5733"
+        >
+          View more
+        </Button>
+      </Flex>
+
+      <Grid
+        templateColumns={{
+          base: "repeat(1, 1fr)",
+          sm: "repeat(2, 1fr)",
+          md: "repeat(3, 1fr)",
+          lg: "repeat(4, 1fr)",
+        }}
+        gap={6}
+      >
+        {products.map((product: Product) => (
+          <ProductCard
+            key={product._id}
+            product={product}
+            onAddToCart={handleAddToCart}
+          />
+        ))}
+      </Grid>
+    </Box>
+  );
+};
+
+export default BestSelling;

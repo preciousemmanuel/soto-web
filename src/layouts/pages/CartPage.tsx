@@ -1,9 +1,47 @@
 import { Box, Flex, Text, Button, Image, SimpleGrid } from "@chakra-ui/react";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { CartItem } from "./_subpages/CategoriesSection";
+import RelatedProducts from "./product/relatedProduct";
+import { useProduct } from "../hooks/useProduct";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = () => {
+  const navigate = useNavigate();
+  const [cart, setCart] = useState<CartItem[]>(
+    JSON.parse(localStorage.getItem("cart") || "[]")
+  );
+  const { handleRemoveFromCart } = useProduct();
+  // console.log(cart, "cart");
+  const updateCart = () => {
+    const updatedCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    setCart(updatedCart);
+  };
+
+  const calculateTotals = () => {
+    const subtotal = cart.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+    return {
+      subtotal,
+      total: subtotal,
+    };
+  };
+
+  useEffect(() => {
+    window.addEventListener("cartUpdated", updateCart);
+    return () => {
+      window.removeEventListener("cartUpdated", updateCart);
+    };
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
   return (
-    <Box bg="" p={[4, 6, 8]}>
+    <Box bg="" p={[4, 6, 8]} mt={120}>
       {/* Shopping Cart Header */}
       <Text
         textAlign="center"
@@ -24,102 +62,125 @@ const CartPage = () => {
         mb={16}
       >
         {/* Product List Section */}
-        <Box flex="2" bg="transparent" p={6} borderRadius="md">
+        <Box flex="2" bg="white" p={6} borderRadius="md" boxShadow="sm">
           <Flex
             bg={"#FBF5F5"}
-            pt={4}
-            pb={4}
+            py={4}
             fontWeight="bold"
-            mb={4}
-            px={4}
+            mb={6}
+            px={6}
             justifyContent="space-between"
+            borderRadius="md"
           >
-            <Text>Product</Text>
-            <Text>Price</Text>
-            <Text>Qty</Text>
-            <Text>Subtotal</Text>
+            <Text flex="2">Product</Text>
+            <Text flex="1" textAlign="center">
+              Price
+            </Text>
+            <Text flex="1" textAlign="center">
+              Qty
+            </Text>
+            <Text flex="1" textAlign="center">
+              Subtotal
+            </Text>
+            <Text flex="0.5"></Text>
           </Flex>
-
-          {/* Example Products */}
-          {[1, 2, 3].map((item) => (
+          {cart.map((item) => (
             <Flex
-              key={item}
+              key={item.productId}
               alignItems="center"
               justifyContent="space-between"
-              py={4}
+              py={5}
+              px={6}
               borderBottom="1px solid"
-              borderColor="gray.200"
+              borderColor="gray.100"
+              _hover={{ bg: "gray.50" }}
             >
-              <Text>Product {item}</Text>
-              <Text>$10.00</Text>
-              <Text>1</Text>
-              <Text>$10.00</Text>
-              <Text color="red.500" cursor="pointer">
-               <RiDeleteBinLine color="red"/>
+              <Flex alignItems="center" gap={4} flex="2">
+                <Image
+                  src={item.image}
+                  alt={item.productName}
+                  boxSize="60px"
+                  objectFit="cover"
+                  borderRadius="md"
+                />
+                <Text fontWeight="medium">{item.productName}</Text>
+              </Flex>
+              <Text flex="1" textAlign="center">
+                N{item.price.toLocaleString()}
               </Text>
+              <Text flex="1" textAlign="center">
+                {item.quantity}
+              </Text>
+              <Text flex="1" textAlign="center" fontWeight="semibold">
+                N{(item.price * item.quantity).toLocaleString()}
+              </Text>
+              <Flex flex="0.5" justifyContent="flex-end">
+                <Box
+                  as="button"
+                  color="red.500"
+                  _hover={{ color: "red.600" }}
+                  transition="all 0.2s"
+                  onClick={() => {
+                    handleRemoveFromCart(item.productId);
+                    updateCart();
+                  }}
+                >
+                  <RiDeleteBinLine size={20} />
+                </Box>
+              </Flex>
             </Flex>
           ))}
         </Box>
 
-        {/* Cart Totals Section */}
-        <Box flex="1"  p={6} borderRadius="md" boxShadow="md" bg={"#FBF5F5"}>
-          <Text fontWeight="bold" mb={4} color={"#FF5733"} fontSize={"20px"}>
+        <Box flex="1" p={6} height="400px" bg={"#FBF5F5"}>
+          <Text fontWeight="bold" mb={4} color={"#FF5733"} fontSize={"30px"}>
             Cart Totals
           </Text>
-          <Flex justifyContent="space-between" mb={2}>
-            <Text>Subtotal</Text>
-            <Text>$30.00</Text>
+          {(() => {
+            const { subtotal, total } = calculateTotals();
+            return (
+              <>
+                <Flex justifyContent="space-between" mb={2}>
+                  <Text>Subtotal</Text>
+                  <Text>N{subtotal.toLocaleString()}</Text>
+                </Flex>
+                <Flex justifyContent="space-between" mb={4}>
+                  <Text fontWeight="bold">Total</Text>
+                  <Text fontWeight="bold">N{total.toLocaleString()}</Text>
+                </Flex>
+              </>
+            );
+          })()}
+          <Flex flexDirection="column" gap={4} mt="30px">
+            <Button
+              width="full"
+              color="#FF5733"
+              border="2px"
+              borderColor="#FF5733"
+              _hover={{ bg: "#FF5733", color: "#ffff" }}
+              borderRadius="md"
+              variant="outline"
+              h="54px"
+            >
+              Continue Shopping
+            </Button>
+            <Button
+              width="full"
+              bg="#FF5733"
+              color="#FFFF"
+              _hover={{ bg: "#FF5733", color: "#ffff" }}
+              borderRadius="md"
+              variant="outline"
+              h="54px"
+              onClick={() => navigate("/checkout")}
+            >
+              Proceed to Checkout
+            </Button>
           </Flex>
-          <Flex justifyContent="space-between" mb={4}>
-            <Text fontWeight="bold">Total</Text>
-            <Text fontWeight="bold">$30.00</Text>
-          </Flex>
-          <Button
-            width="full"
-            // bg="orange.400"
-            color="#FF5733"
-            // _hover={{ bg: "orange.500" }}
-            borderRadius="md"
-            variant="outline"
-          >
-            Proceed to Checkout
-          </Button>
         </Box>
       </Flex>
 
-      {/* You May Also Like Section */}
-      <Box mb={8}>
-        <Text fontSize="lg" fontWeight="bold" mb={4} textAlign="left">
-          You May Also Like
-        </Text>
-
-        {/* Product Suggestions */}
-        <SimpleGrid columns={[2, 4]} spacing={4} mb={6} justifyItems="center">
-          {[1, 2, 3, 4].map((item) => (
-            <Box key={item} borderRadius="md" overflow="hidden">
-              <Image
-                src={`https://via.placeholder.com/150?text=Item+${item}`}
-                alt={`Suggested Product ${item}`}
-                borderRadius="md"
-              />
-            </Box>
-          ))}
-        </SimpleGrid>
-
-        {/* Show More Button */}
-        <Flex justifyContent="center">
-          <Button
-            variant="outline"
-            color="orange.500"
-            borderColor="orange.500"
-            borderRadius="full"
-            _hover={{ bg: "orange.100" }}
-            size={"lg"}
-          >
-            Show More
-          </Button>
-        </Flex>
-      </Box>
+      <RelatedProducts title="You may also like" />
     </Box>
   );
 };
