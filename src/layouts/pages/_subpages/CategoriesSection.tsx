@@ -35,9 +35,9 @@ const ProductCard: React.FC<{
     e.stopPropagation();
     try {
       if (isWishlisted) {
-        await removeFromWishlist?.(product._id);
+        await removeFromWishlist?.(product._id ?? "");
       } else {
-        await addToWishlist?.(product._id);
+        await addToWishlist?.(product._id ?? "");
       }
       setIsWishlisted(!isWishlisted);
     } catch (error) {
@@ -67,7 +67,7 @@ const ProductCard: React.FC<{
       <Flex justify="space-between" align="start">
         <Box position="relative" w="full" mb={4}>
           <Image
-            src={product.images[0]}
+            src={product.images?.[0]}
             alt={product.product_name}
             w="full"
             h="160px"
@@ -128,7 +128,7 @@ const ProductCard: React.FC<{
           size="md"
           width="full"
           h="40px"
-          onClick={() => onAddToCart(product._id)}
+          onClick={() => product._id && onAddToCart(product._id)}
           _hover={{
             background: "#FF5733",
             color: "white",

@@ -12,26 +12,26 @@ interface Category {
   updatedAt: string;
 }
 export interface Product {
-  _id: string;
-  product_name: string;
-  description: string;
-  category: Category;
-  images: string[];
-  vendor: string;
-  unit_price: number;
-  product_quantity: number;
-  total_quantity_sold: number;
-  height: number;
-  width: number;
-  weight: number;
-  discount_price: number;
-  is_discounted: boolean;
-  in_stock: boolean;
-  is_verified: boolean;
-  is_deleted: boolean;
-  createdAt: string;
-  updatedAt: string;
-  favourite: boolean;
+  _id?: string;
+  product_name?: string;
+  description?: string;
+  category?: Category;
+  images?: string[];
+  vendor?: string;
+  unit_price?: number;
+  product_quantity?: number;
+  total_quantity_sold?: number;
+  height?: number;
+  width?: number;
+  weight?: number;
+  discount_price?: number;
+  is_discounted?: boolean;
+  in_stock?: boolean;
+  is_verified?: boolean;
+  is_deleted?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  favourite?: boolean;
 }
 
 interface ProductResponse {
@@ -44,7 +44,6 @@ interface ProductResponse {
 export const useProduct = () => {
   const toast = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
   const fetchProducts = async (
     limit: number,
     page: number,
@@ -77,7 +76,7 @@ export const useProduct = () => {
 
   const fetchSingleProduct = async (
     productId: string
-  ): Promise<{ data: Product }> => {
+  ): Promise<{ data: any }> => {
     const response = await apiClient.get(`/product/view-one/${productId}`);
     return response.data;
   };
@@ -195,9 +194,9 @@ export const useProduct = () => {
     } else {
       cartItems.push({
         productId,
-        productName: productToAdd.product_name,
-        price: productToAdd.unit_price,
-        image: productToAdd.images[0],
+        productName: productToAdd.product_name ?? "",
+        price: productToAdd.unit_price ?? 0,
+        image: productToAdd.images?.[0] ?? "",
         quantity: 1,
       });
     }

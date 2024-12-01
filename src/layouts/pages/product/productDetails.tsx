@@ -19,32 +19,25 @@ interface ProductCategory {
   _id: string;
   name: string;
   image: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 interface ProductUser {
-  _id: string;
   FirstName: string;
   LastName: string;
   Email?: string;
 }
 
 interface ProductReview {
-  _id: string;
   comment: string;
   rating: number;
   product: string;
   user?: ProductUser;
-  createdAt: string;
-  updatedAt: string;
 }
 
 interface ProductData {
-  _id: string;
   product_name: string;
   description: string;
-  category: ProductCategory;
+  category: any;
   images: string[];
   vendor: string;
   unit_price: number;
@@ -56,8 +49,6 @@ interface ProductData {
   in_stock: boolean;
   is_verified: boolean;
   is_deleted: boolean;
-  createdAt: string;
-  updatedAt: string;
   total_quantity_sold: number;
   rating: number;
 }
