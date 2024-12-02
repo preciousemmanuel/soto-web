@@ -155,9 +155,9 @@ const App = () => {
         {
           path: "custom-order",
           element: (
-            <ProtectedRoute>
-              <CustomOrder />
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            <CustomOrder />
+            // </ProtectedRoute>
           ),
         },
       ],
