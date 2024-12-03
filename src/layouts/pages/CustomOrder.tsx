@@ -26,12 +26,12 @@ function CustomOrder() {
 
   const CreateOrder = () => {
     const { register, handleSubmit } = useForm();
-    const { createOrder, isCreatingOrder, orderSuccess, refetchOrders } =
+    const { createCustomOrders, isCreatingOrder, orderSuccess, refetchOrders } =
       useOrder();
 
     const onSubmit = async (data: any) => {
       try {
-        await createOrder(data);
+        await createCustomOrders(data);
         if (orderSuccess) {
           await refetchOrders();
 
@@ -88,12 +88,12 @@ function CustomOrder() {
   // Second Step Layout (Add Order)
   const AddOrder = () => {
     const { register, handleSubmit } = useForm();
-    const { createOrder, isCreatingOrder, orderSuccess, refetchOrders } =
+    const { createCustomOrders, isCreatingOrder, orderSuccess, refetchOrders } =
       useOrder();
 
     const onSubmit = async (data: any) => {
       try {
-        await createOrder(data);
+        await createCustomOrders(data);
         if (orderSuccess) {
           await refetchOrders();
           setStep(3);

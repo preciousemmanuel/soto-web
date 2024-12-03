@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../../services/axios";
 import { useToast } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
-
 export const useAuth = () => {
   const toast = useToast();
   const navigate = useNavigate();
@@ -24,8 +23,9 @@ export const useAuth = () => {
     queryKey: ["profile"],
     queryFn: async () => {
       const response = await apiClient.get("/user/profile");
-      const { FirstName, LastName, Email } = response.data.data;
-      return { FirstName, LastName, Email };
+      const { FirstName, LastName, Email, ShippingAddress, PhoneNumber } =
+        response.data.data;
+      return { FirstName, LastName, Email, ShippingAddress, PhoneNumber };
     },
     enabled: isAuthenticated || isVendorAuthenticated,
     retry: false,
@@ -121,7 +121,7 @@ export const useAuth = () => {
       navigate("/auth");
     },
     onError: (error) => {
-      console.error("Signup failed:", error);
+      // console.error("Signup failed:", error);
       toast({
         title: "Signup Failed",
         description: "Please try again.",
@@ -184,24 +184,49 @@ export const useAuth = () => {
     },
   });
 
+  const addShippingAddressMutation = useMutation({
+    mutationFn: (addressData: any) =>
+      apiClient.put("/user/add-shipping-address", addressData),
+    onSuccess: () => {
+      toast({
+        title: "Shipping Address Added",
+        description: "Your shipping address has been added successfully.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      navigate("/profile");
+    },
+    onError: (error) => {
+      // console.error("Failed to add shipping address:", error);
+      toast({
+        title: "Failed to Add Shipping Address",
+        description: "Please try again.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
   const logout = () => {
     localStorage.removeItem("userToken");
     setIsAuthenticated(false);
-    queryClient.clear(); // Clear all queries from cache
+    queryClient.clear();
     navigate("/auth");
   };
 
   const vendorLogout = () => {
     localStorage.removeItem("vendorToken");
     setIsVendorAuthenticated(false);
-    queryClient.clear(); // Clear all queries from cache
+    queryClient.clear();
     navigate("/auth/vendor-login");
   };
 
   const switchToVendor = () => {
     localStorage.removeItem("userToken");
     setIsAuthenticated(false);
-    queryClient.clear(); // Clear all queries from cache
+    queryClient.clear();
     navigate("/auth/vendor-login");
   };
 
@@ -224,7 +249,8 @@ export const useAuth = () => {
       vendorLoginMutation.isPending ||
       signupMutation.isPending ||
       requestOtpMutation.isPending ||
-      resetPasswordMutation.isPending,
+      resetPasswordMutation.isPending ||
+      addShippingAddressMutation.isPending,
     login: loginMutation.mutate,
     vendorLogin: vendorLoginMutation.mutate,
     logout,
@@ -233,6 +259,7 @@ export const useAuth = () => {
     switchToVendor,
     requestOtp: requestOtpMutation.mutate,
     resetPassword: resetPasswordMutation.mutate,
+    addShippingAddress: addShippingAddressMutation.mutate,
     user,
     refetchProfile,
   };
