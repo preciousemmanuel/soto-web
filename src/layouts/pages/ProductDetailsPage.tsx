@@ -2,14 +2,25 @@ import { Flex, Box } from "@chakra-ui/react";
 import ProductImageGallery from "./product/productImage";
 import ProductDetails from "./product/productDetails";
 import ProductDescription from "./product/productDescription";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useProduct } from "../hooks/useProduct";
 import RelatedProducts from "./product/relatedProduct";
+import { useEffect } from "react";
 
 const ProductDetailsPage = () => {
   const { productId } = useParams<{ productId: string }>();
-  const { useSingleProduct } = useProduct();
+  const { useSingleProduct, handleAddToCart } = useProduct();
   const oneProduct = useSingleProduct(productId as string);
+  useEffect(() => {
+    const handleCartUpdate = () => {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    };
+
+    window.addEventListener("cartUpdated", handleCartUpdate);
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+    };
+  }, []);
 
   const products = oneProduct.data?.data;
   const product = products?.product;
@@ -29,6 +40,7 @@ const ProductDetailsPage = () => {
         <Box w={{ base: "100%", md: "55%" }}>
           <ProductDetails
             product={{
+              _id: product?._id,
               vendor: product?.vendor || "",
               height: product?.height || 0,
               width: product?.width || 0,
@@ -48,6 +60,7 @@ const ProductDetailsPage = () => {
             }}
             sizes={["XS", "L", "XL"]}
             colors={["teal", "gray.400", "green.500"]}
+            onClick={() => handleAddToCart(productId as string)}
           />
         </Box>
       </Flex>

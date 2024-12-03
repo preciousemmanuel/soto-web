@@ -12,7 +12,6 @@ const CartPage = () => {
     JSON.parse(localStorage.getItem("cart") || "[]")
   );
   const { handleRemoveFromCart } = useProduct();
-  // console.log(cart, "cart");
   const updateCart = () => {
     const updatedCart = JSON.parse(localStorage.getItem("cart") || "[]");
     setCart(updatedCart);
@@ -28,6 +27,7 @@ const CartPage = () => {
       total: subtotal,
     };
   };
+  console.log(cart, "cart");
 
   useEffect(() => {
     window.addEventListener("cartUpdated", updateCart);
@@ -161,6 +161,7 @@ const CartPage = () => {
               borderRadius="md"
               variant="outline"
               h="54px"
+              onClick={() => navigate("/")}
             >
               Continue Shopping
             </Button>

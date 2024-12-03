@@ -218,6 +218,31 @@ export const useProduct = () => {
       window.dispatchEvent(new Event("cartUpdated"));
     }
   };
+
+  const updateCart = (productId: string, quantity: number) => {
+    const existingCart = localStorage.getItem("cart");
+    let cartItems: CartItem[] = existingCart ? JSON.parse(existingCart) : [];
+
+    const existingItemIndex = cartItems.findIndex(
+      (item) => item.productId === productId
+    );
+
+    if (existingItemIndex !== -1) {
+      cartItems[existingItemIndex].quantity = quantity;
+    } else {
+      cartItems.push({
+        productId,
+        quantity,
+        productName: "",
+        price: 0,
+        image: "",
+      });
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+    window.dispatchEvent(new Event("cartUpdated"));
+  };
+
   const createProductFormData = (
     data: Record<string, any>,
     images: FileList
@@ -318,5 +343,6 @@ export const useProduct = () => {
     PopluarProductsError,
     createProductFormData,
     useAddNewProduct,
+    updateCart,
   };
 };

@@ -62,6 +62,8 @@ import VendorProtectedRoute from "./features/PrivateRoute/VendorProtectedRoute";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import SuccessMessage from "./layouts/pages/product/alertPage";
 import VendorProductList from "./layouts/pages/Vendor/VendorProductList";
+import ShippingAddress from "./layouts/pages/ShippingAddress";
+import PaymentMessage from "./layouts/pages/product/paymentAlert";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -85,17 +87,17 @@ const App = () => {
             {
               // index: true,
               element: (
-                <ProtectedRoute>
-                  <ProductsPage />
-                </ProtectedRoute>
+                // <ProtectedRoute>
+                <ProductsPage />
+                // </ProtectedRoute>
               ),
             },
             {
               path: ":productId",
               element: (
-                <ProtectedRoute>
-                  <ProductDetailPage />
-                </ProtectedRoute>
+                // <ProtectedRoute>
+                <ProductDetailPage />
+                // </ProtectedRoute>
               ),
             },
           ],
@@ -103,9 +105,9 @@ const App = () => {
         {
           path: "product-list",
           element: (
-            <ProtectedRoute>
-              <ProductsPage />
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            <ProductsPage />
+            // </ProtectedRoute>
           ),
         },
         {
@@ -154,11 +156,7 @@ const App = () => {
         },
         {
           path: "custom-order",
-          element: (
-            // <ProtectedRoute>
-            <CustomOrder />
-            // </ProtectedRoute>
-          ),
+          element: <CustomOrder />,
         },
       ],
     },
@@ -169,6 +167,10 @@ const App = () => {
       children: [
         { index: true, element: <LoginPage /> },
         { path: "signup", element: <SignUpPage /> },
+        {
+          path: "shipping-address",
+          element: <ShippingAddress />,
+        },
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "vendor-signup", element: <VendorSignup /> },
         { path: "vendor-login", element: <VendorLogin /> },
@@ -274,11 +276,11 @@ const App = () => {
         },
         {
           path: "alert-success",
-          element: (
-            <VendorProtectedRoute>
-              <SuccessMessage />
-            </VendorProtectedRoute>
-          ),
+          element: <SuccessMessage />,
+        },
+        {
+          path: "payment-success",
+          element: <PaymentMessage />,
         },
         // Add other seller-specific routes here
       ],

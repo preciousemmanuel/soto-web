@@ -36,7 +36,6 @@ const Navbar = () => {
     onOpen: onDrawerOpen,
     onClose: onDrawerClose,
   } = useDisclosure();
-  const cart: CartItem[] = JSON.parse(localStorage.getItem("cart") || "[]");
 
   const handleExpand = () => setIsExpanded(true);
   const handleCollapse = () => setIsExpanded(false);

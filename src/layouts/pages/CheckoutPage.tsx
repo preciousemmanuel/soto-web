@@ -12,15 +12,81 @@ import {
   Divider,
   Image,
   Flex,
+  FormControl,
+  FormLabel,
 } from "@chakra-ui/react";
-import card from "../../assets/card.png";
-import paystack from "../../assets/paystack.png";
-import paypal from "../../assets/paypal.png";
+import { useState } from "react";
+// import card from "../../assets/card.png";
+// import paystack from "../../assets/paystack.png";
+// import paypal from "../../assets/paypal.png";
 import { FaPencilAlt } from "react-icons/fa";
-import ShippingOptions from "./product/shippingOptions";
-import PaymentMethod from "./product/paymentMethod";
+import { CartItem } from "./_subpages/CategoriesSection";
+import { useOrder } from "../hooks/useOrder";
+import { useAuth } from "../hooks/useAuth";
+// import ShippingOptions from "./product/shippingOptions";
+// import PaymentMethod from "./product/paymentMethod";
 
 const CheckoutPage = () => {
+  const {
+    addNewOrderMutation,
+    isAddingOrder,
+    addOrderSuccess,
+    generatePaymentLinkMutation,
+    newOrderResponse,
+    isGeneratingPaymentLink,
+  } = useOrder();
+  const { user } = useAuth();
+  // const [couponCode, setCouponCode] = useState<string>("");
+  // console.log(newOrderResponse, "order");
+  const [cart] = useState<CartItem[]>(
+    JSON.parse(localStorage.getItem("cart") || "[]")
+  );
+
+  const generatePayment = () => {
+    generatePaymentLinkMutation({
+      amount: newOrderResponse?.data?.grand_total,
+      narration: "ORDER",
+      narration_id: newOrderResponse?.data?._id,
+      platform: "web",
+    });
+  };
+
+  const calculateSubtotal = () =>
+    cart.reduce(
+      (total, product) => total + product.price * product.quantity,
+      0
+    );
+  const groupedCart = cart.reduce<CartItem[]>((acc, product) => {
+    const existingProduct = acc.find(
+      (item: CartItem) => item?.productId === product.productId
+    );
+    if (existingProduct) {
+      existingProduct.quantity += product.quantity;
+    } else {
+      acc.push({ ...product });
+    }
+    return acc;
+  }, []);
+
+  const handleCreateOrder = async () => {
+    const items = cart.map((product) => ({
+      product_id: product.productId,
+      quantity: product.quantity,
+    }));
+
+    const orderData = {
+      items,
+      address: user?.ShippingAddress?.full_address,
+      payment_type: "INSTANT",
+    };
+
+    try {
+      await addNewOrderMutation(orderData);
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
+
   return (
     <Box py="120px">
       <Text
@@ -50,8 +116,7 @@ const CheckoutPage = () => {
                 Shipping Address
               </Text>
               <Text fontSize="sm" w="60%">
-                35 Akeem Adigun Street, Ikeja Junction, off Ikosi, Phase 4 Park
-                Resort
+                {user?.ShippingAddress?.full_address}
               </Text>
             </Text>
             <Text
@@ -81,7 +146,7 @@ const CheckoutPage = () => {
               <Text fontSize="xl" fontWeight="medium">
                 Contact Information
               </Text>
-              <Text fontSize="sm">+234 809 555 5555</Text>
+              <Text fontSize="sm">{user?.PhoneNumber}</Text>
             </Text>
             <Text
               color="white"
@@ -99,27 +164,57 @@ const CheckoutPage = () => {
           </Box>
 
           <Box>
-            <Text fontSize="lg" fontWeight="bold" mb={4}>
-              Change Shipping Details
-            </Text>
-            <Stack spacing={3}>
-              <HStack width="100%">
-                <Input placeholder="First Name" height="60px" width="50%" />
-                <Input placeholder="Last Name" height="60px" width="50%" />
-              </HStack>
-              <Input placeholder="Email Address" width="100%" height="60px" />
-              <Input placeholder="Phone Number" width="100%" height="60px" />
-              <Input placeholder="Street Address" width="100%" height="60px" />
-              <Input placeholder="Town / City" width="100%" height="60px" />
-              <Input placeholder="State" width="100%" height="60px" />
-              <Textarea placeholder="Additional Information" />
-            </Stack>
+            {/* <FormControl mt={8}>
+              <FormLabel>Coupon Code</FormLabel>
+              <Input
+                placeholder="Coupon Code"
+                height="52px"
+                bg="#F8EDEA80"
+                outline="none"
+                borderRadius="xl"
+                fontSize="sm"
+                width="100%"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value)}
+              />
+            </FormControl> */}
+            {!addOrderSuccess ? (
+              <Button
+                color="white"
+                bg="#FF5733"
+                borderRadius="full"
+                mt={6}
+                w="full"
+                h="55px"
+                size="lg"
+                loadingText="Creating order..."
+                isLoading={isAddingOrder}
+                onClick={handleCreateOrder}
+              >
+                Create Order
+              </Button>
+            ) : (
+              <Button
+                color="white"
+                bg="#FF5733"
+                borderRadius="full"
+                mt={6}
+                w="full"
+                h="55px"
+                size="lg"
+                loadingText="Creating payment..."
+                isLoading={isGeneratingPaymentLink}
+                onClick={generatePayment}
+              >
+                Pay now
+              </Button>
+            )}
           </Box>
         </Box>
 
         <Box w="50%" p={4}>
           <Box mb={6}>
-            <Flex justifyContent="space-between">
+            <Flex justifyContent="space-between" mb={4}>
               <Text fontSize="xl" fontWeight="semibold">
                 Product
               </Text>
@@ -127,23 +222,34 @@ const CheckoutPage = () => {
                 Subtotal
               </Text>
             </Flex>
-            <Flex justifyContent="space-between">
-              <Text fontSize="14px" color="#9F9F9F">
-                Argent sofa x 3
-              </Text>
-              <Text mt={2}>₦240,000.00</Text>
-            </Flex>
-            <Flex justifyContent="space-between">
+
+            {groupedCart.map((product: CartItem) => (
+              <Flex
+                key={product.productId}
+                justifyContent="space-between"
+                mb={2}
+              >
+                <Text fontSize="14px" color="#9F9F9F">
+                  {product.productName} x {product.quantity}
+                </Text>
+                <Text>
+                  ₦{(product.price * product.quantity).toLocaleString()}
+                </Text>
+              </Flex>
+            ))}
+
+            <Flex justifyContent="space-between" mt={4}>
               <Text>Subtotal</Text>
-              <Text mt={2}>₦240,000.00</Text>
+              <Text>₦{calculateSubtotal().toLocaleString()}</Text>
             </Flex>
-            <Flex justifyContent="space-between">
+
+            <Flex justifyContent="space-between" mt={2}>
               <Text fontWeight="medium">Total Amount</Text>
-              <Text mt={2}>₦504,000.00</Text>
+              <Text>₦{calculateSubtotal().toLocaleString()}</Text>
             </Flex>
           </Box>
 
-          <Box p={2}>
+          {/* <Box p={2}>
             <Box mb={6}>
               <Text fontSize="lg" fontWeight="semibold" mb={4}>
                 Payment Options
@@ -251,7 +357,7 @@ const CheckoutPage = () => {
             >
               Pay now
             </Button>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
       {/* <PaymentMethod /> */}

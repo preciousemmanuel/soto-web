@@ -12,8 +12,10 @@ import {
   Link,
   Icon,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useProduct } from "../../hooks/useProduct";
 
 interface ProductCategory {
   _id: string;
@@ -35,6 +37,7 @@ interface ProductReview {
 }
 
 interface ProductData {
+  _id: string;
   product_name: string;
   description: string;
   category: any;
@@ -59,6 +62,7 @@ interface ProductDetails {
   total_reviews?: number;
   sizes?: string[];
   colors?: string[];
+  onClick?: any;
 }
 
 const ProductDetails: React.FC<ProductDetails> = ({
@@ -67,14 +71,21 @@ const ProductDetails: React.FC<ProductDetails> = ({
   sizes,
   colors,
   total_reviews,
+  onClick,
 }) => {
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
+  const { updateCart } = useProduct();
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const formattedPrice = new Intl.NumberFormat("en-NG", {
     style: "currency",
     currency: "NGN",
   }).format(product?.unit_price);
+
+  useEffect(() => {
+    return updateCart(product?._id, quantity);
+  }, [quantity, product?._id, updateCart]);
 
   return (
     <VStack align="start" spacing={5}>
@@ -192,6 +203,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           isDisabled={!product?.in_stock}
           _hover={{ bg: "transparent" }}
           mb={{ base: 3, md: 0 }}
+          onClick={onClick}
         >
           Add To Cart
         </Button>
@@ -202,6 +214,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           h="50px"
           isDisabled={!product?.in_stock}
           _hover={{ bg: "#FF5733" }}
+          onClick={() => navigate("/cart")}
         >
           Buy Now
         </Button>
