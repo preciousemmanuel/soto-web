@@ -40,7 +40,7 @@ const ProductDetailsPage = () => {
         <Box w={{ base: "100%", md: "55%" }}>
           <ProductDetails
             product={{
-              _id: product._id,
+              _id: product?._id,
               vendor: product?.vendor || "",
               height: product?.height || 0,
               width: product?.width || 0,
