@@ -13,83 +13,210 @@ import {
   Td,
   VStack,
   Stack,
+  Heading,
+  Flex,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useOrder } from "../../hooks/useOrder";
+import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 
-// Dummy data for orders
-const ordersData = [
-  { id: 1, product: "Product A", productId: "PA123", status: "New order", delivery: "Express", qty: 2 },
-  { id: 2, product: "Product B", productId: "PB456", status: "Awaiting pick up", delivery: "Standard", qty: 1 },
-  { id: 3, product: "Product C", productId: "PC789", status: "Shipped", delivery: "Express", qty: 5 },
-  { id: 4, product: "Product D", productId: "PD101", status: "Completed", delivery: "Standard", qty: 3 },
-  { id: 5, product: "Product E", productId: "PE112", status: "Awaiting pick up", delivery: "Standard", qty: 4 },
-];
 
 const VendorOrder = () => {
-  const [filteredStatus, setFilteredStatus] = useState("All");
+  const [activeStatus, setActiveStatus] = useState("BOOKED");
+  const navigate = useNavigate();
+  const { ordersVendor, isFetchingOrdersVendor } = useOrder();
+  const orderData = ordersVendor?.data?.data;
+  const filteredOrders = orderData?.filter(
+    (order: any) => order.status === activeStatus
+  );
+ 
+  const handleProductClick = (orderId: string) => {
+    navigate(`/vendor-orders/${orderId}`);
+  };
 
-  // Filter orders based on selected status
-  const filteredOrders = filteredStatus === "All" 
-    ? ordersData 
-    : ordersData.filter(order => order.status === filteredStatus);
+
+  const renderStatusAndAction = (status: string, orderId: string) => {
+    switch (status) {
+      case "PENDING":
+        return {
+          status: (
+            <Text color="yellow.500" fontSize="18px" fontWeight="semibold">
+              PENDING
+            </Text>
+          ),
+          action: (
+            <Button
+              colorScheme="yellow"
+              size="sm"
+              onClick={() => alert("Pending Order")}
+            >
+              Pending
+            </Button>
+          ),
+        };
+      case "BOOKED":
+        return {
+          status: (
+            <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
+              BOOKED
+            </Text>
+          ),
+          action: (
+            <Button
+              color={"white"}
+              bg="#FF5733"
+              size="sm"
+              onClick={() => handleProductClick(orderId)}
+            >
+              Veiw
+            </Button>
+          ),
+        };
+      case "DELIVERED":
+        return {
+          status: (
+            <Text color="green.500" fontSize="18px" fontWeight="semibold">
+              DELIVERED
+            </Text>
+          ),
+          action: (
+            <Button colorScheme="green" variant="outline" size="sm">
+              View Details
+            </Button>
+          ),
+        };
+      case "CANCELLED":
+        return {
+          status: (
+            <Text color="red.500" fontSize="18px" fontWeight="semibold">
+              CANCELLED
+            </Text>
+          ),
+          action: (
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={() => alert("Cancelled Order")}
+            >
+              Delete
+            </Button>
+          ),
+        };
+      case "FAILED":
+        return {
+          status: (
+            <Text color="red.500" fontSize="18px" fontWeight="semibold">
+              FAILED
+            </Text>
+          ),
+          action: (
+            <Button
+              colorScheme="red"
+              variant="outline"
+              size="sm"
+              onClick={() => alert("Failed Order")}
+            >
+              Retry
+            </Button>
+          ),
+        };
+      default:
+        return {};
+    }
+  };
 
   return (
-    <Box p={6} minHeight="100vh" mt={32}>
-      {/* Title */}
-      <Text fontSize="33px" fontWeight="500" bg={"#FFEFEB"} py={4} textAlign="center" mb={6} color="#FF5733">
-        Orders
-      </Text>
+    <Box p={4} minH="100vh" textAlign="center" mt={120} my={20}>
+      <Heading
+        size="lg"
+        mb={6}
+        mt={6}
+        fontFamily="Poppins"
+        bg="#FFF2ED"
+        px={4}
+        py={6}
+        color="#FF5753"
+      >
+        My Orders
+      </Heading>
 
-      {/* Filter Buttons */}
-      <Stack direction="row" spacing={4} justify="center" mb={6} wrap="wrap">
-        {["All", "New order", "Custom", "Awaiting pick up", "Shipped", "Completed"].map((status) => (
-          <Button
-            key={status}
-            onClick={() => setFilteredStatus(status)}
-            borderRadius="full"
-            bg={status === filteredStatus ? "#FF5733" : "gray.200"}
-            color={status === filteredStatus ? "white" : ""}
-            size="lg"
-            fontWeight={"500"}
+      <Flex justifyContent={"left"} alignItems={"left"}>
+        <SimpleGrid
+          columns={[2, 2, 5]}
+          spacing={4}
+          mb={8}
+          maxW="850px"
+          mx="auto"
+          py={8}
+        >
+          {["PENDING", "BOOKED", "CANCELLED", "DELIVERED", "FAILED"].map(
+            (buttonStatus) => (
+              <Button
+                key={buttonStatus}
+                bg={activeStatus === buttonStatus ? "#FF5733" : "#F4F6F9"}
+                color={activeStatus === buttonStatus ? "white" : "black"}
+                borderRadius="full"
+                size="md"
+                onClick={() => setActiveStatus(buttonStatus)}
+              >
+                {buttonStatus}
+              </Button>
+            )
+          )}
+        </SimpleGrid>
+      </Flex>
+      { isFetchingOrdersVendor ? (
+        <LoadingSpinner />
+      ) : (
+        <Flex justifyContent="center" px={4}>
+          <Table
+            variant="simple"
+            w="100%"
+            maxW="850px"
+            textAlign="left"
+            fontWeight="normal"
           >
-            {status}
-          </Button>
-        ))}
-      </Stack>
-
-      {/* Orders Table */}
-      <Box bg="white" p={4} borderRadius="md" boxShadow="md" overflowX="auto">
-        <Table variant="simple" size="md">
-          <Thead>
-            <Tr>
-              <Th>Product</Th>
-              <Th>Product ID</Th>
-              <Th>Status</Th>
-              <Th>Delivery</Th>
-              <Th>Qty</Th>
-              <Th>Actions</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {filteredOrders.map((order) => (
-              <Tr key={order.id}>
-                <Td>{order.product}</Td>
-                <Td>{order.productId}</Td>
-                <Td>{order.status}</Td>
-                <Td>{order.delivery}</Td>
-                <Td>{order.qty}</Td>
-                <Td>
-                  <Button size="sm" colorScheme="blue" variant="outline">
-                    View
-                  </Button>
-                </Td>
+            <Thead>
+              <Tr>
+                <Th>Products</Th>
+                <Th>Product ID</Th>
+                <Th>Status</Th>
+                <Th>Qty.</Th>
+                <Th textAlign="center">Action</Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </Box>
+            </Thead>
+            <Tbody>
+              {/* Order Details */}
+              {filteredOrders?.length > 0 ? (
+                filteredOrders?.flatMap((order: any) =>
+                  order?.items?.map((product: any) => {
+                    const { status, action } = renderStatusAndAction(
+                      order?.status,order?._id
+                    );
+                    return (
+                      <Tr key={product.product_id}>
+                        <Td>{product?.product_name}</Td>
+                        <Td>{order?.tracking_id}</Td>
+                        <Td>{status}</Td>
+                        <Td>{product?.quantity}</Td>
+                        <Td textAlign="center">{action}</Td>
+                      </Tr>
+                    );
+                  })
+                )
+              ) : (
+                <Tr>
+                  <Td colSpan={6} textAlign="center" color="gray.500" mt={4}>
+                    No data for the selected status.
+                  </Td>
+                </Tr>
+              )}
+            </Tbody>
+          </Table>
+        </Flex>
+      )}
     </Box>
   );
-};
-
+}
 export default VendorOrder;

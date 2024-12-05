@@ -7,56 +7,114 @@ import {
   Text,
   VStack,
   Flex,
-  Stack,
+  Grid,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
 } from "@chakra-ui/react";
+import { useOrder } from "../hooks/useOrder";
+import LoadingSpinner from "../../features/helpers/LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 function OrderHistoryPage() {
-  const [activeStatus, setActiveStatus] = useState("Active");
+  const [activeStatus, setActiveStatus] = useState("BOOKED");
+  const navigate = useNavigate();
+  const { orders, isFetchingOrders } = useOrder();
+  const orderData = orders?.data?.data;
+  const filteredOrders = orderData?.filter(
+    (order: any) => order.status === activeStatus
+  );
+ 
+  const handleProductClick = (orderId: string) => {
+    navigate(`/my-orders/${orderId}`);
+  };
 
-  // Sample product data (you can replace with real data)
-  const products = [
-    { id: 1, name: "Product A", qty: 1 },
-    { id: 2, name: "Product B", qty: 2 },
-    { id: 3, name: "Product C", qty: 1 },
-    { id: 4, name: "Product D", qty: 3 },
-  ];
 
-  // Function to render status and action buttons based on the selected status
-  const renderStatusAndAction = () => {
-    switch (activeStatus) {
-      case "Active":
+  const renderStatusAndAction = (status: string, orderId: string) => {
+    switch (status) {
+      case "PENDING":
         return {
-          status: <Text color="orange.500" fontSize="13px">Active</Text>,
+          status: (
+            <Text color="yellow.500" fontSize="18px" fontWeight="semibold">
+              PENDING
+            </Text>
+          ),
           action: (
-            <Button colorScheme="orange" size="sm" onClick={() => alert("Track Order")}>
+            <Button
+              colorScheme="yellow"
+              size="sm"
+              onClick={() => alert("Pending Order")}
+            >
+              Pending
+            </Button>
+          ),
+        };
+      case "BOOKED":
+        return {
+          status: (
+            <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
+              BOOKED
+            </Text>
+          ),
+          action: (
+            <Button
+              color={"white"}
+              bg="#FF5733"
+              size="sm"
+              onClick={() => handleProductClick(orderId)}
+            >
               Track
             </Button>
           ),
         };
-      case "Custom":
+      case "DELIVERED":
         return {
-          status: <Text color="green.500" fontSize="13px">In Progress</Text>,
-          action: (
-            <Button variant="outline" colorScheme="green" size="sm">
-              Review
-            </Button>
+          status: (
+            <Text color="green.500" fontSize="18px" fontWeight="semibold">
+              DELIVERED
+            </Text>
           ),
-        };
-      case "Delivered":
-        return {
-          status: <Text color="green.500" fontSize="13px">Delivered</Text>,
           action: (
             <Button colorScheme="green" variant="outline" size="sm">
-              View
+              View Details
             </Button>
           ),
         };
-      case "Canceled":
+      case "CANCELLED":
         return {
-          status: <Text color="red.500" fontSize="13px">Canceled</Text>,
+          status: (
+            <Text color="red.500" fontSize="18px" fontWeight="semibold">
+              CANCELLED
+            </Text>
+          ),
           action: (
-            <Button colorScheme="red" size="sm" onClick={() => alert("Delete Order")}>
+            <Button
+              colorScheme="red"
+              size="sm"
+              onClick={() => alert("Cancelled Order")}
+            >
               Delete
+            </Button>
+          ),
+        };
+      case "FAILED":
+        return {
+          status: (
+            <Text color="red.500" fontSize="18px" fontWeight="semibold">
+              FAILED
+            </Text>
+          ),
+          action: (
+            <Button
+              colorScheme="red"
+              variant="outline"
+              size="sm"
+              onClick={() => alert("Failed Order")}
+            >
+              Retry
             </Button>
           ),
         };
@@ -65,12 +123,8 @@ function OrderHistoryPage() {
     }
   };
 
-  // Get the current status and action details based on the active status
-  const { status, action } = renderStatusAndAction();
-
   return (
-    <Box p={4}  minH="100vh" textAlign="center" mt={120}>
-      {/* Page Title */}
+    <Box p={4} minH="100vh" textAlign="center" mt={120} my={20}>
       <Heading
         size="lg"
         mb={6}
@@ -84,71 +138,81 @@ function OrderHistoryPage() {
         My Orders
       </Heading>
 
-      {/* Order Status Buttons */}
       <Flex justifyContent={"left"} alignItems={"left"}>
-      <SimpleGrid
-        columns={[2, 2, 4]}
-        spacing={4}
-        mb={8}
-        maxW="850px"
-        mx="auto"
-        py={8}
-      >
-        {["Active", "Custom", "Delivered", "Canceled"].map((status) => (
-          <Button
-            key={status}
-            colorScheme={activeStatus === status ? "orange" : "gray"}
-            color={activeStatus === status ? "white" : "black"}
-            borderRadius="full"
-            size="md"
-            onClick={() => setActiveStatus(status)}
-            justifyContent={"left"
-            }
-          >
-            {status}
-          </Button>
-        ))}
-      </SimpleGrid>
-      </Flex>
-
-      {/* Headings for Order Details */}
-      <Flex justifyContent="center">
         <SimpleGrid
-          columns={[2, 2, 6]}
-          spacing={8}
+          columns={[2, 2, 5]}
+          spacing={4}
+          mb={8}
           maxW="850px"
-          textAlign="center"
-          fontWeight="bold"
-          mb={4}
+          mx="auto"
+          py={8}
         >
-          <Text>Products</Text>
-          <Text>Product ID</Text>
-          <Text display={{ base: "none", md: "block" }}>Status</Text>
-          <Text display={{ base: "none", md: "block" }}>Del. Type</Text>
-          <Text display={{ base: "none", md: "block" }}>Qty</Text>
-          <Text>Action</Text>
+          {["PENDING", "BOOKED", "CANCELLED", "DELIVERED", "FAILED"].map(
+            (buttonStatus) => (
+              <Button
+                key={buttonStatus}
+                bg={activeStatus === buttonStatus ? "#FF5733" : "#F4F6F9"}
+                color={activeStatus === buttonStatus ? "white" : "black"}
+                borderRadius="full"
+                size="md"
+                onClick={() => setActiveStatus(buttonStatus)}
+              >
+                {buttonStatus}
+              </Button>
+            )
+          )}
         </SimpleGrid>
       </Flex>
-
-      {/* Order Details Rows */}
-      <VStack spacing={4} maxW="850px" mx="auto">
-        {products.map((product) => (
-          <SimpleGrid
-            columns={[2, 2, 6]}
-            spacing={8}
-            key={product.id}
-            textAlign="center"
-            py={4}
+      {isFetchingOrders ? (
+        <LoadingSpinner />
+      ) : (
+        <Flex justifyContent="center" px={4}>
+          <Table
+            variant="simple"
+            w="100%"
+            maxW="850px"
+            textAlign="left"
+            fontWeight="normal"
           >
-            <Text>{product.name}</Text>
-            <Text>{product.id}</Text>
-            <Text display={{ base: "none", md: "block" }}>{status}</Text>
-            <Text display={{ base: "none", md: "block" }}>Standard</Text>
-            <Text display={{ base: "none", md: "block" }}>{product.qty}</Text>
-            {action}
-          </SimpleGrid>
-        ))}
-      </VStack>
+            <Thead>
+              <Tr>
+                <Th>Products</Th>
+                <Th>Product ID</Th>
+                <Th>Status</Th>
+                <Th>Qty.</Th>
+                <Th textAlign="center">Action</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {/* Order Details */}
+              {filteredOrders?.length > 0 ? (
+                filteredOrders?.flatMap((order: any) =>
+                  order?.items?.map((product: any) => {
+                    const { status, action } = renderStatusAndAction(
+                      order?.status,order?._id
+                    );
+                    return (
+                      <Tr key={product.product_id}>
+                        <Td>{product?.product_name}</Td>
+                        <Td>{order?.tracking_id}</Td>
+                        <Td>{status}</Td>
+                        <Td>{product?.quantity}</Td>
+                        <Td textAlign="center">{action}</Td>
+                      </Tr>
+                    );
+                  })
+                )
+              ) : (
+                <Tr>
+                  <Td colSpan={6} textAlign="center" color="gray.500" mt={4}>
+                    No data for the selected status.
+                  </Td>
+                </Tr>
+              )}
+            </Tbody>
+          </Table>
+        </Flex>
+      )}
     </Box>
   );
 }

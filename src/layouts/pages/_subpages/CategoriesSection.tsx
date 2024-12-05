@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Grid,
@@ -144,6 +144,17 @@ const ProductCard: React.FC<{
 const BestSelling: React.FC = () => {
   const { products, handleAddToCart } = useProduct();
   const navigate = useNavigate();
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+
+  const sortedProducts = [...products].sort((a, b) => {
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
+
+  const toggleSortOrder = () => {
+    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+  };
   return (
     <Box py={8} px={{ base: 6, md: 16 }}>
       <Flex justify="space-between" align="center" mb={6}>
@@ -155,18 +166,23 @@ const BestSelling: React.FC = () => {
             You have a choice to shop based on categories
           </Text>
         </Box>
-        <Button
-          onClick={() => navigate("/product-list")}
-          rightIcon={
-            <Box as="span" fontSize="lg">
-              <ArrowForwardIcon />
-            </Box>
-          }
-          variant="link"
-          color="#FF5733"
-        >
-          View more
-        </Button>
+        <Flex gap={5}>
+          <Button onClick={toggleSortOrder} color="#FF5733" variant="ghost">
+            {sortOrder === "newest" ? "Newest" : "Oldest"}
+          </Button>
+          <Button
+            onClick={() => navigate("/product-list")}
+            rightIcon={
+              <Box as="span" fontSize="lg">
+                <ArrowForwardIcon />
+              </Box>
+            }
+            variant="link"
+            color="#FF5733"
+          >
+            View more
+          </Button>
+        </Flex>
       </Flex>
 
       <Grid
@@ -178,7 +194,7 @@ const BestSelling: React.FC = () => {
         }}
         gap={6}
       >
-        {products.map((product: Product) => (
+        {sortedProducts.map((product: Product) => (
           <ProductCard
             key={product._id}
             product={product}

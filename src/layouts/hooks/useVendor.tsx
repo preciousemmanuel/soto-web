@@ -67,7 +67,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["vendorOverview", { time_frame: selectedTimeframe }],
     queryFn: () => fetchVendorOverview(selectedTimeframe),
-    enabled: isAuthenticated || isVendorAuthenticated,
+    enabled: isVendorAuthenticated,
     retry: false,
   });
 
@@ -78,7 +78,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["ordersByVendor", { limit: 4, page: 1 }],
     queryFn: () => fetchOrdersByVendor(4, 1),
-    enabled: isAuthenticated || isVendorAuthenticated,
+    enabled: isVendorAuthenticated,
     retry: false,
   });
 
@@ -111,7 +111,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["transactionLogs", { limit: 10, page: 1 }],
     queryFn: () => fetchTransactionLogs(10, 1),
-    enabled: isAuthenticated || isVendorAuthenticated,
+    enabled:  isVendorAuthenticated,
     retry: false,
   });
 
@@ -122,7 +122,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["vendorInventory", { limit: 10, page: 1 }],
     queryFn: () => fetchVendorInventory(10, 1),
-    enabled: isAuthenticated || isVendorAuthenticated,
+    enabled: isVendorAuthenticated,
     retry: false,
   });
 
@@ -133,7 +133,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["salesAnalytics"],
     queryFn: fetchSalesAnalytics,
-    enabled: isAuthenticated || isVendorAuthenticated,
+    enabled:  isVendorAuthenticated,
     retry: false,
   });
 
