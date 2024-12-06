@@ -69,6 +69,22 @@ export const useOrder = () => {
     return response.data;
   };
 
+  const fetchVendorOrders = async (
+    limit: number,
+    page: number,
+    status: string
+  ): Promise<any> => {
+    const response = await apiClient.get(
+      `/order/fetch/by-vendor?limit=${limit}&page=${page}&status=${status}`
+    );
+    return response.data;
+  };
+
+  const fetchOneOrder = async (orderId: string): Promise<{ data: any }> => {
+    const response = await apiClient.get(`/order/view-one/${orderId}`);
+    return response.data;
+  };
+
   const fetchStates = async (): Promise<any> => {
     const response = await apiClient.get("/delivery/get-states");
     return response.data;
@@ -114,12 +130,11 @@ export const useOrder = () => {
   const {
     mutate: addNewOrderMutation,
     isPending: isAddingOrder,
+    isError: addOrderError,
     isSuccess: addOrderSuccess,
-    error: addOrderError,
   } = useMutation({
     mutationFn: addNewOrder,
     onSuccess: (res) => {
-      setNewOrderResponse(res);
       toast({
         title: "Order Added",
         description: "Your new order has been added successfully.",
@@ -127,6 +142,7 @@ export const useOrder = () => {
         duration: 2000,
         isClosable: true,
       });
+      setNewOrderResponse(res);
     },
     onError: (error) => {
       toast({
@@ -147,6 +163,7 @@ export const useOrder = () => {
   } = useMutation({
     mutationFn: generatePaymentLink,
     onSuccess: (res) => {
+      console.log(res);
       if (res?.data?.data && res?.data?.data?.authorization_url) {
         clearCart();
         window.location.href = res?.data?.data?.authorization_url;
@@ -178,10 +195,30 @@ export const useOrder = () => {
     refetch: refetchOrders,
   } = useQuery({
     queryKey: ["fetchOrders"],
-    queryFn: () => fetchOrders(10, 1, "CUSTOM"),
-    enabled: isAuthenticated || isVendorAuthenticated,
+    queryFn: () => fetchOrders(10, 1, status),
+    enabled: isAuthenticated,
     retry: false,
   });
+
+  const {
+    data: ordersVendor,
+    isLoading: isFetchingOrdersVendor,
+    error: fetchOrdersErrorVendor,
+    refetch: refetchOrdersVendor,
+  } = useQuery({
+    queryKey: ["fetchOrdersVendor"],
+    queryFn: () => fetchVendorOrders(10, 1, status),
+    enabled: isVendorAuthenticated,
+    retry: false,
+  });
+
+  const useSingleOrder = (orderId: string) => {
+    return useQuery({
+      queryKey: ["product", orderId],
+      queryFn: () => fetchOneOrder(orderId),
+      enabled: isAuthenticated && isVendorAuthenticated  || !! orderId,
+    });
+  };
 
   const {
     data: states,
@@ -220,6 +257,10 @@ export const useOrder = () => {
     isFetchingOrders,
     fetchOrdersError,
     refetchOrders,
+    ordersVendor,
+    isFetchingOrdersVendor,
+    fetchOrdersErrorVendor,
+    refetchOrdersVendor,
     states,
     isFetchingStates,
     fetchStatesError,
@@ -227,5 +268,6 @@ export const useOrder = () => {
     isFetchingCities,
     fetchCitiesError,
     newOrderResponse,
+    useSingleOrder,
   };
 };

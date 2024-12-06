@@ -64,6 +64,7 @@ import SuccessMessage from "./layouts/pages/product/alertPage";
 import VendorProductList from "./layouts/pages/Vendor/VendorProductList";
 import ShippingAddress from "./layouts/pages/ShippingAddress";
 import PaymentMessage from "./layouts/pages/product/paymentAlert";
+import OrderDetailPage from "./layouts/pages/OrderDetailPage";
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -140,11 +141,24 @@ const App = () => {
         },
         {
           path: "my-orders",
-          element: (
-            <ProtectedRoute>
-              <OrderHistoryPage />
-            </ProtectedRoute>
-          ),
+          children: [
+            {
+              index: true,
+              element: (
+                <ProtectedRoute>
+                  <OrderHistoryPage />
+                </ProtectedRoute>
+              ),
+            },
+            {
+              path: ":orderId",
+              element: (
+                <ProtectedRoute>
+                <OrderDetailPage />
+                </ProtectedRoute>
+              ),
+            },
+          ],
         },
         {
           path: "wishlist",
@@ -157,6 +171,10 @@ const App = () => {
         {
           path: "custom-order",
           element: <CustomOrder />,
+        },
+        {
+          path: "track-order",
+          element: <OrderDetailPage />,
         },
       ],
     },
@@ -198,6 +216,27 @@ const App = () => {
               <VendorOrder />
             </VendorProtectedRoute>
           ),
+        },
+        {
+          path: "vendor-orders",
+          children: [
+            {
+              index: true,
+              element: (
+                <VendorProtectedRoute>
+                  <VendorOrder />
+                </VendorProtectedRoute>
+              ),
+            },
+            {
+              path: ":orderId",
+              element: (
+                <VendorProtectedRoute>
+                <OrderDetailPage />
+                </VendorProtectedRoute>
+              ),
+            },
+          ],
         },
         {
           path: "vendor-wallet",
@@ -282,6 +321,7 @@ const App = () => {
           path: "payment-success",
           element: <PaymentMessage />,
         },
+
         // Add other seller-specific routes here
       ],
     },
