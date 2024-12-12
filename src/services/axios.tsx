@@ -38,7 +38,7 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log(error);
+    // console.log(error);
     // const status = error.response ? error.response.status : null;
 
     // switch (status) {

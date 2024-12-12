@@ -14,6 +14,9 @@ import {
   DrawerContent,
   DrawerCloseButton,
   Button,
+  Spinner,
+  List,
+  ListItem,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
@@ -26,7 +29,8 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import AccountModal from "../features/modals/AccountModal";
 import CategoriesPopover from "../features/modals/CategoriesPopover";
-import { CartItem } from "../layouts/pages/_subpages/CategoriesSection";
+import { useProduct } from "../layouts/hooks/useProduct";
+
 
 const Navbar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -37,8 +41,24 @@ const Navbar = () => {
     onClose: onDrawerClose,
   } = useDisclosure();
 
-  const handleExpand = () => setIsExpanded(true);
-  const handleCollapse = () => setIsExpanded(false);
+  const { handleSearch, searchResults, isSearchLoading } = useProduct();
+  const [inputValue, setInputValue] = useState("");
+
+  const handleExpand = () => {
+    setIsExpanded(true);
+  };
+
+  const handleCollapse = () => {
+    setTimeout(() => {
+      setIsExpanded(false);
+    }, 200);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    handleSearch(value);
+  };
 
   const [cartQuantity, setCartQuantity] = useState(0);
 
@@ -146,15 +166,21 @@ const Navbar = () => {
           mt={{ base: 4, md: 0 }}
           display={{ base: "none", md: "flex" }}
         >
-          <Box maxW="200px" width="100%">
+          <Box maxW="200px" width="100%" position="relative">
             <InputGroup>
               <InputLeftElement pointerEvents="none">
-                <Icon as={Search2Icon} color="gray.400" />
+                {isSearchLoading ? (
+                  <Spinner size="sm" color="gray.400" />
+                ) : (
+                  <Icon as={Search2Icon} color="gray.400" />
+                )}
               </InputLeftElement>
               <Input
                 placeholder="Enter your list"
                 onClick={handleExpand}
                 onBlur={handleCollapse}
+                onChange={handleInputChange}
+                value={inputValue}
                 bg={isExpanded ? "white" : "#FFF2ED"}
                 borderRadius="md"
                 width={isExpanded ? "100%" : "150px"}
@@ -162,6 +188,59 @@ const Navbar = () => {
                 fontSize={"12px"}
               />
             </InputGroup>
+
+            {isExpanded && inputValue && searchResults?.length > 0 && (
+              <Box
+                position="absolute"
+                top="100%"
+                left="0"
+                right="0"
+                bg="white"
+                boxShadow="lg"
+                borderRadius="md"
+                mt={2}
+                maxH="400px"
+                overflowY="auto"
+                zIndex={1001}
+              >
+                <List spacing={2} p={2}>
+                  {searchResults.map((product: any) => (
+                    <ListItem
+                      key={product._id}
+                      _hover={{ bg: "gray.50" }}
+                      p={2}
+                      borderRadius="md"
+                    >
+                      <Link
+                        to={`/products/${product._id}`}
+                        onClick={() => {
+                          setIsExpanded(false);
+                          setInputValue("");
+                        }}
+                      >
+                        <Flex alignItems="center" gap={3}>
+                          {product.images?.[0] && (
+                            <Image
+                              src={product.images[0]}
+                              alt={product.product_name}
+                              boxSize="40px"
+                              objectFit="cover"
+                              borderRadius="md"
+                            />
+                          )}
+                          <Box>
+                            <Text fontWeight="medium">{product.product_name}</Text>
+                            <Text fontSize="sm" color="gray.600">
+                              ${product.unit_price}
+                            </Text>
+                          </Box>
+                        </Flex>
+                      </Link>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
+            )}
           </Box>
 
           <Link to="/cart">

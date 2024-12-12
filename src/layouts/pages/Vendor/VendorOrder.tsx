@@ -1,42 +1,37 @@
-// OrdersPage.js
-
-import {
-  Box,
-  Text,
-  Button,
-  SimpleGrid,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  VStack,
-  Stack,
-  Heading,
-  Flex,
-} from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  SimpleGrid,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import { useOrder } from "../../hooks/useOrder";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
-
+import PaginationControls from "../../../features/helpers/Pagination";
 
 const VendorOrder = () => {
-  const [activeStatus, setActiveStatus] = useState("BOOKED");
+  const [activeStatus, setActiveStatus] = useState("PENDING");
   const navigate = useNavigate();
-  const { ordersVendor, isFetchingOrdersVendor } = useOrder();
+  const { ordersVendor, isFetchingOrders,ordersVendorPagination,handlePageChange } = useOrder();
   const orderData = ordersVendor?.data?.data;
   const filteredOrders = orderData?.filter(
     (order: any) => order.status === activeStatus
   );
- 
-  const handleProductClick = (orderId: string) => {
-    navigate(`/vendor-orders/${orderId}`);
+
+  const handleProductClick = (productId: string) => {
+    navigate(`/vendor-order/${productId}`);
   };
 
-
-  const renderStatusAndAction = (status: string, orderId: string) => {
+  const renderStatusAndAction = (status: string, productId: string) => {
     switch (status) {
       case "PENDING":
         return {
@@ -64,12 +59,12 @@ const VendorOrder = () => {
           ),
           action: (
             <Button
-              color={"white"}
+              color="white"
               bg="#FF5733"
               size="sm"
-              onClick={() => handleProductClick(orderId)}
+              // onClick={() => handleProductClick(productId)}
             >
-              Veiw
+              View
             </Button>
           ),
         };
@@ -81,7 +76,12 @@ const VendorOrder = () => {
             </Text>
           ),
           action: (
-            <Button colorScheme="green" variant="outline" size="sm">
+            <Button
+              colorScheme="green"
+              variant="outline"
+              size="sm"
+              onClick={() => handleProductClick(productId)}
+            >
               View Details
             </Button>
           ),
@@ -127,28 +127,17 @@ const VendorOrder = () => {
   };
 
   return (
-    <Box p={4} minH="100vh" textAlign="center" mt={120} my={20}>
-      <Heading
-        size="lg"
-        mb={6}
-        mt={6}
-        fontFamily="Poppins"
-        bg="#FFF2ED"
-        px={4}
-        py={6}
-        color="#FF5753"
-      >
-        My Orders
+    <Box p={4} minH="100vh" textAlign="center" mt={10}>
+      <Heading size="lg" mb={6} bg="#FFF2ED" px={4} py={6} color="#FF5753">
+        Vendor Orders
       </Heading>
-
-      <Flex justifyContent={"left"} alignItems={"left"}>
+      <Flex justifyContent="left">
         <SimpleGrid
           columns={[2, 2, 5]}
           spacing={4}
           mb={8}
           maxW="850px"
           mx="auto"
-          py={8}
         >
           {["PENDING", "BOOKED", "CANCELLED", "DELIVERED", "FAILED"].map(
             (buttonStatus) => (
@@ -166,48 +155,41 @@ const VendorOrder = () => {
           )}
         </SimpleGrid>
       </Flex>
-      { isFetchingOrdersVendor ? (
+      {isFetchingOrders ? (
         <LoadingSpinner />
       ) : (
         <Flex justifyContent="center" px={4}>
-          <Table
-            variant="simple"
-            w="100%"
-            maxW="850px"
-            textAlign="left"
-            fontWeight="normal"
-          >
+          <Table variant="simple" w="100%" maxW="850px" textAlign="left">
             <Thead>
               <Tr>
-                <Th>Products</Th>
+                <Th>Product Name</Th>
                 <Th>Product ID</Th>
                 <Th>Status</Th>
-                <Th>Qty.</Th>
+                <Th>Quantity</Th>
                 <Th textAlign="center">Action</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {/* Order Details */}
               {filteredOrders?.length > 0 ? (
-                filteredOrders?.flatMap((order: any) =>
-                  order?.items?.map((product: any) => {
-                    const { status, action } = renderStatusAndAction(
-                      order?.status,order?._id
-                    );
-                    return (
-                      <Tr key={product.product_id}>
-                        <Td>{product?.product_name}</Td>
-                        <Td>{order?.tracking_id}</Td>
-                        <Td>{status}</Td>
-                        <Td>{product?.quantity}</Td>
-                        <Td textAlign="center">{action}</Td>
-                      </Tr>
-                    );
-                  })
-                )
+                filteredOrders?.map((order: any) => {
+                  const { product_id, quantity, status } = order;
+                  const { status: statusText, action } = renderStatusAndAction(
+                    status,
+                    product_id._id
+                  );
+                  return (
+                    <Tr key={order._id}>
+                      <Td>{product_id.product_name}</Td>
+                      <Td>{product_id._id}</Td>
+                      <Td>{statusText}</Td>
+                      <Td>{quantity}</Td>
+                      <Td textAlign="center">{action}</Td>
+                    </Tr>
+                  );
+                })
               ) : (
                 <Tr>
-                  <Td colSpan={6} textAlign="center" color="gray.500" mt={4}>
+                  <Td colSpan={5} textAlign="center" color="gray.500">
                     No data for the selected status.
                   </Td>
                 </Tr>
@@ -216,7 +198,16 @@ const VendorOrder = () => {
           </Table>
         </Flex>
       )}
+      <Box px={24} pt={8}>
+        <PaginationControls
+          currentPage={ordersVendorPagination.currentPage}
+          totalPages={ordersVendorPagination.totalPages}
+          onPageChange={handlePageChange}
+          hasNextPage={ordersVendorPagination.hasNextPage}
+        />
+      </Box>
     </Box>
   );
-}
+};
+
 export default VendorOrder;

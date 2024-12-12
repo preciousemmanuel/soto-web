@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Box,
-  Container,
   Grid,
   Heading,
   Text,
@@ -9,103 +8,25 @@ import {
   Flex,
   HStack,
   VStack,
-  // StarIcon,
-  Badge,
-  Stack,
 } from "@chakra-ui/react";
 
-import grocery from "../../../assets/grocery.png";
-import furniture from "../../../assets/furniture.png";
-import fashion from "../../../assets/fashion.png";
-import gaming from "../../../assets/gaming.png";
-import phones from "../../../assets/phones.png";
-import laptop from "../../../assets/laptops.png";
-import pan from "../../../assets/pan.png";
-import earpod from "../../../assets/earpod.png";
-import watches from "../../../assets/watches.png";
-import tv from "../../../assets/tv.png";
 import { StarIcon } from "@chakra-ui/icons";
 import { useProduct } from "../../hooks/useProduct";
+import { useNavigate } from "react-router-dom";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Mousewheel } from 'swiper/modules';
+import 'swiper/css';
 
 interface Category {
-  id: string;
+  _id: string;
   name: string;
   image: string;
 }
 
-interface Product {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  image: string;
-  rating: number;
-  reviews: number;
-  series?: string;
-}
-
-const categories: Category[] = [
-  { id: "1", name: "Grocery", image: grocery },
-  { id: "2", name: "Furniture", image: furniture },
-  { id: "3", name: "Fashion", image: fashion },
-  { id: "4", name: "Gaming", image: gaming },
-  { id: "5", name: "Phones & Tabs", image: phones },
-];
-
-const products: Product[] = [
-  {
-    id: "1",
-    name: "HP Laptop",
-    category: "Computer",
-    price: 49000,
-    image: laptop,
-    rating: 4,
-    reviews: 200,
-    series: "Blues Series",
-  },
-  {
-    id: "2",
-    name: "Frying Pan",
-    category: "Kitchen",
-    price: 8700,
-    image: pan,
-    rating: 4,
-    reviews: 307,
-    series: "Steel",
-  },
-  {
-    id: "3",
-    name: "Wrist Watch",
-    category: "Fashion",
-    price: 52000,
-    image: watches,
-    rating: 4,
-    reviews: 110,
-    series: "Black Series",
-  },
-  {
-    id: "4",
-    name: "Earpod",
-    category: "Accessories",
-    price: 37100,
-    image: earpod,
-    rating: 4,
-    reviews: 131,
-    series: "Blues Series",
-  },
-  {
-    id: "5",
-    name: "45 inches TV",
-    category: "Electronics",
-    price: 354000,
-    image: tv,
-    rating: 4,
-    reviews: 420,
-    series: "Smart",
-  },
-];
-
-const CategoryCard: React.FC<{ category: Category }> = ({ category }) => (
+const CategoryCard: React.FC<{
+  category: Category;
+  handleCategory: (categoryId: string) => void;
+}> = ({ category, handleCategory }) => (
   <Box
     position="relative"
     borderRadius="xl"
@@ -118,6 +39,7 @@ const CategoryCard: React.FC<{ category: Category }> = ({ category }) => (
       shadow: "lg",
       transition: "all 0.2s ease-in-out",
     }}
+    onClick={() => category?._id && handleCategory(category?._id)}
   >
     <Box position="absolute" top={0} left={0} right={0} bottom={0}>
       <Image
@@ -217,7 +139,26 @@ const ProductCard: React.FC<{ product: any }> = ({ product }) => (
 );
 
 const PopularProductsSection: React.FC = () => {
-  const { popluarProducts } = useProduct();
+  const navigate = useNavigate();
+  const {
+    popluarProducts,
+    categories,
+    setSelectedCategoryId,
+    refetchProductsByCategory,
+  } = useProduct();
+
+  const category = categories?.data?.data;
+
+  const fetchProductsByCategory = async (categoryId: string) => {
+    try {
+      setSelectedCategoryId(categoryId);
+      await refetchProductsByCategory();
+      navigate(`/category-list?category=${categoryId}`);
+    } catch (error) {
+      setSelectedCategoryId("");
+    }
+  };
+
   return (
     <Box py={4} fontFamily="Poppins">
       <VStack spacing={8} align="stretch">
@@ -228,19 +169,34 @@ const PopularProductsSection: React.FC = () => {
           <Text color="gray.600" mb={4} fontSize="20px">
             You have a choice to shop based on categories
           </Text>
-          <Grid
-            templateColumns={{
-              base: "repeat(1, 1fr)",
-              sm: "repeat(2, 1fr)",
-              md: "repeat(3, 1fr)",
-              lg: "repeat(5, 1fr)",
+          <Swiper
+            slidesPerView="auto"
+            spaceBetween={30}
+            grabCursor={true}
+            mousewheel={true}
+            modules={[Mousewheel]}
+            breakpoints={{
+              320: { slidesPerView: 1.2 },
+              480: { slidesPerView: 2.2 },
+              768: { slidesPerView: 3.2 },
+              1024: { slidesPerView: 4.2 },
             }}
-            gap={4}
+            style={{ padding: '10px' }}
           >
-            {categories.map((category) => (
-              <CategoryCard key={category.id} category={category} />
+            {category?.map((category: any) => (
+              <SwiperSlide 
+                key={category?._id}
+                style={{ width: 'auto' }}
+              >
+                <Box maxW="300px" w="100%">
+                  <CategoryCard
+                    category={category}
+                    handleCategory={fetchProductsByCategory}
+                  />
+                </Box>
+              </SwiperSlide>
             ))}
-          </Grid>
+          </Swiper>
         </Box>
 
         <Box py={{ base: 10, md: 20 }} bg="#F1F1F3" px={{ base: 6, md: 16 }}>
@@ -258,8 +214,8 @@ const PopularProductsSection: React.FC = () => {
             }}
             gap={4}
           >
-            {popluarProducts?.map((product) => (
-              <ProductCard key={product._id} product={product} />
+            {popluarProducts?.slice(0, 5)?.map((product) => (
+              <ProductCard key={product?._id} product={product} />
             ))}
           </Grid>
         </Box>

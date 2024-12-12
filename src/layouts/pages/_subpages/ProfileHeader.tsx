@@ -1,9 +1,9 @@
 import { Button, Flex, Heading } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
 const ProfileHeader = () => {
-  const { switchToVendor } = useAuth();
+  const { switchToVendor,switchToUser, isAuthenticated,isVendorAuthenticated } = useAuth();
   
 
 
@@ -12,7 +12,16 @@ const ProfileHeader = () => {
       <Heading size="lg" fontFamily={"Poppins"} color={"#FF5733"}>
         Profile
       </Heading>
-      <Button
+     {isVendorAuthenticated && <Button
+        size="lg"
+        bg="black"
+        color={"white"}
+        borderRadius="full"
+        onClick={switchToUser}
+      >
+        Switch to Buyer
+      </Button>}
+     {isAuthenticated && <Button
         size="lg"
         bg="black"
         color={"white"}
@@ -20,7 +29,7 @@ const ProfileHeader = () => {
         onClick={switchToVendor}
       >
         Switch to Seller
-      </Button>
+      </Button>}
     </Flex>
   );
 };

@@ -21,7 +21,7 @@ const OrderDetailPage = () => {
   const {data:oneOrder,isPending} = useSingleOrder(orderId as string);
 
   if (!oneOrder || !oneOrder.data) {
-    return <Text>Loading...</Text>; 
+    return <LoadingSpinner/>; 
   }
 
   const {

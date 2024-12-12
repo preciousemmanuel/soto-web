@@ -1,13 +1,17 @@
-import { HStack, Button, Text } from "@chakra-ui/react";
+import { Button, HStack, Text } from "@chakra-ui/react";
+
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  hasNextPage: boolean;
   onPageChange: (newPage: number) => void;
 }
 
 const PaginationControls: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
+  hasNextPage,
   onPageChange,
 }) => {
   return (
@@ -24,7 +28,7 @@ const PaginationControls: React.FC<PaginationProps> = ({
         </Button>
         <Button
           onClick={() => onPageChange(currentPage + 1)}
-          isDisabled={currentPage === totalPages}
+          isDisabled={!hasNextPage}
         >
           Next
         </Button>

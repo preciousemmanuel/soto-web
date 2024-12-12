@@ -2,7 +2,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import apiClient from "../../services/axios";
 import { CartItem } from "../pages/_subpages/CategoriesSection";
 import { useToast } from "@chakra-ui/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface Category {
   _id: string;
@@ -37,31 +38,48 @@ export interface Product {
 interface ProductResponse {
   data: {
     data: Product[];
-    total: number;
+    pagination: {
+      currentPage: number;
+      hasNext: boolean;
+      pageCount: number;
+      pageSize: number;
+      totalCount: number;
+    };
   };
 }
-
 export const useProduct = () => {
   const toast = useToast();
   const navigate = useNavigate();
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
+  const [productCategoryData, setProductCategoryData] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+
   const fetchProducts = async (
     limit: number,
     page: number,
-    status: string
+    status: string,
+    categoryId: string,
+    productName?: string
   ): Promise<ProductResponse> => {
-    const response = await apiClient.get(
-      `/product/fetch?limit=${limit}&page=${page}&fetch_type=${status}`
-    );
+    let url = `/product/fetch?limit=${limit}&page=${page}`;
+    
+    if (status) url += `&fetch_type=${status}`;
+    if (categoryId) url += `&category=${categoryId}`;
+    if (productName) url += `&product_name=${encodeURIComponent(productName)}`;
+    
+    const response = await apiClient.get(url);
     return response.data;
   };
+
   const {
-    data: PopluarProducts,
-    isLoading: PopluarProductsLoading,
-    error: PopluarProductsError,
-    // refetch,
+    data: PopularProducts,
+    isLoading: PopularProductsLoading,
+    error: PopularProductsError,
   } = useQuery({
-    queryKey: ["PopluarProducts"],
-    queryFn: () => fetchProducts(5, 1, "POPULAR"),
+    queryKey: ["PopularProducts", currentPage, itemsPerPage],
+    queryFn: () => fetchProducts(itemsPerPage, currentPage, "POPULAR", ""),
   });
 
   const {
@@ -70,8 +88,8 @@ export const useProduct = () => {
     error: productsError,
     refetch,
   } = useQuery({
-    queryKey: ["products"],
-    queryFn: () => fetchProducts(10, 1, ""),
+    queryKey: ["products", currentPage, itemsPerPage],
+    queryFn: () => fetchProducts(itemsPerPage, currentPage, "", ""),
   });
 
   const fetchSingleProduct = async (
@@ -122,7 +140,7 @@ export const useProduct = () => {
     }
   };
 
-  const useWishlist = (limit: number, page: number) => {
+  const useWishlist = (limit: number = itemsPerPage, page: number = currentPage) => {
     return useQuery({
       queryKey: ["wishlist", limit, page],
       queryFn: () => fetchWishlist(limit, page),
@@ -312,10 +330,51 @@ export const useProduct = () => {
     }
   };
 
-  const { data: categories } = useQuery({
-    queryKey: ["categories", 10, 1],
-    queryFn: () => fetchCategories(10, 1),
+  const { 
+    data: categories,
+    isLoading: categoriesLoading,
+  } = useQuery({
+    queryKey: ["categories", currentPage, itemsPerPage],
+    queryFn: () => fetchCategories(itemsPerPage, currentPage),
   });
+
+  const {
+    data: productsByCategory,
+    refetch: refetchProductsByCategory,
+    isLoading: isProductsByCategory,
+    error: errorProductsByCategory,
+  } = useQuery({
+    queryKey: ["categoriesProducts", selectedCategoryId, currentPage, itemsPerPage],
+    queryFn: async () => {
+      if (!selectedCategoryId) return null;
+      return fetchProducts(itemsPerPage, currentPage, "", selectedCategoryId);
+    },
+    enabled: Boolean(selectedCategoryId),
+  });
+
+  const {
+    data: searchResults,
+    isLoading: isSearchLoading,
+    error: searchError,
+  } = useQuery({
+    queryKey: ['productSearch', searchQuery, currentPage, itemsPerPage],
+    queryFn: () => fetchProducts(itemsPerPage, currentPage, "", "", searchQuery),
+    enabled: searchQuery.length >= 2,
+    staleTime: 1000,
+  });
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
 
   return {
     useWishlist,
@@ -335,14 +394,73 @@ export const useProduct = () => {
     handleAddToCart,
     handleRemoveFromCart,
     products: products?.data?.data || [],
-    total: products?.data?.total || 0,
+    // total: products?.data?.total || 0,
     refetch,
     useSingleProduct,
-    popluarProducts: PopluarProducts?.data?.data || [],
-    PopluarProductsLoading,
-    PopluarProductsError,
+    popluarProducts: PopularProducts?.data?.data || [],
+    // PopluarProductsLoading,
+    // PopluarProductsError,
     createProductFormData,
     useAddNewProduct,
     updateCart,
+    fetchProducts,
+    setSelectedCategoryId,
+    productCategoryData,
+    setProductCategoryData,
+    productsByCategory,
+    isProductsByCategory,
+    refetchProductsByCategory,
+    errorProductsByCategory,
+    selectedCategoryId,
+    searchResults: searchResults?.data?.data || [],
+    isSearchLoading,
+    searchError,
+    handleSearch,
+    searchQuery,
+    currentPage: products?.data?.pagination?.currentPage || 1,
+    totalPages: products?.data?.pagination?.pageCount || 1,
+    totalItems: products?.data?.pagination?.totalCount || 0,
+    pageSize: products?.data?.pagination?.pageSize || 10,
+    hasNextPage: products?.data?.pagination?.hasNext || false,
+    handlePageChange,
+    handleItemsPerPageChange,
+    setCurrentPage,
+    setItemsPerPage,
+    productsPagination: {
+      currentPage: products?.data?.pagination?.currentPage || 1,
+      totalPages: products?.data?.pagination?.pageCount || 1,
+      totalItems: products?.data?.pagination?.totalCount || 0,
+      pageSize: products?.data?.pagination?.pageSize || 10,
+      hasNextPage: products?.data?.pagination?.hasNext || false,
+    },
+   
+    popularProductsPagination: {
+      currentPage: PopularProducts?.data?.pagination?.currentPage || 1,
+      totalPages: PopularProducts?.data?.pagination?.pageCount || 1,
+      totalItems: PopularProducts?.data?.pagination?.totalCount || 0,
+      pageSize: PopularProducts?.data?.pagination?.pageSize || 10,
+      hasNextPage: PopularProducts?.data?.pagination?.hasNext || false,
+    },
+    categoriesPagination: {
+      currentPage: categories?.data?.pagination?.currentPage || 1,
+      totalPages: categories?.data?.pagination?.pageCount || 1,
+      totalItems: categories?.data?.pagination?.totalCount || 0,
+      pageSize: categories?.data?.pagination?.pageSize || 10,
+      hasNextPage: categories?.data?.pagination?.hasNext || false,
+    },
+    productsByCategoryPagination: {
+      currentPage: productsByCategory?.data?.pagination?.currentPage || 1,
+      totalPages: productsByCategory?.data?.pagination?.pageCount || 1,
+      totalItems: productsByCategory?.data?.pagination?.totalCount || 0,
+      pageSize: productsByCategory?.data?.pagination?.pageSize || 10,
+      hasNextPage: productsByCategory?.data?.pagination?.hasNext || false,
+    },
+    searchResultsPagination: {
+      currentPage: searchResults?.data?.pagination?.currentPage || 1,
+      totalPages: searchResults?.data?.pagination?.pageCount || 1,
+      totalItems: searchResults?.data?.pagination?.totalCount || 0,
+      pageSize: searchResults?.data?.pagination?.pageSize || 10,
+      hasNextPage: searchResults?.data?.pagination?.hasNext || false,
+    },
   };
 };

@@ -7,53 +7,42 @@ import {
   Stack,
   Button,
 } from "@chakra-ui/react";
-import pan from "../../../assets/pan.png";
-import earpod from "../../../assets/earpod.png";
-import watches from "../../../assets/watches.png";
-import tv from "../../../assets/tv.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
+import { useProduct } from "../../hooks/useProduct";
+import { useEffect } from "react";
+import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 
-const relatedDataProducts = [
-  {
-    name: "Syltherine",
-    price: "₦2,500,000",
-    discount: "30%",
-    image: pan,
-    category: "Stylish cafe chair",
-  },
-  {
-    name: "Bar Chair",
-    price: "₦2,500,000",
-    image: earpod,
-    category: "Stylish bar chair",
-  },
-  {
-    name: "Clean 4 Seater",
-    price: "₦7,000,000",
-    originalPrice: "₦14,000,000",
-    discount: "50%",
-    image: watches,
-    category: "Luxury big sofa",
-  },
-  {
-    name: "L-Shape Sofa",
-    price: "₦500,000",
-    image: tv,
-    category: "Outdoor bar table and stool",
-  },
-];
-
-const RelatedProducts = ({ title }: { title: string }) => {
+const RelatedProducts = ({ title,categoryId }: { title: string, categoryId: string }) => {
   const navigate = useNavigate();
+  const { 
+    productsByCategory, 
+    isProductsByCategory, 
+    setSelectedCategoryId,
+    refetchProductsByCategory,
+    selectedCategoryId
+  } = useProduct();
+
+
+  const products = productsByCategory?.data?.data;
+
+  useEffect(() => {
+    if (categoryId && categoryId !== selectedCategoryId) {
+      setSelectedCategoryId(categoryId);
+      refetchProductsByCategory();
+    }
+  }, [categoryId, setSelectedCategoryId, selectedCategoryId, refetchProductsByCategory]);
+
+ 
   return (
     <Box p={5} px={14} my="70px" fontFamily="">
       <Text fontSize="34px" textAlign="center" fontWeight="semibold" mb={5}>
         {title}
       </Text>
+      {isProductsByCategory ? <LoadingSpinner/> :
       <SimpleGrid columns={[1, 2, 3, 4]} spacing={4}>
-        {relatedDataProducts.map((product, index) => (
+        {products?.slice(0, 4).map((product) => (
           <Box
-            key={index}
+            key={product._id}
             overflow="hidden"
             p={3}
             bg="#F4F5F7"
@@ -61,45 +50,40 @@ const RelatedProducts = ({ title }: { title: string }) => {
             h="350px"
             position="relative"
           >
-            {product.discount && (
+            {product.is_discounted && (
               <Badge
                 bg="#FF5733"
-                color={"white"}
+                color="white"
                 borderRadius="100%"
                 position="absolute"
                 h="30px"
                 w="30px"
                 top="3"
-                fontWeight={"normal"}
+                fontWeight="normal"
                 right="3"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
               >
-                {product.discount}
+                Sale
               </Badge>
             )}
             <Image
-              src={product.image}
-              objectFit={"contain"}
+              src={product?.images ? product.images[0] : 'placeholder-image-url'}
+              objectFit="contain"
               boxSize="200px"
-              alt={product.name}
+              alt={product.product_name}
             />
             <Stack spacing={2} mt={2}>
-              <Text fontWeight="bold">{product.name}</Text>
-              <Text color="gray.500">{product.category}</Text>
+              <Text fontWeight="bold">{product?.product_name}</Text>
+              <Text color="gray.500">{product?.category?.name}</Text>
               <Text fontWeight="bold" color="red.500">
-                {product.price}
+                ₦{product?.unit_price ? product.unit_price.toLocaleString() : 'N/A'}
               </Text>
-              {product.originalPrice && (
-                <Text fontSize="sm" textDecoration="line-through">
-                  {product.originalPrice}
-                </Text>
-              )}
             </Stack>
           </Box>
         ))}
-      </SimpleGrid>
+      </SimpleGrid> }
       <Box display="flex" justifyContent="center" w="100%" mt={8}>
         <Button
           borderRadius="full"
@@ -110,7 +94,7 @@ const RelatedProducts = ({ title }: { title: string }) => {
           borderColor="#FF5733"
           bg="white"
           _hover={{ bg: "#FF5733", color: "white" }}
-          onClick={() => navigate("/product-list")}
+          onClick={() => navigate(`/category-list?category=${categoryId}`)}
         >
           See More
         </Button>

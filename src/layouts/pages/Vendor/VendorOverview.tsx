@@ -35,6 +35,7 @@ import Chart from "chart.js/auto";
 import { Product } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
+import PaginationControls from "../../../features/helpers/Pagination";
 
 const VendorOverview = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -47,6 +48,9 @@ const VendorOverview = () => {
     topProductsByVendor,
     ordersByVendor,
     transactionLogs,
+    ordersByVendorPagination,
+    handlePageChange,
+    transactionLogsPagination,
     isLoading,
   } = useVendor();
   const [chartData, setChartData] = useState<any>(null);
@@ -213,7 +217,7 @@ const VendorOverview = () => {
                         width="100%"
                         border="1px"
                         borderColor="#FF5733"
-                        boxShadow="lg"
+                        // boxShadow="lg"
                         p={4}
                         borderRadius="md"
                       >
@@ -276,7 +280,7 @@ const VendorOverview = () => {
                         </Flex>
                       </Flex>
                       {topProduct?.length > 0 ? (
-                        topProduct?.map((product: Product) => (
+                        topProduct?.slice(0, 10).map((product: Product) => (
                           <Flex
                             key={product?._id}
                             justify="space-between"
@@ -284,7 +288,7 @@ const VendorOverview = () => {
                             p={3}
                             bg="white"
                             borderRadius="md"
-                            boxShadow="sm"
+                            // boxShadow="sm"
                             wrap="wrap"
                           >
                             <Image
@@ -298,7 +302,7 @@ const VendorOverview = () => {
                               </Text>
                               <Text fontSize="sm" color="gray.500">
                                 {product?.unit_price
-                                  ? `$${(product?.unit_price / 100).toFixed(2)}`
+                                  ? `N${(product?.unit_price / 100).toFixed(2)}`
                                   : "N/A"}
                               </Text>
                             </Box>
@@ -318,7 +322,7 @@ const VendorOverview = () => {
                   </Flex>
                   <Box
                     bg="white"
-                    boxShadow="lg"
+                    // boxShadow="lg"
                     border="1px"
                     borderColor="gray.200"
                     borderRadius="md"
@@ -379,6 +383,14 @@ const VendorOverview = () => {
                         )}
                       </Tbody>
                     </Table>
+                    <Box px={4} pt={8}>
+                      <PaginationControls
+                        currentPage={ordersByVendorPagination.currentPage}
+                        totalPages={ordersByVendorPagination.totalPages}
+                        onPageChange={handlePageChange}
+                        hasNextPage={ordersByVendorPagination.hasNextPage}
+                      />
+                    </Box>
                   </Box>
                 </TabPanel>
                 {/* Additional TabPanels for Inventory and Transactions */}
@@ -390,7 +402,13 @@ const VendorOverview = () => {
                 </TabPanel>
                 {/* TabPanel for Transactions */}
                 <TabPanel>
-                  <VendorTransactions transactions={allTransactionLogs} />
+                  <VendorTransactions
+                    transactions={allTransactionLogs}
+                    currentPage={transactionLogsPagination.currentPage}
+                    totalPages={transactionLogsPagination.totalPages}
+                    onPageChange={handlePageChange}
+                    hasNextPage={transactionLogsPagination.hasNextPage}
+                  />
                   {/* <Text>transactions</Text> */}
                 </TabPanel>
               </TabPanels>

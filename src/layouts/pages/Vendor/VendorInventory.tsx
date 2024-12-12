@@ -9,13 +9,13 @@ import PaginationControls from "../../../features/helpers/Pagination";
 import { useVendor } from "../../hooks/useVendor";
 
 const VendorInventory = () => {
-  const { vendorInventory } = useVendor();
+  const { vendorInventory,vendorInventoryPagination,handlePageChange } = useVendor();
 
-  const [currentPage, setCurrentPage] = useState(1); // Added state for current page
+  // const [currentPage, setCurrentPage] = useState(1); // Added state for current page
 
-  const handlePageChange = (newPage: SetStateAction<number>) => {
-    setCurrentPage(newPage);
-  };
+  // const handlePageChange = (newPage: SetStateAction<number>) => {
+  //   setCurrentPage(newPage);
+  // };
 
   return (
     <Box p={4} minHeight="100vh">
@@ -40,9 +40,10 @@ const VendorInventory = () => {
       )}
 
       <PaginationControls
-        currentPage={currentPage}
-        totalPages={vendorInventory?.data?.pagination?.totalPages}
+        currentPage={vendorInventoryPagination.currentPage}
+        totalPages={vendorInventoryPagination.totalPages}
         onPageChange={handlePageChange}
+        hasNextPage={vendorInventoryPagination.hasNextPage}
       />
     </Box>
   );

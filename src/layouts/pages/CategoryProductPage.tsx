@@ -7,11 +7,9 @@ import {
   Flex,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { Product } from "../../hooks/useProduct";
+import { Product, useProduct } from "../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
-import { useVendor } from "../../hooks/useVendor";
-import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
-import PaginationControls from "../../../features/helpers/Pagination";
+// import { useEffect } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -28,14 +26,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     product?.discount_price &&
     product?.unit_price &&
     product?.discount_price < product?.unit_price;
-  // const navigate = useNavigate();
-
-  // const handleProductClick = (e: React.MouseEvent) => {
-  //   if ((e.target as HTMLElement).closest("button")) {
-  //     return;
-  //   }
-  //   navigate(`/products/${product?._id}`);
-  // };
+  const navigate = useNavigate();
+  const handleProductClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("button")) {
+      return;
+    }
+    navigate(`/products/${product?._id}`);
+  };
 
   return (
     <Box p={4} w="300px">
@@ -47,12 +44,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         w="280px"
         cursor="pointer"
         backgroundColor="#F5F5F5"
-        // onClick={handleProductClick}
+        onClick={handleProductClick}
       >
         <Box position="relative" height="150px">
           <Image
-            src={product?.images?.[0]}
-            alt={product?.product_name}
+            src={product.images?.[0]}
+            alt={product.product_name}
             height="150px"
             width="100%"
             objectFit="contain"
@@ -86,22 +83,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           mt={4}
         >
           <Text fontSize="16px" fontWeight="bold" color="#FF5733">
-            {product?.product_quantity} Available
+            {product.product_quantity} Available
           </Text>
         </Box>
       </Box>
       <Stack mt={4} spacing={2}>
         <Text fontWeight="normal" fontSize="lg">
-          {product?.product_name}
+          {product.product_name}
         </Text>
 
         <Flex gap={4} alignItems="center">
           <Text color={isOnSale ? "#FF5733" : "#FF5733"} fontWeight="normal">
-            ₦{isOnSale ? product?.discount_price : product?.unit_price}
+            ₦{isOnSale ? product.discount_price : product.unit_price}
           </Text>
           {isOnSale && (
             <Text as="s" color="#FF5743" fontSize="sm">
-              ₦{product?.unit_price}
+              ₦{product.unit_price}
             </Text>
           )}
         </Flex>
@@ -110,14 +107,44 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   );
 };
 
-export default function VendorProductList() {
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import LoadingSpinner from "../../features/helpers/LoadingSpinner";
+import PaginationControls from "../../features/helpers/Pagination";
+
+export default function CategoryProductPage() {
+  const [searchParams] = useSearchParams();
   const {
-    allProductsByVendor,
-    isLoadingAllProductsByVendor,
+    productsByCategory,
+    isProductsByCategory,
+    setSelectedCategoryId,
+    refetchProductsByCategory,
+    selectedCategoryId,
+    productsByCategoryPagination,
     handlePageChange,
-    allProductsByVendorPagination,
-  } = useVendor();
-  const products = allProductsByVendor?.data?.data;
+  } = useProduct();
+
+  const products = productsByCategory?.data?.data;
+
+  useEffect(() => {
+    const categoryId = searchParams.get("category");
+    if (categoryId && categoryId !== selectedCategoryId) {
+      setSelectedCategoryId(categoryId);
+      setTimeout(() => {
+        refetchProductsByCategory();
+      }, 0);
+    }
+  }, [
+    searchParams,
+    setSelectedCategoryId,
+    selectedCategoryId,
+    refetchProductsByCategory,
+  ]);
+
+  if (isProductsByCategory) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Box py="120px">
       <Text
@@ -131,23 +158,23 @@ export default function VendorProductList() {
       >
         Product List
       </Text>
-      {isLoadingAllProductsByVendor ? (
-        <LoadingSpinner />
-      ) : (
-        <Box py={8} px="140px">
+      <Box py={8} px="140px">
+        {!products || products?.length === 0 ? (
+          <Text textAlign="center">No products found for this category.</Text>
+        ) : (
           <SimpleGrid columns={[1, 2, 3]} spacing={0.5}>
-            {products?.map((product: any) => (
-              <ProductCard key={product?._id} product={product} />
+            {products?.map((product: Product) => (
+              <ProductCard key={product._id} product={product} />
             ))}
           </SimpleGrid>
-          <PaginationControls
-            currentPage={allProductsByVendorPagination.currentPage}
-            totalPages={allProductsByVendorPagination.totalPages}
-            onPageChange={handlePageChange}
-            hasNextPage={allProductsByVendorPagination.hasNextPage}
-          />
-        </Box>
-      )}
+        )}
+        <PaginationControls
+          currentPage={productsByCategoryPagination.currentPage}
+          totalPages={productsByCategoryPagination.totalPages}
+          onPageChange={handlePageChange}
+          hasNextPage={productsByCategoryPagination.hasNextPage}
+        />
+      </Box>
     </Box>
   );
 }

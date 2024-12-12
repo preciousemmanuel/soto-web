@@ -11,7 +11,7 @@ import {
   Td,
   Button,
 } from "@chakra-ui/react";
-
+import PaginationControls from "../../../features/helpers/Pagination";
 interface Transaction {
   _id: string;
   reference: string;
@@ -26,15 +26,25 @@ interface Transaction {
   updatedAt: string;
 }
 
+interface VendorTransactionsProps {
+  transactions: Transaction[];
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  hasNextPage: boolean;
+}
+
 const VendorTransactions = ({
   transactions,
-}: {
-  transactions: Transaction[];
-}) => {
+  currentPage,
+  totalPages,
+  onPageChange,
+  hasNextPage
+}: VendorTransactionsProps) => {
   return (
     <Box
       bg="white"
-      boxShadow="lg"
+      // boxShadow="lg"
       border="1px"
       borderColor="gray.200"
       borderRadius="md"
@@ -91,6 +101,14 @@ const VendorTransactions = ({
           )}
         </Tbody>
       </Table>
+      <Box px={4} pt={8}>
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={onPageChange}
+          hasNextPage={hasNextPage}
+        />
+      </Box>
     </Box>
   );
 };

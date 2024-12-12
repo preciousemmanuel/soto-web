@@ -5,6 +5,10 @@ import { useState } from "react";
 
 export const useOrder = () => {
   const toast = useToast();
+  const [shippingRate, setShippingRate] = useState(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+
   const clearCart = () => {
     localStorage.removeItem("cart");
   };
@@ -47,6 +51,21 @@ export const useOrder = () => {
     try {
       const response = await apiClient.post(
         "/transaction/generate-payment-link",
+        orderData
+      );
+      if (!response || !response.data) {
+        return [];
+      }
+      return response.data;
+    } catch (error) {
+      return [];
+    }
+  };
+
+  const generateShippingRate = async (orderData: any): Promise<any> => {
+    try {
+      const response = await apiClient.post(
+        "/delivery/agility-get-price",
         orderData
       );
       if (!response || !response.data) {
@@ -107,7 +126,17 @@ export const useOrder = () => {
     error: createCustomOrderError,
   } = useMutation({
     mutationFn: createCustomOrder,
-    onSuccess: () => {
+    onSuccess: (response) => {
+      if (!response || response.length === 0) {
+        toast({
+          title: "Error Creating Order",
+          description: "Unable to create your order. Please try again.",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+        return;
+      }
       toast({
         title: "Order Created",
         description: "Your custom order has been created successfully.",
@@ -116,10 +145,11 @@ export const useOrder = () => {
         isClosable: true,
       });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast({
         title: "Error Creating Order",
-        description: "An error occurred while creating your order.",
+        description:
+          error?.message || "An error occurred while creating your order.",
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -163,7 +193,7 @@ export const useOrder = () => {
   } = useMutation({
     mutationFn: generatePaymentLink,
     onSuccess: (res) => {
-      console.log(res);
+      // console.log(res);
       if (res?.data?.data && res?.data?.data?.authorization_url) {
         clearCart();
         window.location.href = res?.data?.data?.authorization_url;
@@ -189,13 +219,46 @@ export const useOrder = () => {
   });
 
   const {
+    mutate: generateShippingRateMutation,
+    isPending: isShippingRateLink,
+    isSuccess: shippingRateSuccess,
+    error: shippingRateError,
+  } = useMutation({
+    mutationFn: generateShippingRate,
+    onSuccess: (res) => {
+      setShippingRate(res?.data?.shipping_cost);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error Generating Shipping Rate",
+        description: "An error occurred while generating your shipping rate.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
+  const {
     data: orders,
     isLoading: isFetchingOrders,
     error: fetchOrdersError,
     refetch: refetchOrders,
   } = useQuery({
-    queryKey: ["fetchOrders"],
-    queryFn: () => fetchOrders(10, 1, status),
+    queryKey: ["fetchOrders", currentPage, itemsPerPage],
+    queryFn: () => fetchOrders(itemsPerPage, currentPage, ""),
+    enabled: isAuthenticated,
+    retry: false,
+  });
+
+  const {
+    data: customOrdersData,
+    isLoading: isFetchingCustomOrders,
+    error: fetchCustomOrdersError,
+    refetch: refetchCustomOrders,
+  } = useQuery({
+    queryKey: ["customOrders", currentPage, itemsPerPage],
+    queryFn: () => fetchOrders(itemsPerPage, currentPage, "CUSTOM"),
     enabled: isAuthenticated,
     retry: false,
   });
@@ -206,8 +269,8 @@ export const useOrder = () => {
     error: fetchOrdersErrorVendor,
     refetch: refetchOrdersVendor,
   } = useQuery({
-    queryKey: ["fetchOrdersVendor"],
-    queryFn: () => fetchVendorOrders(10, 1, status),
+    queryKey: ["fetchOrdersVendor", currentPage, itemsPerPage],
+    queryFn: () => fetchVendorOrders(itemsPerPage, currentPage, status),
     enabled: isVendorAuthenticated,
     retry: false,
   });
@@ -216,7 +279,7 @@ export const useOrder = () => {
     return useQuery({
       queryKey: ["product", orderId],
       queryFn: () => fetchOneOrder(orderId),
-      enabled: isAuthenticated && isVendorAuthenticated  || !! orderId,
+      enabled: (isAuthenticated && isVendorAuthenticated) || !!orderId,
     });
   };
 
@@ -239,6 +302,15 @@ export const useOrder = () => {
     queryFn: () => fetchCities("NG", "LA"),
     retry: false,
   });
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+    setCurrentPage(1);
+  };
 
   return {
     createCustomOrders,
@@ -269,5 +341,39 @@ export const useOrder = () => {
     fetchCitiesError,
     newOrderResponse,
     useSingleOrder,
+    generateShippingRateMutation,
+    isShippingRateLink,
+    shippingRateSuccess,
+    shippingRateError,
+    shippingRate,
+    customOrdersData,
+    isFetchingCustomOrders,
+    fetchCustomOrdersError,
+    refetchCustomOrders,
+    customOrdersDataPagination: {
+      currentPage: customOrdersData?.data?.pagination?.currentPage || 1,
+      totalPages: customOrdersData?.data?.pagination?.pageCount || 1,
+      totalItems: customOrdersData?.data?.pagination?.totalCount || 0,
+      pageSize: customOrdersData?.data?.pagination?.pageSize || 10,
+      hasNextPage: customOrdersData?.data?.pagination?.hasNext || false,
+    },
+    ordersPagination: {
+      currentPage: orders?.data?.pagination?.currentPage || 1,
+      totalPages: orders?.data?.pagination?.pageCount || 1,
+      totalItems: orders?.data?.pagination?.totalCount || 0,
+      pageSize: orders?.data?.pagination?.pageSize || 10,
+      hasNextPage: orders?.data?.pagination?.hasNext || false,
+    },
+    ordersVendorPagination: {
+      currentPage: ordersVendor?.data?.pagination?.currentPage || 1,
+      totalPages: ordersVendor?.data?.pagination?.pageCount || 1,
+      totalItems: ordersVendor?.data?.pagination?.totalCount || 0,
+      pageSize: ordersVendor?.data?.pagination?.pageSize || 10,
+      hasNextPage: ordersVendor?.data?.pagination?.hasNext || false,
+    },
+    handlePageChange,
+    handleItemsPerPageChange,
+    setCurrentPage,
+    setItemsPerPage,
   };
 };

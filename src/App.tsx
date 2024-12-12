@@ -65,9 +65,19 @@ import VendorProductList from "./layouts/pages/Vendor/VendorProductList";
 import ShippingAddress from "./layouts/pages/ShippingAddress";
 import PaymentMessage from "./layouts/pages/product/paymentAlert";
 import OrderDetailPage from "./layouts/pages/OrderDetailPage";
+import CategoryProductPage from "./layouts/pages/CategoryProductPage";
+import ReviewOrder from "./layouts/pages/ReviewOrder";
+import WithdrawalSuccessMessage from "./layouts/pages/product/withdrawalSuccess";
 
 const App = () => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        retry: false,
+      },
+    },
+  });
   const router = createBrowserRouter([
     {
       path: "/",
@@ -96,9 +106,7 @@ const App = () => {
             {
               path: ":productId",
               element: (
-                // <ProtectedRoute>
                 <ProductDetailPage />
-                // </ProtectedRoute>
               ),
             },
           ],
@@ -106,9 +114,13 @@ const App = () => {
         {
           path: "product-list",
           element: (
-            // <ProtectedRoute>
             <ProductsPage />
-            // </ProtectedRoute>
+          ),
+        },
+        {
+          path: "category-list",
+          element: (
+            <CategoryProductPage />
           ),
         },
         {
@@ -173,9 +185,17 @@ const App = () => {
           element: <CustomOrder />,
         },
         {
+          path: "review-order",
+          element: <ReviewOrder />,
+        },
+        {
           path: "track-order",
           element: <OrderDetailPage />,
         },
+        {
+          path: "withdrawal-success",
+          element: <WithdrawalSuccessMessage/>
+        }
       ],
     },
     {
