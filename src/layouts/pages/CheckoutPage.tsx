@@ -16,15 +16,10 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { useState } from "react";
-// import card from "../../assets/card.png";
-// import paystack from "../../assets/paystack.png";
-// import paypal from "../../assets/paypal.png";
 import { FaPencilAlt } from "react-icons/fa";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useOrder } from "../hooks/useOrder";
 import { useAuth } from "../hooks/useAuth";
-// import ShippingOptions from "./product/shippingOptions";
-// import PaymentMethod from "./product/paymentMethod";
 
 const CheckoutPage = () => {
   const {
@@ -34,10 +29,12 @@ const CheckoutPage = () => {
     generatePaymentLinkMutation,
     newOrderResponse,
     isGeneratingPaymentLink,
+    generateShippingRateMutation,
+    shippingRate,
   } = useOrder();
   const { user } = useAuth();
   // const [couponCode, setCouponCode] = useState<string>("");
-  // console.log(newOrderResponse, "order");
+  // console.log(shippingRate, "shipping rate");
   const [cart] = useState<CartItem[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
   );
@@ -51,11 +48,12 @@ const CheckoutPage = () => {
     });
   };
 
-  const calculateSubtotal = () =>
+  const calculateSubtotal = (shippingRate: number) => 
     cart.reduce(
-      (total, product) => total + product.price * product.quantity,
+      (total, product) => total + product.price * product.quantity, 
       0
-    );
+    ) + shippingRate;
+
   const groupedCart = cart.reduce<CartItem[]>((acc, product) => {
     const existingProduct = acc.find(
       (item: CartItem) => item?.productId === product.productId
@@ -67,6 +65,22 @@ const CheckoutPage = () => {
     }
     return acc;
   }, []);
+
+  const handleShippingRate = async () => {
+    const items = cart.map((product) => ({
+      product_id: product.productId,
+      quantity: product.quantity,
+    }));
+
+    const createShippingRate = {
+      items,
+    };
+    try {
+      await generateShippingRateMutation(createShippingRate);
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
 
   const handleCreateOrder = async () => {
     const items = cart.map((product) => ({
@@ -82,6 +96,7 @@ const CheckoutPage = () => {
 
     try {
       await addNewOrderMutation(orderData);
+      await handleShippingRate();
     } catch (error) {
       console.error("Error creating order:", error);
     }
@@ -239,13 +254,18 @@ const CheckoutPage = () => {
             ))}
 
             <Flex justifyContent="space-between" mt={4}>
+              <Text>Shipping Rate</Text>
+              <Text>₦{shippingRate}</Text>
+            </Flex>
+
+            <Flex justifyContent="space-between" mt={4}>
               <Text>Subtotal</Text>
-              <Text>₦{calculateSubtotal().toLocaleString()}</Text>
+              <Text>₦{calculateSubtotal(shippingRate).toLocaleString()}</Text>
             </Flex>
 
             <Flex justifyContent="space-between" mt={2}>
               <Text fontWeight="medium">Total Amount</Text>
-              <Text>₦{calculateSubtotal().toLocaleString()}</Text>
+              <Text>₦{calculateSubtotal(shippingRate).toLocaleString()}</Text>
             </Flex>
           </Box>
 

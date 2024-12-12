@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../../services/axios";
 import { useToast } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
+
+
 export const useAuth = () => {
   const toast = useToast();
   const navigate = useNavigate();
@@ -23,9 +25,10 @@ export const useAuth = () => {
     queryKey: ["profile"],
     queryFn: async () => {
       const response = await apiClient.get("/user/profile");
-      const { FirstName, LastName, Email, ShippingAddress, PhoneNumber } =
+      // console.log(response.data.data)
+      const { FirstName, LastName, Email, ShippingAddress, PhoneNumber,wallet } =
         response.data.data;
-      return { FirstName, LastName, Email, ShippingAddress, PhoneNumber };
+      return { FirstName, LastName, Email, ShippingAddress, PhoneNumber,wallet };
     },
     enabled: isAuthenticated || isVendorAuthenticated,
     retry: false,
@@ -147,7 +150,7 @@ export const useAuth = () => {
       return response.data.data;
     },
     onError: (error) => {
-      console.error("Error requesting OTP:", error);
+      // console.error("Error requesting OTP:", error);
       toast({
         title: "Failed to Request OTP",
         description: "Please check the email or phone number and try again.",
@@ -223,6 +226,13 @@ export const useAuth = () => {
     navigate("/auth/vendor-login");
   };
 
+  const switchToUser = () => {
+    localStorage.removeItem("vendorToken");
+    setIsAuthenticated(false);
+    queryClient.clear();
+    navigate("/auth");
+  };
+
   const switchToVendor = () => {
     localStorage.removeItem("userToken");
     setIsAuthenticated(false);
@@ -262,5 +272,6 @@ export const useAuth = () => {
     addShippingAddress: addShippingAddressMutation.mutate,
     user,
     refetchProfile,
+    switchToUser
   };
 };

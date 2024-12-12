@@ -18,20 +18,21 @@ import {
 import { useOrder } from "../hooks/useOrder";
 import LoadingSpinner from "../../features/helpers/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
+import PaginationControls from "../../features/helpers/Pagination";
 
 function OrderHistoryPage() {
   const [activeStatus, setActiveStatus] = useState("BOOKED");
   const navigate = useNavigate();
-  const { orders, isFetchingOrders } = useOrder();
+  const { orders, isFetchingOrders, ordersPagination, handlePageChange } =
+    useOrder();
   const orderData = orders?.data?.data;
   const filteredOrders = orderData?.filter(
     (order: any) => order.status === activeStatus
   );
- 
+  //  console.log(orders,"orders")
   const handleProductClick = (orderId: string) => {
     navigate(`/my-orders/${orderId}`);
   };
-
 
   const renderStatusAndAction = (status: string, orderId: string) => {
     switch (status) {
@@ -177,7 +178,7 @@ function OrderHistoryPage() {
             <Thead>
               <Tr>
                 <Th>Products</Th>
-                <Th>Product ID</Th>
+                <Th>Tracking ID</Th>
                 <Th>Status</Th>
                 <Th>Qty.</Th>
                 <Th textAlign="center">Action</Th>
@@ -189,7 +190,8 @@ function OrderHistoryPage() {
                 filteredOrders?.flatMap((order: any) =>
                   order?.items?.map((product: any) => {
                     const { status, action } = renderStatusAndAction(
-                      order?.status,order?._id
+                      order?.status,
+                      order?._id
                     );
                     return (
                       <Tr key={product.product_id}>
@@ -213,6 +215,14 @@ function OrderHistoryPage() {
           </Table>
         </Flex>
       )}
+      <Box px={24} pt={8}>
+        <PaginationControls
+          currentPage={ordersPagination.currentPage}
+          totalPages={ordersPagination.totalPages}
+          onPageChange={handlePageChange}
+          hasNextPage={ordersPagination.hasNextPage}
+        />
+      </Box>
     </Box>
   );
 }

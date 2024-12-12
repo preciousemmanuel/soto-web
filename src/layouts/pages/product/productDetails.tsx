@@ -73,7 +73,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   total_reviews,
   onClick,
 }) => {
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const navigate = useNavigate();
   const { updateCart } = useProduct();
   const [selectedSize, setSelectedSize] = useState("");
@@ -118,7 +118,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
         {product?.in_stock ? "In Stock" : "Out of Stock"}
       </Badge>
 
-      <Box>
+      {/* <Box>
         <Text fontWeight="bold" mb={2}>
           Size
         </Text>
@@ -135,8 +135,8 @@ const ProductDetails: React.FC<ProductDetails> = ({
             </Button>
           ))}
         </HStack>
-      </Box>
-
+      </Box> */}
+{/* 
       <Box>
         <Text fontWeight="bold" mb={2}>
           Color
@@ -156,7 +156,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
             />
           ))}
         </HStack>
-      </Box>
+      </Box> */}
       <Flex
         direction={{ base: "column", md: "row" }}
         gap={{ base: 3, md: 4 }}
@@ -177,7 +177,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
         >
           <Button
             onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
-            isDisabled={quantity <= 1}
+            isDisabled={quantity <= 1 && !product?.in_stock}
             variant="ghost"
           >
             -
@@ -189,7 +189,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 Math.min(prev + 1, product?.product_quantity)
               )
             }
-            isDisabled={quantity >= product?.product_quantity}
+            isDisabled={!product?.in_stock}
             variant="ghost"
           >
             +

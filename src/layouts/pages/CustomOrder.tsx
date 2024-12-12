@@ -17,26 +17,24 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { FaEye } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useOrder } from "../hooks/useOrder";
+import { useNavigate } from "react-router-dom";
 
 function CustomOrder() {
-  const [step, setStep] = useState<number | string>(1);
-  const { orders } = useOrder();
-  const allOrder = orders;
-  const order = allOrder?.data?.data;
-
   const CreateOrder = () => {
+    const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
     const { createCustomOrders, isCreatingOrder, orderSuccess, refetchOrders } =
       useOrder();
 
     const onSubmit = async (data: any) => {
       try {
-        await createCustomOrders(data);
-        if (orderSuccess) {
-          await refetchOrders();
+        const formattedData = {
+          orders: [data],
+        };
+        await createCustomOrders(formattedData);
 
-          setStep(3);
-        }
+        await refetchOrders();
+        navigate("/review-order");
       } catch (error) {
         console.error("Order creation failed:", error);
       }
@@ -93,10 +91,12 @@ function CustomOrder() {
 
     const onSubmit = async (data: any) => {
       try {
-        await createCustomOrders(data);
-        if (orderSuccess) {
+        const formattedData = {
+          orders: [data],
+        };
+        const res: any = await createCustomOrders(formattedData);
+        if (res) {
           await refetchOrders();
-          setStep(3);
         }
       } catch (error) {
         console.error("Order creation failed:", error);
@@ -126,7 +126,7 @@ function CustomOrder() {
             bg={"black"}
             color="white"
             fontSize={"14px"}
-            onClick={() => setStep(3)}
+            // onClick={() => setStep(3)}
           >
             Review Order
           </Button>
@@ -159,7 +159,7 @@ function CustomOrder() {
   // Review Order Layout
   const ReviewOrder = ({ order }: { order: any }) => (
     <Box mt={8}>
-      <Heading
+      {/* <Heading
         size="lg"
         textAlign="center"
         mb={6}
@@ -182,7 +182,7 @@ function CustomOrder() {
           Recently Added
         </Text>
         <Button rounded="full">Select All</Button>
-      </Flex>
+      </Flex> */}
       <Flex
         bg="pink.50"
         p={5}
@@ -212,7 +212,7 @@ function CustomOrder() {
                 Product Brand
               </Text>
               <Text fontWeight="normal" color="#908D8D" fontSize="sm">
-                {order.brand || "N/A"}
+                {order.product_brand || "N/A"}
               </Text>
             </GridItem>
             <GridItem>
@@ -304,7 +304,6 @@ function CustomOrder() {
     </Box>
   );
 
-  // Shared Form Fields
   const renderFormFields = (register: any) => (
     <VStack
       spacing={4}
@@ -320,11 +319,23 @@ function CustomOrder() {
           Product Name
         </Text>
         <Input
-          placeholder="Gaming Keyboard"
+          placeholder="Input product name"
           h="50px"
           rounded="full"
           bg="white"
           {...register("product_name")}
+        />
+      </Box>
+      <Box w="full">
+        <Text fontSize="sm" mb={2} fontWeight="medium" color={"gray"}>
+          Product Brand
+        </Text>
+        <Input
+          placeholder="Input product brand"
+          h="50px"
+          rounded="full"
+          bg="white"
+          {...register("product_brand")}
         />
       </Box>
       <SimpleGrid columns={[1, 2, 3]} spacing={6}>
@@ -445,21 +456,7 @@ function CustomOrder() {
 
   return (
     <Box p={6} minH="100vh" mt={20}>
-      {step === 1 && <CreateOrder />}
-      {step === 2 && <AddOrder />}
-      {step === 3 && (
-        <>
-          {!order || order.length === 0 ? (
-            <Text textAlign="center" color="gray" mt={120}>
-              No orders to review.
-            </Text>
-          ) : (
-            order?.map((orderItem: { _id: string }) => (
-              <ReviewOrder key={orderItem._id} order={orderItem} />
-            ))
-          )}
-        </>
-      )}
+      <CreateOrder />
     </Box>
   );
 }

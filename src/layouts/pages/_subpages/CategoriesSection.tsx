@@ -145,10 +145,10 @@ const BestSelling: React.FC = () => {
   const { products, handleAddToCart } = useProduct();
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
-
+  
   const sortedProducts = [...products].sort((a, b) => {
-    const dateA = new Date(a.createdAt).getTime();
-    const dateB = new Date(b.createdAt).getTime();
+    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
     return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
   });
 
@@ -194,7 +194,7 @@ const BestSelling: React.FC = () => {
         }}
         gap={6}
       >
-        {sortedProducts.map((product: Product) => (
+        {sortedProducts?.slice(0, 8).map((product: Product) => (
           <ProductCard
             key={product._id}
             product={product}

@@ -1,14 +1,7 @@
-import {
-  Box,
-  Image,
-  Badge,
-  Text,
-  Stack,
-  Flex,
-  SimpleGrid,
-} from "@chakra-ui/react";
+import { Box, Image, Text, Stack, Flex, SimpleGrid } from "@chakra-ui/react";
 import { Product, useProduct } from "../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
+import PaginationControls from "../../features/helpers/Pagination";
 
 interface ProductCardProps {
   product: Product;
@@ -107,8 +100,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 };
 
 export default function ProductPage() {
-  const { products } = useProduct();
-  // console.log(products, "ss");
+  const { products, productsPagination, handlePageChange } =
+    useProduct();
+  // console.log(products,"pro")
+
   return (
     <Box py="120px">
       <Text
@@ -128,6 +123,12 @@ export default function ProductPage() {
             <ProductCard key={product._id} product={product} />
           ))}
         </SimpleGrid>
+        <PaginationControls
+           currentPage={productsPagination.currentPage}
+           totalPages={productsPagination.totalPages}
+           onPageChange={handlePageChange}
+           hasNextPage={productsPagination.hasNextPage}
+        />
       </Box>
     </Box>
   );

@@ -17,12 +17,12 @@ import {
   FaAngleRight,
 } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
+import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 
 const ProfileInfoBox = ({ onSelectOption }: any) => {
   const { user, refetchProfile, logout, loading } = useAuth();
   const toast = useToast();
 
-  // console.log(user, "User");
   useEffect(() => {
     refetchProfile();
   }, []);
@@ -30,7 +30,7 @@ const ProfileInfoBox = ({ onSelectOption }: any) => {
   if (loading) {
     return (
       <Flex justify="center" align="center" minH="200px">
-        <Spinner size="xl" />
+        <LoadingSpinner/>
       </Flex>
     );
   }
