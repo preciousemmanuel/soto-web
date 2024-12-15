@@ -13,6 +13,7 @@ import {
     DrawerCloseButton,
     VStack,
     IconButton,
+    Badge,
   } from "@chakra-ui/react";
   import { Link } from "react-router-dom";
   import Logo from "../assets/soto.png";
@@ -20,10 +21,11 @@ import {
   import { HamburgerIcon } from "@chakra-ui/icons";
   import { useState } from "react";
   import AccountModal from "../features/modals/AccountModal";
-  import NotificationModal from "../features/modals/NotificationModal";
+  import NotificationModal, { Notification } from "../features/modals/NotificationModal";
 import { CiLocationOn } from "react-icons/ci";
 import { TbWorld } from "react-icons/tb";
 import VendorModal from "../features/modals/VendorModal";
+import { useVendor } from "../layouts/hooks/useVendor";
   
   const SellerNavbar = () => {
    
@@ -35,7 +37,10 @@ import VendorModal from "../features/modals/VendorModal";
       onClose: onDrawerClose,
     } = useDisclosure();
   
-    
+    const { notifications } = useVendor();
+
+  const notificationsList = notifications?.data?.data || [];
+  const unreadNotifications = notificationsList.filter((n: Notification) => !n.is_read);
   
     return (
       <Box bg="#FFF2ED" position={"fixed"} width={"100%"} zIndex={"1000"} top={"0"}>
@@ -109,13 +114,27 @@ import VendorModal from "../features/modals/VendorModal";
   
           {/* Notification and Account Icons */}
           <Flex gap={6} alignItems="center">
-            <Icon
-              as={MdNotifications}
-              color="gray.500"
-              boxSize={6}
-              cursor="pointer"
-              onClick={onNotificationOpen}
-            />
+            <Box position="relative">
+              <Icon
+                as={MdNotifications}
+                color="gray.500"
+                boxSize={6}
+                cursor="pointer"
+                onClick={onNotificationOpen}
+              />
+              {/* {unreadNotifications.length > 0 && ( */}
+                <Badge
+                  position="absolute"
+                  top="-1"
+                  right="-1"
+                  bg="#FF5733"
+                  color ="white"
+                  borderRadius="full"
+                >
+                  {unreadNotifications?.length}
+                </Badge>
+              {/* )} */}
+            </Box>
             <Flex
               flexDirection="column"
               alignItems="center"

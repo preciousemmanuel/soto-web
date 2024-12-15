@@ -195,17 +195,13 @@ const VendorOverview = () => {
                       >
                         <StatCard
                           title="Sold"
-                          value={`${
-                            vendorOverviewData?.data?.total_unremitted || 0
-                          }`}
+                          value={`₦${(vendorOverviewData?.data?.total_unremitted || 0).toFixed(2)}`}
                           growth="+0%"
                           description="Amount To Be Remitted"
                         />
-                        <StatCard
+                         <StatCard
                           title="On Market"
-                          value={`${
-                            vendorOverviewData?.data?.total_in_stock || 0
-                          }`}
+                          value={`₦${(vendorOverviewData?.data?.total_in_stock || 0).toFixed(2)}`}
                           growth="+0%"
                           description="Amount In Stock"
                         />
@@ -261,7 +257,8 @@ const VendorOverview = () => {
                       direction="column"
                       gap={4}
                       width="100%"
-                      maxWidth="500px"
+                      h="100%"
+                      // maxWidth="500px"
                       border="1px"
                       borderColor="gray.200"
                       p={4}
@@ -280,7 +277,7 @@ const VendorOverview = () => {
                         </Flex>
                       </Flex>
                       {topProduct?.length > 0 ? (
-                        topProduct?.slice(0, 10).map((product: Product) => (
+                        topProduct?.slice(0, 7).map((product: any) => (
                           <Flex
                             key={product?._id}
                             justify="space-between"
@@ -297,11 +294,14 @@ const VendorOverview = () => {
                               alt={product?.product_name}
                             />
                             <Box flex="1" ml={4}>
-                              <Text fontSize="md" fontWeight="bold">
+                              <Text fontSize="md" fontWeight="bold" mb={2}>
                                 {product?.product_name}
                               </Text>
-                              <Text fontSize="sm" color="gray.500">
-                                {product?.unit_price
+                              <Text fontSize="md" fontWeight="bold" mb={2} color="gray.600">
+                                Status: {product?.product_status}
+                              </Text>
+                              <Text fontSize="sm" fontWeight="bold" color="gray.500">
+                                Price: {product?.unit_price
                                   ? `N${(product?.unit_price / 100).toFixed(2)}`
                                   : "N/A"}
                               </Text>

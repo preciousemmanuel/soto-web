@@ -28,14 +28,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     product?.discount_price &&
     product?.unit_price &&
     product?.discount_price < product?.unit_price;
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // const handleProductClick = (e: React.MouseEvent) => {
-  //   if ((e.target as HTMLElement).closest("button")) {
-  //     return;
-  //   }
-  //   navigate(`/products/${product?._id}`);
-  // };
+  const handleProductClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest("button")) {
+      return;
+    }
+    navigate(`/vendor-product/${product?._id}`);
+  };
 
   return (
     <Box p={4} w="300px">
@@ -47,7 +47,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         w="280px"
         cursor="pointer"
         backgroundColor="#F5F5F5"
-        // onClick={handleProductClick}
+        onClick={handleProductClick}
       >
         <Box position="relative" height="150px">
           <Image

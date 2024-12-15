@@ -5,6 +5,7 @@ import RelatedProducts from "./product/relatedProduct";
 import { useProduct } from "../hooks/useProduct";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useOrder } from "../hooks/useOrder";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -27,7 +28,27 @@ const CartPage = () => {
       total: subtotal,
     };
   };
-  console.log(cart, "cart");
+
+  const {
+    generateShippingRateMutation,
+  } = useOrder();
+  // console.log(cart, "cart");
+  const handleShippingRate = async () => {
+    const items = cart.map((product) => ({
+      product_id: product.productId,
+      quantity: product.quantity,
+    }));
+
+    const createShippingRate = {
+      items,
+    };
+    try {
+      await generateShippingRateMutation(createShippingRate);
+       navigate("/checkout")
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
 
   useEffect(() => {
     window.addEventListener("cartUpdated", updateCart);
@@ -173,7 +194,7 @@ const CartPage = () => {
               borderRadius="md"
               variant="outline"
               h="54px"
-              onClick={() => navigate("/checkout")}
+              onClick={() => handleShippingRate()}
             >
               Proceed to Checkout
             </Button>
@@ -181,7 +202,7 @@ const CartPage = () => {
         </Box>
       </Flex>
 
-      <RelatedProducts title="You may also like" />
+      {/* <RelatedProducts title="You may also like"  /> */}
     </Box>
   );
 };

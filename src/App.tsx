@@ -68,6 +68,8 @@ import OrderDetailPage from "./layouts/pages/OrderDetailPage";
 import CategoryProductPage from "./layouts/pages/CategoryProductPage";
 import ReviewOrder from "./layouts/pages/ReviewOrder";
 import WithdrawalSuccessMessage from "./layouts/pages/product/withdrawalSuccess";
+import Terms from "./components/Terms";
+import Privacy from "./components/Privacy";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -98,9 +100,9 @@ const App = () => {
             {
               // index: true,
               element: (
-                // <ProtectedRoute>
+                
                 <ProductsPage />
-                // </ProtectedRoute>
+                
               ),
             },
             {
@@ -134,6 +136,14 @@ const App = () => {
         {
           path: "contact",
           element: <Contact />,
+        },
+        {
+          path: "terms-condition",
+          element: <Terms />,
+        },
+        {
+          path: "privacy-policy",
+          element: <Privacy />,
         },
         {
           path: "checkout",
@@ -213,6 +223,7 @@ const App = () => {
         { path: "vendor-signup", element: <VendorSignup /> },
         { path: "vendor-login", element: <VendorLogin /> },
         { path: "*", element: <ErrorPage /> },
+        
       ],
     },
 
@@ -227,6 +238,12 @@ const App = () => {
             <VendorProtectedRoute>
               <VendorOverview />
             </VendorProtectedRoute>
+          ),
+        },
+        {
+          path: "vendor-product/:productId",
+          element: (
+            <ProductDetailPage />
           ),
         },
         {

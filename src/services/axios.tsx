@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 // Create an axios instance
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_APP_BASE_URL, // Replace with your API base URL
+  baseURL: import.meta.env.VITE_APP_BASE_URL, 
   headers: {
     "Content-Type": "application/json",
   },

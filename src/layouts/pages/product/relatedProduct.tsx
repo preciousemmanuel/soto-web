@@ -33,6 +33,12 @@ const RelatedProducts = ({ title,categoryId }: { title: string, categoryId: stri
   }, [categoryId, setSelectedCategoryId, selectedCategoryId, refetchProductsByCategory]);
 
  
+  const handleProductClick = (productId:any) => {
+    navigate(`/products/${productId}`);
+  };
+
+
+
   return (
     <Box p={5} px={14} my="70px" fontFamily="">
       <Text fontSize="34px" textAlign="center" fontWeight="semibold" mb={5}>
@@ -49,6 +55,8 @@ const RelatedProducts = ({ title,categoryId }: { title: string, categoryId: stri
             w="250px"
             h="350px"
             position="relative"
+            cursor="pointer"
+            onClick={() => handleProductClick(product?._id)}
           >
             {product.is_discounted && (
               <Badge

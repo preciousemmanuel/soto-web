@@ -101,9 +101,9 @@ const VendorWallet = () => {
               onClick={() => navigate("/vendor-withdraw")}
               width={["100%", "auto"]}
             >
-              Withdraw
+              Withdraw Request
             </Button>
-            <Button
+            {/* <Button
               leftIcon={<FaMoneyBill />}
               colorScheme="orange"
               size={["md", "lg"]}
@@ -113,7 +113,7 @@ const VendorWallet = () => {
               width={["100%", "auto"]}
             >
               Request
-            </Button>
+            </Button> */}
           </HStack>
         </Box>
 
@@ -130,32 +130,38 @@ const VendorWallet = () => {
               See all
             </Button>
           </HStack>
-         {isLoading ? <LoadingSpinner/> : <Box p={4} bg="white" borderRadius="md" boxShadow="md">
-            {transactions?.slice(0, 10)?.map((trx:any) => (
-              <HStack key={trx._id} mt={4} spacing={4}>
-                <Icon
-                  as={trx.type === "DEBIT" ? FaArrowUp : FaArrowDown}
-                  color={trx.type === "DEBIT" ? "red.500" : "green.500"}
-                />
-                <VStack align="start" spacing={0}>
-                  <Text fontSize={["sm", "md"]} fontWeight="500">
-                    {trx.narration}
-                  </Text>
-                  <Text fontSize="xs" fontWeight="500">
-                    Reference: {trx.reference}
-                  </Text>
-                </VStack>
-                <VStack align="end" spacing={0} ml="auto">
-                  <Text fontSize={["sm", "md"]} fontWeight="500" color="green">
-                    ₦{trx.amount}
-                  </Text>
-                  <Text fontSize="xs" fontWeight="500">
-                    {new Date(trx.createdAt).toLocaleDateString()}
-                  </Text>
-                </VStack>
-              </HStack>
-            ))}
-          </Box>}
+         {isLoading ? <LoadingSpinner/> : 
+          transactions?.length > 0 ? (
+            <Box p={4} bg="white" borderRadius="md" boxShadow="md">
+              {transactions?.slice(0, 10)?.map((trx:any) => (
+                <HStack key={trx._id} mt={4} spacing={4}>
+                  <Icon
+                    as={trx.type === "DEBIT" ? FaArrowUp : FaArrowDown}
+                    color={trx.type === "DEBIT" ? "red.500" : "green.500"}
+                  />
+                  <VStack align="start" spacing={0}>
+                    <Text fontSize={["sm", "md"]} fontWeight="500">
+                      {trx.narration}
+                    </Text>
+                    <Text fontSize="xs" fontWeight="500">
+                      Reference: {trx.reference}
+                    </Text>
+                  </VStack>
+                  <VStack align="end" spacing={0} ml="auto">
+                    <Text fontSize={["sm", "md"]} fontWeight="500" color="green">
+                      ₦{trx.amount}
+                    </Text>
+                    <Text fontSize="xs" fontWeight="500">
+                      {new Date(trx.createdAt).toLocaleDateString()}
+                    </Text>
+                  </VStack>
+                </HStack>
+              ))}
+            </Box>
+          ) : (
+            <Text>No transactions available.</Text>
+          )
+         }
         </Box>
       </SimpleGrid>
     </Box>

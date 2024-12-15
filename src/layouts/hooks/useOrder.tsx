@@ -138,7 +138,7 @@ export const useOrder = () => {
         return;
       }
       toast({
-        title: "Order Created",
+        title: `${response?.data?.message}`,
         description: "Your custom order has been created successfully.",
         status: "success",
         duration: 2000,
@@ -147,7 +147,7 @@ export const useOrder = () => {
     },
     onError: (error: any) => {
       toast({
-        title: "Error Creating Order",
+        title: `${error?.response?.data?.message}`,
         description:
           error?.message || "An error occurred while creating your order.",
         status: "error",
@@ -166,7 +166,7 @@ export const useOrder = () => {
     mutationFn: addNewOrder,
     onSuccess: (res) => {
       toast({
-        title: "Order Added",
+        title: `${res?.data?.message}`,
         description: "Your new order has been added successfully.",
         status: "success",
         duration: 2000,
@@ -174,9 +174,9 @@ export const useOrder = () => {
       });
       setNewOrderResponse(res);
     },
-    onError: (error) => {
+    onError: (error:any) => {
       toast({
-        title: "Error Adding Order",
+        title: `${error?.response?.data?.message}`,
         description: "An error occurred while adding your order.",
         status: "error",
         duration: 2000,
@@ -207,9 +207,9 @@ export const useOrder = () => {
         });
       }
     },
-    onError: (error) => {
+    onError: (error:any) => {
       toast({
-        title: "Error Generating Payment Link",
+        title: `${error?.response?.data?.message}`,
         description: "An error occurred while generating your payment link.",
         status: "error",
         duration: 2000,
@@ -228,9 +228,9 @@ export const useOrder = () => {
     onSuccess: (res) => {
       setShippingRate(res?.data?.shipping_cost);
     },
-    onError: (error) => {
+    onError: (error:any) => {
       toast({
-        title: "Error Generating Shipping Rate",
+        title: `${error?.response?.data?.message}`,
         description: "An error occurred while generating your shipping rate.",
         status: "error",
         duration: 2000,

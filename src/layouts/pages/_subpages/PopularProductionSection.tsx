@@ -77,13 +77,15 @@ const CategoryCard: React.FC<{
   </Box>
 );
 
-const ProductCard: React.FC<{ product: any }> = ({ product }) => (
+const ProductCard: React.FC<{ product: any,onClick: any }> = ({ product, onClick }) => (
   <Box
     borderRadius="8px"
     borderWidth="1px"
     borderColor="#F9D3CB"
     overflow="hidden"
     bg="#F1F1F3"
+    onClick={onClick}
+    cursor="pointer"
   >
     <HStack pt="14px">
       <Image
@@ -159,6 +161,10 @@ const PopularProductsSection: React.FC = () => {
     }
   };
 
+  const handleProductClick = (productId:any) => {
+    navigate(`/products/${productId}`);
+  };
+
   return (
     <Box py={4} fontFamily="Poppins">
       <VStack spacing={8} align="stretch">
@@ -215,7 +221,7 @@ const PopularProductsSection: React.FC = () => {
             gap={4}
           >
             {popluarProducts?.slice(0, 5)?.map((product) => (
-              <ProductCard key={product?._id} product={product} />
+              <ProductCard key={product?._id} product={product} onClick={() => handleProductClick(product?._id)}/>
             ))}
           </Grid>
         </Box>

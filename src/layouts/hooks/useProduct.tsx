@@ -150,18 +150,18 @@ export const useProduct = () => {
 
   const addMutation = useMutation({
     mutationFn: (productId: string) => addToWishlist(productId),
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast({
-        title: "Added to Wishlist",
+        title: `${response?.data?.message}`,
         description: "Product has been added to your wishlist",
         status: "success",
         duration: 2000,
         isClosable: true,
       });
     },
-    onError: (error) => {
+    onError: (error:any) => {
       toast({
-        title: "Error Adding to Wishlist",
+        title: `${error.response?.data?.message}`,
         description:
           "An error occurred while adding the product to your wishlist.",
         status: "error",
@@ -173,18 +173,18 @@ export const useProduct = () => {
 
   const removeMutation = useMutation({
     mutationFn: (productId: string) => removeFromWishlist(productId),
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast({
-        title: "Removed from Wishlist",
+        title: `${response?.data?.message}`,
         description: "Product has been removed from your wishlist",
         status: "success",
         duration: 2000,
         isClosable: true,
       });
     },
-    onError: (error) => {
+    onError: (error:any) => {
       toast({
-        title: "Error Removing from Wishlist",
+        title: `${error?.response?.data?.message}`,
         description:
           "An error occurred while removing the product from your wishlist.",
         status: "error",
@@ -298,9 +298,9 @@ export const useProduct = () => {
 
   const useAddNewProduct = useMutation<Product, Error, FormData>({
     mutationFn: addNewProductApiCall,
-    onSuccess: (data) => {
+    onSuccess: (response:any) => {
       toast({
-        title: "Product Added",
+        title: `${response?.data?.message}`,
         description: "Product has been added successfully",
         status: "success",
         duration: 2000,
@@ -308,9 +308,9 @@ export const useProduct = () => {
       });
       navigate("/alert-success");
     },
-    onError: (error) => {
+    onError: (error:any) => {
       toast({
-        title: "Error Adding Product",
+        title: `${error?.response?.data?.message}`,
         description: error?.message || "An unknown error occurred",
         status: "error",
         duration: 2000,

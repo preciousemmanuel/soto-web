@@ -274,6 +274,7 @@ const Signup = () => {
                 width="100%"
                 borderRadius="full"
                 mb={4}
+                
               >
                 Create Account
               </Button>
@@ -285,6 +286,7 @@ const Signup = () => {
                 Login
               </Link>
             </Text>
+            
           </Box>
         </Box>
       </Flex>
