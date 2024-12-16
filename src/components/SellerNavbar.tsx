@@ -122,7 +122,7 @@ import { useVendor } from "../layouts/hooks/useVendor";
                 cursor="pointer"
                 onClick={onNotificationOpen}
               />
-              {/* {unreadNotifications.length > 0 && ( */}
+             
                 <Badge
                   position="absolute"
                   top="-1"
@@ -133,7 +133,7 @@ import { useVendor } from "../layouts/hooks/useVendor";
                 >
                   {unreadNotifications?.length}
                 </Badge>
-              {/* )} */}
+            
             </Box>
             <Flex
               flexDirection="column"

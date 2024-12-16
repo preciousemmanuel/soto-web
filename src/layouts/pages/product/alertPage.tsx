@@ -30,7 +30,7 @@ const SuccessMessage: React.FC = () => {
           size="lg"
           width="full"
           onClick={() => {
-            navigate("/");
+            navigate("/vendor-overview");
           }}
         >
           Back To Overview

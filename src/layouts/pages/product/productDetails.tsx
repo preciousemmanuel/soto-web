@@ -82,6 +82,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
     style: "currency",
     currency: "NGN",
   }).format(product?.unit_price);
+  console.log(product,"product")
 
   useEffect(() => {
     return updateCart(product?._id, quantity);
@@ -114,8 +115,8 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
       <Text fontSize="md">{product?.description}</Text>
 
-      <Badge colorScheme={product?.in_stock ? "green" : "red"}>
-        {product?.in_stock ? "In Stock" : "Out of Stock"}
+      <Badge colorScheme={product?.product_quantity > 0 ? "green" : "red"}>
+        {product?.product_quantity > 0 ? "In Stock" : "Out of Stock"}
       </Badge>
 
       {/* <Box>
@@ -177,7 +178,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
         >
           <Button
             onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
-            isDisabled={quantity <= 1 && !product?.in_stock}
+            isDisabled={quantity <= 1 && product?.product_quantity < 0}
             variant="ghost"
           >
             -
@@ -189,7 +190,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 Math.min(prev + 1, product?.product_quantity)
               )
             }
-            isDisabled={!product?.in_stock}
+            isDisabled={product?.product_quantity < 0}
             variant="ghost"
           >
             +
@@ -200,7 +201,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           bg="transparent"
           w={{ base: "100%", md: "170px" }}
           h="50px"
-          isDisabled={!product?.in_stock}
+          isDisabled={product?.product_quantity < 0}
           _hover={{ bg: "transparent" }}
           mb={{ base: 3, md: 0 }}
           onClick={onClick}
@@ -212,7 +213,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           color="white"
           w={{ base: "100%", md: "170px" }}
           h="50px"
-          isDisabled={!product?.in_stock}
+          isDisabled={product?.product_quantity < 0}
           _hover={{ bg: "#FF5733" }}
           onClick={() => navigate("/cart")}
         >

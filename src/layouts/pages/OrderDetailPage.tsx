@@ -38,9 +38,10 @@ const OrderDetailPage = () => {
   const trackingSteps = [
     { label: "Order Pending", active: status === "PENDING" },
     { label: "Order Booked", active: status === "BOOKED" },
-    { label: "Order Cancelled", active: status === "CANCELLED" },
+    { label: "Order Shipped", active: status === "SHIPPED" },
     { label: "Order Delivered", active: status === "DELIVERED" },
-    { label: "Order Failed", active: status === "FAILED" },
+    ...(status === "CANCELLED" ? [{ label: "Order Cancelled", active: true }] : []),
+    ...(status === "FAILED" ? [{ label: "Order Failed", active: true }] : []),
   ];
   
   return (

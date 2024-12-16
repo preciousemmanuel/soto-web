@@ -70,6 +70,7 @@ import ReviewOrder from "./layouts/pages/ReviewOrder";
 import WithdrawalSuccessMessage from "./layouts/pages/product/withdrawalSuccess";
 import Terms from "./components/Terms";
 import Privacy from "./components/Privacy";
+import SearchResult from "./layouts/pages/SearchResult";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -193,6 +194,10 @@ const App = () => {
         {
           path: "custom-order",
           element: <CustomOrder />,
+        },
+        {
+          path: "search-results",
+          element: <SearchResult />,
         },
         {
           path: "review-order",

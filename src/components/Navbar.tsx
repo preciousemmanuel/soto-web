@@ -5,35 +5,26 @@ import {
   Image,
   Input,
   InputGroup,
-  InputLeftElement,
-  Icon,
+  Button,
   useDisclosure,
   Drawer,
   DrawerBody,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  Button,
-  Spinner,
-  List,
-  ListItem,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { TbWorld } from "react-icons/tb";
 import Logo from "../assets/soto.png";
 import { IoCartOutline } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
-import { Search2Icon } from "@chakra-ui/icons";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import AccountModal from "../features/modals/AccountModal";
 import CategoriesPopover from "../features/modals/CategoriesPopover";
-import { useProduct } from "../layouts/hooks/useProduct";
-
 
 const Navbar = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isDrawerOpen,
@@ -41,40 +32,24 @@ const Navbar = () => {
     onClose: onDrawerClose,
   } = useDisclosure();
 
-  const { handleSearch, searchResults, isSearchLoading } = useProduct();
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
-
-  const handleExpand = () => {
-    setIsExpanded(true);
-  };
-
-  const handleCollapse = () => {
-    setTimeout(() => {
-      setIsExpanded(false);
-    }, 200);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setInputValue(value);
-    handleSearch(value);
-  };
-
   const [cartQuantity, setCartQuantity] = useState(0);
 
-  useEffect(() => {
-    updateCartQuantity();
 
-    window.addEventListener("storage", updateCartQuantity);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
 
-    window.addEventListener("cartUpdated", updateCartQuantity);
+ 
+  const handleSearchSubmit = () => {
+    if (inputValue.trim()) {
+     
+      navigate(`/search-results?query=${encodeURIComponent(inputValue)}`);
+    }
+  };
 
-    return () => {
-      window.removeEventListener("storage", updateCartQuantity);
-      window.removeEventListener("cartUpdated", updateCartQuantity);
-    };
-  }, []);
-
+ 
   const updateCartQuantity = () => {
     const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
     const quantity = cartItems.reduce(
@@ -84,9 +59,21 @@ const Navbar = () => {
     setCartQuantity(quantity);
   };
 
+  useEffect(() => {
+    updateCartQuantity();
+
+    window.addEventListener("storage", updateCartQuantity);
+    window.addEventListener("cartUpdated", updateCartQuantity);
+
+    return () => {
+      window.removeEventListener("storage", updateCartQuantity);
+      window.removeEventListener("cartUpdated", updateCartQuantity);
+    };
+  }, []);
+
   return (
-    <Box bg="#FFF2ED" position={"fixed"} width={"100%"} zIndex={"1000"}>
-      {/* Top bar with contact link, location, and language */}
+    <Box bg="#FFF2ED" position="fixed" width="100%" zIndex="1000">
+      {/* Top bar */}
       <Flex
         py={2}
         px={4}
@@ -121,7 +108,7 @@ const Navbar = () => {
         justifyContent="space-between"
         alignItems="center"
         flexWrap="wrap"
-        bg={"white"}
+        bg="white"
       >
         {/* Logo */}
         <Box>
@@ -166,83 +153,37 @@ const Navbar = () => {
           mt={{ base: 4, md: 0 }}
           display={{ base: "none", md: "flex" }}
         >
-          <Box maxW="200px" width="100%" position="relative">
+          <Box maxW="400px" width="100%" position="relative">
             <InputGroup>
-              <InputLeftElement pointerEvents="none">
-                {isSearchLoading ? (
-                  <Spinner size="sm" color="gray.400" />
-                ) : (
-                  <Icon as={Search2Icon} color="gray.400" />
-                )}
-              </InputLeftElement>
               <Input
-                placeholder="Enter your list"
-                onClick={handleExpand}
-                onBlur={handleCollapse}
+                placeholder="Search for products"
                 onChange={handleInputChange}
                 value={inputValue}
-                bg={isExpanded ? "white" : "#FFF2ED"}
+                bg="#FFF2ED"
                 borderRadius="md"
-                width={isExpanded ? "100%" : "150px"}
-                transition="width 0.3s ease"
-                fontSize={"12px"}
+                width="200px"
+                fontSize="12px"
+                onKeyUp={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearchSubmit();
+                  }
+                }}
               />
-            </InputGroup>
-
-            {isExpanded && inputValue && searchResults?.length > 0 && (
-              <Box
-                position="absolute"
-                top="100%"
-                left="0"
-                right="0"
-                bg="white"
-                boxShadow="lg"
-                borderRadius="md"
-                mt={2}
-                maxH="400px"
-                overflowY="auto"
-                zIndex={1001}
+              <Button
+                onClick={handleSearchSubmit}
+                color="white"
+                bg="#FF5733"
+                size="sm"
+                h="40px"
+                w="100px"
+                ml={2}
               >
-                <List spacing={2} p={2}>
-                  {searchResults.map((product: any) => (
-                    <ListItem
-                      key={product._id}
-                      _hover={{ bg: "gray.50" }}
-                      p={2}
-                      borderRadius="md"
-                    >
-                      <Link
-                        to={`/products/${product._id}`}
-                        onClick={() => {
-                          setIsExpanded(false);
-                          setInputValue("");
-                        }}
-                      >
-                        <Flex alignItems="center" gap={3}>
-                          {product.images?.[0] && (
-                            <Image
-                              src={product.images[0]}
-                              alt={product.product_name}
-                              boxSize="40px"
-                              objectFit="cover"
-                              borderRadius="md"
-                            />
-                          )}
-                          <Box>
-                            <Text fontWeight="medium">{product.product_name}</Text>
-                            <Text fontSize="sm" color="gray.600">
-                              ${product.unit_price}
-                            </Text>
-                          </Box>
-                        </Flex>
-                      </Link>
-                    </ListItem>
-                  ))}
-                </List>
-              </Box>
-            )}
+                Search
+              </Button>
+            </InputGroup>
           </Box>
 
+          {/* Cart and Account icons remain the same */}
           <Link to="/cart">
             <Flex
               flexDirection="column"
@@ -296,6 +237,7 @@ const Navbar = () => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerBody pt={10}>
+            {/* Mobile navigation menu items */}
             <Flex flexDirection="column" gap={6}>
               <Link to="/">
                 <Text
@@ -326,17 +268,37 @@ const Navbar = () => {
                 </Text>
               </Link>
 
-              {/* Search bar */}
+              {/* Mobile Search */}
               <Box mt={4}>
                 <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={Search2Icon} color="gray.400" />
-                  </InputLeftElement>
-                  <Input placeholder="Search..." bg="white" borderRadius="md" />
+                  <Input
+                    placeholder="Search for products"
+                    bg="white"
+                    borderRadius="md"
+                    onChange={handleInputChange}
+                    value={inputValue}
+                    onKeyUp={(e) => {
+                      if (e.key === 'Enter') {
+                        handleSearchSubmit();
+                        onDrawerClose();
+                      }
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      handleSearchSubmit();
+                      onDrawerClose();
+                    }}
+                    colorScheme="teal"
+                    size="sm"
+                    ml={2}
+                  >
+                    Search
+                  </Button>
                 </InputGroup>
               </Box>
 
-              {/* Cart and Account */}
+              {/* Mobile Cart and Account */}
               <Flex gap={6} mt={6}>
                 <Link to="/cart">
                   <Flex flexDirection="column" alignItems="center">
