@@ -123,7 +123,7 @@ const ProductCard: React.FC<{ product: any,onClick: any }> = ({ product, onClick
       </HStack>
 
       <Text fontSize="xl" fontWeight="bold" mt={2} color="#FF5733">
-        ₦{product?.unit_price.toLocaleString()}
+        ₦{product?.unit_price?.toLocaleString() || ""}
         {product?.is_discounted && (
           <Text
             as="span"
@@ -132,7 +132,7 @@ const ProductCard: React.FC<{ product: any,onClick: any }> = ({ product, onClick
             textDecoration="line-through"
             ml={2}
           >
-            ₦{product?.discount_price.toLocaleString()}
+            ₦{product?.discount_price?.toLocaleString() || ""}
           </Text>
         )}
       </Text>
