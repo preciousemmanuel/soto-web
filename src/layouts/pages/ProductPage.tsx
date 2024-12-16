@@ -12,7 +12,7 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const isOutOfStock = !product.in_stock;
+  const isOutOfStock = product.product_quantity !== undefined && product.product_quantity < 0;
   const isOnSale =
     product?.is_discounted &&
     product?.discount_price &&

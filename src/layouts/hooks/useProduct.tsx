@@ -355,12 +355,13 @@ export const useProduct = () => {
   const {
     data: searchResults,
     isLoading: isSearchLoading,
+    isSuccess: isFetched,
     error: searchError,
   } = useQuery({
     queryKey: ['productSearch', searchQuery, currentPage, itemsPerPage],
     queryFn: () => fetchProducts(itemsPerPage, currentPage, "", "", searchQuery),
     enabled: searchQuery.length >= 2,
-    staleTime: 1000,
+    staleTime: 0,
   });
 
   const handleSearch = (query: string) => {
@@ -416,6 +417,7 @@ export const useProduct = () => {
     isSearchLoading,
     searchError,
     handleSearch,
+    isFetched,
     searchQuery,
     currentPage: products?.data?.pagination?.currentPage || 1,
     totalPages: products?.data?.pagination?.pageCount || 1,

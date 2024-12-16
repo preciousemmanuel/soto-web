@@ -66,8 +66,8 @@ const ProductCard: React.FC<{
       onClick={handleProductClick}
     >
       <Flex justify="space-between" align="start">
-      <Badge colorScheme={product?.in_stock ? "green" : "red"}>
-        {product?.in_stock ? "" : "Out of Stock"}
+      <Badge colorScheme={product.product_quantity ? "green" : "red"}>
+        {product.product_quantity ? "" : "Out of Stock"}
       </Badge>
         <Box position="relative" w="full" mb={4}>
           <Image
@@ -111,7 +111,7 @@ const ProductCard: React.FC<{
             rounded="full"
             onClick={handleWishlistClick}
             colorScheme="gray"
-            isDisabled={!product?.in_stock}
+            isDisabled={product?.product_quantity ? product.product_quantity < 0 : true}
           />
         </Flex>
         <HStack spacing={1} my={4}>
@@ -134,7 +134,7 @@ const ProductCard: React.FC<{
           variant="outline"
           size="md"
           width="full"
-          isDisabled={!product?.in_stock}
+          isDisabled={product?.product_quantity ? product.product_quantity < 0 : true}
           h="40px"
           onClick={() => product._id && onAddToCart(product._id)}
           _hover={{

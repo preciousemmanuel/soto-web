@@ -16,6 +16,7 @@ import {
   FormErrorMessage,
   InputRightElement,
   Link,
+  Select,
 } from "@chakra-ui/react";
 import {
   FaBuilding,
@@ -32,6 +33,7 @@ import AuthImage from "../assets/auth.png";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import apiClient from "../services/axios";
 import { useMutation } from "@tanstack/react-query";
+import { useProduct } from "../layouts/hooks/useProduct";
 
 interface FormValues {
   business_name: string;
@@ -66,7 +68,7 @@ const validationSchema = Yup.object().shape({
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
     .required("Password is required"),
   business_logo: Yup.mixed()
-    .required("Business logo is required")
+    // .required("Business logo is required")
     .test("fileSize", "File size is too large", (value) => {
       if (!value) return true;
       return (value as File).size <= 5000000;
@@ -145,6 +147,13 @@ const Vendorsignup: React.FC = () => {
     setSelectedFile(file);
     formik.setFieldValue("business_logo", file);
   };
+
+  const {
+    categories,
+  } = useProduct();
+
+  const category = categories?.data?.data;
+
 
   return (
     <Box width="100%">
@@ -293,15 +302,21 @@ const Vendorsignup: React.FC = () => {
                     Business Category
                   </Text>
                   <InputGroup>
-                    <Input
-                      // name="category"
-                      placeholder="Enter your business category"
+                    <Select
+                      placeholder="Select your business category"
                       height="52px"
                       bg="#F8EDEA80"
                       borderRadius="xl"
                       fontSize="sm"
                       {...formik.getFieldProps("category")}
-                    />
+                    >
+                     
+                      {categories?.data?.data.map((category:any) => (
+                        <option key={category?._id} value={category?._id}>
+                          {category?.name}
+                        </option>
+                      ))}
+                    </Select>
                   </InputGroup>
                   <FormErrorMessage>{formik.errors.category}</FormErrorMessage>
                 </FormControl>
