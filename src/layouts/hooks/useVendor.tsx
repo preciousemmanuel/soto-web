@@ -4,8 +4,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import apiClient from "../../services/axios";
 import debounce from 'lodash/debounce';
 
-
-
 export const useVendor = () => {
   const toast = useToast();
   const [search, setSearch] = useState("");
@@ -77,7 +75,39 @@ export const useVendor = () => {
     return response.data;
   };
 
-   const fetchBanks = async (limit: number, page: number, search: string) => {
+  const fetchNotifications = async (limit: number, page: number) => {
+    const response = await apiClient.get(
+      `/notification/fetch?limit=${limit}&page=${page}`
+    );
+    return response.data;
+  };
+
+  const markNotificationAsRead = async (id: string) => {
+    const response = await apiClient.put(`/notification/mark-as-read/${id}`);
+    return response.data;
+  };
+
+  const useMarkNotificationAsRead = useMutation({
+    mutationFn: markNotificationAsRead,
+    onSuccess: () => {
+      toast({
+        title: "Notification marked as read",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error marking notification as read",
+        status: "error", 
+        duration: 2000,
+        isClosable: true,
+      });
+    }
+  });
+
+  const fetchBanks = async (limit: number, page: number, search: string) => {
     const response = await apiClient.get(
       `/business/fetch-banks?limit=${limit}&page=${page}&search=${search}`
     );
@@ -93,6 +123,17 @@ export const useVendor = () => {
     queryKey: ["banks", { limit: 10, page: 1, search: debouncedSearchTerm }],
     queryFn: () => fetchBanks(itemsPerPage, currentPage, debouncedSearchTerm),
     enabled: isVendorAuthenticated && debouncedSearchTerm.length >= 3,
+    retry: false,
+  });
+
+  const {
+    data: notifications,
+    isLoading: isLoadingNotifications,
+    isError: isErrorNotifications,
+  } = useQuery({
+    queryKey: ["notifications", currentPage, itemsPerPage],
+    queryFn: () => fetchNotifications(itemsPerPage, currentPage),
+    enabled: isVendorAuthenticated,
     retry: false,
   });
 
@@ -166,7 +207,6 @@ export const useVendor = () => {
     onError: (error:any) => {
       toast({
         title: `${error?.response?.data?.message}`,
-        // description: "An error occurred while sending your withdrawal request.",
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -206,8 +246,6 @@ export const useVendor = () => {
     enabled: isVendorAuthenticated,
     retry: false,
   });
-
- 
 
   const {
     data: allProductsByVendor,
@@ -279,7 +317,8 @@ export const useVendor = () => {
       isLoadingVendorInventory ||
       isLoadingSalesAnalytics ||
       isLoadingBanks ||
-      isLoadingMyBankDetails,
+      isLoadingMyBankDetails ||
+      isLoadingNotifications,
     isError:
       isErrorVendorOverview ||
       isErrorOrdersByVendor ||
@@ -288,13 +327,15 @@ export const useVendor = () => {
       isErrorVendorInventory ||
       isErrorSalesAnalytics ||
       isErrorBanks ||
-      isErrorMyBankDetails,
+      isErrorMyBankDetails ||
+      isErrorNotifications,
     ordersByVendor,
     topProductsByVendor,
     transactionLogs,
     vendorInventory,
     salesAnalytics,
     banks,
+    notifications,
     selectedTimeframe,
     setSelectedTimeframe,
     allProductsByVendor,
@@ -315,6 +356,7 @@ export const useVendor = () => {
     handleItemsPerPageChange,
     setCurrentPage,
     setItemsPerPage,
+    useMarkNotificationAsRead,
     ordersByVendorPagination: {
       currentPage: ordersByVendor?.data?.pagination?.currentPage || 1,
       totalPages: ordersByVendor?.data?.pagination?.pageCount || 1,
@@ -342,6 +384,13 @@ export const useVendor = () => {
       totalItems: allProductsByVendor?.data?.pagination?.totalCount || 0,
       pageSize: allProductsByVendor?.data?.pagination?.pageSize || 10,
       hasNextPage: allProductsByVendor?.data?.pagination?.hasNext || false,
+    },
+    notificationsPagination: {
+      currentPage: notifications?.data?.pagination?.currentPage || 1,
+      totalPages: notifications?.data?.pagination?.pageCount || 1,
+      totalItems: notifications?.data?.pagination?.totalCount || 0,
+      pageSize: notifications?.data?.pagination?.pageSize || 10,
+      hasNextPage: notifications?.data?.pagination?.hasNext || false,
     },
   };
 };

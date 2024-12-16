@@ -232,6 +232,16 @@ const Login = () => {
                 Create an account
               </Link>
             </Text>
+            <Text textAlign="center" py="3" color="gray.600">
+              Are you a Vendor?{" "}
+              <Link as={RouterLink} color="#FF5733" to="/auth/vendor-login">
+                Login
+              </Link>
+              /
+              <Link as={RouterLink} color="#FF5733" to="/auth/vendor-signup">
+                Register
+              </Link>
+            </Text>
           </Box>
         </Box>
       </Flex>

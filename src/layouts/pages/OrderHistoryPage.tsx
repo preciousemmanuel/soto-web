@@ -71,6 +71,24 @@ function OrderHistoryPage() {
             </Button>
           ),
         };
+      case "SHIPPED":
+        return {
+          status: (
+            <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
+              SHIPPED
+            </Text>
+          ),
+          action: (
+            <Button
+              color="white"
+              bg="#FF5733"
+              size="sm"
+              // onClick={() => handleProductClick(productId)}
+            >
+              View
+            </Button>
+          ),
+        };
       case "DELIVERED":
         return {
           status: (
@@ -140,29 +158,33 @@ function OrderHistoryPage() {
       </Heading>
 
       <Flex justifyContent={"left"} alignItems={"left"}>
-        <SimpleGrid
-          columns={[2, 2, 5]}
-          spacing={4}
+      <Flex
+          justifyContent="center"
+          gap={4}
           mb={8}
-          maxW="850px"
+          maxW="100%"
           mx="auto"
-          py={8}
         >
-          {["PENDING", "BOOKED", "CANCELLED", "DELIVERED", "FAILED"].map(
-            (buttonStatus) => (
-              <Button
-                key={buttonStatus}
-                bg={activeStatus === buttonStatus ? "#FF5733" : "#F4F6F9"}
-                color={activeStatus === buttonStatus ? "white" : "black"}
-                borderRadius="full"
-                size="md"
-                onClick={() => setActiveStatus(buttonStatus)}
-              >
-                {buttonStatus}
-              </Button>
-            )
-          )}
-        </SimpleGrid>
+          {[
+            "PENDING",
+            "BOOKED",
+            "SHIPPED",
+            "DELIVERED",
+            "CANCELLED",
+            "FAILED",
+          ].map((buttonStatus) => (
+            <Button
+              key={buttonStatus}
+              bg={activeStatus === buttonStatus ? "#FF5733" : "#F4F6F9"}
+              color={activeStatus === buttonStatus ? "white" : "black"}
+              borderRadius="full"
+              size="md"
+              onClick={() => setActiveStatus(buttonStatus)}
+            >
+              {buttonStatus}
+            </Button>
+          ))}
+       </Flex>
       </Flex>
       {isFetchingOrders ? (
         <LoadingSpinner />

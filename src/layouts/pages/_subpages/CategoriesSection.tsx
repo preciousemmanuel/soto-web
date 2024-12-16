@@ -9,6 +9,7 @@ import {
   HStack,
   Flex,
   IconButton,
+  Badge,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon, StarIcon } from "@chakra-ui/icons";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
@@ -65,6 +66,9 @@ const ProductCard: React.FC<{
       onClick={handleProductClick}
     >
       <Flex justify="space-between" align="start">
+      <Badge colorScheme={product?.in_stock ? "green" : "red"}>
+        {product?.in_stock ? "" : "Out of Stock"}
+      </Badge>
         <Box position="relative" w="full" mb={4}>
           <Image
             src={product.images?.[0]}
@@ -107,9 +111,11 @@ const ProductCard: React.FC<{
             rounded="full"
             onClick={handleWishlistClick}
             colorScheme="gray"
+            isDisabled={!product?.in_stock}
           />
         </Flex>
         <HStack spacing={1} my={4}>
+          <Box>
           {Array(5)
             .fill("")
             .map((_, i) => (
@@ -119,6 +125,7 @@ const ProductCard: React.FC<{
                 fontSize="sm"
               />
             ))}
+          </Box>
         </HStack>
         <Button
           color="#FF5733"
@@ -127,6 +134,7 @@ const ProductCard: React.FC<{
           variant="outline"
           size="md"
           width="full"
+          isDisabled={!product?.in_stock}
           h="40px"
           onClick={() => product._id && onAddToCart(product._id)}
           _hover={{

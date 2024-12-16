@@ -124,10 +124,10 @@ const Footer = () => {
         pt={6}
       >
         <HStack spacing={4} pl={12}>
-          <Link fontSize="sm" color="gray.500" _hover={{ color: "orange.500" }}>
+          <Link fontSize="sm" href="/terms-condition" color="gray.500" _hover={{ color: "orange.500" }}>
             Terms & Conditions
           </Link>
-          <Link fontSize="sm" color="gray.500" _hover={{ color: "orange.500" }}>
+          <Link fontSize="sm" href="/privacy-policy" color="gray.500" _hover={{ color: "orange.500" }}>
             Privacy Policy
           </Link>
         </HStack>

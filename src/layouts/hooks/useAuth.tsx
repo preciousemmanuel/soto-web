@@ -46,7 +46,7 @@ export const useAuth = () => {
       setIsAuthenticated(true);
 
       toast({
-        title: "Login Successful",
+        title: `${response?.data?.message}`,
         description: "Welcome back!",
         status: "success",
         duration: 7000,
@@ -57,10 +57,10 @@ export const useAuth = () => {
       const origin = location.state?.from?.pathname || "/";
       navigate(origin);
     },
-    onError: (error) => {
+    onError: (error:any) => {
       // console.error("Login failed:", error);
       toast({
-        title: "Login Failed",
+        title: `${error?.response?.data?.message}`,
         description: "Please check your credentials and try again.",
         status: "error",
         duration: 2000,
@@ -81,7 +81,7 @@ export const useAuth = () => {
       setIsVendorAuthenticated(true);
 
       toast({
-        title: "Vendor Login Successful",
+        title: `${response?.data?.message}`,
         description: "Welcome back!",
         status: "success",
         duration: 7000,
@@ -91,10 +91,10 @@ export const useAuth = () => {
 
       navigate("/vendor-overview");
     },
-    onError: (error) => {
+    onError: (error:any) => {
       // console.error("Vendor login failed:", error);
       toast({
-        title: "Login Failed",
+        title: `${error?.response?.data?.message}`,
         description: "Please check your credentials and try again.",
         status: "error",
         duration: 2000,
@@ -112,9 +112,9 @@ export const useAuth = () => {
       SignupChannel: string;
       UserType: string;
     }) => apiClient.post("/user/signup", userData),
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast({
-        title: "User Created Successfully",
+        title: `${response?.data?.message}`,
         description: "Welcome! Please login to continue.",
         status: "success",
         duration: 7000,
@@ -123,10 +123,10 @@ export const useAuth = () => {
       });
       navigate("/auth");
     },
-    onError: (error) => {
+    onError: (error:any) => {
       // console.error("Signup failed:", error);
       toast({
-        title: "Signup Failed",
+        title: `${error?.response?.data?.message}`,
         description: "Please try again.",
         status: "error",
         duration: 2000,
@@ -141,7 +141,7 @@ export const useAuth = () => {
     onSuccess: (response) => {
       const { email } = response.data.data;
       toast({
-        title: "OTP Sent Successfully",
+        title: `${response?.data?.message}`,
         description: `An OTP has been sent to ${email}.`,
         status: "success",
         duration: 2000,
@@ -149,10 +149,10 @@ export const useAuth = () => {
       });
       return response.data.data;
     },
-    onError: (error) => {
+    onError: (error:any) => {
       // console.error("Error requesting OTP:", error);
       toast({
-        title: "Failed to Request OTP",
+        title: `${error?.response?.data?.message}`,
         description: "Please check the email or phone number and try again.",
         status: "error",
         duration: 2000,
@@ -164,9 +164,9 @@ export const useAuth = () => {
   const resetPasswordMutation = useMutation({
     mutationFn: (payload: { new_password: string; otp: string }) =>
       apiClient.put("/user/reset-password", payload),
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast({
-        title: "Password Reset Successfully",
+        title: `${response?.data?.message}`,
         description:
           "Your password has been reset. Please log in with your new credentials.",
         status: "success",
@@ -175,10 +175,10 @@ export const useAuth = () => {
       });
       navigate("/auth");
     },
-    onError: (error) => {
+    onError: (error:any) => {
       // console.error("Password reset failed:", error);
       toast({
-        title: "Failed to Reset Password",
+        title: `${error?.response?.data?.message}`,
         description: "Please check the OTP and try again.",
         status: "error",
         duration: 2000,
@@ -190,9 +190,9 @@ export const useAuth = () => {
   const addShippingAddressMutation = useMutation({
     mutationFn: (addressData: any) =>
       apiClient.put("/user/add-shipping-address", addressData),
-    onSuccess: () => {
+    onSuccess: (response) => {
       toast({
-        title: "Shipping Address Added",
+        title: `${response?.data?.message}`,
         description: "Your shipping address has been added successfully.",
         status: "success",
         duration: 2000,
@@ -200,10 +200,10 @@ export const useAuth = () => {
       });
       navigate("/profile");
     },
-    onError: (error) => {
+    onError: (error:any) => {
       // console.error("Failed to add shipping address:", error);
       toast({
-        title: "Failed to Add Shipping Address",
+        title: `${error?.response?.data?.message}`,
         description: "Please try again.",
         status: "error",
         duration: 2000,

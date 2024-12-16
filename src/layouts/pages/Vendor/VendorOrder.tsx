@@ -68,6 +68,24 @@ const VendorOrder = () => {
             </Button>
           ),
         };
+        case "SHIPPED":
+          return {
+            status: (
+              <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
+                SHIPPED
+              </Text>
+            ),
+            action: (
+              <Button
+                color="white"
+                bg="#FF5733"
+                size="sm"
+                // onClick={() => handleProductClick(productId)}
+              >
+                View
+              </Button>
+            ),
+          };
       case "DELIVERED":
         return {
           status: (
@@ -132,14 +150,14 @@ const VendorOrder = () => {
         Vendor Orders
       </Heading>
       <Flex justifyContent="left">
-        <SimpleGrid
-          columns={[2, 2, 5]}
-          spacing={4}
+        <Flex
+          justifyContent="center"
+          gap={4}
           mb={8}
-          maxW="850px"
+          maxW="100%"
           mx="auto"
         >
-          {["PENDING", "BOOKED", "CANCELLED", "DELIVERED", "FAILED"].map(
+          {["PENDING", "BOOKED", "SHIPPED", "DELIVERED", "CANCELLED", "FAILED"].map(
             (buttonStatus) => (
               <Button
                 key={buttonStatus}
@@ -153,7 +171,7 @@ const VendorOrder = () => {
               </Button>
             )
           )}
-        </SimpleGrid>
+        </Flex>
       </Flex>
       {isFetchingOrders ? (
         <LoadingSpinner />

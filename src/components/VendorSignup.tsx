@@ -100,9 +100,10 @@ const Vendorsignup: React.FC = () => {
       // console.log(response.data, "data");
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      console.log(response)
       toast({
-        title: "Business Registration Successful",
+        title: `${response?.message}`,
         description: "Your business has been registered successfully!",
         status: "success",
         duration: 7000,
@@ -111,10 +112,10 @@ const Vendorsignup: React.FC = () => {
       });
       navigate("/auth/vendor-login");
     },
-    onError: (err) => {
+    onError: (err:any) => {
       // console.log(err, "error");
       toast({
-        title: "Registration Failed",
+        title: `${err.response?.data?.message}`,
         description: "An error occurred during registration",
         status: "error",
         duration: 7000,
@@ -192,7 +193,7 @@ const Vendorsignup: React.FC = () => {
                 Enter accurate business information
               </Text>
 
-              <form>
+              <form onSubmit={formik.handleSubmit}>
                 {/* Business Name */}
                 <FormControl
                   isInvalid={
@@ -443,7 +444,7 @@ const Vendorsignup: React.FC = () => {
                   width="100%"
                   borderRadius="full"
                   mb={4}
-                  onClick={() => formik.handleSubmit()}
+                  // onClick={() => formik.handleSubmit()}
                   isLoading={signupMutation.isPending}
                   loadingText="Creating Business..."
                 >
