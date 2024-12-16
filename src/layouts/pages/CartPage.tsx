@@ -32,7 +32,7 @@ const CartPage = () => {
   const {
     generateShippingRateMutation,
   } = useOrder();
-  // console.log(cart, "cart");
+  console.log(cart, "cart");
   const handleShippingRate = async () => {
     const items = cart.map((product) => ({
       product_id: product.productId,

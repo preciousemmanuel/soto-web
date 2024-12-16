@@ -82,7 +82,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
     style: "currency",
     currency: "NGN",
   }).format(product?.unit_price);
-  console.log(product,"product")
+  // console.log(product,"product")
 
   useEffect(() => {
     return updateCart(product?._id, quantity);
@@ -201,7 +201,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           bg="transparent"
           w={{ base: "100%", md: "170px" }}
           h="50px"
-          isDisabled={product?.product_quantity < 0}
+          // isDisabled={product?.product_quantity < 0}
           _hover={{ bg: "transparent" }}
           mb={{ base: 3, md: 0 }}
           onClick={onClick}
