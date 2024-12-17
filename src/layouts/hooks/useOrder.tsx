@@ -138,7 +138,7 @@ export const useOrder = () => {
         return;
       }
       toast({
-        title: `${response?.data?.message}`,
+        title: `${response?.message}`,
         description: "Your custom order has been created successfully.",
         status: "success",
         duration: 2000,
@@ -166,7 +166,7 @@ export const useOrder = () => {
     mutationFn: addNewOrder,
     onSuccess: (res) => {
       toast({
-        title: `${res?.data?.message}`,
+        title: `${res?.message}`,
         description: "Your new order has been added successfully.",
         status: "success",
         duration: 2000,
@@ -238,6 +238,8 @@ export const useOrder = () => {
       });
     },
   });
+
+  
 
   const {
     data: orders,
@@ -349,6 +351,7 @@ export const useOrder = () => {
     customOrdersData,
     isFetchingCustomOrders,
     fetchCustomOrdersError,
+    clearCart,
     refetchCustomOrders,
     customOrdersDataPagination: {
       currentPage: customOrdersData?.data?.pagination?.currentPage || 1,

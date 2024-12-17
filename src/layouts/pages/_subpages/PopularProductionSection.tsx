@@ -148,7 +148,7 @@ const PopularProductsSection: React.FC = () => {
     setSelectedCategoryId,
     refetchProductsByCategory,
   } = useProduct();
-
+// console.log(popluarProducts,"popluar product")
   const category = categories?.data?.data;
 
   const fetchProductsByCategory = async (categoryId: string) => {

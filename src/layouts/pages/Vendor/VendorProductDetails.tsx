@@ -1,13 +1,11 @@
 import { Flex, Box } from "@chakra-ui/react";
-import ProductImageGallery from "./product/productImage";
-import ProductDetails from "./product/productDetails";
-import ProductDescription from "./product/productDescription";
+import ProductImageGallery from "../product/productImage";
+import ProductDetails from "../product/productDetails";
 import { useParams } from "react-router-dom";
-import { useProduct } from "../hooks/useProduct";
-import RelatedProducts from "./product/relatedProduct";
-import LoadingSpinner from "../../features/helpers/LoadingSpinner";
+import { useProduct } from "../../hooks/useProduct";
+import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 
-const ProductDetailsPage = () => {
+const VendorProductDetailsPage = () => {
   const { productId } = useParams<{ productId: string }>();
   const { useSingleProduct } = useProduct();
   const { data: oneProduct, isLoading } = useSingleProduct(productId as string);
@@ -34,6 +32,7 @@ const ProductDetailsPage = () => {
 
           <Box w={{ base: "100%", md: "55%" }}>
             <ProductDetails
+            showOthers={false}
               product={{
                 _id: product?._id,
                 vendor: product?.vendor || "",
@@ -46,12 +45,13 @@ const ProductDetailsPage = () => {
                 product_quantity: product?.product_quantity || 0,
                 category: product?.category?.name,
                 rating: product?.rating,
-                in_stock: false,
+                // in_stock: false,
                 images: product?.images || [],
                 is_discounted: product?.is_discounted || false,
                 is_verified: product?.is_verified || false,
                 is_deleted: product?.is_deleted || false,
-                total_quantity_sold: product?.total_quantity_sold || 0,
+                // total_quantity_sold: product?.total_quantity_sold || 0,
+                
               }}
               // sizes={["", "", ""]}
               // colors={["", "", ""]}
@@ -59,10 +59,8 @@ const ProductDetailsPage = () => {
           </Box>
         </Flex>
       )}
-      <ProductDescription reviews={products?.reviews} description={product?.description || ""} />
-      <RelatedProducts title="Related Products" categoryId={product?.category?._id} />
     </Box>
   );
 };
 
-export default ProductDetailsPage;
+export default VendorProductDetailsPage;

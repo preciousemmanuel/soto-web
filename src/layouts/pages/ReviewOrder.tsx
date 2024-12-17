@@ -178,7 +178,7 @@ export default function ReviewOrder() {
           ))
         )}   
       </Box>
-      <Box px={24} pt={8}>
+      <Box px={24} py={8}>
         <PaginationControls
           currentPage={customOrdersDataPagination.currentPage}
           totalPages={customOrdersDataPagination.totalPages}

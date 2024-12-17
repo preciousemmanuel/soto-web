@@ -12,6 +12,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { motion, AnimatePresence, Variant } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
+import AuthImage from "../../../assets/what.png";
 import { EffectFade } from "swiper/modules";
 import "swiper/css/effect-fade";
 import "swiper/css";
@@ -110,6 +111,7 @@ const HeroSection: React.FC = () => {
       direction={{ base: "column", md: "row" }}
       align="center"
       wrap="wrap"
+      position="relative"
     >
       <Box flex="1" pr={{ md: 8 }} mb={{ base: 8, md: 0 }}>
         <AnimatePresence mode="wait">
@@ -169,7 +171,14 @@ const HeroSection: React.FC = () => {
           Custom Order
         </Button>
       </Box>
-
+      <Image
+          // flex="1"
+          src={AuthImage}
+          bottom="-70px"
+          right="0px"
+          position="absolute"
+          display={{ base: "none", md: "block" }}
+        />
       <Box flex="1" maxW={{ base: "100%", md: "500px" }}>
         <Swiper
           effect="fade"
@@ -198,6 +207,7 @@ const HeroSection: React.FC = () => {
           )}
         </Swiper>
       </Box>
+      
     </Flex>
   );
 };

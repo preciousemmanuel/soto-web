@@ -133,7 +133,7 @@ const VendorLogin = () => {
               fontFamily="Poppins"
               color="#FF5733"
             >
-              Login
+             Seller's Login
             </Text>
             <Text color="black" mb={6} textAlign="center" fontFamily="Poppins">
               Kindly enter your correct details
@@ -237,7 +237,7 @@ const VendorLogin = () => {
                   fontSize="sm"
                   mt={2}
                 >
-                  <Link as={RouterLink} to="/auth/forgot-password">
+                  <Link as={RouterLink} to="/auth/forget-password">
                     Forgot password?
                   </Link>
                 </Text>

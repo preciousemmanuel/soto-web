@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Text,
@@ -8,28 +8,46 @@ import {
   Flex,
   // Flex,
   Icon,
+  HStack,
 } from "@chakra-ui/react";
 import { useAuth } from "../layouts/hooks/useAuth";
 import { FaGlobe, FaMapMarkerAlt } from "react-icons/fa";
+import AuthImage from "../assets/for.png";
+import OtpInput from "./OtpInupt";
+import { useNavigate } from "react-router-dom";
+
 
 const ForgetPassword = () => {
-  const [step, setStep] = useState(1);
   const [emailOrPhone, setEmailOrPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const { requestOtp } = useAuth();
-  const { resetPassword } = useAuth();
-
+  const navigate = useNavigate()
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const { requestOtp, isSuccesRequest,isSuccessOTP ,loading,validateOtp } = useAuth();
+  
   const handleRequestOtp = async () => {
-    const response: any = await requestOtp({
+    await requestOtp({
       email_or_phone_number: emailOrPhone,
     });
-    if (response) setStep(2);
   };
 
-  const handleResetPassword = async () => {
-    await resetPassword({ new_password: newPassword, otp });
+  const otpResult = otp.join("");
+
+  const handleValidateOTP = async () => {
+    await validateOtp({ otp: otpResult, otp_purpose: "CHANGE_PASSWORD" });
+    localStorage.setItem("otp", otpResult);
   };
+
+  useEffect(() => {
+    if(isSuccessOTP){
+      navigate("/auth/reset-password");
+    }
+  
+  }, [isSuccessOTP])
+  
+
+//   {
+//     "otp":"5205",
+//     "otp_purpose": "CHANGE_PASSWORD" // CHANGE_PASSWORD | FORGOT_PASSWORD | SIGNUP_COMPLETE | PASSWORD_RESET | ACCOUNT_VALIDATION
+// }
 
   return (
     <Box minHeight="100vh">
@@ -58,61 +76,103 @@ const ForgetPassword = () => {
           </Text>
         </Flex>
       </Flex>
-      <Box w="100%" maxW="400px" mx="auto" p={4} mt={32}>
-        <VStack spacing={6}>
-          {step === 1 && (
-            <>
-              <Text fontSize="lg" fontWeight="bold">
-                Forgot Password
-              </Text>
-              <Input
-                placeholder="Enter your email or phone number"
-                value={emailOrPhone}
-                onChange={(e) => setEmailOrPhone(e.target.value)}
-              />
-              <Button
-                bg="#FF5733"
-                color="white"
-                // isLoading={requestLoading}
-                onClick={handleRequestOtp}
-                w="full"
-              >
-                Request OTP
-              </Button>
-            </>
-          )}
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        minHeight="calc(100vh - 56px)"
+      >
+        <Box
+          flex="1"
+          bgImage={AuthImage}
+          bgSize="50% 50%"
+          bgRepeat="no-repeat"
+          bgPosition="center"
+          display={{ base: "none", md: "block" }}
+        />
 
-          {step === 2 && (
-            <>
-              <Text fontSize="lg" fontWeight="bold">
-                Reset Password
-              </Text>
-              <Input
-                placeholder="Enter OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-              />
-              <Input
-                placeholder="Enter New Password"
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-              <Button
-                bg="#FF5733"
-                color="white"
-                // isLoading={resetLoading}
-                onClick={handleResetPassword}
-                w="full"
+        <Box
+          flex="1"
+          p={8}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          py={6}
+          px={6}
+          bg="#FFFAF8"
+        >
+          <Box width="100%" maxWidth="400px">
+            <Text
+              fontSize="3xl"
+              fontWeight="600"
+              mb={2}
+              textAlign="center"
+              fontFamily="Poppins"
+              color="#FF5733"
+            >
+              Forgot Password
+            </Text>
+            <Text color="black" mb={6} textAlign="center" fontFamily="Poppins">
+              Kindly enter your registered email or phone number to reset your
+              password
+            </Text>
+            {!isSuccesRequest ? (
+              <>
+                <Box mb={4}>
+                  <Input
+                    placeholder="Enter your email or username"
+                    height="52px"
+                    bg="#F8EDEA80"
+                    outline="none"
+                    borderRadius="xl"
+                    fontSize="sm"
+                    value={emailOrPhone}
+                    onChange={(e) => setEmailOrPhone(e.target.value)}
+                  />
+                </Box>
+
+                <Button
+                  color="white"
+                  bg="#FF5733"
+                  height="48px"
+                  width="100%"
+                  borderRadius="full"
+                  mb={4}
+                  onClick={handleRequestOtp}
+                  isLoading={loading}
+                  loadingText="Loading..."
+                >
+                  Continue
+                </Button>
+              </>
+            ) : (
+              <Flex
+                direction="column"
+                align="center"
+                justify="center"
+                bg="#FFFBF8"
               >
-                Reset Password
-              </Button>
-            </>
-          )}
-        </VStack>
-      </Box>
+                <OtpInput otp={otp} setOtp={setOtp} />
+                <Button
+                  mt={6}
+                  w="300px"
+                  h="50px"
+                  bg="#FF5733"
+                  color="white"
+                  borderRadius="full"
+                  isLoading={loading}
+                  _hover={{ bg: "#E04E2C" }}
+                  isDisabled={otp.some((digit) => digit === "")} 
+                  onClick={handleValidateOTP}
+                >
+                  Continue
+                </Button>
+              </Flex>
+            )}
+          </Box>
+        </Box>
+      </Flex>
     </Box>
   );
 };
 
 export default ForgetPassword;
+

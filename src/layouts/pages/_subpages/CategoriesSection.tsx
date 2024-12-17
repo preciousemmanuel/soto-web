@@ -153,7 +153,7 @@ const BestSelling: React.FC = () => {
   const { products, handleAddToCart } = useProduct();
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
-  
+  // console.log(products,"best product")
   const sortedProducts = [...products].sort((a, b) => {
     const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
     const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;

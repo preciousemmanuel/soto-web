@@ -103,7 +103,7 @@ const Vendorsignup: React.FC = () => {
       return response.data;
     },
     onSuccess: (response) => {
-      console.log(response)
+      // console.log(response)
       toast({
         title: `${response?.message}`,
         description: "Your business has been registered successfully!",
@@ -112,7 +112,7 @@ const Vendorsignup: React.FC = () => {
         isClosable: true,
         position: "top-right",
       });
-      navigate("/auth/vendor-login");
+      navigate("/auth/otp-page");
     },
     onError: (err:any) => {
       // console.log(err, "error");

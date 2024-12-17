@@ -36,23 +36,23 @@ function OrderHistoryPage() {
 
   const renderStatusAndAction = (status: string, orderId: string) => {
     switch (status) {
-      case "PENDING":
-        return {
-          status: (
-            <Text color="yellow.500" fontSize="18px" fontWeight="semibold">
-              PENDING
-            </Text>
-          ),
-          action: (
-            <Button
-              colorScheme="yellow"
-              size="sm"
-              onClick={() => alert("Pending Order")}
-            >
-              Pending
-            </Button>
-          ),
-        };
+      // case "PENDING":
+      //   return {
+      //     status: (
+      //       <Text color="yellow.500" fontSize="18px" fontWeight="semibold">
+      //         PENDING
+      //       </Text>
+      //     ),
+      //     action: (
+      //       <Button
+      //         colorScheme="yellow"
+      //         size="sm"
+      //         onClick={() => alert("Pending Order")}
+      //       >
+      //         Pending
+      //       </Button>
+      //     ),
+      //   };
       case "BOOKED":
         return {
           status: (
@@ -166,7 +166,7 @@ function OrderHistoryPage() {
           mx="auto"
         >
           {[
-            "PENDING",
+            
             "BOOKED",
             "SHIPPED",
             "DELIVERED",
