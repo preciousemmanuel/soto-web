@@ -237,26 +237,31 @@ export const useProduct = () => {
     }
   };
 
-  const updateCart = (productId: string, quantity: number) => {
+  const clearAllCart = () => {
+    localStorage.removeItem("cart");
+    window.dispatchEvent(new Event("cartUpdated"));
+  };
+
+  const updateCart = (product: Product, quantity: number) => {
     const existingCart = localStorage.getItem("cart");
     let cartItems: CartItem[] = existingCart ? JSON.parse(existingCart) : [];
-
+  
     const existingItemIndex = cartItems.findIndex(
-      (item) => item.productId === productId
+      (item) => item.productId === product._id
     );
-
+  
     if (existingItemIndex !== -1) {
       cartItems[existingItemIndex].quantity = quantity;
     } else {
       cartItems.push({
-        productId,
-        quantity,
-        productName: "",
-        price: 0,
-        image: "",
+        productId: product?._id ?? "",
+        quantity: quantity,
+        productName: product?.product_name ?? "",
+        price: product?.unit_price ?? 0,
+        image: product?.images?.[0] ?? "", 
       });
     }
-
+  
     localStorage.setItem("cart", JSON.stringify(cartItems));
     window.dispatchEvent(new Event("cartUpdated"));
   };
@@ -417,6 +422,7 @@ export const useProduct = () => {
     isSearchLoading,
     searchError,
     handleSearch,
+    
     isFetched,
     searchQuery,
     currentPage: products?.data?.pagination?.currentPage || 1,
@@ -428,6 +434,7 @@ export const useProduct = () => {
     handleItemsPerPageChange,
     setCurrentPage,
     setItemsPerPage,
+    clearAllCart,
     productsPagination: {
       currentPage: products?.data?.pagination?.currentPage || 1,
       totalPages: products?.data?.pagination?.pageCount || 1,
@@ -465,4 +472,5 @@ export const useProduct = () => {
       hasNextPage: searchResults?.data?.pagination?.hasNext || false,
     },
   };
+  
 };

@@ -71,6 +71,9 @@ import WithdrawalSuccessMessage from "./layouts/pages/product/withdrawalSuccess"
 import Terms from "./components/Terms";
 import Privacy from "./components/Privacy";
 import SearchResult from "./layouts/pages/SearchResult";
+import ResetPassword from "./components/ResetPassword";
+import OtpVerification from "./components/OtpPage";
+import VendorProductDetailsPage from "./layouts/pages/Vendor/VendorProductDetails";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -225,6 +228,8 @@ const App = () => {
           element: <ShippingAddress />,
         },
         { path: "forget-password", element: <ForgetPassword /> },
+        { path: "reset-password", element: <ResetPassword /> },
+        { path: "otp-page", element: <OtpVerification /> },
         { path: "vendor-signup", element: <VendorSignup /> },
         { path: "vendor-login", element: <VendorLogin /> },
         { path: "*", element: <ErrorPage /> },
@@ -248,7 +253,7 @@ const App = () => {
         {
           path: "vendor-product/:productId",
           element: (
-            <ProductDetailPage />
+            <VendorProductDetailsPage />
           ),
         },
         {

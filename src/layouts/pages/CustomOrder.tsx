@@ -1,4 +1,4 @@
-import { Key, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import {
   Box,
   Heading,
@@ -32,13 +32,16 @@ function CustomOrder() {
           orders: [data],
         };
         await createCustomOrders(formattedData);
-
-        await refetchOrders();
-        navigate("/review-order");
       } catch (error) {
         console.error("Order creation failed:", error);
       }
     };
+    useEffect(() => {
+      if (orderSuccess) {
+        refetchOrders();
+        navigate("/review-order");
+      }
+    }, [orderSuccess]);
 
     return (
       <Box w="full" mx="auto" bg="" rounded="lg" boxShadow="">

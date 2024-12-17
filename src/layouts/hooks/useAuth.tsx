@@ -4,7 +4,6 @@ import apiClient from "../../services/axios";
 import { useToast } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-
 export const useAuth = () => {
   const toast = useToast();
   const navigate = useNavigate();
@@ -121,7 +120,7 @@ export const useAuth = () => {
         isClosable: true,
         position: "top-right",
       });
-      navigate("/auth");
+      navigate("/auth/otp-page");
     },
     onError: (error:any) => {
       // console.error("Signup failed:", error);
@@ -154,6 +153,30 @@ export const useAuth = () => {
       toast({
         title: `${error?.response?.data?.message}`,
         description: "Please check the email or phone number and try again.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
+  const validateOtpMutation = useMutation({
+    mutationFn: (payload: any) =>
+      apiClient.post("/user/validate-otp", payload),
+    onSuccess: (response) => {
+      toast({
+        title: `${response?.data?.message}`,
+        description: "OTP validated successfully.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      
+    },
+    onError: (error:any) => {
+      toast({
+        title: `${error?.response?.data?.message}`,
+        description: "Please check the OTP and try again.",
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -260,7 +283,8 @@ export const useAuth = () => {
       signupMutation.isPending ||
       requestOtpMutation.isPending ||
       resetPasswordMutation.isPending ||
-      addShippingAddressMutation.isPending,
+      addShippingAddressMutation.isPending ||
+      validateOtpMutation.isPending,
     login: loginMutation.mutate,
     vendorLogin: vendorLoginMutation.mutate,
     logout,
@@ -268,8 +292,11 @@ export const useAuth = () => {
     signup: signupMutation.mutate,
     switchToVendor,
     requestOtp: requestOtpMutation.mutate,
+    isSuccesRequest: requestOtpMutation.isSuccess,
+    isSuccessOTP: validateOtpMutation.isSuccess,
     resetPassword: resetPasswordMutation.mutate,
     addShippingAddress: addShippingAddressMutation.mutate,
+    validateOtp: validateOtpMutation.mutate,
     user,
     refetchProfile,
     switchToUser

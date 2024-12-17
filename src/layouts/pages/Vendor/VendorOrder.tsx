@@ -33,23 +33,23 @@ const VendorOrder = () => {
 
   const renderStatusAndAction = (status: string, productId: string) => {
     switch (status) {
-      case "PENDING":
-        return {
-          status: (
-            <Text color="yellow.500" fontSize="18px" fontWeight="semibold">
-              PENDING
-            </Text>
-          ),
-          action: (
-            <Button
-              colorScheme="yellow"
-              size="sm"
-              onClick={() => alert("Pending Order")}
-            >
-              Pending
-            </Button>
-          ),
-        };
+      // case "PENDING":
+      //   return {
+      //     status: (
+      //       <Text color="yellow.500" fontSize="18px" fontWeight="semibold">
+      //         PENDING
+      //       </Text>
+      //     ),
+      //     action: (
+      //       <Button
+      //         colorScheme="yellow"
+      //         size="sm"
+      //         onClick={() => alert("Pending Order")}
+      //       >
+      //         Pending
+      //       </Button>
+      //     ),
+      //   };
       case "BOOKED":
         return {
           status: (
@@ -157,7 +157,7 @@ const VendorOrder = () => {
           maxW="100%"
           mx="auto"
         >
-          {["PENDING", "BOOKED", "SHIPPED", "DELIVERED", "CANCELLED", "FAILED"].map(
+          {["BOOKED", "SHIPPED", "DELIVERED", "CANCELLED", "FAILED"].map(
             (buttonStatus) => (
               <Button
                 key={buttonStatus}

@@ -107,9 +107,9 @@ export const useVendor = () => {
     }
   });
 
-  const fetchBanks = async (limit: number, page: number, search: string) => {
+  const fetchBanks = async (limit: number, page: number) => {
     const response = await apiClient.get(
-      `/business/fetch-banks?limit=${limit}&page=${page}&search=${search}`
+      `/business/fetch-banks?limit=${limit}&page=${page}`
     );
     return response.data;
   };
@@ -120,10 +120,10 @@ export const useVendor = () => {
     isError: isErrorBanks,
     refetch: refetchBanks,
   } = useQuery({
-    queryKey: ["banks", { limit: 10, page: 1, search: debouncedSearchTerm }],
-    queryFn: () => fetchBanks(itemsPerPage, currentPage, debouncedSearchTerm),
-    enabled: isVendorAuthenticated && debouncedSearchTerm.length >= 3,
-    retry: false,
+    queryKey: ["banks", { limit: 20, page: 1}],
+    queryFn: () => fetchBanks(179, currentPage),
+    enabled: isVendorAuthenticated,
+    retry: true,
   });
 
   const {

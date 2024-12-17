@@ -31,6 +31,8 @@ const CheckoutPage = () => {
     isGeneratingPaymentLink,
     generateShippingRateMutation,
     shippingRate,
+    isShippingRateLink,
+    shippingRateSuccess
   } = useOrder();
   const { user } = useAuth();
   // const [couponCode, setCouponCode] = useState<string>("");
@@ -66,41 +68,43 @@ const CheckoutPage = () => {
     return acc;
   }, []);
 
-  const handleShippingRate = async () => {
+  // const handleShippingRate = async () => {
+  //   const items = cart.map((product) => ({
+  //     product_id: product.productId,
+  //     quantity: product.quantity,
+  //   }));
+
+  //   const createShippingRate = {
+  //     items,
+  //   };
+  //   try {
+  //     await generateShippingRateMutation(createShippingRate);
+  //   } catch (error) {
+  //     console.error("Error creating order:", error);
+  //   }
+  // };
+
+  const handleCheckout = async () => {
     const items = cart.map((product) => ({
       product_id: product.productId,
       quantity: product.quantity,
     }));
-
-    const createShippingRate = {
-      items,
-    };
-    try {
-      await generateShippingRateMutation(createShippingRate);
-    } catch (error) {
-      console.error("Error creating order:", error);
-    }
-  };
-
-  const handleCreateOrder = async () => {
-    const items = cart.map((product) => ({
-      product_id: product.productId,
-      quantity: product.quantity,
-    }));
-
+  
     const orderData = {
       items,
       address: user?.ShippingAddress?.full_address,
       payment_type: "INSTANT",
     };
-
+  
     try {
+      await generateShippingRateMutation({ items });
+      await new Promise(resolve => setTimeout(resolve, 1000));
       await addNewOrderMutation(orderData);
-      await handleShippingRate();
     } catch (error) {
-      console.error("Error creating order:", error);
+      console.error("Error during checkout:", error);
     }
   };
+  
 
   return (
     <Box py="120px">
@@ -193,7 +197,7 @@ const CheckoutPage = () => {
                 onChange={(e) => setCouponCode(e.target.value)}
               />
             </FormControl> */}
-            {!addOrderSuccess ? (
+               {!addOrderSuccess ? (  
               <Button
                 color="white"
                 bg="#FF5733"
@@ -203,12 +207,12 @@ const CheckoutPage = () => {
                 h="55px"
                 size="lg"
                 loadingText="Creating order..."
-                isLoading={isAddingOrder}
-                onClick={handleCreateOrder}
+                isLoading={isAddingOrder || isShippingRateLink}
+                onClick={handleCheckout}
               >
                 Create Order
               </Button>
-            ) : (
+             ) : ( 
               <Button
                 color="white"
                 bg="#FF5733"
@@ -217,13 +221,13 @@ const CheckoutPage = () => {
                 w="full"
                 h="55px"
                 size="lg"
-                loadingText="Creating payment..."
+                loadingText="Making payment..."
                 isLoading={isGeneratingPaymentLink}
                 onClick={generatePayment}
               >
                 Pay now
               </Button>
-            )}
+            )} 
           </Box>
         </Box>
 
@@ -253,10 +257,10 @@ const CheckoutPage = () => {
               </Flex>
             ))}
 
-            <Flex justifyContent="space-between" mt={4}>
+            {shippingRateSuccess && <Flex justifyContent="space-between" mt={4}>
               <Text>Shipping Rate</Text>
               <Text>₦{shippingRate}</Text>
-            </Flex>
+            </Flex>}
 
             <Flex justifyContent="space-between" mt={4}>
               <Text>Subtotal</Text>

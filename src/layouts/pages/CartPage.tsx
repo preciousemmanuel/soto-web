@@ -1,18 +1,20 @@
 import { Box, Flex, Text, Button, Image, SimpleGrid } from "@chakra-ui/react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CartItem } from "./_subpages/CategoriesSection";
-import RelatedProducts from "./product/relatedProduct";
 import { useProduct } from "../hooks/useProduct";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useOrder } from "../hooks/useOrder";
 
 const CartPage = () => {
   const navigate = useNavigate();
+
   const [cart, setCart] = useState<CartItem[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
   );
-  const { handleRemoveFromCart } = useProduct();
+  
+  const { handleRemoveFromCart,clearAllCart } = useProduct();
+
   const updateCart = () => {
     const updatedCart = JSON.parse(localStorage.getItem("cart") || "[]");
     setCart(updatedCart);
@@ -29,27 +31,6 @@ const CartPage = () => {
     };
   };
 
-  const {
-    generateShippingRateMutation,
-  } = useOrder();
-  console.log(cart, "cart");
-  const handleShippingRate = async () => {
-    const items = cart.map((product) => ({
-      product_id: product.productId,
-      quantity: product.quantity,
-    }));
-
-    const createShippingRate = {
-      items,
-    };
-    try {
-      await generateShippingRateMutation(createShippingRate);
-       navigate("/checkout")
-    } catch (error) {
-      console.error("Error creating order:", error);
-    }
-  };
-
   useEffect(() => {
     window.addEventListener("cartUpdated", updateCart);
     return () => {
@@ -63,7 +44,7 @@ const CartPage = () => {
 
   return (
     <Box bg="" p={[4, 6, 8]} mt={120}>
-      {/* Shopping Cart Header */}
+     
       <Text
         textAlign="center"
         bg={"#FFF2ED"}
@@ -83,7 +64,14 @@ const CartPage = () => {
         mb={16}
       >
         {/* Product List Section */}
-        <Box flex="2" bg="white" p={6} borderRadius="md" boxShadow="sm">
+        <Box
+          flex="2"
+          bg="white"
+          p={6}
+          borderRadius="md"
+          boxShadow="sm"
+          position="relative"
+        >
           <Flex
             bg={"#FBF5F5"}
             py={4}
@@ -105,52 +93,66 @@ const CartPage = () => {
             </Text>
             <Text flex="0.5"></Text>
           </Flex>
-          {cart.map((item) => (
-            <Flex
-              key={item.productId}
-              alignItems="center"
-              justifyContent="space-between"
-              py={5}
-              px={6}
-              borderBottom="1px solid"
-              borderColor="gray.100"
-              _hover={{ bg: "gray.50" }}
+          <Box mb="60px">
+            <Button
+              onClick={clearAllCart}
+              color="#FF5733"
+              variant="ghost"
+              position="absolute"
+              right="0px"
+              // float="right"
             >
-              <Flex alignItems="center" gap={4} flex="2">
-                <Image
-                  src={item.image}
-                  alt={item.productName}
-                  boxSize="60px"
-                  objectFit="cover"
-                  borderRadius="md"
-                />
-                <Text fontWeight="medium">{item.productName}</Text>
+              Clear All
+            </Button>
+          </Box>
+          <Box>
+            {cart.map((item) => (
+              <Flex
+                key={item.productId}
+                alignItems="center"
+                justifyContent="space-between"
+                py={5}
+                px={6}
+                borderBottom="1px solid"
+                borderColor="gray.100"
+                _hover={{ bg: "gray.50" }}
+              >
+                <Flex alignItems="center" gap={4} flex="2">
+                  <Image
+                    src={item.image}
+                    alt={item.productName}
+                    boxSize="60px"
+                    objectFit="cover"
+                    borderRadius="md"
+                  />
+                  <Text fontWeight="medium">{item.productName}</Text>
+                </Flex>
+                <Text flex="1" textAlign="center">
+                  N{item.price.toLocaleString()}
+                </Text>
+                <Text flex="1" textAlign="center">
+                  {item.quantity}
+                </Text>
+                <Text flex="1" textAlign="center" fontWeight="semibold">
+                  N{(item.price * item.quantity).toLocaleString()}
+                </Text>
+                <Flex flex="0.5" justifyContent="flex-end">
+                  <Box
+                    as="button"
+                    color="red.500"
+                    _hover={{ color: "red.600" }}
+                    transition="all 0.2s"
+                    onClick={() => {
+                      handleRemoveFromCart(item.productId);
+                      updateCart();
+                    }}
+                  >
+                    <RiDeleteBinLine size={20} />
+                  </Box>
+                </Flex>
               </Flex>
-              <Text flex="1" textAlign="center">
-                N{item.price.toLocaleString()}
-              </Text>
-              <Text flex="1" textAlign="center">
-                {item.quantity}
-              </Text>
-              <Text flex="1" textAlign="center" fontWeight="semibold">
-                N{(item.price * item.quantity).toLocaleString()}
-              </Text>
-              <Flex flex="0.5" justifyContent="flex-end">
-                <Box
-                  as="button"
-                  color="red.500"
-                  _hover={{ color: "red.600" }}
-                  transition="all 0.2s"
-                  onClick={() => {
-                    handleRemoveFromCart(item.productId);
-                    updateCart();
-                  }}
-                >
-                  <RiDeleteBinLine size={20} />
-                </Box>
-              </Flex>
-            </Flex>
-          ))}
+            ))}
+          </Box>
         </Box>
 
         <Box flex="1" p={6} height="400px" bg={"#FBF5F5"}>
@@ -163,11 +165,11 @@ const CartPage = () => {
               <>
                 <Flex justifyContent="space-between" mb={2}>
                   <Text>Subtotal</Text>
-                  <Text>N{subtotal.toLocaleString()}</Text>
+                  <Text>N{subtotal?.toLocaleString()}</Text>
                 </Flex>
                 <Flex justifyContent="space-between" mb={4}>
                   <Text fontWeight="bold">Total</Text>
-                  <Text fontWeight="bold">N{total.toLocaleString()}</Text>
+                  <Text fontWeight="bold">N{total?.toLocaleString()}</Text>
                 </Flex>
               </>
             );
@@ -194,7 +196,7 @@ const CartPage = () => {
               borderRadius="md"
               variant="outline"
               h="54px"
-              onClick={() => handleShippingRate()}
+              onClick={() => navigate("/checkout")}
             >
               Proceed to Checkout
             </Button>

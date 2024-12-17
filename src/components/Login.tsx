@@ -112,12 +112,12 @@ const Login = () => {
               fontFamily="Poppins"
               color="#FF5733"
             >
-              Login
+             Buyer's Login
             </Text>
             <Text color="black" mb={6} textAlign="center" fontFamily="Poppins">
               Kindly enter your correct details
             </Text>
-
+{/* 
             <Flex mb={4} gap={4} flexDirection={{ base: "column", sm: "row" }}>
               <Button
                 flex="1"
@@ -136,15 +136,15 @@ const Login = () => {
               >
                 Google
               </Button>
-            </Flex>
+            </Flex> */}
 
-            <Flex alignItems="center" mb={4}>
+            {/* <Flex alignItems="center" mb={4}>
               <Divider />
               <Text px={2} color="gray.500">
                 or
               </Text>
               <Divider />
-            </Flex>
+            </Flex> */}
 
             <Box mb={4}>
               <Text mb={1} color="gray">
@@ -218,7 +218,7 @@ const Login = () => {
               isLoading={loading}
               loadingText="Logging in"
             >
-              Login
+             Login
             </Button>
 
             <Text textAlign="center" color="gray.600">

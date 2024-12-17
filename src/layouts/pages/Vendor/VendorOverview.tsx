@@ -302,7 +302,7 @@ const VendorOverview = () => {
                               </Text>
                               <Text fontSize="sm" fontWeight="bold" color="gray.500">
                                 Price: {product?.unit_price
-                                  ? `N${(product?.unit_price / 100).toFixed(2)}`
+                                  ? `₦${(product?.unit_price / 100).toFixed(2)}`
                                   : "N/A"}
                               </Text>
                             </Box>
@@ -355,7 +355,7 @@ const VendorOverview = () => {
                                   order?.createdAt
                                 ).toLocaleDateString()}
                               </Td>
-                              <Td>{`$${(order?.unit_price / 100).toFixed(
+                              <Td>{`₦${(order?.unit_price / 100).toFixed(
                                 2
                               )}`}</Td>
                               <Td
