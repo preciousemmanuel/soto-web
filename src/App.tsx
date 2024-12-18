@@ -72,8 +72,10 @@ import Terms from "./components/Terms";
 import Privacy from "./components/Privacy";
 import SearchResult from "./layouts/pages/SearchResult";
 import ResetPassword from "./components/ResetPassword";
-import OtpVerification from "./components/OtpPage";
 import VendorProductDetailsPage from "./layouts/pages/Vendor/VendorProductDetails";
+import ApprovePage from "./layouts/pages/ApprovePage";
+import VendorOtpVerification from "./layouts/pages/VendorOtpVerification";
+import OtpVerification from "./layouts/pages/OtpVerificationPage";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -103,31 +105,21 @@ const App = () => {
           children: [
             {
               // index: true,
-              element: (
-                
-                <ProductsPage />
-                
-              ),
+              element: <ProductsPage />,
             },
             {
               path: ":productId",
-              element: (
-                <ProductDetailPage />
-              ),
+              element: <ProductDetailPage />,
             },
           ],
         },
         {
           path: "product-list",
-          element: (
-            <ProductsPage />
-          ),
+          element: <ProductsPage />,
         },
         {
           path: "category-list",
-          element: (
-            <CategoryProductPage />
-          ),
+          element: <CategoryProductPage />,
         },
         {
           path: "cart",
@@ -180,7 +172,7 @@ const App = () => {
               path: ":orderId",
               element: (
                 <ProtectedRoute>
-                <OrderDetailPage />
+                  <OrderDetailPage />
                 </ProtectedRoute>
               ),
             },
@@ -212,8 +204,8 @@ const App = () => {
         },
         {
           path: "withdrawal-success",
-          element: <WithdrawalSuccessMessage/>
-        }
+          element: <WithdrawalSuccessMessage />,
+        },
       ],
     },
     {
@@ -230,10 +222,15 @@ const App = () => {
         { path: "forget-password", element: <ForgetPassword /> },
         { path: "reset-password", element: <ResetPassword /> },
         { path: "otp-page", element: <OtpVerification /> },
+        { path: "vendor-otp-page", element: <VendorOtpVerification /> },
         { path: "vendor-signup", element: <VendorSignup /> },
         { path: "vendor-login", element: <VendorLogin /> },
+        {
+          path: "approve-page",
+          element: <ApprovePage />,
+        },
+
         { path: "*", element: <ErrorPage /> },
-        
       ],
     },
 
@@ -252,9 +249,7 @@ const App = () => {
         },
         {
           path: "vendor-product/:productId",
-          element: (
-            <VendorProductDetailsPage />
-          ),
+          element: <VendorProductDetailsPage />,
         },
         {
           path: "vendor-orders",
@@ -279,7 +274,7 @@ const App = () => {
               path: ":orderId",
               element: (
                 <VendorProtectedRoute>
-                <OrderDetailPage />
+                  <OrderDetailPage />
                 </VendorProtectedRoute>
               ),
             },
@@ -368,7 +363,7 @@ const App = () => {
           path: "payment-success",
           element: <PaymentMessage />,
         },
-
+       
         // Add other seller-specific routes here
       ],
     },

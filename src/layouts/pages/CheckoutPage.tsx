@@ -14,8 +14,9 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Spinner,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useOrder } from "../hooks/useOrder";
@@ -32,7 +33,7 @@ const CheckoutPage = () => {
     generateShippingRateMutation,
     shippingRate,
     isShippingRateLink,
-    shippingRateSuccess
+    shippingRateSuccess,
   } = useOrder();
   const { user } = useAuth();
   // const [couponCode, setCouponCode] = useState<string>("");
@@ -50,9 +51,9 @@ const CheckoutPage = () => {
     });
   };
 
-  const calculateSubtotal = (shippingRate: number) => 
+  const calculateSubtotal = (shippingRate: number) =>
     cart.reduce(
-      (total, product) => total + product.price * product.quantity, 
+      (total, product) => total + product.price * product.quantity,
       0
     ) + shippingRate;
 
@@ -68,43 +69,47 @@ const CheckoutPage = () => {
     return acc;
   }, []);
 
-  // const handleShippingRate = async () => {
-  //   const items = cart.map((product) => ({
-  //     product_id: product.productId,
-  //     quantity: product.quantity,
-  //   }));
+  const handleShippingRate = async () => {
+    const items = cart.map((product) => ({
+      product_id: product.productId,
+      quantity: product.quantity,
+    }));
 
-  //   const createShippingRate = {
-  //     items,
-  //   };
-  //   try {
-  //     await generateShippingRateMutation(createShippingRate);
-  //   } catch (error) {
-  //     console.error("Error creating order:", error);
-  //   }
-  // };
+    const createShippingRate = {
+      items,
+    };
+    try {
+      await generateShippingRateMutation(createShippingRate);
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  };
+
+  useEffect(() => {
+    // handleShippingRate();
+    console.log("Hellooooo");
+  }, []);
 
   const handleCheckout = async () => {
     const items = cart.map((product) => ({
       product_id: product.productId,
       quantity: product.quantity,
     }));
-  
+
     const orderData = {
       items,
       address: user?.ShippingAddress?.full_address,
       payment_type: "INSTANT",
     };
-  
+
     try {
       await generateShippingRateMutation({ items });
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       await addNewOrderMutation(orderData);
     } catch (error) {
       console.error("Error during checkout:", error);
     }
   };
-  
 
   return (
     <Box py="120px">
@@ -197,7 +202,7 @@ const CheckoutPage = () => {
                 onChange={(e) => setCouponCode(e.target.value)}
               />
             </FormControl> */}
-               {!addOrderSuccess ? (  
+            {!addOrderSuccess ? (
               <Button
                 color="white"
                 bg="#FF5733"
@@ -212,7 +217,7 @@ const CheckoutPage = () => {
               >
                 Create Order
               </Button>
-             ) : ( 
+            ) : (
               <Button
                 color="white"
                 bg="#FF5733"
@@ -227,7 +232,7 @@ const CheckoutPage = () => {
               >
                 Pay now
               </Button>
-            )} 
+            )}
           </Box>
         </Box>
 
@@ -257,10 +262,10 @@ const CheckoutPage = () => {
               </Flex>
             ))}
 
-            {shippingRateSuccess && <Flex justifyContent="space-between" mt={4}>
+            <Flex justifyContent="space-between" mt={4}>
               <Text>Shipping Rate</Text>
-              <Text>₦{shippingRate}</Text>
-            </Flex>}
+              <Text>{isShippingRateLink ? <Spinner /> : shippingRate}</Text>
+            </Flex>
 
             <Flex justifyContent="space-between" mt={4}>
               <Text>Subtotal</Text>

@@ -23,6 +23,7 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import AccountModal from "../features/modals/AccountModal";
 import CategoriesPopover from "../features/modals/CategoriesPopover";
+import { useAuth } from "../layouts/hooks/useAuth";
 
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,25 +32,21 @@ const Navbar = () => {
     onOpen: onDrawerOpen,
     onClose: onDrawerClose,
   } = useDisclosure();
-
+  const { isAuthenticated, isVendorAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
   const [cartQuantity, setCartQuantity] = useState(0);
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
- 
   const handleSearchSubmit = () => {
     if (inputValue.trim()) {
-     
       navigate(`/search-results?query=${encodeURIComponent(inputValue)}`);
     }
   };
 
- 
   const updateCartQuantity = () => {
     const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
     const quantity = cartItems.reduce(
@@ -164,7 +161,7 @@ const Navbar = () => {
                 width="200px"
                 fontSize="12px"
                 onKeyUp={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     handleSearchSubmit();
                   }
                 }}
@@ -217,17 +214,19 @@ const Navbar = () => {
             </Flex>
           </Link>
 
-          <Flex
-            flexDirection="column"
-            alignItems="center"
-            onClick={onOpen}
-            cursor="pointer"
-          >
-            <MdAccountCircle color="gray" size={25} />
-            <Text color="gray.500" fontSize="12px">
-              Account
-            </Text>
-          </Flex>
+          {!isAuthenticated && !isVendorAuthenticated ? null : (
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              onClick={onOpen}
+              cursor="pointer"
+            >
+              <MdAccountCircle color="gray" size={25} />
+              <Text color="gray.500" fontSize="12px">
+                Account
+              </Text>
+            </Flex>
+          )}
         </Flex>
       </Flex>
 
@@ -278,7 +277,7 @@ const Navbar = () => {
                     onChange={handleInputChange}
                     value={inputValue}
                     onKeyUp={(e) => {
-                      if (e.key === 'Enter') {
+                      if (e.key === "Enter") {
                         handleSearchSubmit();
                         onDrawerClose();
                       }

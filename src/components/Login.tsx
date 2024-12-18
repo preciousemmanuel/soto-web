@@ -22,7 +22,7 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import AuthImage from "../assets/auth.png";
 import Logo from "../assets/soto.png";
 import { FcGoogle } from "react-icons/fc";
@@ -32,7 +32,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const { login, loading } = useAuth();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -78,7 +78,15 @@ const Login = () => {
         </Flex>
       </Flex>
 
-      <Image src={Logo} alt="Logo" py={8} px={8} width="120px" />
+      <Image
+        src={Logo}
+        alt="Logo"
+        py={8}
+        px={8}
+        width="120px"
+        onClick={() => navigate("/")}
+        cursor="pointer"
+      />
 
       {/* Main Content */}
       <Flex
@@ -112,12 +120,12 @@ const Login = () => {
               fontFamily="Poppins"
               color="#FF5733"
             >
-             Buyer's Login
+              Buyer's Login
             </Text>
             <Text color="black" mb={6} textAlign="center" fontFamily="Poppins">
               Kindly enter your correct details
             </Text>
-{/* 
+            {/* 
             <Flex mb={4} gap={4} flexDirection={{ base: "column", sm: "row" }}>
               <Button
                 flex="1"
@@ -218,7 +226,7 @@ const Login = () => {
               isLoading={loading}
               loadingText="Logging in"
             >
-             Login
+              Login
             </Button>
 
             <Text textAlign="center" color="gray.600">

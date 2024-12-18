@@ -19,7 +19,7 @@ import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 import PaginationControls from "../../../features/helpers/Pagination";
 
 const VendorOrder = () => {
-  const [activeStatus, setActiveStatus] = useState("PENDING");
+  const [activeStatus, setActiveStatus] = useState("BOOKED");
   const navigate = useNavigate();
   const { ordersVendor, isFetchingOrders,ordersVendorPagination,handlePageChange } = useOrder();
   const orderData = ordersVendor?.data?.data;
@@ -196,9 +196,9 @@ const VendorOrder = () => {
                     product_id._id
                   );
                   return (
-                    <Tr key={order._id}>
-                      <Td>{product_id.product_name}</Td>
-                      <Td>{product_id._id}</Td>
+                    <Tr key={order?._id}>
+                      <Td>{product_id?.product_name}</Td>
+                      <Td>{product_id?._id}</Td>
                       <Td>{statusText}</Td>
                       <Td>{quantity}</Td>
                       <Td textAlign="center">{action}</Td>

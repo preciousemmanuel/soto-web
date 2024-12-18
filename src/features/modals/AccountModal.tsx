@@ -59,6 +59,20 @@ const AccountModal: React.FC<AccountModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
+  // const handleMenuItemClick = (item: MenuItem) => {
+  //   if (item.label === "Log Out") {
+  //     logout();
+  //     toast({
+  //       title: "Logged out",
+  //       description: "You have been successfully logged out.",
+  //       status: "info",
+  //       duration: 5000,
+  //       isClosable: true,
+  //     });
+  //     onClose();
+  //   }
+  // };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />

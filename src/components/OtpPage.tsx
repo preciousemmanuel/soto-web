@@ -1,37 +1,20 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { Text, Icon } from "@chakra-ui/react";
-import { useAuth } from "../layouts/hooks/useAuth";
 import { FaGlobe, FaMapMarkerAlt } from "react-icons/fa";
 import AuthImage from "../assets/for.png";
 import OtpInput from "./OtpInupt";
-import { useNavigate } from "react-router-dom";
 
-const OtpVerification = () => {
-  const navigate = useNavigate();
-  const {
-    loading,
-    validateOtp,
-    isSuccessOTP,
-    isAuthenticated
-  } = useAuth();
-  const [otp, setOtp] = useState(["", "", "", ""]);
-  const otpResult = otp.join("");
-
-  const handleValidateOTP = async () => {
-    await validateOtp({ otp: otpResult, otp_purpose: "ACCOUNT_VALIDATION" });
-  };
-
-  useEffect(() => {
-    if (isSuccessOTP) {
-      if (isAuthenticated) {
-        navigate("/auth");
-      }else{
-        navigate("/auth/vendor-login");
-      }
-    }
-  }, [isSuccessOTP]);
-
+const OtpPage = ({
+  loading,
+  onClick,
+  otp,
+  setOtp,
+}: {
+  loading: boolean;
+  onClick: () => void;
+  otp: any;
+  setOtp: (otp: any) => void;
+}) => {
   return (
     <Box minHeight="100vh">
       <Flex
@@ -91,10 +74,11 @@ const OtpVerification = () => {
               fontFamily="Poppins"
               color="#FF5733"
             >
-             OTP Verification
+              OTP Verification
             </Text>
             <Text color="black" mb={6} textAlign="center" fontFamily="Poppins">
-            Kindly enter the 4 digits OTP sent to your email or phone number to proceed
+              Kindly enter the 4 digits OTP sent to your email or phone number
+              to proceed
             </Text>
 
             <Flex
@@ -113,8 +97,8 @@ const OtpVerification = () => {
                 borderRadius="full"
                 isLoading={loading}
                 _hover={{ bg: "#E04E2C" }}
-                isDisabled={otp.some((digit) => digit === "")}
-                onClick={handleValidateOTP}
+                isDisabled={otp.some((digit: any) => digit === "")}
+                onClick={onClick}
               >
                 Continue
               </Button>
@@ -126,4 +110,4 @@ const OtpVerification = () => {
   );
 };
 
-export default OtpVerification;
+export default OtpPage;

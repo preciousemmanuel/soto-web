@@ -100,7 +100,7 @@ export const useOrder = () => {
   };
 
   const fetchOneOrder = async (orderId: string): Promise<{ data: any }> => {
-    const response = await apiClient.get(`/order/view-one/${orderId}`);
+    const response = await apiClient.get(`/order/view-one-by-vendor${orderId}`);
     return response.data;
   };
 

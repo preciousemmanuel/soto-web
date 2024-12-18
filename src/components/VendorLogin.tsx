@@ -43,7 +43,6 @@ const validationSchema = Yup.object().shape({
 const VendorLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const toast = useToast();
   const { vendorLogin, loading } = useAuth();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -99,7 +98,14 @@ const VendorLogin = () => {
         </Flex>
       </Flex>
 
-      <Image src={Logo} alt="Logo" py={8} px={8} width="120px" />
+      <Image
+        src={Logo}
+        alt="Logo"
+        py={8}
+        px={8}
+        width="120px"
+        onClick={() => navigate("/")}
+      />
 
       {/* Main Content */}
       <Flex
@@ -133,7 +139,7 @@ const VendorLogin = () => {
               fontFamily="Poppins"
               color="#FF5733"
             >
-             Seller's Login
+              Seller's Login
             </Text>
             <Text color="black" mb={6} textAlign="center" fontFamily="Poppins">
               Kindly enter your correct details

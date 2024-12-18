@@ -44,7 +44,7 @@ export const useVendor = () => {
 
   const fetchOrdersByVendor = async (limit: number, page: number) => {
     const response = await apiClient.get(
-      `/order/fetch/by-vendor?limit=${limit}&page=${page}`
+      `/order/fetch/by-vendor-new?limit=${limit}&page=${page}`
     );
     return response.data;
   };
