@@ -103,7 +103,6 @@ const Vendorsignup: React.FC = () => {
       return response.data;
     },
     onSuccess: (response) => {
-      // console.log(response)
       toast({
         title: `${response?.message}`,
         description: "Your business has been registered successfully!",
@@ -112,9 +111,9 @@ const Vendorsignup: React.FC = () => {
         isClosable: true,
         position: "top-right",
       });
-      navigate("/auth/otp-page");
+      navigate("/auth/vendor-otp-page");
     },
-    onError: (err:any) => {
+    onError: (err: any) => {
       // console.log(err, "error");
       toast({
         title: `${err.response?.data?.message}`,
@@ -148,12 +147,9 @@ const Vendorsignup: React.FC = () => {
     formik.setFieldValue("business_logo", file);
   };
 
-  const {
-    categories,
-  } = useProduct();
+  const { categories } = useProduct();
 
-  const category = categories?.data?.data;
-
+  // const category = categories?.data?.data;
 
   return (
     <Box width="100%">
@@ -278,7 +274,7 @@ const Vendorsignup: React.FC = () => {
                     </InputLeftElement>
                     <Input
                       // name="phone_number"
-                      placeholder="Enter your phone number"
+                      placeholder="+234810000000"
                       height="52px"
                       bg="#F8EDEA80"
                       borderRadius="xl"
@@ -310,8 +306,7 @@ const Vendorsignup: React.FC = () => {
                       fontSize="sm"
                       {...formik.getFieldProps("category")}
                     >
-                     
-                      {categories?.data?.data.map((category:any) => (
+                      {categories?.data?.data.map((category: any) => (
                         <option key={category?._id} value={category?._id}>
                           {category?.name}
                         </option>

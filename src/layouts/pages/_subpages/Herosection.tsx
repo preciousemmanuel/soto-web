@@ -174,9 +174,9 @@ const HeroSection: React.FC = () => {
       <Image
           // flex="1"
           src={AuthImage}
-          bottom="-70px"
+          bottom="-20px"
           right="0px"
-          position="absolute"
+          position="fixed"
           display={{ base: "none", md: "block" }}
         />
       <Box flex="1" maxW={{ base: "100%", md: "500px" }}>

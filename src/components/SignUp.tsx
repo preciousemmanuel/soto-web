@@ -23,17 +23,17 @@ import {
 import { useState } from "react";
 import AuthImage from "../assets/auth.png";
 import Logo from "../assets/soto.png";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../layouts/hooks/useAuth";
 
 const Signup = () => {
-  const { signup, loading } = useAuth(); // Access the signup function from your hook
+  const { signup, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const navigate = useNavigate();
 
-  // Formik form setup with Yup validation
   const formik = useFormik({
     initialValues: {
       fullName: "",
@@ -107,7 +107,14 @@ const Signup = () => {
         </Flex>
       </Flex>
 
-      <Image src={Logo} alt="Soto Logo" py={8} px={8} width="120px" />
+      <Image
+        src={Logo}
+        alt="Soto Logo"
+        py={8}
+        px={8}
+        width="120px"
+        onClick={() => navigate("/")}
+      />
 
       {/* Main Content */}
       <Flex
@@ -274,7 +281,6 @@ const Signup = () => {
                 width="100%"
                 borderRadius="full"
                 mb={4}
-                
               >
                 Create Account
               </Button>
@@ -286,7 +292,6 @@ const Signup = () => {
                 Login
               </Link>
             </Text>
-            
           </Box>
         </Box>
       </Flex>

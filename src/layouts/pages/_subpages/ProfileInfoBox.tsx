@@ -23,6 +23,8 @@ const ProfileInfoBox = ({ onSelectOption }: any) => {
   const { user, refetchProfile, logout, loading } = useAuth();
   const toast = useToast();
 
+  console.log(user,"Details.........")
+
   useEffect(() => {
     refetchProfile();
   }, []);

@@ -25,9 +25,24 @@ export const useAuth = () => {
     queryFn: async () => {
       const response = await apiClient.get("/user/profile");
       // console.log(response.data.data)
-      const { FirstName, LastName, Email, ShippingAddress, PhoneNumber,wallet } =
-        response.data.data;
-      return { FirstName, LastName, Email, ShippingAddress, PhoneNumber,wallet };
+      const {
+        FirstName,
+        LastName,
+        Email,
+        ShippingAddress,
+        PhoneNumber,
+        wallet,
+        vendor_status,
+      } = response.data.data;
+      return {
+        FirstName,
+        LastName,
+        Email,
+        ShippingAddress,
+        PhoneNumber,
+        wallet,
+        vendor_status,
+      };
     },
     enabled: isAuthenticated || isVendorAuthenticated,
     retry: false,
@@ -56,7 +71,7 @@ export const useAuth = () => {
       const origin = location.state?.from?.pathname || "/";
       navigate(origin);
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       // console.error("Login failed:", error);
       toast({
         title: `${error?.response?.data?.message}`,
@@ -87,10 +102,13 @@ export const useAuth = () => {
         isClosable: true,
         position: "top-right",
       });
-
-      navigate("/vendor-overview");
+      // if (user?.vendor_status !== "APPROVED") {
+      //   navigate("/auth/approve-page");
+      // } else {
+        navigate("/vendor-overview");
+      // }
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       // console.error("Vendor login failed:", error);
       toast({
         title: `${error?.response?.data?.message}`,
@@ -122,7 +140,7 @@ export const useAuth = () => {
       });
       navigate("/auth/otp-page");
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       // console.error("Signup failed:", error);
       toast({
         title: `${error?.response?.data?.message}`,
@@ -148,7 +166,7 @@ export const useAuth = () => {
       });
       return response.data.data;
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       // console.error("Error requesting OTP:", error);
       toast({
         title: `${error?.response?.data?.message}`,
@@ -161,8 +179,7 @@ export const useAuth = () => {
   });
 
   const validateOtpMutation = useMutation({
-    mutationFn: (payload: any) =>
-      apiClient.post("/user/validate-otp", payload),
+    mutationFn: (payload: any) => apiClient.post("/user/validate-otp", payload),
     onSuccess: (response) => {
       toast({
         title: `${response?.data?.message}`,
@@ -171,9 +188,8 @@ export const useAuth = () => {
         duration: 2000,
         isClosable: true,
       });
-      
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       toast({
         title: `${error?.response?.data?.message}`,
         description: "Please check the OTP and try again.",
@@ -198,7 +214,7 @@ export const useAuth = () => {
       });
       navigate("/auth");
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       // console.error("Password reset failed:", error);
       toast({
         title: `${error?.response?.data?.message}`,
@@ -223,7 +239,7 @@ export const useAuth = () => {
       });
       navigate("/profile");
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       // console.error("Failed to add shipping address:", error);
       toast({
         title: `${error?.response?.data?.message}`,
@@ -294,11 +310,12 @@ export const useAuth = () => {
     requestOtp: requestOtpMutation.mutate,
     isSuccesRequest: requestOtpMutation.isSuccess,
     isSuccessOTP: validateOtpMutation.isSuccess,
+    isErrorOTP: validateOtpMutation.isError,
     resetPassword: resetPasswordMutation.mutate,
     addShippingAddress: addShippingAddressMutation.mutate,
     validateOtp: validateOtpMutation.mutate,
     user,
     refetchProfile,
-    switchToUser
+    switchToUser,
   };
 };

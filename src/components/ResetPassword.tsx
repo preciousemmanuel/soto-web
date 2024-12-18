@@ -37,6 +37,7 @@ const ResetPassword = () => {
 
   const handleResetPassword = async () => {
     await resetPassword({ new_password: password, otp });
+    await localStorage.removeItem("otp");
   };
 
   return (

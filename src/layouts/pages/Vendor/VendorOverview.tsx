@@ -195,13 +195,17 @@ const VendorOverview = () => {
                       >
                         <StatCard
                           title="Sold"
-                          value={`₦${(vendorOverviewData?.data?.total_unremitted || 0).toFixed(2)}`}
+                          value={`₦${(
+                            vendorOverviewData?.data?.total_unremitted || 0
+                          ).toFixed(2)}`}
                           growth="+0%"
                           description="Amount To Be Remitted"
                         />
-                         <StatCard
+                        <StatCard
                           title="On Market"
-                          value={`₦${(vendorOverviewData?.data?.total_in_stock || 0).toFixed(2)}`}
+                          value={`₦${(
+                            vendorOverviewData?.data?.total_in_stock || 0
+                          ).toFixed(2)}`}
                           growth="+0%"
                           description="Amount In Stock"
                         />
@@ -290,18 +294,29 @@ const VendorOverview = () => {
                           >
                             <Image
                               src={product?.images && product?.images[0]}
-                              boxSize="50px"
+                              boxSize="100px"
                               alt={product?.product_name}
                             />
                             <Box flex="1" ml={4}>
                               <Text fontSize="md" fontWeight="bold" mb={2}>
                                 {product?.product_name}
                               </Text>
-                              <Text fontSize="md" fontWeight="bold" mb={2} color="gray.600">
-                                Status: {product?.product_status}
+                              <Text
+                                fontSize="sm"
+                                fontWeight="bold"
+                                mb={2}
+                                color="gray.05"
+                              >
+                                Status:{" "}
+                                <Text color="green">{product?.status}</Text>
                               </Text>
-                              <Text fontSize="sm" fontWeight="bold" color="gray.500">
-                                Price: {product?.unit_price
+                              <Text
+                                fontSize="sm"
+                                fontWeight="bold"
+                                color="gray.500"
+                              >
+                                Price:{" "}
+                                {product?.unit_price
                                   ? `₦${(product?.unit_price / 100).toFixed(2)}`
                                   : "N/A"}
                               </Text>
@@ -337,7 +352,6 @@ const VendorOverview = () => {
                       <Thead>
                         <Tr>
                           <Th>Order ID</Th>
-                          <Th>Product</Th>
                           <Th>Order Date</Th>
                           <Th>Price</Th>
                           <Th>Status</Th>
@@ -349,13 +363,12 @@ const VendorOverview = () => {
                           leastOrder?.map((order: any) => (
                             <Tr key={order?._id}>
                               <Td>{order?._id}</Td>
-                              <Td>{order?.product_id?.product_name}</Td>
                               <Td>
                                 {new Date(
                                   order?.createdAt
                                 ).toLocaleDateString()}
                               </Td>
-                              <Td>{`₦${(order?.unit_price / 100).toFixed(
+                              <Td>{`₦${(order?.grand_total / 100).toFixed(
                                 2
                               )}`}</Td>
                               <Td
