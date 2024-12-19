@@ -1,4 +1,3 @@
-
 import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import { Suspense } from "react";
@@ -7,7 +6,7 @@ import LoadingSpinner from "../features/helpers/LoadingSpinner";
 
 const AuthLayout = () => {
   return (
-    <Box minHeight="100vh" display="flex" flexDirection="column">
+    <Box height="100%" display="flex" flexDirection="column">
       {/* <IdleTimer timeout={120000} /> */}
       <Suspense fallback={<LoadingSpinner />}>
         <Outlet />

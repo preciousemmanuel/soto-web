@@ -22,11 +22,10 @@ import AuthImage from "../assets/Wave.png";
 
 const ResetPassword = () => {
   const [otp, setOtp] = useState("");
-  const { resetPassword,loading } = useAuth();
+  const { resetPassword, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
-
 
   useEffect(() => {
     const storedOtp = localStorage.getItem("otp");
@@ -41,7 +40,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <Box minHeight="100vh">
+    <Box height="100%">
       <Flex
         bg="#FFF2ED"
         px={4}

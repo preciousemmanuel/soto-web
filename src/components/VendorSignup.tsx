@@ -67,16 +67,15 @@ const validationSchema = Yup.object().shape({
     .matches(/[a-z]/, "Password must contain at least one lowercase letter")
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
     .required("Password is required"),
-  business_logo: Yup.mixed()
-    // .required("Business logo is required")
-    .test("fileSize", "File size is too large", (value) => {
-      if (!value) return true;
-      return (value as File).size <= 5000000;
-    })
-    .test("fileType", "Unsupported file format", (value) => {
-      if (!value) return true;
-      return ["image/jpeg", "image/png"].includes((value as File).type);
-    }),
+  // business_logo: Yup.mixed()
+  //   .test("fileSize", "File size is too large", (value) => {
+  //     if (!value) return true;
+  //     return (value as File).size <= 5000000;
+  //   })
+  //   .test("fileType", "Unsupported file format", (value) => {
+  //     if (!value) return true;
+  //     return ["image/jpeg", "image/png"].includes((value as File).type);
+  //   }),
 });
 
 const Vendorsignup: React.FC = () => {
@@ -97,12 +96,14 @@ const Vendorsignup: React.FC = () => {
       const response = await apiClient.post("/business/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+
         },
       });
-      // console.log(response.data, "data");
+     
       return response.data;
     },
     onSuccess: (response) => {
+        localStorage.setItem("vendorToken", response.data.Token);
       toast({
         title: `${response?.message}`,
         description: "Your business has been registered successfully!",
@@ -307,7 +308,7 @@ const Vendorsignup: React.FC = () => {
                       {...formik.getFieldProps("category")}
                     >
                       {categories?.data?.data.map((category: any) => (
-                        <option key={category?._id} value={category?._id}>
+                        <option key={category?._id} value={category?.name}>
                           {category?.name}
                         </option>
                       ))}
@@ -440,9 +441,9 @@ const Vendorsignup: React.FC = () => {
                       onChange={handleFileChange}
                     />
                   </Flex>
-                  <FormErrorMessage>
+                  {/* <FormErrorMessage>
                     {formik.errors.business_logo}
-                  </FormErrorMessage>
+                  </FormErrorMessage> */}
                 </FormControl>
 
                 {/* Submit Button */}

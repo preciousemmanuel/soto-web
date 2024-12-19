@@ -16,7 +16,6 @@ import { useForm } from "react-hook-form";
  const BankForm = ({setShowAddBank}: {setShowAddBank: (show: boolean) => void}) => {
     const { banks, setSearch,search, isLoadingBanks, useAddMyBankDetails,refetchMyBankDetails } = useVendor();
     const { mutate: addBankDetails, isPending,isSuccess } = useAddMyBankDetails;
-  console.log(banks,"banks...")
     const {
       register,
       handleSubmit,

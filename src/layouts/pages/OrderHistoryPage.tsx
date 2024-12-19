@@ -25,34 +25,19 @@ function OrderHistoryPage() {
   const navigate = useNavigate();
   const { orders, isFetchingOrders, ordersPagination, handlePageChange } =
     useOrder();
+
   const orderData = orders?.data?.data;
   const filteredOrders = orderData?.filter(
     (order: any) => order.status === activeStatus
   );
-  //  console.log(orders,"orders")
+ 
   const handleProductClick = (orderId: string) => {
     navigate(`/my-orders/${orderId}`);
   };
 
   const renderStatusAndAction = (status: string, orderId: string) => {
+    console.log(orderId,"ORDER-ID")
     switch (status) {
-      // case "PENDING":
-      //   return {
-      //     status: (
-      //       <Text color="yellow.500" fontSize="18px" fontWeight="semibold">
-      //         PENDING
-      //       </Text>
-      //     ),
-      //     action: (
-      //       <Button
-      //         colorScheme="yellow"
-      //         size="sm"
-      //         onClick={() => alert("Pending Order")}
-      //       >
-      //         Pending
-      //       </Button>
-      //     ),
-      //   };
       case "BOOKED":
         return {
           status: (
@@ -190,7 +175,7 @@ function OrderHistoryPage() {
         <LoadingSpinner />
       ) : (
         <Flex justifyContent="center" px={4}>
-          <Table
+          {/* <Table
             variant="simple"
             w="100%"
             maxW="850px"
@@ -207,7 +192,7 @@ function OrderHistoryPage() {
               </Tr>
             </Thead>
             <Tbody>
-              {/* Order Details */}
+             
               {filteredOrders?.length > 0 ? (
                 filteredOrders?.flatMap((order: any) =>
                   order?.items?.map((product: any) => {
@@ -216,7 +201,7 @@ function OrderHistoryPage() {
                       order?._id
                     );
                     return (
-                      <Tr key={product.product_id}>
+                      <Tr key={product?._id}>
                         <Td>{product?.product_name}</Td>
                         <Td>{order?.tracking_id}</Td>
                         <Td>{status}</Td>
@@ -229,6 +214,43 @@ function OrderHistoryPage() {
               ) : (
                 <Tr>
                   <Td colSpan={6} textAlign="center" color="gray.500" mt={4}>
+                    No data for the selected status.
+                  </Td>
+                </Tr>
+              )}
+            </Tbody>
+          </Table> */}
+           <Table variant="simple" w="100%" maxW="850px" textAlign="left">
+            <Thead>
+              <Tr>
+                <Th>Order ID</Th>
+                <Th>Order Date</Th>
+                <Th>Product</Th>
+                <Th>Status</Th>
+                <Th textAlign="center">Action</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {filteredOrders?.length > 0 ? (
+                filteredOrders?.map((order: any) => {
+                  const { status } = order;
+                  const { status: statusText, action } = renderStatusAndAction(
+                    status,
+                    order?._id
+                  );
+                  return (
+                    <Tr key={order?._id}>
+                      <Td>{order?._id}</Td>
+                      <Td>{new Date(order?.createdAt).toLocaleDateString()}</Td>
+                      <Td>{order?.items?.length}</Td>
+                      <Td>{statusText}</Td>
+                      <Td textAlign="center">{action}</Td>
+                    </Tr>
+                  );
+                })
+              ) : (
+                <Tr>
+                  <Td colSpan={5} textAlign="center" color="gray.500">
                     No data for the selected status.
                   </Td>
                 </Tr>

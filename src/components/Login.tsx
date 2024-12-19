@@ -50,7 +50,7 @@ const Login = () => {
   };
 
   return (
-    <Box minHeight="100vh">
+    <Box height="100%">
       {/* Navbar */}
       <Flex
         bg="#FFF2ED"

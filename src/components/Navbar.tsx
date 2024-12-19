@@ -108,9 +108,10 @@ const Navbar = () => {
         bg="white"
       >
         {/* Logo */}
-        <Box>
-          <Image src={Logo} width={{ base: "40px", md: "50px" }} />
-        </Box>
+        <Box >
+            <Image src={Logo} width={{ base: "40px", md: "50px" }} cursor="pointer" onClick={() => navigate("/")}/>
+          </Box>
+  
 
         {/* Hamburger Icon for Mobile */}
         <Box display={{ base: "block", md: "none" }}>
@@ -153,7 +154,7 @@ const Navbar = () => {
           <Box maxW="400px" width="100%" position="relative">
             <InputGroup>
               <Input
-                placeholder="Search for products"
+                placeholder="Enter list"
                 onChange={handleInputChange}
                 value={inputValue}
                 bg="#FFF2ED"
@@ -271,7 +272,7 @@ const Navbar = () => {
               <Box mt={4}>
                 <InputGroup>
                   <Input
-                    placeholder="Search for products"
+                    placeholder="Enter list"
                     bg="white"
                     borderRadius="md"
                     onChange={handleInputChange}

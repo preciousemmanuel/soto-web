@@ -9,7 +9,8 @@ import PaginationControls from "../../../features/helpers/Pagination";
 import { useVendor } from "../../hooks/useVendor";
 
 const VendorInventory = () => {
-  const { vendorInventory,vendorInventoryPagination,handlePageChange } = useVendor();
+  const { vendorInventory, vendorInventoryPagination, handlePageChange } =
+    useVendor();
 
   // const [currentPage, setCurrentPage] = useState(1); // Added state for current page
 
@@ -18,7 +19,7 @@ const VendorInventory = () => {
   // };
 
   return (
-    <Box p={4} minHeight="100vh">
+    <Box p={4} height="100%">
       <Flex justify="flex-end" mb={4}>
         <SortModal />
       </Flex>

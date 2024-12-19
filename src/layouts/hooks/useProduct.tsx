@@ -33,6 +33,7 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
   favourite?: boolean;
+  status?: any
 }
 
 interface ProductResponse {

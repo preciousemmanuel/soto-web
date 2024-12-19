@@ -82,7 +82,7 @@ export const useAuth = () => {
       });
     },
   });
-
+// console.log(user,"userr")
   const vendorLoginMutation = useMutation({
     mutationFn: (credentials: {
       email_or_phone_number: string;
@@ -102,11 +102,7 @@ export const useAuth = () => {
         isClosable: true,
         position: "top-right",
       });
-      // if (user?.vendor_status !== "APPROVED") {
-      //   navigate("/auth/approve-page");
-      // } else {
         navigate("/vendor-overview");
-      // }
     },
     onError: (error: any) => {
       // console.error("Vendor login failed:", error);

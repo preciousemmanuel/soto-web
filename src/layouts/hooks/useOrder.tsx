@@ -94,13 +94,18 @@ export const useOrder = () => {
     status: string
   ): Promise<any> => {
     const response = await apiClient.get(
-      `/order/fetch/by-vendor?limit=${limit}&page=${page}&status=${status}`
+      `/order/fetch/by-vendor-new?limit=${limit}&page=${page}&status=${status}`
     );
     return response.data;
   };
 
   const fetchOneOrder = async (orderId: string): Promise<{ data: any }> => {
-    const response = await apiClient.get(`/order/view-one-by-vendor${orderId}`);
+    const response = await apiClient.get(`/order/view-one/${orderId}`);
+    return response.data;
+  };
+
+  const fetchOneVendorOrder = async (orderId: string): Promise<{ data: any }> => {
+    const response = await apiClient.get(`/order/view-one-by-vendor/${orderId}`);
     return response.data;
   };
 
@@ -279,9 +284,17 @@ export const useOrder = () => {
 
   const useSingleOrder = (orderId: string) => {
     return useQuery({
-      queryKey: ["product", orderId],
+      queryKey: ["buyer-orders", orderId],
       queryFn: () => fetchOneOrder(orderId),
-      enabled: (isAuthenticated && isVendorAuthenticated) || !!orderId,
+      enabled: isAuthenticated || isVendorAuthenticated,
+    });
+  };
+
+  const useSingleVendorOrder = (orderId: string) => {
+    return useQuery({
+      queryKey: ["vendor-orders", orderId],
+      queryFn: () => fetchOneVendorOrder(orderId),
+      enabled: (isVendorAuthenticated),
     });
   };
 
@@ -353,6 +366,7 @@ export const useOrder = () => {
     fetchCustomOrdersError,
     clearCart,
     refetchCustomOrders,
+    useSingleVendorOrder,
     customOrdersDataPagination: {
       currentPage: customOrdersData?.data?.pagination?.currentPage || 1,
       totalPages: customOrdersData?.data?.pagination?.pageCount || 1,

@@ -16,7 +16,7 @@ const OtpPage = ({
   setOtp: (otp: any) => void;
 }) => {
   return (
-    <Box minHeight="100vh">
+    <Box height="100%">
       <Flex
         bg="#FFF2ED"
         px={4}

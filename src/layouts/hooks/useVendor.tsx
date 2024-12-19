@@ -174,6 +174,7 @@ export const useVendor = () => {
       });
     },
     onError: (error) => {
+      console.log(error)
       toast({
         title: "Error Adding Bank Details",
         description: "An error occurred while adding your bank details.",

@@ -15,7 +15,7 @@ import {
     IconButton,
     Badge,
   } from "@chakra-ui/react";
-  import { Link } from "react-router-dom";
+  import { Link, useNavigate } from "react-router-dom";
   import Logo from "../assets/soto.png";
   import { MdAccountCircle, MdNotifications } from "react-icons/md";
   import { HamburgerIcon } from "@chakra-ui/icons";
@@ -28,7 +28,7 @@ import VendorModal from "../features/modals/VendorModal";
 import { useVendor } from "../layouts/hooks/useVendor";
   
   const SellerNavbar = () => {
-   
+   const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isNotificationOpen, onOpen: onNotificationOpen, onClose: onNotificationClose } = useDisclosure();
     const {
@@ -80,8 +80,8 @@ import { useVendor } from "../layouts/hooks/useVendor";
           bg={"white"}
         >
           {/* Logo */}
-          <Box>
-            <Image src={Logo} width={{ base: "40px", md: "50px" }} />
+          <Box >
+            <Image src={Logo} width={{ base: "40px", md: "50px" }} cursor="pointer" onClick={() => navigate("/")}/>
           </Box>
   
           {/* Desktop Navigation links */}
