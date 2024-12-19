@@ -128,7 +128,7 @@ const VendorOverview = () => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <Box p={4} minHeight="100vh" mt={28} px={16}>
+        <Box p={4} height="100%" mt={28} px={16}>
           <Flex justify="space-between" align="center" mb={8} flexWrap="wrap">
             <Flex align="center" gap={2} mb={[4, 0]}>
               <Avatar size="lg" src={businessData?.business_logo} />

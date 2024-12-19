@@ -16,13 +16,13 @@ import AuthImage from "../assets/for.png";
 import OtpInput from "./OtpInupt";
 import { useNavigate } from "react-router-dom";
 
-
 const ForgetPassword = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [otp, setOtp] = useState(["", "", "", ""]);
-  const { requestOtp, isSuccesRequest,isSuccessOTP ,loading,validateOtp } = useAuth();
-  
+  const { requestOtp, isSuccesRequest, isSuccessOTP, loading, validateOtp } =
+    useAuth();
+
   const handleRequestOtp = async () => {
     await requestOtp({
       email_or_phone_number: emailOrPhone,
@@ -37,20 +37,18 @@ const ForgetPassword = () => {
   };
 
   useEffect(() => {
-    if(isSuccessOTP){
+    if (isSuccessOTP) {
       navigate("/auth/reset-password");
     }
-  
-  }, [isSuccessOTP])
-  
+  }, [isSuccessOTP]);
 
-//   {
-//     "otp":"5205",
-//     "otp_purpose": "CHANGE_PASSWORD" // CHANGE_PASSWORD | FORGOT_PASSWORD | SIGNUP_COMPLETE | PASSWORD_RESET | ACCOUNT_VALIDATION
-// }
+  //   {
+  //     "otp":"5205",
+  //     "otp_purpose": "CHANGE_PASSWORD" // CHANGE_PASSWORD | FORGOT_PASSWORD | SIGNUP_COMPLETE | PASSWORD_RESET | ACCOUNT_VALIDATION
+  // }
 
   return (
-    <Box minHeight="100vh">
+    <Box height="100%">
       <Flex
         bg="#FFF2ED"
         px={4}
@@ -160,7 +158,7 @@ const ForgetPassword = () => {
                   borderRadius="full"
                   isLoading={loading}
                   _hover={{ bg: "#E04E2C" }}
-                  isDisabled={otp.some((digit) => digit === "")} 
+                  isDisabled={otp.some((digit) => digit === "")}
                   onClick={handleValidateOTP}
                 >
                   Continue
@@ -175,4 +173,3 @@ const ForgetPassword = () => {
 };
 
 export default ForgetPassword;
-

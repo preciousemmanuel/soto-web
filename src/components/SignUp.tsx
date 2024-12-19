@@ -73,7 +73,7 @@ const Signup = () => {
   });
 
   return (
-    <Box minHeight="100vh">
+    <Box height="100%">
       {/* Navbar */}
       <Flex
         bg="#FFF2ED"
@@ -111,6 +111,7 @@ const Signup = () => {
         src={Logo}
         alt="Soto Logo"
         py={8}
+        cursor="pointer"
         px={8}
         width="120px"
         onClick={() => navigate("/")}

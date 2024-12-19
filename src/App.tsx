@@ -76,6 +76,8 @@ import VendorProductDetailsPage from "./layouts/pages/Vendor/VendorProductDetail
 import ApprovePage from "./layouts/pages/ApprovePage";
 import VendorOtpVerification from "./layouts/pages/VendorOtpVerification";
 import OtpVerification from "./layouts/pages/OtpVerificationPage";
+import OrderDetails from "./layouts/pages/Vendor/VendorOrderDetails";
+import RaiseDisputePage from "./layouts/pages/RaiseDispute";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -206,10 +208,14 @@ const App = () => {
           path: "withdrawal-success",
           element: <WithdrawalSuccessMessage />,
         },
+        {
+          path: "raise-dispute",
+          element: <RaiseDisputePage />,
+        },
       ],
     },
     {
-      path: "/auth", // Pages without Navbar and Footer
+      path: "/auth", 
       element: <AuthLayout />,
       errorElement: <ErrorPage />,
       children: [
@@ -274,7 +280,7 @@ const App = () => {
               path: ":orderId",
               element: (
                 <VendorProtectedRoute>
-                  <OrderDetailPage />
+                  <OrderDetails />
                 </VendorProtectedRoute>
               ),
             },

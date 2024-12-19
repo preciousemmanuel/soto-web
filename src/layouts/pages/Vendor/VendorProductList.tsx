@@ -66,7 +66,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               position="absolute"
               top={2}
               left={2}
-              borderRadius={3}
+              borderRadius="full"
               fontSize="12px"
               fontWeight="bold"
               display="flex"
@@ -76,6 +76,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               Out of stock
             </Box>
           )}
+          <Box
+              bg={product?.status === 'APPROVED' ? 'green' : product?.status === 'PENDING' ? '#FFC900' : 'red'}
+              color="white"
+              h="26px"
+              w="90px"
+              position="absolute"
+              top={2}
+              right={2}
+              borderRadius="full"
+              fontSize="12px"
+              fontWeight="bold"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              {product?.status}
+            </Box>
         </Box>
         <Box
           bg="#FBDED3"

@@ -21,35 +21,24 @@ import PaginationControls from "../../../features/helpers/Pagination";
 const VendorOrder = () => {
   const [activeStatus, setActiveStatus] = useState("BOOKED");
   const navigate = useNavigate();
-  const { ordersVendor, isFetchingOrders,ordersVendorPagination,handlePageChange } = useOrder();
+  const {
+    ordersVendor,
+    isFetchingOrders,
+    ordersVendorPagination,
+    handlePageChange,
+  } = useOrder();
   const orderData = ordersVendor?.data?.data;
   const filteredOrders = orderData?.filter(
     (order: any) => order.status === activeStatus
   );
 
-  const handleProductClick = (productId: string) => {
-    navigate(`/vendor-order/${productId}`);
+  const handleProductClick = (orderId: string) => {
+    navigate(`/vendor-orders/${orderId}`);
   };
 
-  const renderStatusAndAction = (status: string, productId: string) => {
+  const renderStatusAndAction = (status: string, orderId: string) => {
+    // console.log(orderId,"orderId.")
     switch (status) {
-      // case "PENDING":
-      //   return {
-      //     status: (
-      //       <Text color="yellow.500" fontSize="18px" fontWeight="semibold">
-      //         PENDING
-      //       </Text>
-      //     ),
-      //     action: (
-      //       <Button
-      //         colorScheme="yellow"
-      //         size="sm"
-      //         onClick={() => alert("Pending Order")}
-      //       >
-      //         Pending
-      //       </Button>
-      //     ),
-      //   };
       case "BOOKED":
         return {
           status: (
@@ -62,30 +51,30 @@ const VendorOrder = () => {
               color="white"
               bg="#FF5733"
               size="sm"
-              // onClick={() => handleProductClick(productId)}
+              onClick={() => handleProductClick(orderId)}
             >
               View
             </Button>
           ),
         };
-        case "SHIPPED":
-          return {
-            status: (
-              <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
-                SHIPPED
-              </Text>
-            ),
-            action: (
-              <Button
-                color="white"
-                bg="#FF5733"
-                size="sm"
-                // onClick={() => handleProductClick(productId)}
-              >
-                View
-              </Button>
-            ),
-          };
+      case "SHIPPED":
+        return {
+          status: (
+            <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
+              SHIPPED
+            </Text>
+          ),
+          action: (
+            <Button
+              color="white"
+              bg="#FF5733"
+              size="sm"
+              // onClick={() => handleProductClick(orderId)}
+            >
+              View
+            </Button>
+          ),
+        };
       case "DELIVERED":
         return {
           status: (
@@ -98,7 +87,7 @@ const VendorOrder = () => {
               colorScheme="green"
               variant="outline"
               size="sm"
-              onClick={() => handleProductClick(productId)}
+              onClick={() => handleProductClick(orderId)}
             >
               View Details
             </Button>
@@ -150,13 +139,7 @@ const VendorOrder = () => {
         Vendor Orders
       </Heading>
       <Flex justifyContent="left">
-        <Flex
-          justifyContent="center"
-          gap={4}
-          mb={8}
-          maxW="100%"
-          mx="auto"
-        >
+        <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">
           {["BOOKED", "SHIPPED", "DELIVERED", "CANCELLED", "FAILED"].map(
             (buttonStatus) => (
               <Button
@@ -180,27 +163,27 @@ const VendorOrder = () => {
           <Table variant="simple" w="100%" maxW="850px" textAlign="left">
             <Thead>
               <Tr>
-                <Th>Product Name</Th>
-                <Th>Product ID</Th>
+                <Th>Order ID</Th>
+                <Th>Order Date</Th>
+                <Th>Price</Th>
                 <Th>Status</Th>
-                <Th>Quantity</Th>
                 <Th textAlign="center">Action</Th>
               </Tr>
             </Thead>
             <Tbody>
               {filteredOrders?.length > 0 ? (
                 filteredOrders?.map((order: any) => {
-                  const { product_id, quantity, status } = order;
+                  const {  status } = order;
                   const { status: statusText, action } = renderStatusAndAction(
                     status,
-                    product_id._id
+                    order?._id
                   );
                   return (
                     <Tr key={order?._id}>
-                      <Td>{product_id?.product_name}</Td>
-                      <Td>{product_id?._id}</Td>
+                      <Td>{order?._id}</Td>
+                      <Td>{new Date(order?.createdAt).toLocaleDateString()}</Td>
+                      <Td>{order?.items?.length}</Td>
                       <Td>{statusText}</Td>
-                      <Td>{quantity}</Td>
                       <Td textAlign="center">{action}</Td>
                     </Tr>
                   );

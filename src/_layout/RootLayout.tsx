@@ -6,23 +6,19 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 // import IdleTimer from "../features/helpers/IdleTimer";
 
-
-
 const RootLayout = () => {
-    return (
-      <Box minHeight="100vh" display="flex" flexDirection="column">
-        {/* <IdleTimer timeout={120000} /> */}
-        <Navbar/>
-        <Box as="main" flex={1}>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Outlet />
-          </Suspense>
-        </Box>
-       <Footer />
+  return (
+    <Box height="100%" display="flex" flexDirection="column">
+      {/* <IdleTimer timeout={120000} /> */}
+      <Navbar />
+      <Box as="main" flex={1}>
+        <Suspense fallback={<LoadingSpinner />}>
+          <Outlet />
+        </Suspense>
       </Box>
-    );
-  };
+      <Footer />
+    </Box>
+  );
+};
 
-
-  export default RootLayout;
-  
+export default RootLayout;

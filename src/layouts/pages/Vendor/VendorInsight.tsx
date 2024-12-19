@@ -6,7 +6,7 @@ const VendorInsight = () => {
   const data = salesAnalytics?.data;
 
   return (
-    <Box p={6} minHeight="100vh" mt={32} px={34}>
+    <Box p={6} height="100%" mt={32} px={34}>
       <Text fontSize="33px" fontWeight="500" mb={6}>
         Sales Analytics
       </Text>

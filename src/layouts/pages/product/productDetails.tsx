@@ -17,12 +17,6 @@ import { FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useProduct } from "../../hooks/useProduct";
 
-interface ProductCategory {
-  _id: string;
-  name: string;
-  image: string;
-}
-
 interface ProductUser {
   FirstName: string;
   LastName: string;
@@ -54,6 +48,7 @@ interface ProductData {
   is_deleted: boolean;
   total_quantity_sold: number;
   rating: number;
+  status?: any;
 }
 
 interface ProductDetails {
@@ -62,7 +57,7 @@ interface ProductDetails {
   total_reviews?: number;
   sizes?: string[];
   colors?: string[];
-  showOthers: boolean
+  showOthers: boolean;
   // onAddToCart: (product:any) => void;
 }
 
@@ -71,7 +66,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   sizes,
   colors,
   total_reviews,
-  showOthers = true
+  showOthers = true,
   // onAddToCart,
 }) => {
   const [quantity, setQuantity] = useState(0);
@@ -86,7 +81,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const [cart] = useState<[]>(JSON.parse(localStorage.getItem("cart") || "[]"));
   useEffect(() => {
     return updateCart(product || {}, quantity);
-  }, [quantity, product?._id || '', updateCart]);
+  }, [quantity, product?._id || "", updateCart]);
 
   return (
     <VStack align="start" spacing={5}>
@@ -115,9 +110,41 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
       <Text fontSize="md">{product?.description}</Text>
 
-      <Badge colorScheme={product?.product_quantity ? (product.product_quantity > 0 ? "green" : "red") : "gray"}>
-        {product?.product_quantity ? (product.product_quantity > 0 ? "In Stock" : "Out of Stock") : "Unknown"}
+      <Badge
+        colorScheme={
+          product?.product_quantity
+            ? product.product_quantity > 0
+              ? "green"
+              : "red"
+            : "gray"
+        }
+      >
+        {product?.product_quantity
+          ? product.product_quantity > 0
+            ? "In Stock"
+            : "Out of Stock"
+          : "Unknown"}
       </Badge>
+      <Box
+        bg={
+          product?.status === "APPROVED"
+            ? "green"
+            : product?.status === "PENDING"
+            ? "#FFC900"
+            : "red"
+        }
+        color="white"
+        h="26px"
+        w="90px"
+        borderRadius="full"
+        fontSize="12px"
+        fontWeight="bold"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        {product?.status}
+      </Box>
       {showOthers && (
         <>
           <Box>
@@ -181,7 +208,11 @@ const ProductDetails: React.FC<ProductDetails> = ({
             >
               <Button
                 onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
-                isDisabled={quantity <= 1 || (product?.product_quantity !== undefined && product.product_quantity < 0)}
+                isDisabled={
+                  quantity <= 1 ||
+                  (product?.product_quantity !== undefined &&
+                    product.product_quantity < 0)
+                }
                 variant="ghost"
               >
                 -
@@ -193,7 +224,10 @@ const ProductDetails: React.FC<ProductDetails> = ({
                     Math.min(prev + 1, product?.product_quantity ?? 0)
                   )
                 }
-                isDisabled={product?.product_quantity === undefined || product.product_quantity < 0}
+                isDisabled={
+                  product?.product_quantity === undefined ||
+                  product.product_quantity < 0
+                }
                 variant="ghost"
               >
                 +
@@ -219,7 +253,10 @@ const ProductDetails: React.FC<ProductDetails> = ({
               color="white"
               w={{ base: "100%", md: "170px" }}
               h="50px"
-              isDisabled={product?.product_quantity !== undefined && product.product_quantity < 0}
+              isDisabled={
+                product?.product_quantity !== undefined &&
+                product.product_quantity < 0
+              }
               _hover={{ bg: "#FF5733" }}
               onClick={() => navigate("/cart")}
             >

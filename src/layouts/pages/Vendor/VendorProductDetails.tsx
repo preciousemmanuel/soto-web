@@ -45,13 +45,14 @@ const VendorProductDetailsPage = () => {
                 product_quantity: product?.product_quantity || 0,
                 category: product?.category?.name,
                 rating: product?.rating,
-                // in_stock: false,
+                in_stock: product?.in_stock || false,
                 images: product?.images || [],
                 is_discounted: product?.is_discounted || false,
                 is_verified: product?.is_verified || false,
                 is_deleted: product?.is_deleted || false,
                 // total_quantity_sold: product?.total_quantity_sold || 0,
-                
+                status: product?.status,
+                ...product
               }}
               // sizes={["", "", ""]}
               // colors={["", "", ""]}
