@@ -115,15 +115,6 @@ const OrderDetails = () => {
                     ₦{oneOrder?.data?.grand_total}
                   </Text>
                 </HStack>
-                <HStack justify="space-between" w="full" pt="6px">
-                  <Text fontSize="sm" color="gray.600">
-                    Buyer
-                  </Text>
-                  <Text fontSize="sm">
-                    {oneOrder?.data?.user?.FirstName}{" "}
-                    {oneOrder?.data?.user?.LastName}
-                  </Text>
-                </HStack>
               </VStack>
             </Box>
           </Box>

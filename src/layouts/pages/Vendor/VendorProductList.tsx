@@ -22,12 +22,7 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const isOutOfStock = !product.in_stock;
-  const isOnSale =
-    product?.is_discounted &&
-    product?.discount_price &&
-    product?.unit_price &&
-    product?.discount_price < product?.unit_price;
+  const isOutOfStock = product.product_quantity !== undefined && product.product_quantity < 0;
   const navigate = useNavigate();
 
   const handleProductClick = (e: React.MouseEvent) => {
@@ -113,14 +108,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </Text>
 
         <Flex gap={4} alignItems="center">
-          <Text color={isOnSale ? "#FF5733" : "#FF5733"} fontWeight="normal">
-            ₦{isOnSale ? product?.discount_price : product?.unit_price}
-          </Text>
-          {isOnSale && (
+          
             <Text as="s" color="#FF5743" fontSize="sm">
-              ₦{product?.unit_price}
+              ₦{product?.raw_price}
             </Text>
-          )}
         </Flex>
       </Stack>
     </Box>

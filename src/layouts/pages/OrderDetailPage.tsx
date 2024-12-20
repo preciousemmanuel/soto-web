@@ -12,7 +12,7 @@ import {
   Divider,
   Badge,
 } from "@chakra-ui/react";
-// import { FaClipboard } from "react-icons/fa";
+import { FaClipboard } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOrder } from "../hooks/useOrder";
 import LoadingSpinner from "../../features/helpers/LoadingSpinner";
@@ -28,8 +28,17 @@ const OrderDetailPage = () => {
   }
 
   const {
-    data: { status },
+    data: { status,tracking_id },
   } = oneOrder ?? {};
+
+  const trackingSteps = [
+    
+    { label: "Order Booked", active: status === "BOOKED" },
+    { label: "Order Shipped", active: status === "SHIPPED" },
+    { label: "Order Delivered", active: status === "DELIVERED" },
+    ...(status === "CANCELLED" ? [{ label: "Order Cancelled", active: true }] : []),
+    ...(status === "FAILED" ? [{ label: "Order Failed", active: true }] : []),
+  ];
 
   return (
     <Box p={8} h="100%" fontFamily="Poppins" mt={100}>
@@ -45,10 +54,11 @@ const OrderDetailPage = () => {
       >
         Order Details
       </Heading>
+      <Flex direction="row" justifyContent="space-between" w="100%">
       {isPending ? (
         <LoadingSpinner />
       ) : (
-        <Box p={8} bg="white" maxW="1000px" mx="auto">
+        <Box p={8} bg="white" w="70%">
           <HStack spacing={8} align="stretch">
             <Box flex={1} bg="orange.50" p={6} borderRadius="md">
               <HStack justify="space-between" w="full">
@@ -189,6 +199,59 @@ const OrderDetailPage = () => {
           </HStack>
         </Box>
       )}
+      <Box w="400px">
+          <Heading size="28px" color="gray.600" fontWeight="semibold" mb={6}>
+            Track Order
+          </Heading>
+          <HStack
+            justify="space-between"
+            bg="gray.100"
+            p={6}
+            borderRadius="xl"
+            mb={6}
+          >
+            <Text fontWeight="semibold" fontSize="md">
+              Tracked ID: {tracking_id}
+            </Text>
+            <Icon
+              as={FaClipboard}
+              boxSize={6}
+              cursor="pointer"
+              color="#FF5753"
+            />
+          </HStack>
+  
+          <VStack align="stretch" width="100%" mt={8}>
+            {trackingSteps?.map((step, index) => (
+              <Flex key={index} align="center" justify="flex-start" w="100%">
+                <Box >
+                  <Box
+                    w={4}
+                    h={4}
+                    borderRadius="full"
+                    bg={step.active ? "#FF5753" : "gray.300"}
+                    border="2px solid"
+                    borderColor={step.active ? "#FF5753" : "gray.300"}
+                  />
+                  {index !== trackingSteps.length - 1 && (
+                    <Box
+                      w={2}
+                      h="60px"
+                      bg={step.active ? "#FF5753" : "gray.300"}
+                      ml={1}
+                      mt={-2}
+                      mb={2}
+                    />
+                  )}
+                </Box>
+                <Text ml={4} fontSize="lg" color={step.active ? "#FF5753" : "gray.600"}>
+                  {step.label}
+                </Text>
+              </Flex>
+            ))}
+          </VStack>
+      </Box>
+      </Flex>
     </Box>
   );
 };

@@ -3,11 +3,8 @@ import {
   Box,
   Heading,
   Button,
-  SimpleGrid,
   Text,
-  VStack,
   Flex,
-  Grid,
   Table,
   Thead,
   Tr,
@@ -30,13 +27,12 @@ function OrderHistoryPage() {
   const filteredOrders = orderData?.filter(
     (order: any) => order.status === activeStatus
   );
- 
+
   const handleProductClick = (orderId: string) => {
     navigate(`/my-orders/${orderId}`);
   };
 
   const renderStatusAndAction = (status: string, orderId: string) => {
-    console.log(orderId,"ORDER-ID")
     switch (status) {
       case "BOOKED":
         return {
@@ -52,7 +48,7 @@ function OrderHistoryPage() {
               size="sm"
               onClick={() => handleProductClick(orderId)}
             >
-              Track
+              View
             </Button>
           ),
         };
@@ -68,7 +64,7 @@ function OrderHistoryPage() {
               color="white"
               bg="#FF5733"
               size="sm"
-              // onClick={() => handleProductClick(productId)}
+              onClick={() => handleProductClick(orderId)}
             >
               View
             </Button>
@@ -82,15 +78,20 @@ function OrderHistoryPage() {
             </Text>
           ),
           action: (
-            <Button colorScheme="green" variant="outline" size="sm">
-              View Details
+            <Button
+              colorScheme="green"
+              variant="outline"
+              size="sm"
+              onClick={() => handleProductClick(orderId)}
+            >
+              View
             </Button>
           ),
         };
       case "CANCELLED":
         return {
           status: (
-            <Text color="red.500" fontSize="18px" fontWeight="semibold">
+            <Text color="red.500" fontSize="18px" fontWeight="semibold" onClick={() => handleProductClick(orderId)}>
               CANCELLED
             </Text>
           ),
@@ -98,9 +99,9 @@ function OrderHistoryPage() {
             <Button
               colorScheme="red"
               size="sm"
-              onClick={() => alert("Cancelled Order")}
+              onClick={() => handleProductClick(orderId)}
             >
-              Delete
+              View
             </Button>
           ),
         };
@@ -116,9 +117,9 @@ function OrderHistoryPage() {
               colorScheme="red"
               variant="outline"
               size="sm"
-              onClick={() => alert("Failed Order")}
+              onClick={() => handleProductClick(orderId)}
             >
-              Retry
+             View
             </Button>
           ),
         };
@@ -127,8 +128,10 @@ function OrderHistoryPage() {
     }
   };
 
+ 
+
   return (
-    <Box p={4} minH="100vh" textAlign="center" mt={120} my={20}>
+    <Box p={4} minH="100%" textAlign="center" mt={120} my={20}>
       <Heading
         size="lg"
         mb={6}
@@ -143,84 +146,28 @@ function OrderHistoryPage() {
       </Heading>
 
       <Flex justifyContent={"left"} alignItems={"left"}>
-      <Flex
-          justifyContent="center"
-          gap={4}
-          mb={8}
-          maxW="100%"
-          mx="auto"
-        >
-          {[
-            
-            "BOOKED",
-            "SHIPPED",
-            "DELIVERED",
-            "CANCELLED",
-            "FAILED",
-          ].map((buttonStatus) => (
-            <Button
-              key={buttonStatus}
-              bg={activeStatus === buttonStatus ? "#FF5733" : "#F4F6F9"}
-              color={activeStatus === buttonStatus ? "white" : "black"}
-              borderRadius="full"
-              size="md"
-              onClick={() => setActiveStatus(buttonStatus)}
-            >
-              {buttonStatus}
-            </Button>
-          ))}
-       </Flex>
+        <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">
+          {["BOOKED", "SHIPPED", "DELIVERED", "CANCELLED", "FAILED"].map(
+            (buttonStatus) => (
+              <Button
+                key={buttonStatus}
+                bg={activeStatus === buttonStatus ? "#FF5733" : "#F4F6F9"}
+                color={activeStatus === buttonStatus ? "white" : "black"}
+                borderRadius="full"
+                size="md"
+                onClick={() => setActiveStatus(buttonStatus)}
+              >
+                {buttonStatus}
+              </Button>
+            )
+          )}
+        </Flex>
       </Flex>
       {isFetchingOrders ? (
         <LoadingSpinner />
       ) : (
         <Flex justifyContent="center" px={4}>
-          {/* <Table
-            variant="simple"
-            w="100%"
-            maxW="850px"
-            textAlign="left"
-            fontWeight="normal"
-          >
-            <Thead>
-              <Tr>
-                <Th>Products</Th>
-                <Th>Tracking ID</Th>
-                <Th>Status</Th>
-                <Th>Qty.</Th>
-                <Th textAlign="center">Action</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-             
-              {filteredOrders?.length > 0 ? (
-                filteredOrders?.flatMap((order: any) =>
-                  order?.items?.map((product: any) => {
-                    const { status, action } = renderStatusAndAction(
-                      order?.status,
-                      order?._id
-                    );
-                    return (
-                      <Tr key={product?._id}>
-                        <Td>{product?.product_name}</Td>
-                        <Td>{order?.tracking_id}</Td>
-                        <Td>{status}</Td>
-                        <Td>{product?.quantity}</Td>
-                        <Td textAlign="center">{action}</Td>
-                      </Tr>
-                    );
-                  })
-                )
-              ) : (
-                <Tr>
-                  <Td colSpan={6} textAlign="center" color="gray.500" mt={4}>
-                    No data for the selected status.
-                  </Td>
-                </Tr>
-              )}
-            </Tbody>
-          </Table> */}
-           <Table variant="simple" w="100%" maxW="850px" textAlign="left">
+          <Table variant="simple" w="100%" maxW="850px" textAlign="left">
             <Thead>
               <Tr>
                 <Th>Order ID</Th>

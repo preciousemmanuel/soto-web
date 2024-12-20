@@ -57,7 +57,8 @@ interface ProductDetails {
   total_reviews?: number;
   sizes?: string[];
   colors?: string[];
-  showOthers: boolean;
+  showOthers?: boolean;
+  showColor?: boolean;
   // onAddToCart: (product:any) => void;
 }
 
@@ -67,6 +68,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   colors,
   total_reviews,
   showOthers = true,
+  showColor = true,
   // onAddToCart,
 }) => {
   const [quantity, setQuantity] = useState(0);
@@ -125,69 +127,75 @@ const ProductDetails: React.FC<ProductDetails> = ({
             : "Out of Stock"
           : "Unknown"}
       </Badge>
-      <Box
-        bg={
-          product?.status === "APPROVED"
-            ? "green"
-            : product?.status === "PENDING"
-            ? "#FFC900"
-            : "red"
-        }
-        color="white"
-        h="26px"
-        w="90px"
-        borderRadius="full"
-        fontSize="12px"
-        fontWeight="bold"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        {product?.status}
-      </Box>
+      {product?.status && (
+        <Box
+          bg={
+            product?.status === "APPROVED"
+              ? "green"
+              : product?.status === "PENDING"
+              ? "#FFC900"
+              : "red"
+          }
+          color="white"
+          h="26px"
+          w="90px"
+          borderRadius="full"
+          fontSize="12px"
+          fontWeight="bold"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          {product?.status}
+        </Box>
+      )}
       {showOthers && (
         <>
-          <Box>
-            <Text fontWeight="bold" mb={2}>
-              Size
-            </Text>
-            <HStack spacing={3}>
-              {sizes?.map((size) => (
-                <Button
-                  key={size}
-                  size="sm"
-                  variant={selectedSize === size ? "solid" : "outline"}
-                  colorScheme="orange"
-                  onClick={() => setSelectedSize(size)}
-                >
-                  {size}
-                </Button>
-              ))}
-            </HStack>
-          </Box>
+          {showColor && (
+            <>
+              <Box>
+                <Text fontWeight="bold" mb={2}>
+                  Size
+                </Text>
+                <HStack spacing={3}>
+                  {sizes?.map((size) => (
+                    <Button
+                      key={size}
+                      size="sm"
+                      variant={selectedSize === size ? "solid" : "outline"}
+                      colorScheme="orange"
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {size}
+                    </Button>
+                  ))}
+                </HStack>
+              </Box>
 
-          <Box>
-            <Text fontWeight="bold" mb={2}>
-              Color
-            </Text>
-            <HStack spacing={3}>
-              {colors?.map((color) => (
-                <Box
-                  key={color}
-                  boxSize="30px"
-                  borderRadius="full"
-                  bg={color}
-                  border={
-                    selectedColor === color
-                      ? "2px solid black"
-                      : "1px solid gray"
-                  }
-                  cursor="pointer"
-                  onClick={() => setSelectedColor(color)}
-                />
-              ))}
-            </HStack>
-          </Box>
+              <Box>
+                <Text fontWeight="bold" mb={2}>
+                  Color
+                </Text>
+                <HStack spacing={3}>
+                  {colors?.map((color) => (
+                    <Box
+                      key={color}
+                      boxSize="30px"
+                      borderRadius="full"
+                      bg={color}
+                      border={
+                        selectedColor === color
+                          ? "2px solid black"
+                          : "1px solid gray"
+                      }
+                      cursor="pointer"
+                      onClick={() => setSelectedColor(color)}
+                    />
+                  ))}
+                </HStack>
+              </Box>
+            </>
+          )}
           <Flex
             direction={{ base: "column", md: "row" }}
             gap={{ base: 3, md: 4 }}

@@ -11,11 +11,16 @@ import {
 import CustomerReviews from "./reviewCard";
 
 interface ProductDescriptionProps {
-  reviews: any[]; 
+  reviews: any[];
   description: string;
+  productId: any;
 }
 
-const ProductDescription = ({ reviews, description }: ProductDescriptionProps) => {
+const ProductDescription = ({
+  reviews,
+  description,
+  productId,
+}: ProductDescriptionProps) => {
   return (
     <Box p={12}>
       <Box
@@ -31,7 +36,9 @@ const ProductDescription = ({ reviews, description }: ProductDescriptionProps) =
             <Tab _selected={{ color: "#FF5733", bg: "#fff" }}>
               Additional Information
             </Tab>
-            <Tab _selected={{ color: "#FF5733", bg: "#fff" }}>Reviews [{reviews?.length}]</Tab>
+            <Tab _selected={{ color: "#FF5733", bg: "#fff" }}>
+              Reviews [{reviews?.length}]
+            </Tab>
           </TabList>
 
           <TabPanels alignItems="center">
@@ -43,7 +50,7 @@ const ProductDescription = ({ reviews, description }: ProductDescriptionProps) =
                 color="#999999"
                 px={18}
               >
-               {description}
+                {description}
               </Text>
             </TabPanel>
             <TabPanel>
@@ -65,7 +72,7 @@ const ProductDescription = ({ reviews, description }: ProductDescriptionProps) =
               </Text>
             </TabPanel>
             <TabPanel>
-              <CustomerReviews reviews={reviews}/>
+              <CustomerReviews reviews={reviews} productId={productId} />
             </TabPanel>
           </TabPanels>
         </Tabs>

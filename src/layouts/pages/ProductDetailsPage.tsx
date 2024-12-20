@@ -13,7 +13,7 @@ const ProductDetailsPage = () => {
   const { data: oneProduct, isLoading } = useSingleProduct(productId as string);
   const products = oneProduct?.data;
   const product = products?.product;
- 
+
   return (
     <Box>
       {isLoading ? (
@@ -34,6 +34,7 @@ const ProductDetailsPage = () => {
 
           <Box w={{ base: "100%", md: "55%" }}>
             <ProductDetails
+              showColor={false}
               product={{
                 _id: product?._id,
                 vendor: product?.vendor || "",
@@ -59,8 +60,15 @@ const ProductDetailsPage = () => {
           </Box>
         </Flex>
       )}
-      <ProductDescription reviews={products?.reviews} description={product?.description || ""} />
-      <RelatedProducts title="Related Products" categoryId={product?.category?._id} />
+      <ProductDescription
+        reviews={products?.reviews}
+        description={product?.description || ""}
+        productId={productId}
+      />
+      <RelatedProducts
+        title="Related Products"
+        categoryId={product?.category?._id}
+      />
     </Box>
   );
 };
