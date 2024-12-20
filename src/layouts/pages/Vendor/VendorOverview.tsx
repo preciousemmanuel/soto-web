@@ -61,6 +61,10 @@ const VendorOverview = () => {
   const allTransactionLogs = transactionLogs?.data?.data;
   const chartRef = useRef<Chart | null>(null);
 
+  const handleProductClick = (orderId: string) => {
+    navigate(`/vendor-orders/${orderId}`);
+  };
+
   const handleTimeframeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -353,7 +357,7 @@ const VendorOverview = () => {
                         <Tr>
                           <Th>Order ID</Th>
                           <Th>Order Date</Th>
-                          <Th>Price</Th>
+                          <Th>Products</Th>
                           <Th>Status</Th>
                           <Th>Action</Th>
                         </Tr>
@@ -368,9 +372,7 @@ const VendorOverview = () => {
                                   order?.createdAt
                                 ).toLocaleDateString()}
                               </Td>
-                              <Td>{`₦${(order?.grand_total / 100).toFixed(
-                                2
-                              )}`}</Td>
+                              <Td>{order?.items?.length}</Td>
                               <Td
                                 color={
                                   order?.status === "DELIVERED"
@@ -383,7 +385,7 @@ const VendorOverview = () => {
                                 {order.status}
                               </Td>
                               <Td>
-                                <Button size={buttonSize}>...</Button>
+                                <Button size={buttonSize} onClick={() => handleProductClick(order?._id)}>View</Button>
                               </Td>
                             </Tr>
                           ))

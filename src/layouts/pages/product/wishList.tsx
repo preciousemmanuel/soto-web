@@ -13,6 +13,7 @@ import {
 import { IoCartOutline } from "react-icons/io5";
 import { Product, useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 
 interface ProductCardProps {
   product: Product;
@@ -86,7 +87,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               )}
             </Box>
             <Box display="flex" alignItems="center" justifyContent="flex-end">
-              <IconButton
+              {/* <IconButton
                 aria-label="Delete wishlist"
                 icon={<DeleteIcon color="#FF5733" fontSize={20} />}
                 size="md"
@@ -94,7 +95,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 rounded="full"
                 // onClick={handleWishlistClick}
                 colorScheme="gray"
-              />
+              /> */}
             </Box>
           </Box>
         </Box>
@@ -140,8 +141,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
 export default function WishListPage() {
   const { useWishlist } = useProduct();
-  const product = useWishlist(10, 1);
-  const products = product?.data?.data?.data;
+  const { data: product, isLoading } = useWishlist(20, 1);
+  const products = product?.data?.data;
   return (
     <Box py="120px">
       <Text
@@ -157,13 +158,17 @@ export default function WishListPage() {
       </Text>
       <Box py={4} px="140px">
         <Text fontSize="lg" mb={6} textAlign={"left"} color={"#FF5733"}>
-          Wishlist (4)
+          Wishlist ({products?.length})
         </Text>
-        <SimpleGrid columns={[1, 2, 3]} spacing={0.5}>
-          {products?.map((product: Product) => (
-            <ProductCard key={product?._id} product={product} />
-          ))}
-        </SimpleGrid>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <SimpleGrid columns={[1, 2, 3]} spacing={0.5}>
+            {products?.map((product: Product) => (
+              <ProductCard key={product?._id} product={product} />
+            ))}
+          </SimpleGrid>
+        )}
       </Box>
     </Box>
   );

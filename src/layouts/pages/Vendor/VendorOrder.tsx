@@ -134,7 +134,7 @@ const VendorOrder = () => {
   };
 
   return (
-    <Box p={4} minH="100vh" textAlign="center" mt={10}>
+    <Box p={4} h="100%" textAlign="center" mt={10}>
       <Heading size="lg" mb={6} bg="#FFF2ED" px={4} py={6} color="#FF5753">
         Vendor Orders
       </Heading>
@@ -165,7 +165,7 @@ const VendorOrder = () => {
               <Tr>
                 <Th>Order ID</Th>
                 <Th>Order Date</Th>
-                <Th>Price</Th>
+                <Th>Products</Th>
                 <Th>Status</Th>
                 <Th textAlign="center">Action</Th>
               </Tr>

@@ -30,13 +30,13 @@ const ProductCard: React.FC<{
 }> = ({ product, onAddToCart }) => {
   const navigate = useNavigate();
   const [isWishlisted, setIsWishlisted] = React.useState(false);
-  const { addToWishlist, removeFromWishlist } = useProduct();
+  const { addToWishlist } = useProduct();
 
   const handleWishlistClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
       if (isWishlisted) {
-        await removeFromWishlist?.(product._id ?? "");
+        // await removeFromWishlist?.(product._id ?? "");
       } else {
         await addToWishlist?.(product._id ?? "");
       }

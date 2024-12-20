@@ -176,6 +176,7 @@ const HeroSection: React.FC = () => {
           src={AuthImage}
           bottom="-20px"
           right="0px"
+          zIndex={999}
           position="fixed"
           display={{ base: "none", md: "block" }}
         />

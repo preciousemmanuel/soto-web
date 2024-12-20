@@ -26,6 +26,7 @@ export interface Product {
   width?: number;
   weight?: number;
   discount_price?: number;
+  raw_price?: number,
   is_discounted?: boolean;
   in_stock?: boolean;
   is_verified?: boolean;
@@ -48,6 +49,7 @@ interface ProductResponse {
     };
   };
 }
+
 export const useProduct = () => {
   const toast = useToast();
   const navigate = useNavigate();
@@ -73,6 +75,7 @@ export const useProduct = () => {
     const response = await apiClient.get(url);
     return response.data;
   };
+
 
   const {
     data: PopularProducts,
@@ -119,16 +122,16 @@ export const useProduct = () => {
     }
   };
 
-  const removeFromWishlist = async (productId: string) => {
-    try {
-      const response = await apiClient.delete(
-        `/product/add-to-wishlist/${productId}`
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+  // const removeFromWishlist = async (productId: string) => {
+  //   try {
+  //     const response = await apiClient.delete(
+  //       `/product/add-to-wishlist/${productId}`
+  //     );
+  //     return response.data;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
 
   const fetchWishlist = async (limit: number, page: number) => {
     try {
@@ -153,7 +156,7 @@ export const useProduct = () => {
     mutationFn: (productId: string) => addToWishlist(productId),
     onSuccess: (response) => {
       toast({
-        title: `${response?.data?.message}`,
+        title: `${response?.message}`,
         description: "Product has been added to your wishlist",
         status: "success",
         duration: 2000,
@@ -172,22 +175,55 @@ export const useProduct = () => {
     },
   });
 
-  const removeMutation = useMutation({
-    mutationFn: (productId: string) => removeFromWishlist(productId),
+  // const removeMutation = useMutation({
+  //   mutationFn: (productId: string) => removeFromWishlist(productId),
+  //   onSuccess: (response) => {
+  //     console.log(response,"new")
+  //     toast({
+  //       title: `${response?.message}`,
+  //       description: "Product has been removed from your wishlist",
+  //       status: "success",
+  //       duration: 2000,
+  //       isClosable: true,
+  //     });
+  //   },
+  //   onError: (error:any) => {
+  //     toast({
+  //       title: `${error?.response?.data?.message}`,
+  //       description:
+  //         "An error occurred while removing the product from your wishlist.",
+  //       status: "error",
+  //       duration: 2000,
+  //       isClosable: true,
+  //     });
+  //   },
+  // });
+
+  const writeReview = async (productId: string, formData: any) => {
+    try {
+      const response = await apiClient.post(`/product/write-a-review/${productId}`, formData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const reviewMutation = useMutation({
+    mutationFn: ({ productId, formData }: { productId: string; formData: any }) => writeReview(productId, formData),
     onSuccess: (response) => {
+      console.log(response, "new");
       toast({
-        title: `${response?.data?.message}`,
-        description: "Product has been removed from your wishlist",
+        title: `${response?.message}`,
+        description: "Review created",
         status: "success",
         duration: 2000,
         isClosable: true,
       });
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       toast({
         title: `${error?.response?.data?.message}`,
-        description:
-          "An error occurred while removing the product from your wishlist.",
+        description: "An error occurred while creating the review.",
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -385,18 +421,19 @@ export const useProduct = () => {
 
   return {
     useWishlist,
+    reviewMutation,
     addToWishlist: addMutation.mutate,
-    removeFromWishlist: removeMutation.mutate,
+    // removeFromWishlist: removeMutation.mutate,
     categories,
     isLoading:
       productsLoading ||
-      addMutation.isPending ||
-      removeMutation.isPending ||
+      addMutation.isPending || reviewMutation.isPending ||
+      // removeMutation.isPending ||
       useAddNewProduct.isPending,
     error:
       productsError ||
-      addMutation.error ||
-      removeMutation.error ||
+      addMutation.error || reviewMutation.error ||
+      // removeMutation.error ||
       useAddNewProduct.error,
     handleAddToCart,
     handleRemoveFromCart,
@@ -423,7 +460,6 @@ export const useProduct = () => {
     isSearchLoading,
     searchError,
     handleSearch,
-    
     isFetched,
     searchQuery,
     currentPage: products?.data?.pagination?.currentPage || 1,

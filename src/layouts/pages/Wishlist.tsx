@@ -3,7 +3,7 @@ import WishListPage from "./product/wishList";
 
 const Wishlist = () => {
   return (
-    <Box p={4} minH="100vh" textAlign="center">
+    <Box p={4} h="100%" textAlign="center">
       <WishListPage />
     </Box>
   );
