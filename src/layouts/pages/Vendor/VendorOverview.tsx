@@ -366,7 +366,7 @@ const VendorOverview = () => {
                         {leastOrder?.length > 0 ? (
                           leastOrder?.map((order: any) => (
                             <Tr key={order?._id}>
-                              <Td>{order?._id}</Td>
+                             <Td>{order?.tracking_id}</Td>
                               <Td>
                                 {new Date(
                                   order?.createdAt

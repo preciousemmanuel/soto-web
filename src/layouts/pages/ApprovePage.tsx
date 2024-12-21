@@ -7,13 +7,24 @@ import { useCallback } from "react";
 
 export default function ApprovePage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, refetchProfile } = useAuth();
 
-  const handleApporvedPage = useCallback(() => {
+  const handleApprovedPage = useCallback(async () => {
     if (user?.vendor_status === "APPROVED") {
-      navigate("/vendor-overview");
+      try {
+        const { data, isError } = await refetchProfile();
+        if (!isError) {
+          // console.log("Data fetched successfully:", data);
+          navigate("/vendor-overview");
+        }
+      } catch (error) {
+        // console.error("Error during profile refetch:", error);
+      }
+    } else {
+      // console.warn("User status is not APPROVED:", user?.vendor_status);
     }
-  }, [user, navigate]);
+  }, [user?.vendor_status, refetchProfile, navigate]);
+
   return (
     <Box height="100%">
       <Flex dir="row" alignItems="center" gap="350px">
@@ -36,7 +47,7 @@ export default function ApprovePage() {
             ? "green"
             : user?.vendor_status === "PENDING"
             ? "#FFC900"
-            : "red"
+            : undefined
         }
         color="white"
         h="30px"
@@ -82,7 +93,7 @@ export default function ApprovePage() {
             justifySelf="center"
             borderRadius="md"
             my={8}
-            onClick={handleApporvedPage}
+            onClick={handleApprovedPage}
           >
             Check Status
           </Button>

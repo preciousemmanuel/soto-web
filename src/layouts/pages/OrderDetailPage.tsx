@@ -99,7 +99,7 @@ const OrderDetailPage = () => {
                       Order ID
                     </Text>
                     <Text fontSize="sm" fontWeight="bold">
-                      {oneOrder.data._id}
+                      {oneOrder.data?.tracking_id}
                     </Text>
                   </HStack>
                   <Divider my={4} />
