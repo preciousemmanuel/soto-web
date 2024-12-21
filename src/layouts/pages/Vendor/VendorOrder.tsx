@@ -180,7 +180,7 @@ const VendorOrder = () => {
                   );
                   return (
                     <Tr key={order?._id}>
-                      <Td>{order?._id}</Td>
+                      <Td>{order?.tracking_id}</Td>
                       <Td>{new Date(order?.createdAt).toLocaleDateString()}</Td>
                       <Td>{order?.items?.length}</Td>
                       <Td>{statusText}</Td>

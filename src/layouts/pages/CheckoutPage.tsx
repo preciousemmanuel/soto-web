@@ -1,4 +1,4 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Text,
@@ -15,8 +15,14 @@ import {
   FormControl,
   FormLabel,
   Spinner,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useOrder } from "../hooks/useOrder";
@@ -33,15 +39,20 @@ const CheckoutPage = () => {
     generateShippingRateMutation,
     shippingRate,
     isShippingRateLink,
+    addOrderError,
     shippingRateSuccess,
   } = useOrder();
   const { user } = useAuth();
   // const [couponCode, setCouponCode] = useState<string>("");
-  // console.log(shippingRate, "shipping rate");
+ 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = useRef<HTMLButtonElement>(null);
+  const [items, setItems] = useState([]);
   const [cart] = useState<CartItem[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
   );
-
+  // console.log(addOrderError,"error")
   const generatePayment = () => {
     generatePaymentLinkMutation({
       amount: newOrderResponse?.data?.grand_total,
@@ -69,26 +80,34 @@ const CheckoutPage = () => {
     return acc;
   }, []);
 
-  const handleShippingRate = async () => {
-    const items = cart.map((product) => ({
-      product_id: product.productId,
+  // const handleShippingRate = async () => {
+
+  //   const createShippingRate = {
+  //     items,
+  //   };
+  //   try {
+  //     await generateShippingRateMutation(createShippingRate);
+  //   } catch (error) {
+  //     console.error("Error creating order:", error);
+  //   }
+  // };
+  useEffect(() => {
+    const items: any = cart.map((product) => ({
+      _id: product.productId,
       quantity: product.quantity,
     }));
-
-    const createShippingRate = {
-      items,
-    };
-    try {
-      await generateShippingRateMutation(createShippingRate);
-    } catch (error) {
-      console.error("Error creating order:", error);
-    }
-  };
+    setItems(items);
+  }, []);
 
   useEffect(() => {
-    // handleShippingRate();
-    console.log("Hellooooo");
-  }, []);
+    generateShippingRateMutation({ items });
+  }, [items]);
+
+  useEffect(() => {
+    if (addOrderSuccess) {
+      setIsOpen(true);
+    }
+  }, [addOrderSuccess]);
 
   const handleCheckout = async () => {
     const items = cart.map((product) => ({
@@ -103,8 +122,7 @@ const CheckoutPage = () => {
     };
 
     try {
-      await generateShippingRateMutation({ items });
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
       await addNewOrderMutation(orderData);
     } catch (error) {
       console.error("Error during checkout:", error);
@@ -202,22 +220,26 @@ const CheckoutPage = () => {
                 onChange={(e) => setCouponCode(e.target.value)}
               />
             </FormControl> */}
-            {!addOrderSuccess ? (
-              <Button
-                color="white"
-                bg="#FF5733"
-                borderRadius="full"
-                mt={6}
-                w="full"
-                h="55px"
-                size="lg"
-                loadingText="Creating order..."
-                isLoading={isAddingOrder || isShippingRateLink}
-                onClick={handleCheckout}
-              >
-                Create Order
-              </Button>
-            ) : (
+            {/* {!addOrderSuccess ? ( */}
+            <Button
+              color="white"
+              bg="#FF5733"
+              borderRadius="full"
+              mt={6}
+              w="full"
+              h="55px"
+              size="lg"
+              loadingText={
+                isAddingOrder
+                  ? "Creating order..."
+                  : "Generating shipping rate..."
+              }
+              isLoading={isAddingOrder || isShippingRateLink}
+              onClick={handleCheckout}
+            >
+              Create Order
+            </Button>
+            {/* ) : (
               <Button
                 color="white"
                 bg="#FF5733"
@@ -232,7 +254,7 @@ const CheckoutPage = () => {
               >
                 Pay now
               </Button>
-            )}
+            )} */}
           </Box>
         </Box>
 
@@ -257,7 +279,7 @@ const CheckoutPage = () => {
                   {product.productName} x {product.quantity}
                 </Text>
                 <Text>
-                  ₦{(product.price * product.quantity).toLocaleString()}
+                  ₦{(product.price * product.quantity)?.toLocaleString()}
                 </Text>
               </Flex>
             ))}
@@ -269,12 +291,12 @@ const CheckoutPage = () => {
 
             <Flex justifyContent="space-between" mt={4}>
               <Text>Subtotal</Text>
-              <Text>₦{calculateSubtotal(shippingRate).toLocaleString()}</Text>
+              <Text>₦{calculateSubtotal(shippingRate)?.toLocaleString()}</Text>
             </Flex>
 
             <Flex justifyContent="space-between" mt={2}>
               <Text fontWeight="medium">Total Amount</Text>
-              <Text>₦{calculateSubtotal(shippingRate).toLocaleString()}</Text>
+              <Text>₦{calculateSubtotal(shippingRate)?.toLocaleString()}</Text>
             </Flex>
           </Box>
 
@@ -390,6 +412,42 @@ const CheckoutPage = () => {
         </Box>
       </Box>
       {/* <PaymentMethod /> */}
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+          <CloseIcon />
+        </AlertDialogHeader>
+        <AlertDialogOverlay />
+        <AlertDialogContent mt="220px" h="150px">
+          <AlertDialogBody
+            py="20px"
+            fontSize="18px"
+            fontWeight="medium"
+            textAlign="center"
+          >
+            Proceed to make payment!!!
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Button
+              color="white"
+              bg="#FF5733"
+              borderRadius="full"
+              // mt={2}
+              w="full"
+              h="55px"
+              size="lg"
+              loadingText="Making payment..."
+              isLoading={isGeneratingPaymentLink}
+              onClick={generatePayment}
+            >
+              Pay now
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Box>
   );
 };

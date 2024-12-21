@@ -134,7 +134,7 @@ export const useAuth = () => {
         isClosable: true,
         position: "top-right",
       });
-      navigate("/auth/otp-page");
+      navigate("/");
     },
     onError: (error: any) => {
       // console.error("Signup failed:", error);
