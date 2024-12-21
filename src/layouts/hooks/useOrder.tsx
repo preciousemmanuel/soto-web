@@ -8,7 +8,6 @@ export const useOrder = () => {
   const [shippingRate, setShippingRate] = useState(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
-
   const clearCart = () => {
     localStorage.removeItem("cart");
   };
@@ -104,8 +103,12 @@ export const useOrder = () => {
     return response.data;
   };
 
-  const fetchOneVendorOrder = async (orderId: string): Promise<{ data: any }> => {
-    const response = await apiClient.get(`/order/view-one-by-vendor/${orderId}`);
+  const fetchOneVendorOrder = async (
+    orderId: string
+  ): Promise<{ data: any }> => {
+    const response = await apiClient.get(
+      `/order/view-one-by-vendor/${orderId}`
+    );
     return response.data;
   };
 
@@ -142,6 +145,7 @@ export const useOrder = () => {
         });
         return;
       }
+
       toast({
         title: `${response?.message}`,
         description: "Your custom order has been created successfully.",
@@ -179,7 +183,7 @@ export const useOrder = () => {
       });
       setNewOrderResponse(res);
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       toast({
         title: `${error?.response?.data?.message}`,
         description: "An error occurred while adding your order.",
@@ -198,7 +202,6 @@ export const useOrder = () => {
   } = useMutation({
     mutationFn: generatePaymentLink,
     onSuccess: (res) => {
-      // console.log(res);
       if (res?.data?.data && res?.data?.data?.authorization_url) {
         clearCart();
         window.location.href = res?.data?.data?.authorization_url;
@@ -212,7 +215,7 @@ export const useOrder = () => {
         });
       }
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       toast({
         title: `${error?.response?.data?.message}`,
         description: "An error occurred while generating your payment link.",
@@ -233,7 +236,8 @@ export const useOrder = () => {
     onSuccess: (res) => {
       setShippingRate(res?.data?.shipping_cost);
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
+      // console.log(error,"shipping error")
       toast({
         title: `${error?.response?.data?.message}`,
         description: "An error occurred while generating your shipping rate.",
@@ -243,8 +247,6 @@ export const useOrder = () => {
       });
     },
   });
-
-  
 
   const {
     data: orders,
@@ -294,7 +296,7 @@ export const useOrder = () => {
     return useQuery({
       queryKey: ["vendor-orders", orderId],
       queryFn: () => fetchOneVendorOrder(orderId),
-      enabled: (isVendorAuthenticated),
+      enabled: isVendorAuthenticated,
     });
   };
 
