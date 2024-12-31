@@ -10,7 +10,7 @@ import {
   Divider,
   Icon,
   Image,
-  Link,
+  Link
 } from "@chakra-ui/react";
 import {
   FaFacebook,
@@ -24,7 +24,7 @@ import {
 import { useState } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import AuthImage from "../assets/auth.png";
-import Logo from "../assets/soto.png";
+import Logo from "../assets/soto.svg";
 import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "../layouts/hooks/useAuth";
 
@@ -72,9 +72,9 @@ const Login = () => {
             <Icon as={FaGlobe} mr={1} />
             <Text>ENG</Text>
           </Flex>
-          <Text fontWeight="500" color="#FF5733">
-            Buy & sell on Soto
-          </Text>
+          <RouterLink to="/auth/vendor-signup">
+            <Text color="#FF5733" textDecoration="underline" fontWeight="bold">Sell on Soto</Text>
+          </RouterLink>
         </Flex>
       </Flex>
 

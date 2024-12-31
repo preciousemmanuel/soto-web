@@ -22,7 +22,7 @@ import {
 } from "react-icons/fa";
 import { useState } from "react";
 import AuthImage from "../assets/auth.png";
-import Logo from "../assets/soto.png";
+import Logo from "../assets/soto.svg";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -101,9 +101,9 @@ const Signup = () => {
             <Icon as={FaGlobe} mr={1} />
             <Text>ENG</Text>
           </Flex>
-          <Text fontWeight="500" color="#FF5733">
-            Buy & sell on Soto
-          </Text>
+          <RouterLink to="/auth/vendor-signup">
+            <Text color="#FF5733" textDecoration="underline" fontWeight="bold">Sell on Soto</Text>
+          </RouterLink>
         </Flex>
       </Flex>
 

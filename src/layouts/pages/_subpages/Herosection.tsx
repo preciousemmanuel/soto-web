@@ -7,6 +7,7 @@ import {
   Button,
   Image,
   ResponsiveValue,
+  Link,
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { motion, AnimatePresence, Variant } from "framer-motion";
@@ -171,7 +172,8 @@ const HeroSection: React.FC = () => {
           Custom Order
         </Button>
       </Box>
-      <Image
+      <Link href="https://wa.me/message/7V3CGNZN5GPMO1" isExternal>
+        <Image
           // flex="1"
           src={AuthImage}
           bottom="-20px"
@@ -180,6 +182,7 @@ const HeroSection: React.FC = () => {
           position="fixed"
           display={{ base: "none", md: "block" }}
         />
+      </Link>
       <Box flex="1" maxW={{ base: "100%", md: "500px" }}>
         <Swiper
           effect="fade"

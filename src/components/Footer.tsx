@@ -12,7 +12,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
-import Logo from "../assets/soto.png";
+import Logo from "../assets/soto.svg";
 
 const Footer = () => {
   return (
@@ -28,7 +28,7 @@ const Footer = () => {
       >
         {/* First Section: Logo and Subscription */}
         <VStack spacing={4} align="start" w={{ base: "100%", md: "25%" }}>
-          <Image src={Logo} alt="Logo" boxSize="50px" mb={4} />
+          <Image src={Logo} alt="Logo" boxSize="80px" mb={4} />
           <Flex gap={2}>
             <Input
               placeholder="Enter your email"

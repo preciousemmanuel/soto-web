@@ -16,11 +16,9 @@ import {
     Badge,
   } from "@chakra-ui/react";
   import { Link, useNavigate } from "react-router-dom";
-  import Logo from "../assets/soto.png";
+  import Logo from "../assets/soto.svg";
   import { MdAccountCircle, MdNotifications } from "react-icons/md";
   import { HamburgerIcon } from "@chakra-ui/icons";
-  import { useState } from "react";
-  import AccountModal from "../features/modals/AccountModal";
   import NotificationModal, { Notification } from "../features/modals/NotificationModal";
 import { CiLocationOn } from "react-icons/ci";
 import { TbWorld } from "react-icons/tb";
@@ -67,7 +65,9 @@ import { useVendor } from "../layouts/hooks/useVendor";
             <TbWorld color="gray" />
             <Text color="gray.500">ENG</Text>
           </Flex>
-          <Text color="gray.500">Buy & sell on Soto</Text>
+          <Link to="/auth/signup">
+            <Text color="#FF5733" fontWeight="bold" textDecoration="underline">Buy on Soto</Text>
+          </Link>
         </Flex>
       </Flex>
         {/* Main navigation bar */}
@@ -81,7 +81,7 @@ import { useVendor } from "../layouts/hooks/useVendor";
         >
           {/* Logo */}
           <Box >
-            <Image src={Logo} width={{ base: "40px", md: "50px" }} cursor="pointer" onClick={() => navigate("/")}/>
+            <Image src={Logo} width={{ base: "40px", md: "70px" }} cursor="pointer" onClick={() => navigate("/vendor-overview")}/>
           </Box>
   
           {/* Desktop Navigation links */}

@@ -32,7 +32,7 @@ import { useVendor } from "../../hooks/useVendor";
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import Chart from "chart.js/auto";
-import { Product } from "../../hooks/useProduct";
+// import { Product } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 import PaginationControls from "../../../features/helpers/Pagination";
@@ -312,7 +312,14 @@ const VendorOverview = () => {
                                 color="gray.05"
                               >
                                 Status:{" "}
-                                <Text color="green">{product?.status}</Text>
+                                <Text color={
+                                  product?.status === "PENDING" ? "yellow.500" :
+                                  product?.status === "APPROVED" ? "green.500" :
+                                  product?.status === "DECLINED" ? "red.500" :
+                                  "gray.500"
+                                }>
+                                  {product?.status}
+                                </Text>
                               </Text>
                               <Text
                                 fontSize="sm"

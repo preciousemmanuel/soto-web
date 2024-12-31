@@ -19,6 +19,7 @@ import {
 } from "react-icons/fa";
 import { useAuth } from "../layouts/hooks/useAuth";
 import AuthImage from "../assets/Wave.png";
+import { Link } from "react-router-dom";
 
 const ResetPassword = () => {
   const [otp, setOtp] = useState("");
@@ -61,9 +62,9 @@ const ResetPassword = () => {
             <Icon as={FaGlobe} mr={1} />
             <Text>ENG</Text>
           </Flex>
-          <Text fontWeight="500" color="#FF5733">
-            Buy & sell on Soto
-          </Text>
+          <Link to="/auth/vendor-signup">
+            <Text color="#FF5733" textDecoration="underline" fontWeight="bold">Sell on Soto</Text>
+          </Link>
         </Flex>
       </Flex>
       <Flex

@@ -16,7 +16,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { TbWorld } from "react-icons/tb";
-import Logo from "../assets/soto.png";
+import Logo from "../assets/soto.svg";
 import { IoCartOutline } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 import { HamburgerIcon } from "@chakra-ui/icons";
@@ -36,6 +36,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
   const [cartQuantity, setCartQuantity] = useState(0);
+  const [bgColor, setBgColor] = useState("white");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -68,8 +69,26 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const middleOfPage = document.documentElement.scrollHeight / 10;
+
+      if (scrollPosition >= middleOfPage) {
+        setBgColor("#FFF2ED");
+      } else {
+        setBgColor("white");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <Box bg="#FFF2ED" position="fixed" width="100%" zIndex="1000">
+    <Box bg={bgColor} position="fixed" width="100%" zIndex="1000">
       {/* Top bar */}
       <Flex
         py={2}
@@ -94,7 +113,9 @@ const Navbar = () => {
             <TbWorld color="gray" />
             <Text color="gray.500">ENG</Text>
           </Flex>
-          <Text color="gray.500">Buy & sell on Soto</Text>
+          <Link to="/auth/vendor-signup">
+            <Text color="#FF5733" textDecoration="underline" fontWeight="bold">Sell on Soto</Text>
+          </Link>
         </Flex>
       </Flex>
 
@@ -105,11 +126,11 @@ const Navbar = () => {
         justifyContent="space-between"
         alignItems="center"
         flexWrap="wrap"
-        bg="white"
+        bg={bgColor}
       >
         {/* Logo */}
         <Box >
-            <Image src={Logo} width={{ base: "40px", md: "50px" }} cursor="pointer" onClick={() => navigate("/")}/>
+            <Image src={Logo} width={{ base: "40px", md: "70px" }} cursor="pointer" onClick={() => navigate("/")}/>
           </Box>
   
 
@@ -157,7 +178,7 @@ const Navbar = () => {
                 placeholder="Enter list"
                 onChange={handleInputChange}
                 value={inputValue}
-                bg="#FFF2ED"
+                bg="white"
                 borderRadius="md"
                 width="200px"
                 fontSize="12px"

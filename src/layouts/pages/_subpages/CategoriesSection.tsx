@@ -24,7 +24,7 @@ export interface CartItem {
   quantity: number;
 }
 
-const ProductCard: React.FC<{
+export const ProductCard: React.FC<{
   product: Product;
   onAddToCart: (productId: string) => void;
 }> = ({ product, onAddToCart }) => {

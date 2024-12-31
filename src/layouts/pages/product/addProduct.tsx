@@ -126,9 +126,7 @@ const AddProduct: React.FC = () => {
                 borderRadius="15px"
                 placeholder="Enter quantity"
                 type="number"
-                {...register("product_quantity", {
-                  required: true,
-                })}
+                {...register("product_quantity")}
               />
             </FormControl>
           </HStack>
@@ -142,9 +140,7 @@ const AddProduct: React.FC = () => {
                 borderRadius="15px"
                 placeholder="Enter price"
                 type="number"
-                {...register("unit_price", {
-                  required: true,
-                })}
+                {...register("unit_price")}
               />
             </FormControl>
             <FormControl>
@@ -155,9 +151,7 @@ const AddProduct: React.FC = () => {
                 borderRadius="15px"
                 placeholder="Enter weight"
                 type="number"
-                {...register("weight", {
-                  required: true,
-                })}
+                {...register("weight")}
               />
             </FormControl>
             <FormControl>
@@ -244,6 +238,7 @@ const AddProduct: React.FC = () => {
               <IconButton
                 variant="outline"
                 aria-label="Images"
+                onClick={() => document.getElementById('file-upload')?.click()}
                 fontSize="50px"
                 icon={<FaRegImages color="#979797" />}
               />
