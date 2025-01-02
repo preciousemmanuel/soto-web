@@ -14,7 +14,7 @@ import { useAuth } from "../layouts/hooks/useAuth";
 import { FaGlobe, FaMapMarkerAlt } from "react-icons/fa";
 import AuthImage from "../assets/for.png";
 import OtpInput from "./OtpInupt";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ForgetPassword = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
@@ -69,9 +69,9 @@ const ForgetPassword = () => {
             <Icon as={FaGlobe} mr={1} />
             <Text>ENG</Text>
           </Flex>
-          <Text fontWeight="500" color="#FF5733">
-            Buy & sell on Soto
-          </Text>
+          <Link to="/auth/vendor-signup">
+            <Text color="#FF5733" textDecoration="underline" fontWeight="bold">Sell on Soto</Text>
+          </Link>
         </Flex>
       </Flex>
       <Flex
