@@ -105,8 +105,6 @@ const ProductCard: React.FC<{ product: any,onClick: any }> = ({ product, onClick
       <Text fontSize="lg" fontWeight="semibold" mt={1}>
         {product?.product_name}
       </Text>
-      <Text fontSize="sm">{product?.description}</Text>
-
       <HStack mt={2} spacing={1} mx={{ base: "auto", md: 0 }}>
         {Array(5)
           .fill("")

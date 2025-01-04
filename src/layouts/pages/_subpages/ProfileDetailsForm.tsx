@@ -3,25 +3,28 @@ import { useAuth } from "../../hooks/useAuth";
 import { useEffect } from "react";
 
 const ProfileDetailsForm = () => { 
-  // const { user, refetchProfile,loading } = useAuth();
+  const { user, refetchProfile, loading } = useAuth();
 
-  // useEffect(() => {
-  //   refetchProfile();
-  // }, []);
+  useEffect(() => {
+    refetchProfile();
+  }, []);
 
-  // console.log(user,"")
-  
-  
+
+
   return (
   <Box p={12} bg="" borderRadius="lg" width={{ base: "100%", md: "100%" }} display="flex" flexDirection="column" alignItems="center">
     <Text color="#FF5733" fontWeight="bold" textAlign="left" fontSize={"17px"} mb={4} textDecoration="underline" fontFamily={"Poppins"}>
       Edit Profile
     </Text>
     <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={6}>
-      {["Full Name", "Phone Number", "Email", "Password", "Shipping Address", "City"].map((label, index) => (
+      {["FirstName", "LastName", "Email", "ShippingAddress"].map((label, index) => (
         <FormControl key={index}>
           <FormLabel>{label}</FormLabel>
-          <Input borderRadius="md" rounded={"lg"}/>
+          <Input 
+            borderRadius="md" 
+            rounded={"lg"} 
+            value={label.includes("ShippingAddress") ? user?.ShippingAddress?.country : user?.[label as keyof typeof user]} 
+          />
         </FormControl>
       ))}
     </Grid>
