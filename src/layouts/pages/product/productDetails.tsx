@@ -241,7 +241,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 +
               </Button>
             </Box>
-            <Button
+            {/* <Button
               border="1px solid black"
               bg="transparent"
               w={{ base: "100%", md: "170px" }}
@@ -255,7 +255,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
               }
             >
               Add To Cart
-            </Button>
+            </Button> */}
             <Button
               bg="#FF5733"
               color="white"

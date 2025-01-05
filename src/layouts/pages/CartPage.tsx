@@ -3,11 +3,12 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useProduct } from "../hooks/useProduct";
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useOrder } from "../hooks/useOrder";
 
 const CartPage = () => {
   const navigate = useNavigate();
+  const location = useLocation()
 
   const [cart, setCart] = useState<CartItem[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
@@ -41,6 +42,7 @@ const CartPage = () => {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
+
 
   return (
     <Box bg="" p={[4, 6, 8]} mt={120}>
@@ -184,7 +186,10 @@ const CartPage = () => {
               borderRadius="md"
               variant="outline"
               h="54px"
-              onClick={() => navigate("/")}
+              onClick={() => {
+                const origin = location.state?.from?.pathname;
+                navigate(origin);
+              }}
             >
               Continue Shopping
             </Button>

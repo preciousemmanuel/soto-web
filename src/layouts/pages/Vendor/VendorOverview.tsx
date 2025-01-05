@@ -61,6 +61,8 @@ const VendorOverview = () => {
   const allTransactionLogs = transactionLogs?.data?.data;
   const chartRef = useRef<Chart | null>(null);
 
+  // console.log(topProduct,"PRODUCT")
+
   const handleProductClick = (orderId: string) => {
     navigate(`/vendor-orders/${orderId}`);
   };
@@ -256,7 +258,7 @@ const VendorOverview = () => {
                           {chartData ? (
                             <Line data={chartData} options={options} />
                           ) : (
-                            <Text>Loading chart data...</Text>
+                            <LoadingSpinner/>
                           )}
                         </Box>
                       </Box>
@@ -328,7 +330,7 @@ const VendorOverview = () => {
                               >
                                 Price:{" "}
                                 {product?.unit_price
-                                  ? `₦${(product?.unit_price / 100).toFixed(2)}`
+                                  ? `₦${product?.unit_price}`
                                   : "N/A"}
                               </Text>
                             </Box>

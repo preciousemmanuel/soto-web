@@ -37,6 +37,10 @@ const AddProduct: React.FC = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      if (e.target.files.length > 5) {
+        alert("You can only upload a maximum of 5 images.");
+        return;
+      }
       setSelectedImages(e.target.files);
       const filesArray = Array.from(e.target.files);
       const previews = filesArray.map((file) => URL.createObjectURL(file));

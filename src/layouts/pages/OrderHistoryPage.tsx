@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Heading,
@@ -20,8 +20,12 @@ import PaginationControls from "../../features/helpers/Pagination";
 function OrderHistoryPage() {
   const [activeStatus, setActiveStatus] = useState("BOOKED");
   const navigate = useNavigate();
-  const { orders, isFetchingOrders, ordersPagination, handlePageChange } =
+  const { orders, isFetchingOrders, refetchOrders, ordersPagination, handlePageChange } =
     useOrder();
+
+  useEffect(() => {
+    refetchOrders();
+  }, []);
 
   const orderData = orders?.data?.data;
   const filteredOrders = orderData?.filter(

@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Heading, Image, Text } from "@chakra-ui/react";
-import Logo from "../../assets/soto.png";
+import Logo from "../../assets/soto.svg";
 import AuthImage from "../../assets/aov.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
@@ -27,20 +27,20 @@ export default function ApprovePage() {
 
   return (
     <Box height="100%">
-      <Flex dir="row" alignItems="center" gap="350px">
+      <Flex dir="row" alignItems="center">
         <Image
           src={Logo}
           alt="Logo"
-          py={8}
+          py={4}
           px={8}
           width="120px"
           onClick={() => navigate("/")}
           cursor="pointer"
         />
-        <Heading size="lg" textAlign="center">
-          Awaiting Admin Approval!!
-        </Heading>
       </Flex>
+      <Heading size="lg" textAlign="center" py={8}>
+          Awaiting Admin Approval!!!
+        </Heading>
       <Flex
         bg={
           user?.vendor_status === "APPROVED"
