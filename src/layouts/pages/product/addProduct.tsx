@@ -18,7 +18,7 @@ import {
 import { useForm } from "react-hook-form";
 import { FaRegImages } from "react-icons/fa";
 import { useProduct } from "../../hooks/useProduct";
-import { useNavigate } from "react-router-dom";
+
 
 const AddProduct: React.FC = () => {
   const {
@@ -28,7 +28,6 @@ const AddProduct: React.FC = () => {
   } = useForm();
   const { useAddNewProduct, isLoading, createProductFormData, categories } =
     useProduct();
-  const navigate = useNavigate();
   const category = categories?.data?.data;
   const [isInStock, setIsInStock] = useState(true);
   const [isDiscounted, setIsDiscounted] = useState(false);
@@ -48,14 +47,35 @@ const AddProduct: React.FC = () => {
     }
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data:any) => {
     if (selectedImages) {
+      const {
+        product_name,
+        category,
+        product_quantity,
+        unit_price,
+        weight,
+        discount_price,
+        length,
+        height,
+        width,
+        description
+      } = data;
+
       const newProduct = {
-        ...data,
+        product_name,
+        category,
+        product_quantity,
+        unit_price,
+        description,
         is_discounted: isDiscounted,
         in_stock: isInStock ? "YES" : "NO",
+        ...(weight && weight !== "" && { weight: Number(weight) }),
+        ...(length && length !== "" && { length: Number(length) }),
+        ...(height && height !== "" && { height: Number(height) }),
+        ...(width && width !== "" && { width: Number(width) }),
+        ...(discount_price && { discount_price: Number(discount_price) })
       };
-
       const formData = createProductFormData(newProduct, selectedImages);
       useAddNewProduct.mutate(formData);
     }
@@ -213,6 +233,7 @@ const AddProduct: React.FC = () => {
 
           <FormControl>
             <FormLabel>Upload Product Image</FormLabel>
+            <Text fontSize={12} py={4}>To upload multiple images, please select the multiple images from the image dialog</Text>
             <Input
               type="file"
               multiple

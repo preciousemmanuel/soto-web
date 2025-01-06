@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Flex,
@@ -22,6 +22,10 @@ const OrderDetailPage = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const { useSingleOrder } = useOrder();
   const { data: oneOrder, isPending } = useSingleOrder(orderId as string);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [orderId]);
 
   if (!oneOrder || !oneOrder.data) {
     return <LoadingSpinner />;

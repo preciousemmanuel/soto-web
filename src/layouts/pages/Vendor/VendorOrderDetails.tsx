@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Text,
@@ -23,6 +23,10 @@ const OrderDetails = () => {
   if (!oneOrder || !oneOrder?.data) {
     return <LoadingSpinner />;
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
  
   const {

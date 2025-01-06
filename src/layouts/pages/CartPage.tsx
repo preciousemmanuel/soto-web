@@ -10,9 +10,16 @@ const CartPage = () => {
   const navigate = useNavigate();
   const location = useLocation()
 
+  
+
   const [cart, setCart] = useState<CartItem[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [cart]);
+
   
   const { handleRemoveFromCart,clearAllCart } = useProduct();
 

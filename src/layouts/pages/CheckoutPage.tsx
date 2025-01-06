@@ -52,6 +52,11 @@ const CheckoutPage = () => {
   const [cart] = useState<CartItem[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // console.log(addOrderError,"error")
   const generatePayment = () => {
     generatePaymentLinkMutation({

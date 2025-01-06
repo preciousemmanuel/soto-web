@@ -26,6 +26,10 @@ function CustomOrder() {
     const { createCustomOrders, isCreatingOrder, orderSuccess, refetchOrders } =
       useOrder();
 
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
+
     const onSubmit = async (data: any) => {
       try {
         const formattedData = {

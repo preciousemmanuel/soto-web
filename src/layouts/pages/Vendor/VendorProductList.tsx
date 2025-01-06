@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useVendor } from "../../hooks/useVendor";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 import PaginationControls from "../../../features/helpers/Pagination";
+import { useEffect } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -31,6 +32,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
     navigate(`/vendor-product/${product?._id}`);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
 
   return (
     <Box p={4} w="300px">

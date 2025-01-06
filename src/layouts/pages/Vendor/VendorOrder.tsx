@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -31,6 +31,11 @@ const VendorOrder = () => {
   const filteredOrders = orderData?.filter(
     (order: any) => order.status === activeStatus
   );
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
 
   const handleProductClick = (orderId: string) => {
     navigate(`/vendor-orders/${orderId}`);

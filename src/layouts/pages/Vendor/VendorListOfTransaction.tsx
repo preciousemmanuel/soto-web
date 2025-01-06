@@ -20,6 +20,7 @@ import { useVendor } from "../../hooks/useVendor";
 import { useAuth } from "../../hooks/useAuth";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 import PaginationControls from "../../../features/helpers/Pagination";
+import { useEffect } from "react";
 
 const VendorListOfTransaction = () => {
   const navigate = useNavigate();
@@ -31,6 +32,10 @@ const VendorListOfTransaction = () => {
   } = useVendor();
   const { user } = useAuth();
   const transactions = transactionLogs?.data?.data || [];
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Box
