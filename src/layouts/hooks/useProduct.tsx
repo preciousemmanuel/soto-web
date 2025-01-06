@@ -419,6 +419,25 @@ export const useProduct = () => {
     setCurrentPage(1);
   };
 
+  const fetchBusinessCategories = async (limit: number, page: number) => {
+    try {
+      const response = await apiClient.get(
+        `/business/fetch-business-categories?limit=${limit}&page=${page}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const {
+    data: businessCategories,
+    isLoading: businessCategoriesLoading,
+  } = useQuery({
+    queryKey: ["businessCategories", currentPage, itemsPerPage],
+    queryFn: () => fetchBusinessCategories(itemsPerPage, currentPage),
+  });
+
   return {
     useWishlist,
     reviewMutation,
@@ -508,6 +527,8 @@ export const useProduct = () => {
       pageSize: searchResults?.data?.pagination?.pageSize || 10,
       hasNextPage: searchResults?.data?.pagination?.hasNext || false,
     },
+    businessCategories,
+    businessCategoriesLoading,
   };
   
 };
