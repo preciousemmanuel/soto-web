@@ -96,14 +96,13 @@ const Vendorsignup: React.FC = () => {
       const response = await apiClient.post("/business/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-
         },
       });
-     
+
       return response.data;
     },
     onSuccess: (response) => {
-        localStorage.setItem("vendorToken", response.data.Token);
+      localStorage.setItem("vendorToken", response.data.Token);
       toast({
         title: `${response?.message}`,
         description: "Your business has been registered successfully!",
@@ -148,9 +147,7 @@ const Vendorsignup: React.FC = () => {
     formik.setFieldValue("business_logo", file);
   };
 
-  const { categories } = useProduct();
-
-  // const category = categories?.data?.data;
+  const { businessCategories: categories } = useProduct();
 
   return (
     <Box width="100%">
