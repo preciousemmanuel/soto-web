@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import { Suspense } from "react";
 import LoadingSpinner from "../features/helpers/LoadingSpinner";
 // import Navbar from "../components/Navbar";
+import VendorFooter from "../components/VendorFooter";
 import SellerNavbar from "../components/SellerNavbar";
 
 const SellerLayout = () => (
@@ -16,7 +17,7 @@ const SellerLayout = () => (
         <Outlet />
       </Suspense>
     </Box>
-    <Footer />
+    <VendorFooter />
   </Box>
 );
 

@@ -1,6 +1,3 @@
-// InventoryPage.js
-
-import { SetStateAction, useState } from "react";
 import { Box, Flex, Text } from "@chakra-ui/react";
 import SortModal from "../../../features/modals/SortModal";
 import SummaryBoxes from "../_subpages/SummaryBox";

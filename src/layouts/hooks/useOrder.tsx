@@ -202,9 +202,10 @@ export const useOrder = () => {
   } = useMutation({
     mutationFn: generatePaymentLink,
     onSuccess: (res) => {
-      if (res?.data?.data && res?.data?.data?.authorization_url) {
+      // console.log(res?.data?.data.data.authorization_url)
+      if (res?.data?.data) {
         clearCart();
-        window.location.href = res?.data?.data?.authorization_url;
+        window.location.href = res?.data?.data?.data?.authorization_url;
       } else {
         toast({
           title: "Error",

@@ -34,6 +34,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     navigate(`/products/${product?._id}`);
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
   return (
     <Box p={4} w="300px">
       <Box

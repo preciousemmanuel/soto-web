@@ -4,6 +4,7 @@ import ProductDetails from "../product/productDetails";
 import { useParams } from "react-router-dom";
 import { useProduct } from "../../hooks/useProduct";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
+import { useEffect } from "react";
 
 const VendorProductDetailsPage = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -11,6 +12,11 @@ const VendorProductDetailsPage = () => {
   const { data: oneProduct, isLoading } = useSingleProduct(productId as string);
   const products = oneProduct?.data;
   const product = products?.product;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [productId]);
+
  
   return (
     <Box>

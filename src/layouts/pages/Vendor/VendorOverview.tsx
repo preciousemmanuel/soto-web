@@ -61,6 +61,9 @@ const VendorOverview = () => {
   const allTransactionLogs = transactionLogs?.data?.data;
   const chartRef = useRef<Chart | null>(null);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   // console.log(topProduct,"PRODUCT")
 
   const handleProductClick = (orderId: string) => {
@@ -274,7 +277,7 @@ const VendorOverview = () => {
                       p={4}
                     >
                       <Flex justify="space-between" align="center" mb={4}>
-                        <Text fontSize="md" fontWeight="500">
+                        <Text fontSize="md" fontWeight="900">
                           Top Products
                         </Text>
                         <Flex
@@ -287,7 +290,7 @@ const VendorOverview = () => {
                         </Flex>
                       </Flex>
                       {topProduct?.length > 0 ? (
-                        topProduct?.slice(0, 7).map((product: any) => (
+                        topProduct?.slice(0, 4).map((product: any) => (
                           <Flex
                             key={product?._id}
                             justify="space-between"
@@ -329,8 +332,8 @@ const VendorOverview = () => {
                                 color="gray.500"
                               >
                                 Price:{" "}
-                                {product?.unit_price
-                                  ? `₦${product?.unit_price}`
+                                {product?.raw_price
+                                  ? `₦${product?.raw_price}`
                                   : "N/A"}
                               </Text>
                             </Box>

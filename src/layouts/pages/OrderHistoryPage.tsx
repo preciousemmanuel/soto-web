@@ -20,8 +20,17 @@ import PaginationControls from "../../features/helpers/Pagination";
 function OrderHistoryPage() {
   const [activeStatus, setActiveStatus] = useState("BOOKED");
   const navigate = useNavigate();
-  const { orders, isFetchingOrders, refetchOrders, ordersPagination, handlePageChange } =
-    useOrder();
+  const {
+    orders,
+    isFetchingOrders,
+    refetchOrders,
+    ordersPagination,
+    handlePageChange,
+  } = useOrder();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     refetchOrders();
@@ -95,7 +104,12 @@ function OrderHistoryPage() {
       case "CANCELLED":
         return {
           status: (
-            <Text color="red.500" fontSize="18px" fontWeight="semibold" onClick={() => handleProductClick(orderId)}>
+            <Text
+              color="red.500"
+              fontSize="18px"
+              fontWeight="semibold"
+              onClick={() => handleProductClick(orderId)}
+            >
               CANCELLED
             </Text>
           ),
@@ -123,7 +137,7 @@ function OrderHistoryPage() {
               size="sm"
               onClick={() => handleProductClick(orderId)}
             >
-             View
+              View
             </Button>
           ),
         };
@@ -131,8 +145,6 @@ function OrderHistoryPage() {
         return {};
     }
   };
-
- 
 
   return (
     <Box p={4} minH="100%" textAlign="center" mt={120} my={20}>

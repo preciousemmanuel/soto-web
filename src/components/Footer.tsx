@@ -21,8 +21,7 @@ const Footer = () => {
   const navigate = useNavigate();
   const { categories, setSelectedCategoryId, refetchProductsByCategory } =
     useProduct();
-  const { isAuthenticated } = useAuth();
-
+  
   const fetchProductsByCategory = async (categoryId: string) => {
     try {
       setSelectedCategoryId(categoryId);
@@ -34,7 +33,7 @@ const Footer = () => {
   };
   return (
     <Box bg="#FFF2ED" py={10} h="100%">
-      {isAuthenticated && (
+    
         <Flex
           px={12}
           direction={{ base: "column", md: "row" }}
@@ -153,73 +152,75 @@ const Footer = () => {
             ))}
           </Flex>
         </Flex>
-      )}
+    
 
       {/* Bottom Section: Terms, Social Media, Copyright */}
-      <Stack
-        direction={{ base: "column", md: "row" }}
-        align="center"
-        justify="space-between"
-        borderTop="1px solid #FB9984"
-        spacing={5}
-        pt={6}
-      >
-        <HStack spacing={4} pl={12}>
-          <Link
-            fontSize="sm"
-            href="/terms-condition"
-            color="gray.500"
-            _hover={{ color: "orange.500" }}
-          >
-            Terms & Conditions
-          </Link>
-          <Link
-            fontSize="sm"
-            href="/privacy-policy"
-            color="gray.500"
-            _hover={{ color: "orange.500" }}
-          >
-            Privacy Policy
-          </Link>
-        </HStack>
+      
+        <Stack
+          direction={{ base: "column", md: "row" }}
+          align="center"
+          justify="space-between"
+          borderTop="1px solid #FB9984"
+          spacing={5}
+          pt={6}
+        >
+          <HStack spacing={4} pl={12}>
+            <Link
+              fontSize="sm"
+              href="/terms-condition"
+              color="gray.500"
+              _hover={{ color: "orange.500" }}
+            >
+              Terms & Conditions
+            </Link>
+            <Link
+              fontSize="sm"
+              href="/privacy-policy"
+              color="gray.500"
+              _hover={{ color: "orange.500" }}
+            >
+              Privacy Policy
+            </Link>
+          </HStack>
 
-        <HStack spacing={4}>
-          <Icon
-            as={FaFacebookF}
-            boxSize={6}
-            color="white"
-            _hover={{ color: "blue.600" }}
-            py={1}
-            bg={"#FF5733"}
-            rounded={"full"}
-            cursor="pointer"
-          />
-          <Icon
-            as={FaTwitter}
-            boxSize={6}
-            color="white"
-            _hover={{ color: "blue.400" }}
-            py={1}
-            bg={"#FF5733"}
-            rounded={"full"}
-            cursor="pointer"
-          />
-          <Icon
-            as={FaLinkedinIn}
-            boxSize={6}
-            color="white"
-            _hover={{ color: "blue.700" }}
-            py={1}
-            bg={"#FF5733"}
-            rounded={"full"}
-            cursor="pointer"
-          />
-        </HStack>
+          <HStack spacing={4}>
+            <Icon
+              as={FaFacebookF}
+              boxSize={6}
+              color="white"
+              _hover={{ color: "blue.600" }}
+              py={1}
+              bg={"#FF5733"}
+              rounded={"full"}
+              cursor="pointer"
+            />
+            <Icon
+              as={FaTwitter}
+              boxSize={6}
+              color="white"
+              _hover={{ color: "blue.400" }}
+              py={1}
+              bg={"#FF5733"}
+              rounded={"full"}
+              cursor="pointer"
+            />
+            <Icon
+              as={FaLinkedinIn}
+              boxSize={6}
+              color="white"
+              _hover={{ color: "blue.700" }}
+              py={1}
+              bg={"#FF5733"}
+              rounded={"full"}
+              cursor="pointer"
+            />
+          </HStack>
 
-        <Text fontSize="sm" color="gray.500" textAlign="center" pr={12}>
-          Soto© {new Date().getFullYear()} All rights reserved
-        </Text>
-      </Stack>
+          <Text fontSize="sm" color="gray.500" textAlign="center" pr={12}>
+            Soto© {new Date().getFullYear()} All rights reserved
+          </Text>
+        </Stack>
+    
     </Box>
   );
 };

@@ -305,7 +305,7 @@ const Vendorsignup: React.FC = () => {
                       {...formik.getFieldProps("category")}
                     >
                       {categories?.data?.data.map((category: any) => (
-                        <option key={category?._id} value={category?.name}>
+                        <option key={category?._id} value={category?._id}>
                           {category?.name}
                         </option>
                       ))}

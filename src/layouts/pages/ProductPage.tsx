@@ -2,6 +2,7 @@ import { Box, Image, Text, Stack, Flex, SimpleGrid } from "@chakra-ui/react";
 import { Product, useProduct } from "../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
 import PaginationControls from "../../features/helpers/Pagination";
+import { useEffect } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -25,6 +26,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     }
     navigate(`/products/${product?._id}`);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
 
   return (
     <Box p={4} w="300px">
