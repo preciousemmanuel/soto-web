@@ -36,6 +36,8 @@ const VendorOrder = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // console.log(orderData,"ORDER-DATA")
+
 
   const handleProductClick = (orderId: string) => {
     navigate(`/vendor-orders/${orderId}`);
@@ -139,7 +141,7 @@ const VendorOrder = () => {
   };
 
   return (
-    <Box p={4} h="100%" textAlign="center" mt={10}>
+    <Box p={4} h="100vh" textAlign="center" mt={10}>
       <Heading size="lg" mb={6} bg="#FFF2ED" px={4} py={6} color="#FF5753">
         Vendor Orders
       </Heading>

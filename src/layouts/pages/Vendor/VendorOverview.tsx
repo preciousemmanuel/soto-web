@@ -64,7 +64,7 @@ const VendorOverview = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  // console.log(topProduct,"PRODUCT")
+  // console.log(vendorOverviewData,"overview")
 
   const handleProductClick = (orderId: string) => {
     navigate(`/vendor-orders/${orderId}`);
@@ -206,7 +206,7 @@ const VendorOverview = () => {
                           title="Sold"
                           value={`₦${(
                             vendorOverviewData?.data?.total_unremitted || 0
-                          ).toFixed(2)}`}
+                          )}`}
                           growth="+0%"
                           description="Amount To Be Remitted"
                         />
@@ -214,7 +214,7 @@ const VendorOverview = () => {
                           title="On Market"
                           value={`₦${(
                             vendorOverviewData?.data?.total_in_stock || 0
-                          ).toFixed(2)}`}
+                          )}`}
                           growth="+0%"
                           description="Amount In Stock"
                         />

@@ -150,7 +150,7 @@ const VendorWithdraw = () => {
        </Box>}
       </Box>
 
-      <Box bg="#FFF2ED" px={20} py={40} h="100%">
+      <Box bg="#FFF2ED" px={20} py={40} h="100vh">
         <Text fontSize="lg" fontWeight="bold" color="#00000" mb={4}>
           Choose Account
         </Text>
