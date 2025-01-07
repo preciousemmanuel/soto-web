@@ -41,7 +41,7 @@ const VendorListOfTransaction = () => {
     <Box
       px="20px"
       py="150px"
-      h="100%"
+      h="100vh"
       bg="linear-gradient(161.91deg, #FF5733 -17.77%, #FFF8F7 36.84%, #FFFFFF 91.46%)"
     >
       <IconButton

@@ -16,7 +16,7 @@ const VendorInventory = () => {
   // };
 
   return (
-    <Box p={4} height="100%">
+    <Box p={4} height="100vh">
       <Flex justify="flex-end" mb={4}>
         <SortModal />
       </Flex>

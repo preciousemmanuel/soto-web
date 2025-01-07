@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Image, Text, useToast } from "@chakra-ui/react";
 import Logo from "../../assets/soto.svg";
 import AuthImage from "../../assets/aov.png";
 import { useNavigate } from "react-router-dom";
@@ -8,20 +8,32 @@ import { useCallback } from "react";
 export default function ApprovePage() {
   const navigate = useNavigate();
   const { user, refetchProfile } = useAuth();
-
+  const toast = useToast();
+console.log(user,"USERR")
   const handleApprovedPage = useCallback(async () => {
     if (user?.vendor_status === "APPROVED") {
       try {
-        const { data, isError } = await refetchProfile();
+        const { data, isError,refetch } = await refetchProfile();
+        
         if (!isError) {
-          // console.log("Data fetched successfully:", data);
+         console.log(data) 
           navigate("/vendor-overview");
         }
+        refetch()
       } catch (error) {
-        // console.error("Error during profile refetch:", error);
+        console.error("Error during profile refetch:", error);
       }
     } else {
-      // console.warn("User status is not APPROVED:", user?.vendor_status);
+      toast({
+        title: `Status: ${user?.vendor_status}`,
+        description: user?.vendor_status === "PENDING" 
+          ? "Your business registration is still pending approval."
+          : "Your business registration status needs attention.",
+        status: user?.vendor_status === "PENDING" ? "warning" : "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top",
+      });
     }
   }, [user?.vendor_status, refetchProfile, navigate]);
 
@@ -38,7 +50,7 @@ export default function ApprovePage() {
           cursor="pointer"
         />
       </Flex>
-      <Heading size="lg" textAlign="center" py={8}>
+      <Heading size="lg" textAlign="center" py={2}>
           Awaiting Admin Approval!!!
         </Heading>
       <Flex
@@ -58,22 +70,25 @@ export default function ApprovePage() {
         alignItems="center"
         justifyContent="center"
         mx="auto"
+        mb={4}
       >
         {user?.vendor_status}
       </Flex>
       <Flex
         direction={{ base: "column" }}
-        minHeight="calc(100vh - 56px)"
-        // justifyContent="center"
-        // alignItems="center"
+        minHeight="100%"
+        position="relative"
       >
         <Box
-          flex="1"
           bgImage={AuthImage}
-          bgSize="30%"
+          bgSize="contain"
           bgRepeat="no-repeat"
           bgPosition="center"
           display={{ base: "none", md: "block" }}
+          height="300px"
+          width="100%"
+          opacity={0.8}
+          mb={8}
         />
 
         <Box
@@ -81,6 +96,7 @@ export default function ApprovePage() {
           flexDir="column"
           justifyContent="center"
           alignItems="center"
+          mt={{ base: 20, md: 0 }}
         >
           <Text>
             Your registration will be approved by the admin within a short time
@@ -92,7 +108,7 @@ export default function ApprovePage() {
             width="300px"
             justifySelf="center"
             borderRadius="md"
-            my={8}
+            my={2}
             onClick={handleApprovedPage}
           >
             Check Status

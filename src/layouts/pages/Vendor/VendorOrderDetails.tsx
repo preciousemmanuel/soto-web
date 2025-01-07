@@ -24,10 +24,10 @@ const OrderDetails = () => {
     return <LoadingSpinner />;
   }
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // }, []);
+// console.log(oneOrder,"ONE ORDER")
  
   const {
     data: {
@@ -37,7 +37,7 @@ const OrderDetails = () => {
 
     
   return (
-    <Box p={8} h="100%" fontFamily="Poppins" mt={100}>
+    <Box p={8} h="100vh" fontFamily="Poppins" mt={100}>
     <Heading
       size="lg"
       mb={6}
