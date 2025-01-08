@@ -69,9 +69,12 @@ const ProductDetails: React.FC<ProductDetails> = ({
   total_reviews,
   showOthers = true,
   showColor = true,
-  // onAddToCart,
 }) => {
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(() => {
+    const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existingItem = cartItems.find((item: any) => item.productId === product?._id);
+    return existingItem ? existingItem.quantity : 0;
+  });
   const navigate = useNavigate();
   const { updateCart } = useProduct();
   const [selectedSize, setSelectedSize] = useState("");
@@ -80,10 +83,10 @@ const ProductDetails: React.FC<ProductDetails> = ({
     style: "currency",
     currency: "NGN",
   }).format(product?.unit_price || 0);
-  const [cart] = useState<[]>(JSON.parse(localStorage.getItem("cart") || "[]"));
+
   useEffect(() => {
-    return updateCart(product || {}, quantity);
-  }, [quantity, product?._id || "", updateCart]);
+    updateCart(product || {}, quantity);
+  }, [quantity, product, updateCart]);
 
   return (
     <VStack align="start" spacing={5}>
@@ -215,7 +218,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
               mb={{ base: 3, md: 0 }}
             >
               <Button
-                onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
+                onClick={() => setQuantity((prev:any) => Math.max(prev - 1, 1))}
                 isDisabled={
                   quantity <= 1 ||
                   (product?.product_quantity !== undefined &&
@@ -228,7 +231,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
               <Text>{quantity}</Text>
               <Button
                 onClick={() =>
-                  setQuantity((prev) =>
+                  setQuantity((prev:any) =>
                     Math.min(prev + 1, product?.product_quantity ?? 0)
                   )
                 }

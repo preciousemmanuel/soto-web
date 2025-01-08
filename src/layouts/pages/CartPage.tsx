@@ -194,8 +194,11 @@ const CartPage = () => {
               variant="outline"
               h="54px"
               onClick={() => {
-                const origin = location.state?.from?.pathname;
-                navigate(origin);
+                if (window.history.length > 2) {
+                  navigate(-1);
+                } else {
+                  navigate('/product-list');
+                }
               }}
             >
               Continue Shopping

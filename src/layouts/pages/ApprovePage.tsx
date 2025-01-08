@@ -9,17 +9,25 @@ export default function ApprovePage() {
   const navigate = useNavigate();
   const { user, refetchProfile } = useAuth();
   const toast = useToast();
-console.log(user,"USERR")
+// console.log(user,"USERR")
   const handleApprovedPage = useCallback(async () => {
     if (user?.vendor_status === "APPROVED") {
       try {
-        const { data, isError,refetch } = await refetchProfile();
-        
+        const { data, isError } = await refetchProfile(); 
         if (!isError) {
-         console.log(data) 
+        //  console.log(data) 
           navigate("/vendor-overview");
         }
-        refetch()
+        toast({
+          title: `Status: ${data?.vendor_status}`,
+          description: data?.vendor_status === "APPROVED" 
+            ? "Your business registration is approved."
+            : undefined,
+          status: data?.vendor_status === "APPROVED" ? "success" : undefined,
+          duration: 2000,
+          isClosable: true,
+          position: "top",
+        });
       } catch (error) {
         console.error("Error during profile refetch:", error);
       }
