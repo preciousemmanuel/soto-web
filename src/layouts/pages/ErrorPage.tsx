@@ -11,7 +11,6 @@ const ErrorPage = () => {
       justifyContent="center"
       alignItems="center"
       spacing={6}
-      
       px={4}
     >
       {/* <Image
@@ -19,7 +18,12 @@ const ErrorPage = () => {
         alt="Not found character"
         boxSize="100px"
       /> */}
-      <Heading  size="xl" textAlign="center" fontFamily={"Poppins"} color={"red.400"}>
+      <Heading
+        size="xl"
+        textAlign="center"
+        fontFamily={"Poppins"}
+        color={"red.400"}
+      >
         Oops! Page Not Found
       </Heading>
       <Text color="gray.600" fontSize="md" textAlign="center" maxW="400px">
@@ -27,8 +31,17 @@ const ErrorPage = () => {
           error?.message ||
           "The page you’re looking for doesn’t exist. Let's get you back on track!"}
       </Text>
-      <Button bg="black" color={"white"} size="md" onClick={() => navigate("/")}>
-        Return to Home
+      <Button
+        bg="black"
+        color={"white"}
+        size="md"
+        onClick={() => {
+          if (window.history.length > 2) {
+            navigate(-1);
+          }
+        }}
+      >
+        Back
       </Button>
     </VStack>
   );
