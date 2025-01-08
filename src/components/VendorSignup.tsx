@@ -138,7 +138,16 @@ const Vendorsignup: React.FC = () => {
       business_logo: null,
     },
     validationSchema,
-    onSubmit: (values) => signupMutation.mutate(values),
+    onSubmit: (values) => {
+
+      const formattedValues = {
+        ...values,
+        phone_number: values.phone_number.startsWith('+234') 
+          ? values.phone_number 
+          : `+234${values.phone_number}`
+      };
+      signupMutation.mutate(formattedValues);
+    },
   });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -270,9 +279,12 @@ const Vendorsignup: React.FC = () => {
                     <InputLeftElement pointerEvents="none" mt="1.5">
                       <Icon as={FaPhone} color="gray.500" />
                     </InputLeftElement>
+                    <InputLeftElement pointerEvents="none" ml="9" mt="1.5">
+                      <Text color="black">+234</Text>
+                    </InputLeftElement>
                     <Input
-                      // name="phone_number"
-                      placeholder="+234810000000"
+                      pl="24"
+                      placeholder="8100000000"
                       height="52px"
                       bg="#F8EDEA80"
                       borderRadius="xl"

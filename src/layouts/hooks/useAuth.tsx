@@ -24,7 +24,7 @@ export const useAuth = () => {
     queryKey: ["profile"],
     queryFn: async () => {
       const response = await apiClient.get("/user/profile");
-      console.log(response.data.data)
+      // console.log(response.data.data)
       const {
         FirstName,
         LastName,

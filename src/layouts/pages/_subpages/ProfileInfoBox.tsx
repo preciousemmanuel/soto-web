@@ -29,6 +29,12 @@ const ProfileInfoBox = ({ onSelectOption }: any) => {
     refetchProfile();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
+
   if (loading) {
     return (
       <Flex justify="center" align="center" minH="200px">
@@ -57,7 +63,7 @@ const ProfileInfoBox = ({ onSelectOption }: any) => {
       <Flex align="center" mb={4}>
         <Avatar size="md" name={`${user.FirstName} ${user.LastName}`} />
         <Box ml={4}>
-          <Text fontWeight="bold">{`${user.FirstName} ${user.LastName}`}</Text>
+          <Text fontWeight="bold">{`${user.FirstName}`}</Text>
           <Text color="gray.500" fontSize={"sm"}>
             {user.Email}
           </Text>
