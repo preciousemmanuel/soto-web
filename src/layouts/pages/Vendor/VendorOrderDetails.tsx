@@ -20,15 +20,16 @@ const OrderDetails = () => {
   const { useSingleVendorOrder } = useOrder();
   const { data: oneOrder, isPending } = useSingleVendorOrder(orderId as string);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   if (!oneOrder || !oneOrder?.data) {
     return <LoadingSpinner />;
   }
 
-  // useEffect(() => {
-  //   window.scrollTo(0, 0);
-  // }, []);
-// console.log(oneOrder,"ONE ORDER")
- 
+  
+
   const {
     data: {
       status,
@@ -71,7 +72,7 @@ const OrderDetails = () => {
                 }
                 px={4} py={1} borderRadius="md"
               >
-                {status}
+                {status.replace("_", " ")}
               </Badge>
             </HStack>
 
