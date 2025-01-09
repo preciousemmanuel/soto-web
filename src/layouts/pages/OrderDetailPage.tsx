@@ -20,6 +20,7 @@ import LoadingSpinner from "../../features/helpers/LoadingSpinner";
 const OrderDetailPage = () => {
   const navigate = useNavigate();
   const { orderId } = useParams<{ orderId: string }>();
+  console.log(orderId)
   const { useSingleOrder } = useOrder();
   const { data: oneOrder, isPending } = useSingleOrder(orderId as string);
 
@@ -38,7 +39,7 @@ const OrderDetailPage = () => {
   const trackingSteps = [
     
     { label: "Order Booked", active: status === "BOOKED" },
-    { label: "Order Shipped", active: status === "SHIPPED" },
+    { label: "Order Shipped", active: status === "SHIPPED" || status === "PICKED_UP" },
     { label: "Order Delivered", active: status === "DELIVERED" },
     ...(status === "CANCELLED" ? [{ label: "Order Cancelled", active: true }] : []),
     ...(status === "FAILED" ? [{ label: "Order Failed", active: true }] : []),
@@ -189,7 +190,7 @@ const OrderDetailPage = () => {
                 </VStack>
               </Box>
               <Button
-                onClick={() => navigate("/raise-dispute")}
+                onClick={() => navigate(`/raise-dispute/${orderId}`)}
                 mt={6}
                 color="white"
                 bg="#FF5753"

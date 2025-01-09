@@ -308,6 +308,40 @@ export const useVendor = () => {
     setCurrentPage(1);
   };
 
+  const createDispute = async (disputeData: any) => {
+    try {
+      const response = await apiClient.post('/dispute/create', disputeData,{
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const useCreateDispute = useMutation({
+    mutationFn: createDispute,
+    onSuccess: (res) => {
+      toast({
+        title: "Dispute Created",
+        description: "Your dispute has been created successfully",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+        position: "top"
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: error?.response?.data?.message || "Error Creating Dispute",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "top"
+      });
+    },
+  });
+
   return {
     vendorOverviewData,
     isLoading:
@@ -393,5 +427,6 @@ export const useVendor = () => {
       pageSize: notifications?.data?.pagination?.pageSize || 10,
       hasNextPage: notifications?.data?.pagination?.hasNext || false,
     },
+    useCreateDispute,
   };
 };
