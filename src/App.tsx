@@ -209,7 +209,7 @@ const App = () => {
           element: <WithdrawalSuccessMessage />,
         },
         {
-          path: "raise-dispute",
+          path: "raise-dispute/:orderId",
           element: <RaiseDisputePage />,
         },
       ],

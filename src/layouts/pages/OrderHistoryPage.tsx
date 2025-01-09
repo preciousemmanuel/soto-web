@@ -65,11 +65,11 @@ function OrderHistoryPage() {
             </Button>
           ),
         };
-      case "SHIPPED":
+      case "PICKED_UP":
         return {
           status: (
             <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
-              SHIPPED
+              PICKED UP
             </Text>
           ),
           action: (
@@ -163,7 +163,7 @@ function OrderHistoryPage() {
 
       <Flex justifyContent={"left"} alignItems={"left"}>
         <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">
-          {["BOOKED", "SHIPPED", "DELIVERED", "CANCELLED", "FAILED"].map(
+          {["BOOKED", "PICKED_UP", "DELIVERED", "CANCELLED", "FAILED"].map(
             (buttonStatus) => (
               <Button
                 key={buttonStatus}
@@ -173,7 +173,7 @@ function OrderHistoryPage() {
                 size="md"
                 onClick={() => setActiveStatus(buttonStatus)}
               >
-                {buttonStatus}
+                {buttonStatus.replace("_", " ")}
               </Button>
             )
           )}
