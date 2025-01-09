@@ -137,7 +137,7 @@ const VendorOverview = () => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <Box p={4} height="100%" mt={28} px={16}>
+        <Box p={4} height="100%" mt="130px" px={16}>
           <Flex justify="space-between" align="center" mb={8} flexWrap="wrap">
             <Flex align="center" gap={2} mb={[4, 0]}>
               <Avatar size="lg" src={businessData?.business_logo} />
@@ -394,7 +394,7 @@ const VendorOverview = () => {
                                     : "yellow.500"
                                 }
                               >
-                                {order.status}
+                                {order.status.replace("_", " ")}
                               </Td>
                               <Td>
                                 <Button size={buttonSize} onClick={() => handleProductClick(order?._id)}>View</Button>

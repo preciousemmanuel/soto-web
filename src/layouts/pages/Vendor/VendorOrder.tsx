@@ -17,6 +17,7 @@ import {
 import { useOrder } from "../../hooks/useOrder";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 import PaginationControls from "../../../features/helpers/Pagination";
+import { useVendor } from "../../hooks/useVendor";
 
 const VendorOrder = () => {
   const [activeStatus, setActiveStatus] = useState("BOOKED");
@@ -27,7 +28,9 @@ const VendorOrder = () => {
     ordersVendorPagination,
     handlePageChange,
   } = useOrder();
+  const {vendorOverviewData} = useVendor()
   const orderData = ordersVendor?.data?.data;
+  const vendorId = vendorOverviewData?.data?.user?._id
   const filteredOrders = orderData?.filter(
     (order: any) => order.status === activeStatus
   );
@@ -64,11 +67,11 @@ const VendorOrder = () => {
             </Button>
           ),
         };
-      case "SHIPPED":
+      case "PICKED_UP":
         return {
           status: (
             <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
-              SHIPPED
+              PICKED UP
             </Text>
           ),
           action: (
@@ -76,7 +79,7 @@ const VendorOrder = () => {
               color="white"
               bg="#FF5733"
               size="sm"
-              // onClick={() => handleProductClick(orderId)}
+              onClick={() => handleProductClick(orderId)}
             >
               View
             </Button>
@@ -91,12 +94,11 @@ const VendorOrder = () => {
           ),
           action: (
             <Button
-              colorScheme="green"
-              variant="outline"
+              colorScheme="red"
               size="sm"
               onClick={() => handleProductClick(orderId)}
             >
-              View Details
+              View
             </Button>
           ),
         };
@@ -111,9 +113,9 @@ const VendorOrder = () => {
             <Button
               colorScheme="red"
               size="sm"
-              onClick={() => alert("Cancelled Order")}
+              onClick={() => handleProductClick(orderId)}
             >
-              Delete
+              View
             </Button>
           ),
         };
@@ -129,9 +131,9 @@ const VendorOrder = () => {
               colorScheme="red"
               variant="outline"
               size="sm"
-              onClick={() => alert("Failed Order")}
+              onClick={() => handleProductClick(orderId)}
             >
-              Retry
+              View
             </Button>
           ),
         };
@@ -147,7 +149,7 @@ const VendorOrder = () => {
       </Heading>
       <Flex justifyContent="left">
         <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">
-          {["BOOKED", "SHIPPED", "DELIVERED", "CANCELLED", "FAILED"].map(
+          {["BOOKED", "PICKED_UP", "DELIVERED", "CANCELLED", "FAILED"].map(
             (buttonStatus) => (
               <Button
                 key={buttonStatus}
@@ -157,7 +159,7 @@ const VendorOrder = () => {
                 size="md"
                 onClick={() => setActiveStatus(buttonStatus)}
               >
-                {buttonStatus}
+                {buttonStatus.replace("_", " ")}
               </Button>
             )
           )}
@@ -189,7 +191,9 @@ const VendorOrder = () => {
                     <Tr key={order?._id}>
                       <Td>{order?.tracking_id}</Td>
                       <Td>{new Date(order?.createdAt).toLocaleDateString()}</Td>
-                      <Td>{order?.items?.length}</Td>
+                      <Td>
+                        {order?.items?.filter((item: any) => item.vendor === vendorId)?.length}
+                      </Td>
                       <Td>{statusText}</Td>
                       <Td textAlign="center">{action}</Td>
                     </Tr>

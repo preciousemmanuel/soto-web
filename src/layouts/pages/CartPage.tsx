@@ -8,9 +8,7 @@ import { useOrder } from "../hooks/useOrder";
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const location = useLocation()
-
-  
+  const location = useLocation();
 
   const [cart, setCart] = useState<CartItem[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
@@ -20,8 +18,7 @@ const CartPage = () => {
     window.scrollTo(0, 0);
   }, [cart]);
 
-  
-  const { handleRemoveFromCart,clearAllCart } = useProduct();
+  const { handleRemoveFromCart, clearAllCart } = useProduct();
 
   const updateCart = () => {
     const updatedCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -50,10 +47,8 @@ const CartPage = () => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-
   return (
     <Box bg="" p={[4, 6, 8]} mt={120}>
-     
       <Text
         textAlign="center"
         bg={"#FFF2ED"}
@@ -193,13 +188,7 @@ const CartPage = () => {
               borderRadius="md"
               variant="outline"
               h="54px"
-              onClick={() => {
-                if (window.history.length > 2) {
-                  navigate(-1);
-                } else {
-                  navigate('/product-list');
-                }
-              }}
+              onClick={() => { navigate("/product-list")}}
             >
               Continue Shopping
             </Button>
