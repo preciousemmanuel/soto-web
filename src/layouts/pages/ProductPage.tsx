@@ -10,6 +10,9 @@ export default function ProductPage() {
   const { products, productsPagination, handlePageChange,handleAddToCart } =
     useProduct();
   // console.log(products,"pro")
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Box py="120px">
@@ -25,7 +28,7 @@ export default function ProductPage() {
         Product List
       </Text>
       <Box py={8} px="140px">
-        <SimpleGrid columns={[1, 2, 3]} spacing={0.5}>
+        <SimpleGrid columns={[1, 2, 3]} spacing={9}>
           {products.map((product) => (
            <ProductCard key={product._id} product={product} onAddToCart={handleAddToCart}/>
           ))}
