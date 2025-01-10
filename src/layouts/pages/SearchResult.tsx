@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Text, Spinner, Image, Flex, Stack, SimpleGrid, HStack } from '@chakra-ui/react';
 import { Product, useProduct } from '../hooks/useProduct';
 import PaginationControls from '../../features/helpers/Pagination';
-import { StarIcon } from '@chakra-ui/icons';
+// import { StarIcon } from '@chakra-ui/icons';
 import { ProductCard } from './_subpages/CategoriesSection';
 
 
@@ -24,6 +24,10 @@ const SearchResults = () => {
       handleSearch(query);
     }
   }, [location.search, handleSearch]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (isSearchLoading) {
     return (
