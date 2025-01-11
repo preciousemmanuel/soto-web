@@ -20,7 +20,6 @@ import LoadingSpinner from "../../features/helpers/LoadingSpinner";
 const OrderDetailPage = () => {
   const navigate = useNavigate();
   const { orderId } = useParams<{ orderId: string }>();
-  console.log(orderId)
   const { useSingleOrder } = useOrder();
   const { data: oneOrder, isPending } = useSingleOrder(orderId as string);
 
