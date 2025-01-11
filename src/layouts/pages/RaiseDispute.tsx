@@ -48,17 +48,15 @@ const RaiseDisputePage = () => {
   };
 
   const onSubmit = async (data: DisputeFormData) => {
-    try {
-      const disputeData = {
-        title: data.title,
-        description: data.description,
-        order: orderId || ""
-      };
-     const formData = createProductFormData(disputeData,selectedImages)
-      await useCreateDispute.mutate(formData);
-    } catch (error) {
-      console.error("Error submitting dispute:", error);
-    }
+    const disputeData = {
+      title: data.title,
+      description: data.description,
+      order: orderId || ""
+    };
+    
+    const formData = createProductFormData(disputeData, selectedImages || []);
+    
+    await useCreateDispute.mutate(formData);
   };
   useEffect(() => {
     if(success){
@@ -96,14 +94,14 @@ const RaiseDisputePage = () => {
       </Box>
 
       <VStack spacing={6} align="stretch" maxWidth="700px" mx="auto" py="40px">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form >
           <Flex gap={20} w="full">
             <FormControl isInvalid={!!errors.title}>
               <FormLabel fontSize="sm" color="gray.700">
                 Dispute Title
               </FormLabel>
               <Input
-                {...register("title", { required: "Title is required" })}
+                {...register("title")}
                 w="full"
                 placeholder="Dispute Title"
                 borderColor="gray.300"
@@ -142,7 +140,7 @@ const RaiseDisputePage = () => {
             </FormLabel>
             <Textarea
               {...register("description", {
-                required: "description is required",
+                // required: "description is required",
               })}
               height="200px"
               placeholder="Type your description"
@@ -160,7 +158,8 @@ const RaiseDisputePage = () => {
             size="lg"
             w="full"
             borderRadius="md"
-            type="submit"
+            // type="submit"
+            onClick={handleSubmit(onSubmit)}
             loadingText="Submitting..."
             isLoading={loading}
           >
