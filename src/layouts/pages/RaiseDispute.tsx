@@ -11,6 +11,7 @@ import {
   IconButton,
   Heading,
   Flex,
+  Select,
 } from "@chakra-ui/react";
 import { FiPaperclip } from "react-icons/fi";
 import { useVendor } from "../hooks/useVendor";
@@ -100,14 +101,20 @@ const RaiseDisputePage = () => {
               <FormLabel fontSize="sm" color="gray.700">
                 Dispute Title
               </FormLabel>
-              <Input
+              <Select
                 {...register("title")}
                 w="full"
-                placeholder="Dispute Title"
+                placeholder="Select Dispute Category"
                 borderColor="gray.300"
                 _focus={{ borderColor: "orange.400" }}
                 _hover={{ borderColor: "gray.400" }}
-              />
+              >
+                <option value="Order and Delivery">Order and Delivery</option>
+                <option value="Payment and Refund">Payment and Refund</option>
+                <option value="Product quality and authenticity">Product quality and authenticity</option>
+                <option value="Warranty and Return">Warranty and Return</option>
+                <option value="Fraud and security">Fraud and security</option>
+              </Select>
             </FormControl>
             <HStack gap="16px" w="full" alignItems="center">
               <FormLabel fontSize="sm" color="gray.700">
