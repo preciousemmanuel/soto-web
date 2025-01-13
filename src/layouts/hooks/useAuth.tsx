@@ -126,6 +126,9 @@ export const useAuth = () => {
       UserType: string;
     }) => apiClient.post("/user/signup", userData),
     onSuccess: (response) => {
+      const { Token } = response.data.data;
+      localStorage.setItem("userToken", Token);
+      setIsAuthenticated(true);
       toast({
         title: `${response?.data?.message}`,
         description: "Welcome! Please login to continue.",
