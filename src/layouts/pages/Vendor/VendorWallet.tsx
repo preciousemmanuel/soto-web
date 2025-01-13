@@ -35,7 +35,7 @@ const VendorWallet = () => {
     <Box
       px="50px"
       py="150px"
-      h="100vh"
+      h="100%"
       bg="linear-gradient(161.91deg, #FF5733 -17.77%, #FFF8F7 36.84%, #FFFFFF 91.46%)"
     >
       <HStack mb={6} spacing={4} py={2} alignItems="center">
@@ -132,7 +132,7 @@ const VendorWallet = () => {
           </HStack>
          {isLoading ? <LoadingSpinner/> : 
           transactions?.length > 0 ? (
-            <Box p={4} bg="white" borderRadius="md" boxShadow="md">
+            <Box p={4} bg="white" borderRadius="md" boxShadow="md" height="100%">
               {transactions?.slice(0, 10)?.map((trx:any) => (
                 <HStack key={trx._id} mt={4} spacing={4}>
                   <Icon

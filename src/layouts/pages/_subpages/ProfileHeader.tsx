@@ -8,7 +8,7 @@ const ProfileHeader = () => {
 
 
   return (
-    <Flex justify="space-between" align="center" p={8} mb={6} bg="#FFEFEB">
+    <Flex justify="space-between" align="center" p={8}  mb={6} bg="#FFEFEB">
       <Heading size="lg" fontFamily={"Poppins"} color={"#FF5733"}>
         Profile
       </Heading>

@@ -63,8 +63,9 @@ const VendorWithdraw = () => {
       templateColumns={{ base: "1fr", md: "1fr 1fr" }}
       gap={8}
       // px={8}
+      h="100%"
     >
-      <Box bg="white" px={120} h="100%" py="100px">
+      <Box bg="white" px={120} h="100vh" py="100px">
         <Text fontSize="24px" fontWeight="bold" color="#00000" my={8}>
           Withdraw to bank
         </Text>
@@ -159,7 +160,7 @@ const VendorWithdraw = () => {
         ) : (
           <RadioGroup onChange={setSelectedAccount} value={selectedAccount}>
             <Stack spacing={4}>
-              {myBankDetails?.data?.map((bank: any) => (
+              {myBankDetails?.data?.slice(0, 3).map((bank: any) => (
                 <Box
                   key={bank.account_number}
                   p={4}

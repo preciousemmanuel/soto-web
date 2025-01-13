@@ -13,7 +13,7 @@ import {
   Grid,
   GridItem,
 } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { FaEye } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { useOrder } from "../hooks/useOrder";
@@ -49,7 +49,36 @@ function CustomOrder() {
 
     return (
       <Box w="full" mx="auto" bg="" rounded="lg" boxShadow="">
+        
+        <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
+        bg="#FFF2ED"
+        p={6}
+        mt={20}
+        mb={6}
+      >
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
         <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+            Create Order
+        </Heading>
+      </Flex>
+
+        {/* <Heading
           size="lg"
           textAlign="center"
           color={"#FF5733"}
@@ -63,8 +92,8 @@ function CustomOrder() {
           fontWeight={"bold"}
           fontSize={"22px"}
         >
-          Create Order
-        </Heading>
+          
+        </Heading> */}
         <Text textAlign="center" mb={8} color={"gray"}>
           Kindly enter your order details
         </Text>

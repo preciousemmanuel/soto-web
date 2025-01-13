@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const [selectedOption, setSelectedOption] = useState("Edit Profile");
 
   return (
-    <Box mt={32}>
+    <Box mt="200px">
       <ProfileHeader />
       <Flex direction={{ base: "column", md: "row" }} px={8} py={6} gap={6}>
         <ProfileInfoBox onSelectOption={setSelectedOption} />

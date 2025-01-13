@@ -18,6 +18,7 @@ import { useOrder } from "../../hooks/useOrder";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 import PaginationControls from "../../../features/helpers/Pagination";
 import { useVendor } from "../../hooks/useVendor";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const VendorOrder = () => {
   const [activeStatus, setActiveStatus] = useState("BOOKED");
@@ -144,9 +145,34 @@ const VendorOrder = () => {
 
   return (
     <Box p={4} h="100vh" textAlign="center" mt={10}>
-      <Heading size="lg" mb={6} bg="#FFF2ED" px={4} py={6} color="#FF5753">
-        Vendor Orders
-      </Heading>
+     <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
+        bg="#FFF2ED"
+        p={6}
+        mt={20}
+        mb={6}
+      >
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+        <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+            Orders
+        </Heading>
+      </Flex>
+
       <Flex justifyContent="left">
         <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">
           {["BOOKED", "PICKED_UP", "DELIVERED", "CANCELLED", "FAILED"].map(

@@ -1,14 +1,16 @@
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box, Button } from "@chakra-ui/react";
 import ProductImageGallery from "./product/productImage";
 import ProductDetails from "./product/productDetails";
 import ProductDescription from "./product/productDescription";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useProduct } from "../hooks/useProduct";
 import RelatedProducts from "./product/relatedProduct";
 import LoadingSpinner from "../../features/helpers/LoadingSpinner";
 import { useEffect } from "react";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const ProductDetailsPage = () => {
+  const navigate = useNavigate();
   const { productId } = useParams<{ productId: string }>();
   const { useSingleProduct } = useProduct();
   const { data: oneProduct, isLoading } = useSingleProduct(productId as string);
@@ -17,10 +19,27 @@ const ProductDetailsPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [productId]);
+  }, []);
 
   return (
-    <Box>
+    <Box pt={14}>
+       <Flex 
+        align="start" 
+        justify="start" 
+        position="relative"
+        mt={140}
+        mx={6}
+      >
+        <Button 
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+      </Flex>
+      <Box mt={-120}>
       {isLoading ? (
         <Box display="flex" justifyContent="center" alignItems="center">
           <LoadingSpinner />
@@ -65,6 +84,7 @@ const ProductDetailsPage = () => {
           </Box>
         </Flex>
       )}
+      </Box>
       <ProductDescription
         reviews={products?.reviews}
         description={product?.description || ""}

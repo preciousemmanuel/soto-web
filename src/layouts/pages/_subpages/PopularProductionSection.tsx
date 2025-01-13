@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Mousewheel } from 'swiper/modules';
 import 'swiper/css';
+import { ProductCard } from "./CategoriesSection";
 
 interface Category {
   _id: string;
@@ -77,66 +78,66 @@ const CategoryCard: React.FC<{
   </Box>
 );
 
-const ProductCard: React.FC<{ product: any,onClick: any }> = ({ product, onClick }) => (
-  <Box
-    borderRadius="8px"
-    borderWidth="1px"
-    borderColor="#F9D3CB"
-    overflow="hidden"
-    bg="#F1F1F3"
-    onClick={onClick}
-    cursor="pointer"
-  >
-    <HStack pt="14px">
-      <Image
-        src={product?.images[0]}
-        alt={product?.product_name}
-        w="120px"
-        h="90px"
-        objectFit="cover"
-        mx="auto"
-      />
-    </HStack>
+// const ProductCard: React.FC<{ product: any,onClick: any }> = ({ product, onClick }) => (
+//   <Box
+//     borderRadius="8px"
+//     borderWidth="1px"
+//     borderColor="#F9D3CB"
+//     overflow="hidden"
+//     bg="#F1F1F3"
+//     onClick={onClick}
+//     cursor="pointer"
+//   >
+//     <HStack pt="14px">
+//       <Image
+//         src={product?.images[0]}
+//         alt={product?.product_name}
+//         w="120px"
+//         h="90px"
+//         objectFit="cover"
+//         mx="auto"
+//       />
+//     </HStack>
 
-    <Box p={4} textAlign={{ base: "center", md: "left" }}>
-      <Text color="#FF5733CC" fontSize="sm">
-        {product?.category?.name}
-      </Text>
-      <Text fontSize="lg" fontWeight="semibold" mt={1}>
-        {product?.product_name}
-      </Text>
-      <HStack mt={2} spacing={1} mx={{ base: "auto", md: 0 }}>
-        {Array(5)
-          .fill("")
-          .map((_, i) => (
-            <StarIcon
-              key={i}
-              color={i < (product?.favourite ? 5 : 0) ? "#FF8A00" : "gray.200"}
-              fontSize="sm"
-            />
-          ))}
-        <Text fontSize="12px" color="gray.600">
-          {product?.total_quantity_sold} reviews
-        </Text>
-      </HStack>
+//     <Box p={4} textAlign={{ base: "center", md: "left" }}>
+//       <Text color="#FF5733CC" fontSize="sm">
+//         {product?.category?.name}
+//       </Text>
+//       <Text fontSize="lg" fontWeight="semibold" mt={1}>
+//         {product?.product_name}
+//       </Text>
+//       <HStack mt={2} spacing={1} mx={{ base: "auto", md: 0 }}>
+//         {Array(5)
+//           .fill("")
+//           .map((_, i) => (
+//             <StarIcon
+//               key={i}
+//               color={i < (product?.favourite ? 5 : 0) ? "#FF8A00" : "gray.200"}
+//               fontSize="sm"
+//             />
+//           ))}
+//         <Text fontSize="12px" color="gray.600">
+//           {product?.total_quantity_sold} reviews
+//         </Text>
+//       </HStack>
 
-      <Text fontSize="xl" fontWeight="bold" mt={2} color="#FF5733">
-        ₦{product?.unit_price?.toLocaleString() || ""}
-        {product?.is_discounted && (
-          <Text
-            as="span"
-            fontSize="sm"
-            color="gray.500"
-            textDecoration="line-through"
-            ml={2}
-          >
-            ₦{product?.discount_price?.toLocaleString() || ""}
-          </Text>
-        )}
-      </Text>
-    </Box>
-  </Box>
-);
+//       <Text fontSize="xl" fontWeight="bold" mt={2} color="#FF5733">
+//         ₦{product?.unit_price?.toLocaleString() || ""}
+//         {product?.is_discounted && (
+//           <Text
+//             as="span"
+//             fontSize="sm"
+//             color="gray.500"
+//             textDecoration="line-through"
+//             ml={2}
+//           >
+//             ₦{product?.discount_price?.toLocaleString() || ""}
+//           </Text>
+//         )}
+//       </Text>
+//     </Box>
+//   </Box>
+// );
 
 const PopularProductsSection: React.FC = () => {
   const navigate = useNavigate();
@@ -145,6 +146,7 @@ const PopularProductsSection: React.FC = () => {
     categories,
     setSelectedCategoryId,
     refetchProductsByCategory,
+    handleAddToCart
   } = useProduct();
 // console.log(popluarProducts,"popluar product")
   const category = categories?.data?.data;
@@ -219,7 +221,7 @@ const PopularProductsSection: React.FC = () => {
             gap={4}
           >
             {popluarProducts?.slice(0, 5)?.map((product) => (
-              <ProductCard key={product?._id} product={product} onClick={() => handleProductClick(product?._id)}/>
+              <ProductCard key={product?._id} product={product} onAddToCart={handleAddToCart}/>
             ))}
           </Grid>
         </Box>

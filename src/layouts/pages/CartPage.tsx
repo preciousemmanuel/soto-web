@@ -1,10 +1,11 @@
-import { Box, Flex, Text, Button, Image, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, Image, SimpleGrid, Heading } from "@chakra-ui/react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useProduct } from "../hooks/useProduct";
 import { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useOrder } from "../hooks/useOrder";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -48,19 +49,35 @@ const CartPage = () => {
   }, [cart]);
 
   return (
-    <Box bg="" p={[4, 6, 8]} mt={120}>
-      <Text
-        textAlign="center"
-        bg={"#FFF2ED"}
-        pt={4}
-        pb={4}
-        fontSize="2xl"
-        fontWeight="bold"
-        mb={8}
+    <Box p={[4, 6, 8]} mt={120}>
+        <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
+        bg="#FFF2ED"
+        p={6}
+        mt={10}
+        mb={6}
       >
-        Shopping Cart
-      </Text>
-
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+        <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+            Shopping Cart
+        </Heading>
+      </Flex>
+    
       <Flex
         flexDirection={["column", "row"]}
         justifyContent="space-between"

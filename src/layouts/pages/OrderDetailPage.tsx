@@ -16,6 +16,7 @@ import { FaClipboard } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOrder } from "../hooks/useOrder";
 import LoadingSpinner from "../../features/helpers/LoadingSpinner";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const OrderDetailPage = () => {
   const navigate = useNavigate();
@@ -46,18 +47,33 @@ const OrderDetailPage = () => {
 
   return (
     <Box p={8} h="100%" fontFamily="Poppins" mt={100}>
-      <Heading
-        size="lg"
-        mb={6}
-        mt={6}
-        fontFamily="Poppins"
+      <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
         bg="#FFF2ED"
-        py={6}
-        textAlign="center"
-        color="#FF5753"
+        p={6}
+        mt={10}
+        mb={6}
       >
-        Order Details
-      </Heading>
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+        <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+            Order Details
+        </Heading>
+      </Flex>
       <Flex direction="row" justifyContent="space-between" w="100%">
       {isPending ? (
         <LoadingSpinner />

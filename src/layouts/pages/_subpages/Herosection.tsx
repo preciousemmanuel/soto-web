@@ -23,6 +23,7 @@ import "swiper/css/autoplay";
 import Slide1 from "../../../assets/slide1.png";
 import Slide2 from "../../../assets/slide2.png";
 import Slide3 from "../../../assets/slide3.png";
+import { RiWhatsappFill } from "react-icons/ri";
 
 type HeroTitle = {
   text: string;
@@ -173,15 +174,17 @@ const HeroSection: React.FC = () => {
         </Button>
       </Box>
       <Link href="https://wa.me/message/7V3CGNZN5GPMO1" isExternal>
-        <Image
-          // flex="1"
-          src={AuthImage}
-          bottom="-20px"
-          right="0px"
+        <Box
+          bottom="10px"
+          right="10px"
           zIndex={999}
           position="fixed"
           display={{ base: "none", md: "block" }}
-        />
+          bg="white"
+          rounded="full"
+        >
+          <RiWhatsappFill color="green" size={80} />
+        </Box>
       </Link>
       <Box flex="1" maxW={{ base: "100%", md: "500px" }}>
         <Swiper
@@ -211,7 +214,6 @@ const HeroSection: React.FC = () => {
           )}
         </Swiper>
       </Box>
-      
     </Flex>
   );
 };

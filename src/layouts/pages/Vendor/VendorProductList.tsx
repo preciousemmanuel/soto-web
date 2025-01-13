@@ -6,6 +6,8 @@ import {
   Stack,
   Flex,
   SimpleGrid,
+  Heading,
+  Button,
 } from "@chakra-ui/react";
 import { Product } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +15,7 @@ import { useVendor } from "../../hooks/useVendor";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 import PaginationControls from "../../../features/helpers/Pagination";
 import { useEffect } from "react";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 interface ProductCardProps {
   product: Product;
@@ -131,10 +134,11 @@ export default function VendorProductList() {
     handlePageChange,
     allProductsByVendorPagination,
   } = useVendor();
+  const navigate = useNavigate();
   const products = allProductsByVendor?.data?.data;
   return (
     <Box py="120px">
-      <Text
+      {/* <Text
         textAlign="center"
         bg={"#FFF2ED"}
         pt={4}
@@ -144,7 +148,34 @@ export default function VendorProductList() {
         mb={8}
       >
         Product List
-      </Text>
+      </Text> */}
+      <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
+        bg="#FFF2ED"
+        p={6}
+        mt={20}
+        mb={6}
+      >
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+        <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+            Product List
+        </Heading>
+      </Flex>
       {isLoadingAllProductsByVendor ? (
         <LoadingSpinner />
       ) : (

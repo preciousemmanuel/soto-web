@@ -12,11 +12,13 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useOrder } from "../../hooks/useOrder";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const OrderDetails = () => {
     const { orderId } = useParams<{ orderId: string }>();
+    const navigate = useNavigate();
   const { useSingleVendorOrder } = useOrder();
   const { data: oneOrder, isPending } = useSingleVendorOrder(orderId as string);
 
@@ -39,18 +41,33 @@ const OrderDetails = () => {
     
   return (
     <Box p={8} h="100vh" fontFamily="Poppins" mt={100}>
-    <Heading
-      size="lg"
-      mb={6}
-      mt={6}
-      fontFamily="Poppins"
-      bg="#FFF2ED"
-      py={6}
-      textAlign="center"
-      color="#FF5753"
-    >
-      Order Details
-    </Heading>
+    <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
+        bg="#FFF2ED"
+        p={6}
+        mt={10}
+        mb={6}
+      >
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+        <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+            Order Details
+        </Heading>
+      </Flex>
     {isPending ? (
       <LoadingSpinner />
     ) : (
