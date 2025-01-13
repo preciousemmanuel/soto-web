@@ -73,7 +73,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const [quantity, setQuantity] = useState(() => {
     const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
     const existingItem = cartItems.find((item: any) => item.productId === product?._id);
-    return existingItem ? existingItem.quantity : 0;
+    return existingItem ? existingItem.quantity : 1;
   });
   const navigate = useNavigate();
   const { updateCart } = useProduct();
