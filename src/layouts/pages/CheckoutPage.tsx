@@ -1,4 +1,4 @@
-import { AddIcon, CloseIcon } from "@chakra-ui/icons";
+import { AddIcon, ChevronLeftIcon, CloseIcon } from "@chakra-ui/icons";
 import {
   Box,
   Text,
@@ -21,14 +21,17 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  Heading,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useOrder } from "../hooks/useOrder";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
+  const navigate = useNavigate();
   const {
     addNewOrderMutation,
     isAddingOrder,
@@ -136,17 +139,34 @@ const CheckoutPage = () => {
 
   return (
     <Box py="120px">
-      <Text
-        textAlign="center"
-        bg={"#FFF2ED"}
-        pt={4}
-        pb={4}
-        fontSize="2xl"
-        fontWeight="bold"
-        mb={8}
+      <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
+        bg="#FFF2ED"
+        p={6}
+        mt={14}
+        mb={6}
       >
-        Checkout
-      </Text>
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+        <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+             Checkout
+        </Heading>
+      </Flex>
+  
       <Box display="flex" p={6} justifyContent="space-between" gap={6} px={40}>
         <Box w="50%">
           <Box

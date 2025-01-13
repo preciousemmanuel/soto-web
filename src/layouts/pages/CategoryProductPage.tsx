@@ -6,6 +6,8 @@ import {
   Stack,
   Flex,
   SimpleGrid,
+  Button,
+  Heading,
 } from "@chakra-ui/react";
 import { Product, useProduct } from "../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +43,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
   return (
     <Box p={4} w="300px">
+        
       <Box
         borderRadius="sm"
         overflow="hidden"
@@ -116,9 +119,11 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import LoadingSpinner from "../../features/helpers/LoadingSpinner";
 import PaginationControls from "../../features/helpers/Pagination";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 export default function CategoryProductPage() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const {
     productsByCategory,
     isProductsByCategory,
@@ -152,17 +157,33 @@ export default function CategoryProductPage() {
 
   return (
     <Box py="120px">
-      <Text
-        textAlign="center"
-        bg={"#FFF2ED"}
-        pt={4}
-        pb={4}
-        fontSize="2xl"
-        fontWeight="bold"
-        mb={8}
+       <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
+        bg="#FFF2ED"
+        p={6}
+        mt={16}
+        mb={6}
       >
-        Product List
-      </Text>
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+        <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+            Product List
+        </Heading>
+      </Flex>
       <Box py={8} px="140px">
         {!products || products?.length === 0 ? (
           <Text textAlign="center">No products found for this category.</Text>

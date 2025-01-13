@@ -16,6 +16,7 @@ import { useOrder } from "../hooks/useOrder";
 import LoadingSpinner from "../../features/helpers/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import PaginationControls from "../../features/helpers/Pagination";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 function OrderHistoryPage() {
   const [activeStatus, setActiveStatus] = useState("BOOKED");
@@ -148,18 +149,33 @@ function OrderHistoryPage() {
 
   return (
     <Box p={4} minH="100%" textAlign="center" mt={120} my={20}>
-      <Heading
-        size="lg"
-        mb={6}
-        mt={6}
-        fontFamily="Poppins"
+      <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
         bg="#FFF2ED"
-        px={4}
-        py={6}
-        color="#FF5753"
+        p={6}
+        mt={20}
+        mb={6}
       >
-        My Orders
-      </Heading>
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+        <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+          My Orders
+        </Heading>
+      </Flex>
 
       <Flex justifyContent={"left"} alignItems={"left"}>
         <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">

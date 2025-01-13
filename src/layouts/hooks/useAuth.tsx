@@ -266,6 +266,7 @@ export const useAuth = () => {
 
   const switchToUser = () => {
     localStorage.removeItem("vendorToken");
+    localStorage.removeItem("cart");
     setIsAuthenticated(false);
     queryClient.clear();
     navigate("/auth");
@@ -273,6 +274,7 @@ export const useAuth = () => {
 
   const switchToVendor = () => {
     localStorage.removeItem("userToken");
+    localStorage.removeItem("cart");
     setIsAuthenticated(false);
     queryClient.clear();
     navigate("/auth/vendor-login");

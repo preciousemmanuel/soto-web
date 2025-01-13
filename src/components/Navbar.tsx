@@ -36,7 +36,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
   const [cartQuantity, setCartQuantity] = useState(0);
-  const [bgColor, setBgColor] = useState("white");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -69,41 +68,16 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const middleOfPage = document.documentElement.scrollHeight / 10;
-
-      if (scrollPosition >= middleOfPage) {
-        setBgColor("#FFF2ED");
-      } else {
-        setBgColor("white");
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
-    <Box bg={bgColor} position="fixed" width="100%" zIndex="1000">
-      {/* Top bar */}
+    <Box bg="#FFF2ED" position="fixed" width="100%" zIndex="1000">
       <Flex
         py={2}
         px={4}
-        justifyContent="space-between"
+        justifyContent="flex-end"
         alignItems="center"
         flexWrap="wrap"
         fontSize={{ base: "12px", md: "14px" }}
       >
-        <Link to="/contact">
-          <Text color="#FF5733" fontWeight="bold" as="u">
-            Contact us
-          </Text>
-        </Link>
-
         <Flex alignItems="center" gap={{ base: 4, md: 8 }}>
           <Flex gap={2} alignItems="center">
             <CiLocationOn color="gray" />
@@ -113,8 +87,15 @@ const Navbar = () => {
             <TbWorld color="gray" />
             <Text color="gray.500">ENG</Text>
           </Flex>
+          <Link to="/contact">
+            <Text color="#FF5733" fontWeight="bold" as="u">
+              Contact us
+            </Text>
+          </Link>
           <Link to="/auth/vendor-signup">
-            <Text color="#FF5733" textDecoration="underline" fontWeight="bold">Sell on Soto</Text>
+            <Text color="#FF5733" textDecoration="underline" fontWeight="bold">
+              Sell on Soto
+            </Text>
           </Link>
         </Flex>
       </Flex>
@@ -126,13 +107,17 @@ const Navbar = () => {
         justifyContent="space-between"
         alignItems="center"
         flexWrap="wrap"
-        bg={bgColor}
+        bg="#FFF2ED"
       >
         {/* Logo */}
-        <Box >
-            <Image src={Logo} width={{ base: "40px", md: "70px" }} cursor="pointer" onClick={() => navigate("/")}/>
-          </Box>
-  
+        <Box>
+          <Image
+            src={Logo}
+            width={{ base: "60px", md: "100px" }}
+            cursor="pointer"
+            onClick={() => navigate("/")}
+          />
+        </Box>
 
         {/* Hamburger Icon for Mobile */}
         <Box display={{ base: "block", md: "none" }}>
@@ -310,8 +295,11 @@ const Navbar = () => {
                       handleSearchSubmit();
                       onDrawerClose();
                     }}
-                    colorScheme="teal"
+                    color="white"
+                    bg="#FF5733"
                     size="sm"
+                    h="40px"
+                    w="100px"
                     ml={2}
                   >
                     Search

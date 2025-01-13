@@ -1,4 +1,4 @@
-import { DeleteIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon, DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   Image,
@@ -9,6 +9,8 @@ import {
   SimpleGrid,
   IconButton,
   VStack,
+  Button,
+  Heading,
 } from "@chakra-ui/react";
 import { IoCartOutline } from "react-icons/io5";
 import { Product, useProduct } from "../../hooks/useProduct";
@@ -141,21 +143,38 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
 export default function WishListPage() {
   const { useWishlist } = useProduct();
+  const navigate = useNavigate();
   const { data: product, isLoading } = useWishlist(20, 1);
   const products = product?.data?.data;
   return (
     <Box py="120px">
-      <Text
-        textAlign="center"
-        bg={"#FFF2ED"}
-        pt={4}
-        pb={4}
-        fontSize="2xl"
-        fontWeight="bold"
-        mb={8}
+       <Flex 
+        align="center" 
+        justify="center" 
+        position="relative"
+        bg="#FFF2ED"
+        p={6}
+        mt={10}
+        mb={6}
       >
-        WishList
-      </Text>
+        <Button
+          position="absolute"
+          left={6}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+        >
+          Back
+        </Button>
+        <Heading
+          size="lg"
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+            WishList
+        </Heading>
+      </Flex>
       <Box py={4} px="140px">
         <Text fontSize="lg" mb={6} textAlign={"left"} color={"#FF5733"}>
           Wishlist ({products?.length})
