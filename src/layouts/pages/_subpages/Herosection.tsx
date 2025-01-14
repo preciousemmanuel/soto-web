@@ -179,11 +179,22 @@ const HeroSection: React.FC = () => {
           right="10px"
           zIndex={999}
           position="fixed"
-          display={{ base: "none", md: "block" }}
-          bg="white"
-          rounded="full"
+          display={{ base: "none", md: "flex" }}
+          alignItems="center"
+          gap={2}
         >
-          <RiWhatsappFill color="green" size={80} />
+          <Text
+            color="green"
+            fontWeight="bold"
+          >
+            Order via
+          </Text>
+          <Box
+            bg="white"
+            rounded="full"
+          >
+            <RiWhatsappFill color="green" size={80} />
+          </Box>
         </Box>
       </Link>
       <Box flex="1" maxW={{ base: "100%", md: "500px" }}>
