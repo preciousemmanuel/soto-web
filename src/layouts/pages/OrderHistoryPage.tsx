@@ -48,6 +48,24 @@ function OrderHistoryPage() {
 
   const renderStatusAndAction = (status: string, orderId: string) => {
     switch (status) {
+      case "PENDING":
+        return {
+          status: (
+            <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
+              PENDING
+            </Text>
+          ),
+          action: (
+            <Button
+              color={"white"}
+              bg="#FF5733"
+              size="sm"
+              onClick={() => handleProductClick(orderId)}
+            >
+              View
+            </Button>
+          ),
+        };
       case "BOOKED":
         return {
           status: (
@@ -179,7 +197,7 @@ function OrderHistoryPage() {
 
       <Flex justifyContent={"left"} alignItems={"left"}>
         <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">
-          {["BOOKED", "PICKED_UP", "DELIVERED", "CANCELLED", "FAILED"].map(
+          {["PENDING","BOOKED", "PICKED_UP", "DELIVERED", "CANCELLED", "FAILED"].map(
             (buttonStatus) => (
               <Button
                 key={buttonStatus}

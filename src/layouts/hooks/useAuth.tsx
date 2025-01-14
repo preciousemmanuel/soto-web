@@ -55,6 +55,8 @@ export const useAuth = () => {
       userType: "USER";
     }) => apiClient.post("/user/login", credentials),
     onSuccess: (response) => {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("vendorToken");
       const { Token } = response.data.data;
       localStorage.setItem("userToken", Token);
       setIsAuthenticated(true);
@@ -90,6 +92,8 @@ export const useAuth = () => {
       userType: "VENDOR";
     }) => apiClient.post("/user/login", credentials),
     onSuccess: (response) => {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("vendorToken");
       const { Token } = response.data.data;
       localStorage.setItem("vendorToken", Token);
       setIsVendorAuthenticated(true);
@@ -126,6 +130,8 @@ export const useAuth = () => {
       UserType: string;
     }) => apiClient.post("/user/signup", userData),
     onSuccess: (response) => {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("vendorToken");
       const { Token } = response.data.data;
       localStorage.setItem("userToken", Token);
       setIsAuthenticated(true);

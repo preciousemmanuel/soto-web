@@ -37,7 +37,7 @@ const OrderDetailPage = () => {
   } = oneOrder ?? {};
 
   const trackingSteps = [
-    
+    { label: "Order Pending", active: status === "PENDING"},
     { label: "Order Booked", active: status === "BOOKED" },
     { label: "Order Shipped", active: status === "SHIPPED" || status === "PICKED_UP" },
     { label: "Order Delivered", active: status === "DELIVERED" },

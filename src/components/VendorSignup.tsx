@@ -102,6 +102,8 @@ const Vendorsignup: React.FC = () => {
       return response.data;
     },
     onSuccess: (response) => {
+      localStorage.removeItem("userToken");
+      localStorage.removeItem("vendorToken");
       localStorage.setItem("vendorToken", response.data.Token);
       toast({
         title: `${response?.message}`,
