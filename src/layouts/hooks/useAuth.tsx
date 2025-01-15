@@ -143,7 +143,7 @@ export const useAuth = () => {
         isClosable: true,
         position: "top-right",
       });
-      navigate("/");
+      navigate("/auth/shipping-address");
     },
     onError: (error: any) => {
       // console.error("Signup failed:", error);
@@ -242,7 +242,7 @@ export const useAuth = () => {
         duration: 2000,
         isClosable: true,
       });
-      navigate("/profile");
+      navigate("/");
     },
     onError: (error: any) => {
       // console.error("Failed to add shipping address:", error);

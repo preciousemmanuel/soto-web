@@ -197,7 +197,7 @@ function OrderHistoryPage() {
 
       <Flex justifyContent={"left"} alignItems={"left"}>
         <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">
-          {["PENDING","BOOKED", "PICKED_UP", "DELIVERED", "CANCELLED", "FAILED"].map(
+          {["BOOKED","PENDING","PICKED_UP", "DELIVERED", "CANCELLED", "FAILED"].map(
             (buttonStatus) => (
               <Button
                 key={buttonStatus}

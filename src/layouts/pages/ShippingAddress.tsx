@@ -10,7 +10,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import Logo from "../../assets/soto.png";
+import Logo from "../../assets/soto.svg";
 import Shipping from "../../assets/shipping.png";
 import { useAuth } from "../hooks/useAuth";
 
@@ -21,7 +21,7 @@ export default function ShippingAddress() {
 
   return (
     <Box pt="25px">
-      <Image src={Logo} alt="Logo" py={4} px={8} width="120px" />
+      <Image src={Logo} alt="Logo" py={4} px={8} width="150px" />
       <Flex
         direction={{ base: "column", md: "row" }}
         minHeight="calc(100vh - 56px)"
