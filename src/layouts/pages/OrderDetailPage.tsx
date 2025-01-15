@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Flex,
@@ -11,22 +11,42 @@ import {
   VStack,
   Divider,
   Badge,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay
 } from "@chakra-ui/react";
 import { FaClipboard } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { useOrder } from "../hooks/useOrder";
 import LoadingSpinner from "../../features/helpers/LoadingSpinner";
-import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon, CloseIcon } from "@chakra-ui/icons";
 
 const OrderDetailPage = () => {
   const navigate = useNavigate();
   const { orderId } = useParams<{ orderId: string }>();
-  const { useSingleOrder } = useOrder();
+  const cancelRef = useRef<HTMLButtonElement>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const onClose = () => setIsOpen(false);
+  const { useSingleOrder,generatePaymentLinkMutation,isGeneratingPaymentLink } = useOrder();
   const { data: oneOrder, isPending } = useSingleOrder(orderId as string);
+  // console.log(oneOrder,"oneOrder")
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [orderId]);
+  }, []);
+
+
+  const generatePayment = () => {
+    generatePaymentLinkMutation({
+      amount: oneOrder?.data?.grand_total,
+      narration: "ORDER",
+      narration_id: oneOrder?.data?._id,
+      platform: "web",
+    });
+  };
 
   if (!oneOrder || !oneOrder.data) {
     return <LoadingSpinner />;
@@ -204,17 +224,32 @@ const OrderDetailPage = () => {
                   ))}
                 </VStack>
               </Box>
-              <Button
-                onClick={() => navigate(`/raise-dispute/${orderId}`)}
-                mt={6}
-                color="white"
-                bg="#FF5753"
-                size="lg"
-                w="full"
-                borderRadius="md"
-              >
-                Raise Dispute
-              </Button>
+             
+              {oneOrder.data.status === "PENDING" ? (
+                <Button
+                  onClick={() => setIsOpen(true)}
+                  mt={6}
+                  color="white"
+                  bg="#FF5753"
+                  size="lg"
+                  w="full"
+                  borderRadius="md"
+                >
+                  Proceed to make payment
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => navigate(`/raise-dispute/${orderId}`)}
+                  mt={6}
+                  color="white"
+                  bg="#FF5753"
+                  size="lg"
+                  w="full"
+                  borderRadius="md"
+                >
+                  Raise Dispute
+                </Button>
+              )}
             </Flex>
           </HStack>
         </Box>
@@ -272,6 +307,42 @@ const OrderDetailPage = () => {
           </VStack>
       </Box>
       </Flex>
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <AlertDialogHeader fontSize="lg" fontWeight="bold">
+          <CloseIcon />
+        </AlertDialogHeader>
+        <AlertDialogOverlay />
+        <AlertDialogContent mt="220px" h="150px">
+          <AlertDialogBody
+            py="20px"
+            fontSize="18px"
+            fontWeight="medium"
+            textAlign="center"
+          >
+            Proceed to make payment!!!
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Button
+              color="white"
+              bg="#FF5733"
+              borderRadius="full"
+              // mt={2}
+              w="full"
+              h="55px"
+              size="lg"
+              loadingText="Making payment..."
+              isLoading={isGeneratingPaymentLink}
+              onClick={generatePayment}
+            >
+              Pay now
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Box>
   );
 };
