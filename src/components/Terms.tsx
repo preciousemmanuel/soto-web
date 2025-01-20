@@ -13,7 +13,7 @@ export default function Terms() {
           These Terms and Conditions ("Agreement") govern the use of our
           e-commerce platform [Soto Nigeria] which consists of a Website and
           Mobile Application ("marketplace"). These terms and conditions shall
-          apply to both buyers and sellers on the Website and shall govern your
+          apply to both buyers and Vendors on the Website and shall govern your
           use of the marketplace and related services. By accessing,
           registering, listing products, or making purchases on the Marketplace,
           you agree to be bound by these Terms and Conditions. Please read these
@@ -21,13 +21,13 @@ export default function Terms() {
           agree to these Terms, you may not use the Website or Marketplace.
         </Text>
         <Text pb={6} lineHeight={8}>
-          <strong>General Terms for Buyers and Sellers </strong>
+          <strong>General Terms for Buyers and Vendors </strong>
           <br />
           <strong>Eligibility </strong>
           <br />
           <strong>Buyers:</strong> To make purchases on the Marketplace, you
           must be at least 18 years old or have the legal capacity to enter into
-          binding contracts. Sellers: To list products, sellers must be at least
+          binding contracts. Vendors: To list products, Vendors must be at least
           18 years old and, if applicable, be a registered business with all
           necessary permits and legal documentation to sell the products they
           offer.
@@ -36,7 +36,7 @@ export default function Terms() {
           <strong>Agreement Binding</strong>
           <br />
           By using the Marketplace, you agree to comply with and be bound by
-          these Terms. This applies to both buyers and sellers, who may also be
+          these Terms. This applies to both buyers and Vendors, who may also be
           referred to as "users" within this Agreement.
         </Text>
         <Text pb={6} lineHeight={8}>
@@ -111,14 +111,14 @@ export default function Terms() {
           <strong>Buyer Responsibilities</strong>
           <li>
             Buyers agree to provide accurate information, respect the rights of
-            sellers, and refrain from fraudulent or malicious activities.
+            Vendors, and refrain from fraudulent or malicious activities.
           </li>
           <li>
             <strong>Prohibited Activities:</strong> Buyers may not engage in any
             activity that disrupts the Marketplace's operations or interferes
             with other users' experiences. This includes, but is not limited to,
             submitting false information, conducting chargebacks without
-            justification, or harassing sellers.
+            justification, or harassing Vendors.
           </li>
         </Text>
         <Text pb={6} lineHeight={8}>
@@ -126,17 +126,17 @@ export default function Terms() {
           <li>Seller-Specific Terms</li>
           You acknowledge and agree that:
           <li>
-            To list products on the Marketplace, sellers must create an account
+            To list products on the Marketplace, Vendors must create an account
             and provide complete business information, including proof of
             identity, tax identification number (if available), and payment
             details for payouts.
           </li>
           <li>
-            Sellers are responsible for maintaining accurate account details and
+            Vendors are responsible for maintaining accurate account details and
             promptly updating them if there are any changes.
           </li>
           <li>
-            We shall accept binding sales on behalf of sellers, but Zoto will
+            We shall accept binding sales on behalf of Vendors, but Zoto will
             not be held liable for transaction with the buyer.
           </li>
         </Text>
@@ -144,14 +144,14 @@ export default function Terms() {
           <strong>Product Listings</strong>
 
           <li>
-            <strong>Product Information:</strong> Sellers are responsible for
+            <strong>Product Information:</strong> Vendors are responsible for
             accurately describing their products, including providing clear
             images, descriptions, pricing, and specifications.
           </li>
           <li>
-            <strong>Product Availability:</strong> Sellers must ensure that
+            <strong>Product Availability:</strong> Vendors must ensure that
             listed products are available for sale. Should there be a change in
-            stock level, sellers must update their inventory promptly.
+            stock level, Vendors must update their inventory promptly.
           </li>
           <li>
             <strong>Product Quality:</strong> products must be of satisfactory
@@ -161,7 +161,7 @@ export default function Terms() {
             to the buyer.
           </li>
           <li>
-            <strong>Prohibited Products:</strong>Sellers must not list any
+            <strong>Prohibited Products:</strong>Vendors must not list any
             products that violate intellectual property laws, infringe on
             copyrights or trademarks, or contravene local or international
             regulations.
@@ -181,23 +181,24 @@ export default function Terms() {
         <Text pb={6} lineHeight={8}>
           <strong>Pricing and Fees</strong>
           <li>
-            Sellers are responsible for setting their product prices, which must
+            Vendors are responsible for setting their product prices, which must
             include applicable taxes, shipping fees, and other costs.
           </li>
           <li>
-            <strong>Platform Fees:</strong> Sellers are not subjected to fees
+            <strong>Platform Fees:</strong> Vendors are not subjected to fees
             for using the platform unless otherwise stated.
           </li>
         </Text>
         <Text pb={6} lineHeight={8}>
           <strong>Order Fulfillment and Shipping</strong>
           <li>
-            <strong>Shipping Timeframe:</strong> Sellers are required to make
+            <strong>Shipping Timeframe:</strong> Vendors are required to make
             ordered goods available for pickup at the designated time. Delays
             must be communicated to Soto in a timely manner.
           </li>
           <li>
-            <strong>Packaging:</strong> Sellers are responsible for securely packaging items to prevent damage during transit.
+            <strong>Packaging:</strong> Vendors are responsible for securely
+            packaging items to prevent damage during transit.
           </li>
         </Text>
       </Box>

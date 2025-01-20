@@ -72,7 +72,9 @@ const ProductDetails: React.FC<ProductDetails> = ({
 }) => {
   const [quantity, setQuantity] = useState(() => {
     const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
-    const existingItem = cartItems.find((item: any) => item.productId === product?._id);
+    const existingItem = cartItems.find(
+      (item: any) => item.productId === product?._id
+    );
     return existingItem ? existingItem.quantity : 1;
   });
   const navigate = useNavigate();
@@ -85,8 +87,11 @@ const ProductDetails: React.FC<ProductDetails> = ({
   }).format(product?.unit_price || 0);
 
   useEffect(() => {
-    updateCart(product || {}, quantity);
+    if (product?.product_quantity && product.product_quantity > 0) {
+      updateCart(product, quantity);
+    }
   }, [quantity, product, updateCart]);
+  
 
   return (
     <VStack align="start" spacing={5}>
@@ -117,19 +122,16 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
       <Badge
         colorScheme={
-          product?.product_quantity
-            ? product.product_quantity > 0
-              ? "green"
-              : "red"
-            : "gray"
+          product?.product_quantity && product.product_quantity > 0
+            ? "green"
+            : "red"
         }
       >
-        {product?.product_quantity
-          ? product.product_quantity > 0
-            ? "In Stock"
-            : "Out of Stock"
-          : "Unknown"}
+        {product?.product_quantity && product.product_quantity > 0
+          ? ""
+          : "Out of Stock"}
       </Badge>
+
       {product?.status && (
         <Box
           bg={
@@ -218,7 +220,9 @@ const ProductDetails: React.FC<ProductDetails> = ({
               mb={{ base: 3, md: 0 }}
             >
               <Button
-                onClick={() => setQuantity((prev:any) => Math.max(prev - 1, 1))}
+                onClick={() =>
+                  setQuantity((prev: any) => Math.max(prev - 1, 1))
+                }
                 isDisabled={
                   quantity <= 1 ||
                   (product?.product_quantity !== undefined &&
@@ -231,7 +235,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
               <Text>{quantity}</Text>
               <Button
                 onClick={() =>
-                  setQuantity((prev:any) =>
+                  setQuantity((prev: any) =>
                     Math.min(prev + 1, product?.product_quantity ?? 0)
                   )
                 }
@@ -265,9 +269,12 @@ const ProductDetails: React.FC<ProductDetails> = ({
               w={{ base: "100%", md: "170px" }}
               h="50px"
               isDisabled={
-                product?.product_quantity !== undefined &&
-                product.product_quantity < 0
+                product?.product_quantity ? product.product_quantity < 0 : true
               }
+              // isDisabled={
+              //   product?.product_quantity !== undefined &&
+              //   product.product_quantity < 0
+              // }
               _hover={{ bg: "#FF5733" }}
               onClick={() => navigate("/cart")}
             >
@@ -282,12 +289,12 @@ const ProductDetails: React.FC<ProductDetails> = ({
               <Text>{product?.category}</Text>
             </HStack>
 
-            <HStack spacing={4} mb={2}>
+            {/* <HStack spacing={4} mb={2}>
               <Text fontWeight="normal" color="gray.600">
                 Tags:
               </Text>
               <Text color="gray.600">Sofa, Chair, Home, Shop</Text>
-            </HStack>
+            </HStack> */}
 
             <HStack spacing={4}>
               <Text fontWeight="normal" color="gray.600">
