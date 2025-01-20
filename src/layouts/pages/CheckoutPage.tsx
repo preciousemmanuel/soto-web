@@ -47,7 +47,7 @@ const CheckoutPage = () => {
   } = useOrder();
   const { user } = useAuth();
   // const [couponCode, setCouponCode] = useState<string>("");
- 
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = useRef<HTMLButtonElement>(null);
@@ -69,12 +69,13 @@ const CheckoutPage = () => {
       platform: "web",
     });
   };
+  const discountedPrice = (product: CartItem) =>
+    product.discount || product.price;
 
   const calculateSubtotal = (shippingRate: number) =>
-    cart.reduce(
-      (total, product) => total + product.price * product.quantity,
-      0
-    ) + shippingRate;
+    cart.reduce((total, product) => {
+      return total + discountedPrice(product) * product.quantity;
+    }, 0) + shippingRate;
 
   const groupedCart = cart.reduce<CartItem[]>((acc, product) => {
     const existingProduct = acc.find(
@@ -139,9 +140,9 @@ const CheckoutPage = () => {
 
   return (
     <Box py="120px">
-      <Flex 
-        align="center" 
-        justify="center" 
+      <Flex
+        align="center"
+        justify="center"
         position="relative"
         bg="#FFF2ED"
         p={6}
@@ -158,15 +159,11 @@ const CheckoutPage = () => {
         >
           Back
         </Button>
-        <Heading
-          size="lg"
-          fontFamily="Poppins"
-          color="#FF5753"
-        >
-             Checkout
+        <Heading size="lg" fontFamily="Poppins" color="#FF5753">
+          Checkout
         </Heading>
       </Flex>
-  
+
       <Box display="flex" p={6} justifyContent="space-between" gap={6} px={40}>
         <Box w="50%">
           <Box
@@ -303,8 +300,12 @@ const CheckoutPage = () => {
                 <Text fontSize="14px" color="#9F9F9F">
                   {product.productName} x {product.quantity}
                 </Text>
+
                 <Text>
-                  ₦{(product.price * product.quantity)?.toLocaleString()}
+                  ₦
+                  {(
+                    discountedPrice(product) * product.quantity
+                  )?.toLocaleString()}
                 </Text>
               </Flex>
             ))}
@@ -313,7 +314,6 @@ const CheckoutPage = () => {
               <Text>Shipping Rate</Text>
               <Text>{isShippingRateLink ? <Spinner /> : shippingRate}</Text>
             </Flex>
-
             <Flex justifyContent="space-between" mt={4}>
               <Text>Subtotal</Text>
               <Text>₦{calculateSubtotal(shippingRate)?.toLocaleString()}</Text>

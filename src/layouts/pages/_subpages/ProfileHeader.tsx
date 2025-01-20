@@ -28,7 +28,7 @@ const ProfileHeader = () => {
         borderRadius="full"
         onClick={switchToVendor}
       >
-        Switch to Seller
+        Switch to Vendor
       </Button>}
     </Flex>
   );

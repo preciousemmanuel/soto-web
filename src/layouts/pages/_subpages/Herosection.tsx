@@ -155,7 +155,7 @@ const HeroSection: React.FC = () => {
           textAlign={{ base: "center", md: "left" }}
           fontSize={responsiveStyles.fontSize}
         >
-          Browse our exclusive collection of products <br /> from top sellers
+          Browse our exclusive collection of products <br /> from top vendors
           with durability and scalability.
         </Text>
 

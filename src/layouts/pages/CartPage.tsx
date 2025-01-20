@@ -1,15 +1,15 @@
-import { Box, Flex, Text, Button, Image, SimpleGrid, Heading } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, Image,Heading } from "@chakra-ui/react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useProduct } from "../hooks/useProduct";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useOrder } from "../hooks/useOrder";
+// import { useOrder } from "../hooks/useOrder";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
 
   const [cart, setCart] = useState<CartItem[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
@@ -26,9 +26,13 @@ const CartPage = () => {
     setCart(updatedCart);
   };
 
+  const discountedPrice = (product: CartItem) =>
+    product.discount || product.price;
+
+
   const calculateTotals = () => {
     const subtotal = cart.reduce(
-      (acc, item) => acc + item.price * item.quantity,
+      (acc, item) => acc + discountedPrice(item) * item.quantity,
       0
     );
     return {
@@ -149,13 +153,17 @@ const CartPage = () => {
                   <Text fontWeight="medium">{item.productName}</Text>
                 </Flex>
                 <Text flex="1" textAlign="center">
-                  N{item.price.toLocaleString()}
+                ₦{discountedPrice(item).toLocaleString()}
                 </Text>
                 <Text flex="1" textAlign="center">
                   {item.quantity}
                 </Text>
                 <Text flex="1" textAlign="center" fontWeight="semibold">
-                  N{(item.price * item.quantity).toLocaleString()}
+                  
+                  ₦
+                  {(
+                    discountedPrice(item) * item.quantity
+                  )?.toLocaleString()}
                 </Text>
                 <Flex flex="0.5" justifyContent="flex-end">
                   <Box
@@ -186,11 +194,11 @@ const CartPage = () => {
               <>
                 <Flex justifyContent="space-between" mb={2}>
                   <Text>Subtotal</Text>
-                  <Text>N{subtotal?.toLocaleString()}</Text>
+                  <Text>₦{subtotal?.toLocaleString()}</Text>
                 </Flex>
                 <Flex justifyContent="space-between" mb={4}>
                   <Text fontWeight="bold">Total</Text>
-                  <Text fontWeight="bold">N{total?.toLocaleString()}</Text>
+                  <Text fontWeight="bold">₦{total?.toLocaleString()}</Text>
                 </Flex>
               </>
             );

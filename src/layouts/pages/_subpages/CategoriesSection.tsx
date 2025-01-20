@@ -22,6 +22,7 @@ export interface CartItem {
   price: number;
   image: string;
   quantity: number;
+  discount: any
 }
 
 export const ProductCard: React.FC<{
@@ -31,7 +32,7 @@ export const ProductCard: React.FC<{
   const navigate = useNavigate();
   const [isWishlisted, setIsWishlisted] = React.useState(false);
   const { addToWishlist } = useProduct();
-
+  // console.log(product,"PRODUCT")
   const handleWishlistClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
@@ -65,11 +66,30 @@ export const ProductCard: React.FC<{
       cursor="pointer"
       onClick={handleProductClick}
     >
-      <Flex justify="space-between" align="start">
-      <Badge colorScheme={product.product_quantity ? "green" : "red"}>
-        {product.product_quantity ? "" : "Out of Stock"}
-      </Badge>
-        <Box position="relative" w="full" mb={4}>
+      <Flex
+        direction="column"
+        align="center"
+        position="relative"
+        w="full"
+        mb={4}
+      >
+        <Badge
+          position="absolute"
+          top="4"
+          left="4"
+          colorScheme={
+            product?.product_quantity && product.product_quantity > 0
+              ? "green"
+              : "red"
+          }
+        >
+          {product?.product_quantity && product.product_quantity > 0
+            ? ""
+            : "Out of Stock"}
+        </Badge>
+
+        
+        <Box w="full">
           <Image
             src={product.images?.[0]}
             alt={product.product_name}
@@ -78,7 +98,28 @@ export const ProductCard: React.FC<{
             objectFit="contain"
           />
         </Box>
+
+        {product.is_discounted &&
+          product.unit_price &&
+          product.discount_price && (
+            <Badge
+              position="absolute"
+              top="4"
+              right="4"
+              bg="red"
+              color="white"
+              rounded="full"
+            >
+              {Math.round(
+                ((product.unit_price - product.discount_price) /
+                  product.unit_price) *
+                  100
+              )}
+              % off
+            </Badge>
+          )}
       </Flex>
+
       <Box fontFamily="poppins">
         <Flex justify="space-between" align="start">
           <Box>
@@ -87,7 +128,7 @@ export const ProductCard: React.FC<{
             </Text>
             <HStack spacing={2} mb={2}>
               <Text fontWeight="500">₦{product.unit_price}</Text>
-              {product.is_discounted && (
+              {product.is_discounted && product.discount_price && (
                 <Text
                   fontSize="sm"
                   color="gray.500"
@@ -111,20 +152,22 @@ export const ProductCard: React.FC<{
             rounded="full"
             onClick={handleWishlistClick}
             colorScheme="gray"
-            isDisabled={product?.product_quantity ? product.product_quantity < 0 : true}
+            isDisabled={
+              product?.product_quantity ? product.product_quantity < 0 : true
+            }
           />
         </Flex>
-        <HStack spacing={1} my={4}>
+        <HStack spacing={24} my={4}>
           <Box>
-          {Array(5)
-            .fill("")
-            .map((_, i) => (
-              <StarIcon
-                key={i}
-                color={i < 5 ? "#FF8A00" : "gray.200"}
-                fontSize="sm"
-              />
-            ))}
+            {Array(5)
+              .fill("")
+              .map((_, i) => (
+                <StarIcon
+                  key={i}
+                  color={i < 5 ? "#FF8A00" : "gray.200"}
+                  fontSize="sm"
+                />
+              ))}
           </Box>
         </HStack>
         <Button
@@ -134,7 +177,9 @@ export const ProductCard: React.FC<{
           variant="outline"
           size="md"
           width="full"
-          isDisabled={product?.product_quantity ? product.product_quantity < 0 : true}
+          isDisabled={
+            product?.product_quantity ? product.product_quantity < 0 : true
+          }
           h="40px"
           onClick={() => product._id && onAddToCart(product._id)}
           _hover={{

@@ -253,6 +253,7 @@ export const useProduct = () => {
         price: productToAdd.unit_price ?? 0,
         image: productToAdd.images?.[0] ?? "",
         quantity: 1,
+        discount: productToAdd?.is_discounted ? productToAdd?.discount_price : 0
       });
     }
     localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -296,6 +297,7 @@ export const useProduct = () => {
         productName: product?.product_name ?? "",
         price: product?.unit_price ?? 0,
         image: product?.images?.[0] ?? "", 
+        discount: product.is_discounted ? product.discount_price : 0
       });
     }
   
