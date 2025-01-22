@@ -87,6 +87,16 @@ export const useOrder = () => {
     return response.data;
   };
 
+  const fetchCoupons = async (
+    limit: number,
+    page: number,
+  ): Promise<any> => {
+    const response = await apiClient.get(
+      `/coupon/fetch-available?limit=${limit}&page=${page}`
+    );
+    return response.data;
+  };
+
   const fetchVendorOrders = async (
     limit: number,
     page: number,
@@ -261,6 +271,20 @@ export const useOrder = () => {
     retry: false,
   });
 
+  
+
+  const {
+    data: coupons,
+    isLoading: isFetchCoupons,
+    error: fetchCouponsError,
+    refetch: refetchCoupons,
+  } = useQuery({
+    queryKey: ["fetchCoupons", currentPage, itemsPerPage],
+    queryFn: () => fetchCoupons(itemsPerPage, currentPage),
+    enabled: isAuthenticated,
+    retry: false,
+  });
+
   const {
     data: customOrdersData,
     isLoading: isFetchingCustomOrders,
@@ -347,6 +371,10 @@ export const useOrder = () => {
     isFetchingOrders,
     fetchOrdersError,
     refetchOrders,
+    coupons,
+    isFetchCoupons,
+    fetchCouponsError,
+    refetchCoupons,
     ordersVendor,
     isFetchingOrdersVendor,
     fetchOrdersErrorVendor,
