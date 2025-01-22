@@ -45,7 +45,7 @@ const CheckoutPage = () => {
     shippingRate,
     isShippingRateLink,
     coupons,
-    // isFetchCoupons
+    isFetchCoupons,
     // addOrderError,
     // shippingRateSuccess,
   } = useOrder();
@@ -75,11 +75,9 @@ const CheckoutPage = () => {
   const discountedPrice = (product: CartItem) =>
     product.discount || product.price;
   const couponDiscount = newOrderResponse?.data?.is_coupon_applied
-  ? newOrderResponse.data.amount
-  : 0;
-  const calculateSubtotal = (
-    shippingRate: number
-  ) => {
+    ? newOrderResponse.data.amount
+    : 0;
+  const calculateSubtotal = (shippingRate: number) => {
     const subtotal = cart.reduce((total, product) => {
       return total + discountedPrice(product) * product.quantity;
     }, 0);
@@ -132,24 +130,23 @@ const CheckoutPage = () => {
       product_id: product.productId,
       quantity: product.quantity,
     }));
-  
+
     const orderData: any = {
       items,
       address: user?.ShippingAddress?.full_address,
       payment_type: "INSTANT",
     };
-  
+
     if (couponCode) {
       orderData.coupon_code = couponCode;
     }
-  
+
     try {
       await addNewOrderMutation(orderData);
     } catch (error) {
       console.error("Error during checkout:", error);
     }
   };
-  
 
   return (
     <Box py="120px">
@@ -344,17 +341,23 @@ const CheckoutPage = () => {
           </Box>
 
           <VStack spacing={4} p={5}>
-            {coupons?.data?.data?.map(
-              (
-                coupon: { name: any; code: any; expiry_date: any },
-                index: any
-              ) => (
-                <CouponCard
-                  key={index}
-                  title={coupon.name}
-                  code={coupon.code}
-                  expiryDate={coupon.expiry_date}
-                />
+            {coupons?.data?.data?.length === 0 ? (
+              <Text fontSize="lg" color="gray.500">
+                No coupons available.
+              </Text>
+            ) : (
+              coupons?.data?.data?.map(
+                (
+                  coupon: { name: any; code: any; expiry_date: any },
+                  index: any
+                ) => (
+                  <CouponCard
+                    key={index}
+                    title={coupon.name}
+                    code={coupon.code}
+                    expiryDate={coupon.expiry_date}
+                  />
+                )
               )
             )}
           </VStack>
