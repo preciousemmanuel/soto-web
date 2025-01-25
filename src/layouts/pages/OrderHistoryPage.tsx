@@ -36,12 +36,14 @@ function OrderHistoryPage() {
   useEffect(() => {
     refetchOrders();
   }, []);
+  // console.log(orders,"helloo")
 
   const orderData = orders?.data?.data;
   const filteredOrders = orderData?.filter(
     (order: any) => order.status === activeStatus
   );
 
+ 
   const handleProductClick = (orderId: string) => {
     navigate(`/my-orders/${orderId}`);
   };
@@ -235,6 +237,7 @@ function OrderHistoryPage() {
                     status,
                     order?._id
                   );
+                  // console.log(order,"stta")
                   return (
                     <Tr key={order?._id}>
                       <Td>{order?.tracking_id}</Td>

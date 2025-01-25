@@ -22,6 +22,7 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Heading,
+  VStack,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
@@ -29,6 +30,7 @@ import { CartItem } from "./_subpages/CategoriesSection";
 import { useOrder } from "../hooks/useOrder";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { CouponCard } from "../../components/Coupons";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -42,12 +44,13 @@ const CheckoutPage = () => {
     generateShippingRateMutation,
     shippingRate,
     isShippingRateLink,
-    addOrderError,
-    shippingRateSuccess,
+    coupons,
+    isFetchCoupons,
+    // addOrderError,
+    // shippingRateSuccess,
   } = useOrder();
   const { user } = useAuth();
-  // const [couponCode, setCouponCode] = useState<string>("");
-
+  const [couponCode, setCouponCode] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const onClose = () => setIsOpen(false);
   const cancelRef = useRef<HTMLButtonElement>(null);
@@ -60,7 +63,7 @@ const CheckoutPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // console.log(addOrderError,"error")
+  // console.log(coupons, "coupons");
   const generatePayment = () => {
     generatePaymentLinkMutation({
       amount: newOrderResponse?.data?.grand_total,
@@ -71,11 +74,15 @@ const CheckoutPage = () => {
   };
   const discountedPrice = (product: CartItem) =>
     product.discount || product.price;
-
-  const calculateSubtotal = (shippingRate: number) =>
-    cart.reduce((total, product) => {
+  const couponDiscount = newOrderResponse?.data?.is_coupon_applied
+    ? newOrderResponse.data.amount
+    : 0;
+  const calculateSubtotal = (shippingRate: number) => {
+    const subtotal = cart.reduce((total, product) => {
       return total + discountedPrice(product) * product.quantity;
-    }, 0) + shippingRate;
+    }, 0);
+    return subtotal + shippingRate - couponDiscount;
+  };
 
   const groupedCart = cart.reduce<CartItem[]>((acc, product) => {
     const existingProduct = acc.find(
@@ -124,14 +131,17 @@ const CheckoutPage = () => {
       quantity: product.quantity,
     }));
 
-    const orderData = {
+    const orderData: any = {
       items,
       address: user?.ShippingAddress?.full_address,
       payment_type: "INSTANT",
     };
 
+    if (couponCode) {
+      orderData.coupon_code = couponCode;
+    }
+
     try {
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
       await addNewOrderMutation(orderData);
     } catch (error) {
       console.error("Error during checkout:", error);
@@ -228,7 +238,7 @@ const CheckoutPage = () => {
           </Box>
 
           <Box>
-            {/* <FormControl mt={8}>
+            <FormControl mt={8}>
               <FormLabel>Coupon Code</FormLabel>
               <Input
                 placeholder="Coupon Code"
@@ -241,7 +251,7 @@ const CheckoutPage = () => {
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
               />
-            </FormControl> */}
+            </FormControl>
             {/* {!addOrderSuccess ? ( */}
             <Button
               color="white"
@@ -316,7 +326,12 @@ const CheckoutPage = () => {
             </Flex>
             <Flex justifyContent="space-between" mt={4}>
               <Text>Subtotal</Text>
-              <Text>₦{calculateSubtotal(shippingRate)?.toLocaleString()}</Text>
+              <Text>
+                ₦
+                {newOrderResponse?.data?.is_coupon_applied
+                  ? newOrderResponse?.data?.grand_total
+                  : calculateSubtotal(shippingRate)?.toLocaleString()}
+              </Text>
             </Flex>
 
             <Flex justifyContent="space-between" mt={2}>
@@ -325,6 +340,27 @@ const CheckoutPage = () => {
             </Flex>
           </Box>
 
+          <VStack spacing={4} p={5}>
+            {coupons?.data?.data?.length === 0 ? (
+              <Text fontSize="lg" color="gray.500">
+                No coupons available.
+              </Text>
+            ) : (
+              coupons?.data?.data?.map(
+                (
+                  coupon: { name: any; code: any; expiry_date: any },
+                  index: any
+                ) => (
+                  <CouponCard
+                    key={index}
+                    title={coupon.name}
+                    code={coupon.code}
+                    expiryDate={coupon.expiry_date}
+                  />
+                )
+              )
+            )}
+          </VStack>
           {/* <Box p={2}>
             <Box mb={6}>
               <Text fontSize="lg" fontWeight="semibold" mb={4}>
