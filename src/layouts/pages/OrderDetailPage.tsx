@@ -23,6 +23,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useOrder } from "../hooks/useOrder";
 import LoadingSpinner from "../../features/helpers/LoadingSpinner";
 import { ChevronLeftIcon, CloseIcon } from "@chakra-ui/icons";
+import PaymentMethod from "./product/paymentMethod";
 
 const OrderDetailPage = () => {
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ const OrderDetailPage = () => {
   const onClose = () => setIsOpen(false);
   const { useSingleOrder,generatePaymentLinkMutation,isGeneratingPaymentLink } = useOrder();
   const { data: oneOrder, isPending } = useSingleOrder(orderId as string);
+  const [paymentMethod, setPaymentMethod] = useState("");
   // console.log(oneOrder,"oneOrder")
 
   useEffect(() => {
@@ -316,31 +318,21 @@ const OrderDetailPage = () => {
           <CloseIcon />
         </AlertDialogHeader>
         <AlertDialogOverlay />
-        <AlertDialogContent mt="220px" h="150px">
+        <AlertDialogContent mt="220px" h="100%" w="100%">
           <AlertDialogBody
             py="20px"
             fontSize="18px"
             fontWeight="medium"
             textAlign="center"
           >
-            Proceed to make payment!!!
+            <PaymentMethod
+              setPaymentMethod={setPaymentMethod}
+              paymentMethod={paymentMethod}
+            />
           </AlertDialogBody>
-          <AlertDialogFooter>
-            <Button
-              color="white"
-              bg="#FF5733"
-              borderRadius="full"
-              // mt={2}
-              w="full"
-              h="55px"
-              size="lg"
-              loadingText="Making payment..."
-              isLoading={isGeneratingPaymentLink}
-              onClick={generatePayment}
-            >
-              Pay now
-            </Button>
-          </AlertDialogFooter>
+          {/* <AlertDialogFooter>
+            
+          </AlertDialogFooter> */}
         </AlertDialogContent>
       </AlertDialog>
     </Box>

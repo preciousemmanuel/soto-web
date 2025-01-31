@@ -51,7 +51,7 @@ export default function PaymentMethod({
 
   const AlatPayment = () => {
     generateAlATPaymentLinkMutation({
-      amount: newOrderResponse?.data?.grand_total,
+      amount:  1000,
       card_number: cardDetails.card_number,
       card_month: cardDetails.card_month,
       card_year: cardDetails.card_year,

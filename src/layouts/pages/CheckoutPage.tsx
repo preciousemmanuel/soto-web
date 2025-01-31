@@ -331,7 +331,7 @@ const CheckoutPage = () => {
               setPaymentMethod={setPaymentMethod}
               paymentMethod={paymentMethod}
             />
-          )}
+          )} 
         </Box>
       </Box>
     </Box>
