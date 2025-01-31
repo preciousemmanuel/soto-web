@@ -122,7 +122,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["banks", { limit: 20, page: 1}],
     queryFn: () => fetchBanks(179, currentPage),
-    enabled: isVendorAuthenticated,
+    enabled: false,
     retry: true,
   });
 
@@ -133,7 +133,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["notifications", currentPage, itemsPerPage],
     queryFn: () => fetchNotifications(itemsPerPage, currentPage),
-    enabled: isVendorAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -149,7 +149,7 @@ export const useVendor = () => {
   const useGetMyBankDetails = useQuery({
     queryKey: ["get-my-bank-details"],
     queryFn: getMyBankDetails,
-    enabled: isVendorAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -222,10 +222,11 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["vendorOverview", { time_frame: selectedTimeframe }],
     queryFn: () => fetchVendorOverview(selectedTimeframe),
-    enabled: isVendorAuthenticated,
+    enabled: false,
     retry: false,
   });
-
+  
+ 
   const {
     data: ordersByVendor,
     isLoading: isLoadingOrdersByVendor,
@@ -233,7 +234,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["ordersByVendor", currentPage, itemsPerPage],
     queryFn: () => fetchOrdersByVendor(itemsPerPage, currentPage),
-    enabled: isVendorAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -244,7 +245,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["topProductsByVendor",  currentPage, itemsPerPage],
     queryFn: () => fetchTopProductsByVendor(itemsPerPage, currentPage),
-    enabled: isVendorAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -255,7 +256,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["allTopProductsByVendor", currentPage, itemsPerPage],
     queryFn: () => fetchTopProductsByVendor(itemsPerPage, currentPage),
-    enabled: isVendorAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -266,7 +267,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["transactionLogs", currentPage, itemsPerPage],
     queryFn: () => fetchTransactionLogs(itemsPerPage, currentPage),
-    enabled:  isVendorAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -277,7 +278,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["vendorInventory", currentPage, itemsPerPage],
     queryFn: () => fetchVendorInventory(itemsPerPage, currentPage),
-    enabled: isVendorAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -288,7 +289,7 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["salesAnalytics"],
     queryFn: fetchSalesAnalytics,
-    enabled:  isVendorAuthenticated,
+    enabled: false,
     retry: false,
   });
 

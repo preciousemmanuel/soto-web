@@ -1,26 +1,13 @@
-import { AddIcon, ChevronLeftIcon, CloseIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 import {
   Box,
   Text,
   Input,
-  Textarea,
-  Stack,
-  Radio,
-  RadioGroup,
   Button,
-  HStack,
-  Divider,
-  Image,
   Flex,
   FormControl,
   FormLabel,
   Spinner,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
   Heading,
   VStack,
 } from "@chakra-ui/react";
@@ -31,6 +18,7 @@ import { useOrder } from "../hooks/useOrder";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { CouponCard } from "../../components/Coupons";
+import PaymentMethod from "./product/paymentMethod";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -38,22 +26,21 @@ const CheckoutPage = () => {
     addNewOrderMutation,
     isAddingOrder,
     addOrderSuccess,
-    generatePaymentLinkMutation,
+    // generatePaymentLinkMutation,
     newOrderResponse,
-    isGeneratingPaymentLink,
+    // isGeneratingPaymentLink,
     generateShippingRateMutation,
     shippingRate,
     isShippingRateLink,
     coupons,
     isFetchCoupons,
-    // addOrderError,
-    // shippingRateSuccess,
   } = useOrder();
   const { user } = useAuth();
   const [couponCode, setCouponCode] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const onClose = () => setIsOpen(false);
-  const cancelRef = useRef<HTMLButtonElement>(null);
+  // const onClose = () => setIsOpen(false);
+  // const cancelRef = useRef<HTMLButtonElement>(null);
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [items, setItems] = useState([]);
   const [cart] = useState<CartItem[]>(
     JSON.parse(localStorage.getItem("cart") || "[]")
@@ -64,14 +51,7 @@ const CheckoutPage = () => {
   }, []);
 
   // console.log(coupons, "coupons");
-  const generatePayment = () => {
-    generatePaymentLinkMutation({
-      amount: newOrderResponse?.data?.grand_total,
-      narration: "ORDER",
-      narration_id: newOrderResponse?.data?._id,
-      platform: "web",
-    });
-  };
+
   const discountedPrice = (product: CartItem) =>
     product.discount || product.price;
   const couponDiscount = newOrderResponse?.data?.is_coupon_applied
@@ -174,8 +154,8 @@ const CheckoutPage = () => {
         </Heading>
       </Flex>
 
-      <Box display="flex" p={6} justifyContent="space-between" gap={6} px={40}>
-        <Box w="50%">
+      <Box display="flex" p={6} justifyContent="space-between" gap={6} px={20}>
+        <Box w="70%">
           <Box
             as="div"
             bg="#F9F9F9"
@@ -252,7 +232,7 @@ const CheckoutPage = () => {
                 onChange={(e) => setCouponCode(e.target.value)}
               />
             </FormControl>
-            {/* {!addOrderSuccess ? ( */}
+            
             <Button
               color="white"
               bg="#FF5733"
@@ -271,26 +251,11 @@ const CheckoutPage = () => {
             >
               Create Order
             </Button>
-            {/* ) : (
-              <Button
-                color="white"
-                bg="#FF5733"
-                borderRadius="full"
-                mt={6}
-                w="full"
-                h="55px"
-                size="lg"
-                loadingText="Making payment..."
-                isLoading={isGeneratingPaymentLink}
-                onClick={generatePayment}
-              >
-                Pay now
-              </Button>
-            )} */}
+            
           </Box>
         </Box>
 
-        <Box w="50%" p={4}>
+        <Box w="70%" p={4}>
           <Box mb={6}>
             <Flex justifyContent="space-between" mb={4}>
               <Text fontSize="xl" fontWeight="semibold">
@@ -361,154 +326,14 @@ const CheckoutPage = () => {
               )
             )}
           </VStack>
-          {/* <Box p={2}>
-            <Box mb={6}>
-              <Text fontSize="lg" fontWeight="semibold" mb={4}>
-                Payment Options
-              </Text>
-              <RadioGroup flexDirection="column" gap={6}>
-                <Flex justifyContent="space-between" mb={2}>
-                  <HStack>
-                    <Image src={card} />
-                    <Text fontWeight="normal" color="#9F9F9F" fontSize="md">
-                      Credit card
-                    </Text>
-                  </HStack>
-                  <Radio
-                    value="credit-card"
-                    size="lg"
-                    _checked={{
-                      bg: "#FF5733",
-                    }}
-                  ></Radio>
-                </Flex>
-                <Text fontSize="sm" color="#9F9F9F" mb={6}>
-                  Make your payment directly into our bank account. Please use
-                  your Order ID as the payment reference. Your order will not be
-                  shipped until the funds have cleared.
-                </Text>
-
-                <Flex justifyContent="space-between" mb={6}>
-                  <HStack>
-                    <Image src={paystack} />
-                    <Text fontWeight="normal" color="#9F9F9F" fontSize="md">
-                      PayStack
-                    </Text>
-                  </HStack>
-                  <Radio
-                    value="paystack"
-                    size="lg"
-                    _checked={{
-                      bg: "#FF5733",
-                    }}
-                  ></Radio>
-                </Flex>
-
-                <Flex justifyContent="space-between" mb={6}>
-                  <HStack>
-                    <Image src={paypal} />
-                    <Text fontWeight="normal" color="#9F9F9F" fontSize="md">
-                      Paypal
-                    </Text>
-                  </HStack>
-                  <Radio
-                    value="paypal"
-                    size="lg"
-                    _checked={{
-                      bg: "#FF5733",
-                    }}
-                  ></Radio>
-                </Flex>
-
-                <Box
-                  as="button"
-                  w="100%"
-                  border="1px dashed gray"
-                  p={3}
-                  borderRadius="md"
-                  textAlign="center"
-                >
-                  <HStack justify="center">
-                    <AddIcon boxSize={3} />
-                    <Text fontSize="sm" color="gray.600">
-                      Add card
-                    </Text>
-                  </HStack>
-                </Box>
-              </RadioGroup>
-              <Box my="4">
-                <Text fontSize="sm">
-                  Your personal data will be used to support your experience
-                  throughout this website, to manage access to your account, and
-                  for other purposes described in our privacy policy.
-                </Text>
-              </Box>
-            </Box>
-
-            <Divider my={4} />
-
-            <Box mb={6}>
-              <Text fontSize="lg" fontWeight="bold" mb={4}>
-                Shipping Options
-              </Text>
-              <ShippingOptions />
-            </Box>
-
-            <Text fontSize="sm" color="gray.600" mt={4}>
-              Delivered on or before Saturday, 16 October 2024
-            </Text>
-
-            <Button
-              color="white"
-              bg="#FF5733"
-              borderRadius="full"
-              mt={6}
-              w="full"
-              h="55px"
-              size="lg"
-            >
-              Pay now
-            </Button>
-          </Box> */}
+          {isOpen && (
+            <PaymentMethod
+              setPaymentMethod={setPaymentMethod}
+              paymentMethod={paymentMethod}
+            />
+          )}
         </Box>
       </Box>
-      {/* <PaymentMethod /> */}
-      <AlertDialog
-        isOpen={isOpen}
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-      >
-        <AlertDialogHeader fontSize="lg" fontWeight="bold">
-          <CloseIcon />
-        </AlertDialogHeader>
-        <AlertDialogOverlay />
-        <AlertDialogContent mt="220px" h="150px">
-          <AlertDialogBody
-            py="20px"
-            fontSize="18px"
-            fontWeight="medium"
-            textAlign="center"
-          >
-            Proceed to make payment!!!
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            <Button
-              color="white"
-              bg="#FF5733"
-              borderRadius="full"
-              // mt={2}
-              w="full"
-              h="55px"
-              size="lg"
-              loadingText="Making payment..."
-              isLoading={isGeneratingPaymentLink}
-              onClick={generatePayment}
-            >
-              Pay now
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </Box>
   );
 };

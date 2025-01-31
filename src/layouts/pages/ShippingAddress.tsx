@@ -108,7 +108,7 @@ export default function ShippingAddress() {
                 fontSize="sm"
                 width="100%"
                 {...register("postal_code", {
-                  required: true,
+                  
                   pattern: /^\d+$/,
                 })}
               />
