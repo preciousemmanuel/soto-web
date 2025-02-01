@@ -51,19 +51,20 @@ export default function PaymentMethod({
 
   const AlatPayment = () => {
     generateAlATPaymentLinkMutation({
-      amount:  1000,
+      amount: newOrderResponse?.data?.grand_total,
       card_number: cardDetails.card_number,
       card_month: cardDetails.card_month,
       card_year: cardDetails.card_year,
       sec_code: cardDetails.sec_code,
       narration: "ORDER",
       narration_id: newOrderResponse?.data?._id,
+      // order: "6763c0f1ccc03ae8d0fbcd1b"
     });
   };
 
   return (
-    <Box mb={6}>
-      <Text fontSize="20px" fontWeight="medium" mb={6}>
+    <Box mb={6} px={{ base: 4, md: 0 }}>
+      <Text fontSize={{ base: "18px", md: "20px" }} fontWeight="medium" mb={6}>
         Payment Methods
       </Text>
       <RadioGroup
@@ -74,14 +75,14 @@ export default function PaymentMethod({
       >
         <Flex justifyContent="space-between" mb={6}>
           <HStack>
-            <Image src={alat} w="40px" rounded="full" />
-            <Text fontWeight="normal" color="#9F9F9F" fontSize="md">
+            <Image src={alat} w={{ base: "30px", md: "40px" }} rounded="full" />
+            <Text fontWeight="normal" color="#9F9F9F" fontSize={{ base: "sm", md: "md" }}>
               Alat Pay
             </Text>
           </HStack>
           <Radio
             value="alat"
-            size="lg"
+            size={{ base: "md", md: "lg" }}
             _checked={{
               bg: "#FF5733",
             }}
@@ -90,14 +91,14 @@ export default function PaymentMethod({
 
         <Flex justifyContent="space-between" mb={6}>
           <HStack>
-            <Image src={paystack} />
-            <Text fontWeight="normal" color="#9F9F9F" fontSize="md">
+            <Image src={paystack} w={{ base: "80px", md: "auto" }} />
+            <Text fontWeight="normal" color="#9F9F9F" fontSize={{ base: "sm", md: "md" }}>
               PayStack
             </Text>
           </HStack>
           <Radio
             value="paystack"
-            size="lg"
+            size={{ base: "md", md: "lg" }}
             _checked={{
               bg: "#FF5733",
             }}
@@ -105,40 +106,21 @@ export default function PaymentMethod({
         </Flex>
       </RadioGroup>
       {paymentMethod === "alat" && (
-        <Box p={6} borderRadius="lg" borderWidth="1px" bg="white">
-          <Text fontSize="lg" fontWeight="bold" mb={4}>
+        <Box p={{ base: 4, md: 6 }} borderRadius="lg" borderWidth="1px" bg="white">
+          <Text fontSize={{ base: "md", md: "lg" }} fontWeight="bold" mb={4}>
             Add Debit Card
           </Text>
 
-          <Grid templateColumns="repeat(2, 1fr)" gap={4} mb={6}>
-            {/* <GridItem colSpan={[2, 1]}>
-              <VStack align="start">
-                <Text fontSize="sm" fontWeight="medium">
-                  Holder Name
-                </Text>
-                <Input
-                  placeholder="Enter your name"
-                  width="300px"
-                  height="50px"
-                  value={cardDetails.cardHolderName}
-                  onChange={(e) =>
-                    setCardDetails({
-                      ...cardDetails,
-                      cardHolderName: e.target.value,
-                    })
-                  }
-                />
-              </VStack>
-            </GridItem> */}
-            <GridItem colSpan={[2, 1]}>
+          <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} mb={6}>
+            <GridItem colSpan={{ base: 1, md: 2 }}>
               <VStack align="start">
                 <Text fontSize="sm" fontWeight="medium">
                   Card Number
                 </Text>
                 <Input
                   placeholder="0000 - 0000 - 0000 - 0000"
-                  width="300px"
-                  height="50px"
+                  width="100%"
+                  height={{ base: "40px", md: "50px" }}
                   value={cardDetails.card_number}
                   onChange={(e) =>
                     setCardDetails({
@@ -149,7 +131,7 @@ export default function PaymentMethod({
                 />
               </VStack>
             </GridItem>
-            <GridItem colSpan={[3, 1]}>
+            <GridItem>
               <VStack align="start">
                 <Text fontSize="sm" fontWeight="medium">
                   Card Month
@@ -157,8 +139,8 @@ export default function PaymentMethod({
                 <Input
                   placeholder="MM"
                   type="text"
-                  width="300px"
-                  height="50px"
+                  width="100%"
+                  height={{ base: "40px", md: "50px" }}
                   value={cardDetails.card_month}
                   onChange={(e) =>
                     setCardDetails({
@@ -169,8 +151,7 @@ export default function PaymentMethod({
                 />
               </VStack>
             </GridItem>
-            {/* Expiry Date */}
-            <GridItem colSpan={[3, 1]}>
+            <GridItem>
               <VStack align="start">
                 <Text fontSize="sm" fontWeight="medium">
                   Card Year
@@ -178,8 +159,8 @@ export default function PaymentMethod({
                 <Input
                   placeholder="YY"
                   type="text"
-                  width="300px"
-                  height="50px"
+                  width="100%"
+                  height={{ base: "40px", md: "50px" }}
                   value={cardDetails.card_year}
                   onChange={(e) =>
                     setCardDetails({
@@ -190,9 +171,7 @@ export default function PaymentMethod({
                 />
               </VStack>
             </GridItem>
-
-            {/* CVV */}
-            <GridItem colSpan={[2, 1]}>
+            <GridItem colSpan={{ base: 1, md: 2 }}>
               <VStack align="start">
                 <Text fontSize="sm" fontWeight="medium">
                   CVV
@@ -200,8 +179,8 @@ export default function PaymentMethod({
                 <Input
                   placeholder="CVV"
                   type="text"
-                  width="300px"
-                  height="50px"
+                  width="100%"
+                  height={{ base: "40px", md: "50px" }}
                   value={cardDetails.sec_code}
                   onChange={(e) =>
                     setCardDetails({ ...cardDetails, sec_code: e.target.value })
@@ -213,7 +192,7 @@ export default function PaymentMethod({
           <Button
             color="white"
             bg="#FF5733"
-            h="60px"
+            h={{ base: "50px", md: "60px" }}
             borderRadius="full"
             w="full"
             loadingText="Making payment..."
@@ -230,10 +209,9 @@ export default function PaymentMethod({
           color="white"
           bg="#FF5733"
           borderRadius="full"
-          // mt={2}
           w="full"
-          h="55px"
-          size="lg"
+          h={{ base: "50px", md: "55px" }}
+          size={{ base: "md", md: "lg" }}
           loadingText="Making payment..."
           isLoading={isGeneratingPaymentLink}
           onClick={generatePayment}
@@ -242,5 +220,5 @@ export default function PaymentMethod({
         </Button>
       )}
     </Box>
-  );
+  )
 }
