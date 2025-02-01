@@ -16,10 +16,10 @@ import paystack from "../../../assets/paystack.png";
 // import paypal from "../../../assets/paypal.png";
 // import { useState } from "react";
 import { useOrder } from "../../hooks/useOrder";
-import { useState } from "react";
+// import { useState } from "react";
 import AlatpayButton from "./AlatPay";
 import { useAuth } from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 // import ShippingOptions from "./shippingOptions";
 
 export default function PaymentMethod({
