@@ -31,7 +31,7 @@ const OrderDetailPage = () => {
   const cancelRef = useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const onClose = () => setIsOpen(false);
-  const { useSingleOrder,generatePaymentLinkMutation,isGeneratingPaymentLink } = useOrder();
+  const { useSingleOrder } = useOrder();
   const { data: oneOrder, isPending } = useSingleOrder(orderId as string);
   const [paymentMethod, setPaymentMethod] = useState("");
   // console.log(oneOrder,"oneOrder")
@@ -41,14 +41,14 @@ const OrderDetailPage = () => {
   }, []);
 
 
-  const generatePayment = () => {
-    generatePaymentLinkMutation({
-      amount: oneOrder?.data?.grand_total,
-      narration: "ORDER",
-      narration_id: oneOrder?.data?._id,
-      platform: "web",
-    });
-  };
+  // const generatePayment = () => {
+  //   generatePaymentLinkMutation({
+  //     amount: oneOrder?.data?.grand_total,
+  //     narration: "ORDER",
+  //     narration_id: oneOrder?.data?._id,
+  //     platform: "web",
+  //   });
+  // };
 
   if (!oneOrder || !oneOrder.data) {
     return <LoadingSpinner />;
@@ -318,7 +318,7 @@ const OrderDetailPage = () => {
           <CloseIcon />
         </AlertDialogHeader>
         <AlertDialogOverlay />
-        <AlertDialogContent mt="220px" h="100%" w="100%">
+        <AlertDialogContent mt="220px" h="50%" w="100%">
           <AlertDialogBody
             py="20px"
             fontSize="18px"
@@ -328,6 +328,7 @@ const OrderDetailPage = () => {
             <PaymentMethod
               setPaymentMethod={setPaymentMethod}
               paymentMethod={paymentMethod}
+              amount={oneOrder?.data?.grand_total}
             />
           </AlertDialogBody>
           {/* <AlertDialogFooter>

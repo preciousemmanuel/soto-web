@@ -331,12 +331,13 @@ const CheckoutPage = () => {
               )
             )}
           </VStack>
-           {isOpen && (  
+           {isOpen && (   
             <PaymentMethod
               setPaymentMethod={setPaymentMethod}
               paymentMethod={paymentMethod}
+              amount={newOrderResponse?.data?.grand_total}
             />
-          )} 
+            )}  
         </Box>
       </Box>
     </Box>

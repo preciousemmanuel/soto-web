@@ -64,7 +64,7 @@ export const useOrder = () => {
   const generateAlATPaymentLink = async (orderData: any): Promise<any> => {
     try {
       const response = await apiClient.post(
-        "/transaction/generate-payment-link",
+        "/transaction/alat-wema/initialize-card",
         orderData
       );
       if (!response || !response.data) {
@@ -210,7 +210,7 @@ export const useOrder = () => {
       return res; 
     },
     onError: (error: any) => {
-      console.log(error, "error");
+      // console.log(error, "error");
       toast({
         title: `${error?.response?.data?.message}`,
         description: "An error occurred while adding your order.",
