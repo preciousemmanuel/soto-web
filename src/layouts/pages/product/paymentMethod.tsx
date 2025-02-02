@@ -1,9 +1,6 @@
 import {
   Box,
   Text,
-  Input,
-  Grid,
-  GridItem,
   Radio,
   RadioGroup,
   Button,
@@ -12,220 +9,244 @@ import {
   Image,
   Flex,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
-import card from "../../../assets/card.png";
+import alat from "../../../assets/alat.png";
 import paystack from "../../../assets/paystack.png";
-import paypal from "../../../assets/paypal.png";
-import ShippingOptions from "./shippingOptions";
+// import paypal from "../../../assets/paypal.png";
+// import { useState } from "react";
+import { useOrder } from "../../hooks/useOrder";
+// import { useState } from "react";
+import AlatpayButton from "./AlatPay";
+import { useAuth } from "../../hooks/useAuth";
+// import { useNavigate } from "react-router-dom";
+// import ShippingOptions from "./shippingOptions";
 
-export default function PaymentMethod() {
+export default function PaymentMethod({
+  paymentMethod,
+  setPaymentMethod,
+  amount
+}: any) {
+  const {
+    generatePaymentLinkMutation,
+    newOrderResponse,
+    isGeneratingPaymentLink,
+    // generateAlATPaymentLinkMutation,
+    // clearCart,
+    // isGeneratingAlATPaymentLink,
+  } = useOrder();
+  const { user } = useAuth();
+  // const toast = useToast();
+  // const navigate = useNavigate();
+  // const [alatResponse, setAlatResponse] = useState<any | null>(null);
+  // const [cardDetails, setCardDetails] = useState<any>({
+  //   card_number: "",
+  //   card_month: "",
+  //   card_year: "",
+  //   sec_code: "",
+  // });
+
+  const generatePayment = () => {
+    generatePaymentLinkMutation({
+      amount: amount,
+      narration: "ORDER",
+      narration_id: newOrderResponse?.data?._id,
+      platform: "web",
+    });
+  };
+
+  // const AlatPayment = () => {
+  //   generateAlATPaymentLinkMutation({
+  //     amount: newOrderResponse?.data?.grand_total,
+  //     card_number: cardDetails.card_number,
+  //     card_month: cardDetails.card_month,
+  //     card_year: cardDetails.card_year,
+  //     sec_code: cardDetails.sec_code,
+  //     narration: "ORDER",
+  //     narration_id: newOrderResponse?.data?._id,
+  //     // order: "6763c0f1ccc03ae8d0fbcd1b"
+  //   });
+  // };
+
   return (
-    <Flex direction="row" justify="space-between" px={24}>
-      <Box mb={6}>
-        <Text fontSize="30px" fontWeight="semibold" mb={4}>
-          Payment Methods
-        </Text>
-        <RadioGroup flexDirection="column" gap={6}>
-          <Flex justifyContent="space-between" mb={2}>
-            <HStack>
-              <Image src={card} />
-              <Text fontWeight="normal" color="#9F9F9F" fontSize="md">
-                Credit card
-              </Text>
-            </HStack>
-            <Radio
-              value="credit-card"
-              size="lg"
-              _checked={{
-                bg: "#FF5733",
-              }}
-            ></Radio>
-          </Flex>
+    <Box mb={6} px={{ base: 4, md: 0 }}>
+      <Text fontSize={{ base: "18px", md: "20px" }} fontWeight="medium" mb={6}>
+        Payment Methods
+      </Text>
+      <RadioGroup
+        flexDirection="column"
+        gap={6}
+        value={paymentMethod}
+        onChange={setPaymentMethod}
+      >
+        <Flex justifyContent="space-between" mb={6}>
+          <HStack>
+            <Image src={alat} w={{ base: "30px", md: "40px" }} rounded="full" />
+            <Text fontWeight="normal" color="#9F9F9F" fontSize={{ base: "sm", md: "md" }}>
+              Alat Pay
+            </Text>
+          </HStack>
+          <Radio
+            value="alat"
+            size={{ base: "md", md: "lg" }}
+            _checked={{
+              bg: "#FF5733",
+            }}
+          ></Radio>
+        </Flex>
 
-          <Flex justifyContent="space-between" mb={6}>
-            <HStack>
-              <Image src={paystack} />
-              <Text fontWeight="normal" color="#9F9F9F" fontSize="md">
-                PayStack
-              </Text>
-            </HStack>
-            <Radio
-              value="paystack"
-              size="lg"
-              _checked={{
-                bg: "#FF5733",
-              }}
-            ></Radio>
-          </Flex>
+        <Flex justifyContent="space-between" mb={6}>
+          <HStack>
+            <Image src={paystack} w={{ base: "80px", md: "auto" }} />
+            <Text fontWeight="normal" color="#9F9F9F" fontSize={{ base: "sm", md: "md" }}>
+              PayStack
+            </Text>
+          </HStack>
+          <Radio
+            value="paystack"
+            size={{ base: "md", md: "lg" }}
+            _checked={{
+              bg: "#FF5733",
+            }}
+          ></Radio>
+        </Flex>
+      </RadioGroup>
+      {paymentMethod === "alat" && (
+        // <Box p={{ base: 4, md: 6 }} borderRadius="lg" borderWidth="1px" bg="white">
+        //   <Text fontSize={{ base: "md", md: "lg" }} fontWeight="bold" mb={4}>
+        //     Add Debit Card
+        //   </Text>
 
-          <Flex justifyContent="space-between" mb={6}>
-            <HStack>
-              <Image src={paypal} />
-              <Text fontWeight="normal" color="#9F9F9F" fontSize="md">
-                Paypal
-              </Text>
-            </HStack>
-            <Radio
-              value="paypal"
-              size="lg"
-              _checked={{
-                bg: "#FF5733",
-              }}
-            ></Radio>
-          </Flex>
-        </RadioGroup>
-        <Box
-          p={6}
-          borderRadius="md"
-          boxShadow="md"
-          borderWidth="1px"
-          bg="white"
-          //   maxW="lg"
-          mx="auto"
+        //   <Grid templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }} gap={4} mb={6}>
+        //     <GridItem colSpan={{ base: 1, md: 2 }}>
+        //       <VStack align="start">
+        //         <Text fontSize="sm" fontWeight="medium">
+        //           Card Number
+        //         </Text>
+        //         <Input
+        //           placeholder="0000 - 0000 - 0000 - 0000"
+        //           width="100%"
+        //           height={{ base: "40px", md: "50px" }}
+        //           value={cardDetails.card_number}
+        //           onChange={(e) =>
+        //             setCardDetails({
+        //               ...cardDetails,
+        //               card_number: e.target.value,
+        //             })
+        //           }
+        //         />
+        //       </VStack>
+        //     </GridItem>
+        //     <GridItem>
+        //       <VStack align="start">
+        //         <Text fontSize="sm" fontWeight="medium">
+        //           Card Month
+        //         </Text>
+        //         <Input
+        //           placeholder="MM"
+        //           type="text"
+        //           width="100%"
+        //           height={{ base: "40px", md: "50px" }}
+        //           value={cardDetails.card_month}
+        //           onChange={(e) =>
+        //             setCardDetails({
+        //               ...cardDetails,
+        //               card_month: e.target.value,
+        //             })
+        //           }
+        //         />
+        //       </VStack>
+        //     </GridItem>
+        //     <GridItem>
+        //       <VStack align="start">
+        //         <Text fontSize="sm" fontWeight="medium">
+        //           Card Year
+        //         </Text>
+        //         <Input
+        //           placeholder="YY"
+        //           type="text"
+        //           width="100%"
+        //           height={{ base: "40px", md: "50px" }}
+        //           value={cardDetails.card_year}
+        //           onChange={(e) =>
+        //             setCardDetails({
+        //               ...cardDetails,
+        //               card_year: e.target.value,
+        //             })
+        //           }
+        //         />
+        //       </VStack>
+        //     </GridItem>
+        //     <GridItem colSpan={{ base: 1, md: 2 }}>
+        //       <VStack align="start">
+        //         <Text fontSize="sm" fontWeight="medium">
+        //           CVV
+        //         </Text>
+        //         <Input
+        //           placeholder="CVV"
+        //           type="text"
+        //           width="100%"
+        //           height={{ base: "40px", md: "50px" }}
+        //           value={cardDetails.sec_code}
+        //           onChange={(e) =>
+        //             setCardDetails({ ...cardDetails, sec_code: e.target.value })
+        //           }
+        //         />
+        //       </VStack>
+        //     </GridItem>
+        //   </Grid>
+        //   <Button
+        //     color="white"
+        //     bg="#FF5733"
+        //     h={{ base: "50px", md: "60px" }}
+        //     borderRadius="full"
+        //     w="full"
+        //     loadingText="Making payment..."
+        //     isLoading={isGeneratingAlATPaymentLink}
+        //     onClick={AlatPayment}
+        //   >
+        //     Pay now
+        //   </Button>
+        // </Box>
+        <AlatpayButton 
+          email={user?.Email}  
+          firstName={user?.FirstName} 
+          lastName={user?.FirstName}
+          amount={amount} 
+          // onTransaction={(response) => {
+          //   setAlatResponse(response?.message)
+          //   console.log("Transaction response:", response);
+          // }}
+          // onClose={() => {
+          //   if(alatResponse === "Success") {
+          //   clearCart()
+          //   toast({
+          //     title: "Payment Successful",
+          //     status: "success",
+          //     duration: 2000,
+          //     isClosable: true,
+          //   });
+          //   navigate("/product-list")
+          // }
+          // }}
+        />
+      )}
+
+      {paymentMethod === "paystack" && (
+        <Button
+          color="white"
+          bg="#FF5733"
+          borderRadius="full"
+          w="full"
+          h={{ base: "50px", md: "55px" }}
+          size={{ base: "md", md: "lg" }}
+          loadingText="Making payment..."
+          isLoading={isGeneratingPaymentLink}
+          onClick={generatePayment}
         >
-          <Text fontSize="lg" fontWeight="bold" mb={4}>
-            Add Debit Card
-          </Text>
-
-          <Grid templateColumns="repeat(2, 1fr)" gap={4} mb={6}>
-            {/* Holder Name */}
-            <GridItem colSpan={[2, 1]}>
-              <VStack align="start">
-                <Text fontSize="sm" fontWeight="medium">
-                  Holder Name
-                </Text>
-                <Input
-                  placeholder="Enter your name"
-                  width="300px"
-                  height="60px"
-                />
-              </VStack>
-            </GridItem>
-
-            {/* Card Number */}
-            <GridItem colSpan={[2, 1]}>
-              <VStack align="start">
-                <Text fontSize="sm" fontWeight="medium">
-                  Card Number
-                </Text>
-                <Input
-                  placeholder="0000 - 0000 - 0000 - 0000"
-                  width="300px"
-                  height="60px"
-                />
-              </VStack>
-            </GridItem>
-
-            {/* Expiry Date */}
-            <GridItem colSpan={[2, 1]}>
-              <VStack align="start">
-                <Text fontSize="sm" fontWeight="medium">
-                  Expiry Date
-                </Text>
-                <Input
-                  placeholder="Select expiry date"
-                  type="text"
-                  width="300px"
-                  height="60px"
-                />
-              </VStack>
-            </GridItem>
-
-            {/* CVV */}
-            <GridItem colSpan={[2, 1]}>
-              <VStack align="start">
-                <Text fontSize="sm" fontWeight="medium">
-                  CVV
-                </Text>
-                <Input
-                  placeholder="Enter card CVV"
-                  type="text"
-                  width="300px"
-                  height="60px"
-                />
-              </VStack>
-            </GridItem>
-          </Grid>
-
-          {/* Buttons */}
-          <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-            <Button
-              color="#FF5733"
-              bg="white"
-              borderRadius="full"
-              variant="outline"
-              h="60px"
-            >
-              Cancel
-            </Button>
-            <Button
-              color="white"
-              bg="#FF5733"
-              h="60px"
-              borderRadius="full"
-              w="full"
-            >
-              Checkout
-            </Button>
-          </Grid>
-        </Box>
-      </Box>
-      <Flex direction="column">
-        <Text fontSize="30px" fontWeight="semibold" mb={4}>
-          Order Summary
-        </Text>
-        <Box mb={6}>
-          <Flex justifyContent="space-between">
-            <Text fontSize="xl" fontWeight="semibold">
-              Product
-            </Text>
-            <Text fontSize="xl" fontWeight="semibold">
-              Subtotal
-            </Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text fontSize="14px" color="#9F9F9F">
-              Argent sofa x 3
-            </Text>
-            <Text mt={2}>₦240,000.00</Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text>Subtotal</Text>
-            <Text mt={2}>₦240,000.00</Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text fontWeight="medium">Total Amount</Text>
-            <Text mt={2}>₦504,000.00</Text>
-          </Flex>
-        </Box>
-
-        <Box p={2}>
-          <Divider my={4} />
-
-          <Box mb={6}>
-            <Text fontSize="lg" fontWeight="bold" mb={4}>
-              Shipping Options
-            </Text>
-            <ShippingOptions />
-          </Box>
-
-          <Text fontSize="sm" color="gray.600" mt={4}>
-            Delivered on or before Saturday, 16 October 2024
-          </Text>
-
-          <Button
-            color="white"
-            bg="#FF5733"
-            borderRadius="full"
-            mt={6}
-            w="full"
-            h="55px"
-            size="lg"
-          >
-            Pay now
-          </Button>
-        </Box>
-      </Flex>
-    </Flex>
-  );
+          Pay now
+        </Button>
+      )}
+    </Box>
+  )
 }

@@ -3,7 +3,7 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useProduct } from "../hooks/useProduct";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import { useOrder } from "../hooks/useOrder";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 

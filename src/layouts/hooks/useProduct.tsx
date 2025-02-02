@@ -84,6 +84,8 @@ export const useProduct = () => {
   } = useQuery({
     queryKey: ["PopularProducts", currentPage, itemsPerPage],
     queryFn: () => fetchProducts(itemsPerPage, currentPage, "POPULAR", ""),
+    enabled: false,
+    retry: false,
   });
 
   const {
@@ -94,6 +96,8 @@ export const useProduct = () => {
   } = useQuery({
     queryKey: ["products", currentPage, itemsPerPage],
     queryFn: () => fetchProducts(itemsPerPage, currentPage, "", ""),
+    enabled: false,
+    retry: false,
   });
 
   const fetchSingleProduct = async (
@@ -108,6 +112,7 @@ export const useProduct = () => {
       queryKey: ["product", productId],
       queryFn: () => fetchSingleProduct(productId),
       enabled: !!productId,
+      retry: false,
     });
   };
 
@@ -149,6 +154,7 @@ export const useProduct = () => {
       queryKey: ["wishlist", limit, page],
       queryFn: () => fetchWishlist(limit, page),
       enabled: !!limit && !!page,
+      retry: false,
     });
   };
 
@@ -380,6 +386,8 @@ export const useProduct = () => {
   } = useQuery({
     queryKey: ["categories", currentPage, itemsPerPage],
     queryFn: () => fetchCategories(itemsPerPage, currentPage),
+    enabled: false,
+    retry: false,
   });
 
   const {
@@ -438,6 +446,8 @@ export const useProduct = () => {
   } = useQuery({
     queryKey: ["businessCategories", currentPage, itemsPerPage],
     queryFn: () => fetchBusinessCategories(itemsPerPage, currentPage),
+    enabled: false,
+    retry: false,
   });
 
   return {

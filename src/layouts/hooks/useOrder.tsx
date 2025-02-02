@@ -26,11 +26,11 @@ export const useOrder = () => {
     try {
       const response = await apiClient.post("/order/create-custom", orderData);
       if (!response || !response.data) {
-        return [];
+        throw new Error("No response data received");
       }
       return response.data;
     } catch (error) {
-      return [];
+      throw error; 
     }
   };
 
@@ -38,11 +38,11 @@ export const useOrder = () => {
     try {
       const response = await apiClient.post("/order/create", orderData);
       if (!response || !response.data) {
-        return [];
+        throw new Error("No response data received");
       }
       return response.data;
     } catch (error) {
-      return [];
+      throw error; 
     }
   };
 
@@ -53,11 +53,26 @@ export const useOrder = () => {
         orderData
       );
       if (!response || !response.data) {
-        return [];
+        throw new Error("No response data received");
       }
       return response.data;
     } catch (error) {
-      return [];
+      throw error; 
+    }
+  };
+
+  const generateAlATPaymentLink = async (orderData: any): Promise<any> => {
+    try {
+      const response = await apiClient.post(
+        "/transaction/alat-wema/initialize-card",
+        orderData
+      );
+      if (!response || !response.data) {
+        throw new Error("No response data received");
+      }
+      return response.data;
+    } catch (error) {
+      throw error; 
     }
   };
 
@@ -68,11 +83,11 @@ export const useOrder = () => {
         orderData
       );
       if (!response || !response.data) {
-        return [];
+        throw new Error("No response data received");
       }
       return response.data;
     } catch (error) {
-      return [];
+      throw error; 
     }
   };
 
@@ -176,6 +191,7 @@ export const useOrder = () => {
     },
   });
 
+  
   const {
     mutate: addNewOrderMutation,
     isPending: isAddingOrder,
@@ -185,15 +201,16 @@ export const useOrder = () => {
     mutationFn: addNewOrder,
     onSuccess: (res) => {
       toast({
-        title: `${res?.message}`,
-        description: "Your new order has been added successfully.",
-        status: "success",
+        title: `${res?.data?.message}`,
+        status: res?.data?.status === "success" ? "success" : "error",
         duration: 2000,
         isClosable: true,
       });
       setNewOrderResponse(res);
+      return res; 
     },
     onError: (error: any) => {
+      // console.log(error, "error");
       toast({
         title: `${error?.response?.data?.message}`,
         description: "An error occurred while adding your order.",
@@ -201,6 +218,7 @@ export const useOrder = () => {
         duration: 2000,
         isClosable: true,
       });
+      return error; 
     },
   });
 
@@ -260,6 +278,39 @@ export const useOrder = () => {
   });
 
   const {
+    mutate: generateAlATPaymentLinkMutation,
+    isPending: isGeneratingAlATPaymentLink,
+    isSuccess: generateAlATPaymentLinkSuccess,
+    error: generateAlATPaymentLinkError,
+  } = useMutation({
+    mutationFn: generateAlATPaymentLink,
+    onSuccess: (res) => {
+      if (res?.data?.data) {
+        clearCart();
+        window.location.href = res?.data?.data?.data?.authorization_url;
+      } else {
+        toast({
+          title: "Error",
+          description: "No authorization URL returned.",
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    },
+    onError: (error: any) => {
+      toast({
+        title: `${error?.response?.data?.message}`,
+        description: "An error occurred while generating your payment link.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
+
+  const {
     data: orders,
     isLoading: isFetchingOrders,
     error: fetchOrdersError,
@@ -267,7 +318,7 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["fetchOrders", currentPage, itemsPerPage],
     queryFn: () => fetchOrders(itemsPerPage, currentPage, ""),
-    enabled: isAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -281,7 +332,7 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["fetchCoupons", currentPage, itemsPerPage],
     queryFn: () => fetchCoupons(itemsPerPage, currentPage),
-    enabled: isAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -293,7 +344,7 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["customOrders", currentPage, itemsPerPage],
     queryFn: () => fetchOrders(itemsPerPage, currentPage, "CUSTOM"),
-    enabled: isAuthenticated,
+    enabled: false,
     retry: false,
   });
 
@@ -305,7 +356,7 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["fetchOrdersVendor", currentPage, itemsPerPage],
     queryFn: () => fetchVendorOrders(itemsPerPage, currentPage, status),
-    enabled: isVendorAuthenticated,
+    enabled:false,
     retry: false,
   });
 
@@ -313,7 +364,8 @@ export const useOrder = () => {
     return useQuery({
       queryKey: ["buyer-orders", orderId],
       queryFn: () => fetchOneOrder(orderId),
-      enabled: isAuthenticated || isVendorAuthenticated,
+      enabled: false,
+      retry: false,
     });
   };
 
@@ -321,7 +373,8 @@ export const useOrder = () => {
     return useQuery({
       queryKey: ["vendor-orders", orderId],
       queryFn: () => fetchOneVendorOrder(orderId),
-      enabled: isVendorAuthenticated,
+      enabled:false,
+      retry: false,
     });
   };
 
@@ -333,6 +386,7 @@ export const useOrder = () => {
     queryKey: ["fetchStates"],
     queryFn: fetchStates,
     retry: false,
+    enabled:false,
   });
 
   const {
@@ -343,6 +397,7 @@ export const useOrder = () => {
     queryKey: ["fetchCities"],
     queryFn: () => fetchCities("NG", "LA"),
     retry: false,
+    enabled:false,
   });
 
   const handlePageChange = (newPage: number) => {
@@ -363,6 +418,10 @@ export const useOrder = () => {
     isAddingOrder,
     addOrderSuccess,
     addOrderError,
+    generateAlATPaymentLinkMutation,
+    isGeneratingAlATPaymentLink,
+    generateAlATPaymentLinkSuccess,
+    generateAlATPaymentLinkError,
     generatePaymentLinkMutation,
     isGeneratingPaymentLink,
     generatePaymentLinkSuccess,
