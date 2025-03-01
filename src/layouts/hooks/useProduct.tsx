@@ -26,7 +26,7 @@ export interface Product {
   width?: number;
   weight?: number;
   discount_price?: number;
-  raw_price?: number,
+  raw_price?: number;
   is_discounted?: boolean;
   in_stock?: boolean;
   is_verified?: boolean;
@@ -34,7 +34,7 @@ export interface Product {
   createdAt?: string;
   updatedAt?: string;
   favourite?: boolean;
-  status?: any
+  status?: any;
 }
 
 interface ProductResponse {
@@ -67,15 +67,14 @@ export const useProduct = () => {
     productName?: string
   ): Promise<ProductResponse> => {
     let url = `/product/fetch?limit=${limit}&page=${page}`;
-    
+
     if (status) url += `&fetch_type=${status}`;
     if (categoryId) url += `&category=${categoryId}`;
     if (productName) url += `&product_name=${encodeURIComponent(productName)}`;
-    
+
     const response = await apiClient.get(url);
     return response.data;
   };
-
 
   const {
     data: PopularProducts,
@@ -84,7 +83,7 @@ export const useProduct = () => {
   } = useQuery({
     queryKey: ["PopularProducts", currentPage, itemsPerPage],
     queryFn: () => fetchProducts(itemsPerPage, currentPage, "POPULAR", ""),
-    enabled: false,
+    enabled: true,
     retry: false,
   });
 
@@ -96,7 +95,7 @@ export const useProduct = () => {
   } = useQuery({
     queryKey: ["products", currentPage, itemsPerPage],
     queryFn: () => fetchProducts(itemsPerPage, currentPage, "", ""),
-    enabled: false,
+    enabled: true,
     retry: false,
   });
 
@@ -149,7 +148,10 @@ export const useProduct = () => {
     }
   };
 
-  const useWishlist = (limit: number = itemsPerPage, page: number = currentPage) => {
+  const useWishlist = (
+    limit: number = itemsPerPage,
+    page: number = currentPage
+  ) => {
     return useQuery({
       queryKey: ["wishlist", limit, page],
       queryFn: () => fetchWishlist(limit, page),
@@ -169,7 +171,7 @@ export const useProduct = () => {
         isClosable: true,
       });
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       toast({
         title: `${error.response?.data?.message}`,
         description:
@@ -207,7 +209,10 @@ export const useProduct = () => {
 
   const writeReview = async (productId: string, formData: any) => {
     try {
-      const response = await apiClient.post(`/product/write-a-review/${productId}`, formData);
+      const response = await apiClient.post(
+        `/product/write-a-review/${productId}`,
+        formData
+      );
       return response.data;
     } catch (error) {
       throw error;
@@ -215,7 +220,13 @@ export const useProduct = () => {
   };
 
   const reviewMutation = useMutation({
-    mutationFn: ({ productId, formData }: { productId: string; formData: any }) => writeReview(productId, formData),
+    mutationFn: ({
+      productId,
+      formData,
+    }: {
+      productId: string;
+      formData: any;
+    }) => writeReview(productId, formData),
     onSuccess: (response) => {
       console.log(response, "new");
       toast({
@@ -259,7 +270,9 @@ export const useProduct = () => {
         price: productToAdd.unit_price ?? 0,
         image: productToAdd.images?.[0] ?? "",
         quantity: 1,
-        discount: productToAdd?.is_discounted ? productToAdd?.discount_price : 0
+        discount: productToAdd?.is_discounted
+          ? productToAdd?.discount_price
+          : 0,
       });
     }
     localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -289,11 +302,11 @@ export const useProduct = () => {
   const updateCart = (product: Product, quantity: number) => {
     const existingCart = localStorage.getItem("cart");
     let cartItems: CartItem[] = existingCart ? JSON.parse(existingCart) : [];
-  
+
     const existingItemIndex = cartItems.findIndex(
       (item) => item.productId === product._id
     );
-  
+
     if (existingItemIndex !== -1) {
       cartItems[existingItemIndex].quantity = quantity;
     } else {
@@ -302,11 +315,11 @@ export const useProduct = () => {
         quantity: quantity,
         productName: product?.product_name ?? "",
         price: product?.unit_price ?? 0,
-        image: product?.images?.[0] ?? "", 
-        discount: product.is_discounted ? product.discount_price : 0
+        image: product?.images?.[0] ?? "",
+        discount: product.is_discounted ? product.discount_price : 0,
       });
     }
-  
+
     localStorage.setItem("cart", JSON.stringify(cartItems));
     window.dispatchEvent(new Event("cartUpdated"));
   };
@@ -348,7 +361,7 @@ export const useProduct = () => {
 
   const useAddNewProduct = useMutation<Product, Error, FormData>({
     mutationFn: addNewProductApiCall,
-    onSuccess: (response:any) => {
+    onSuccess: (response: any) => {
       toast({
         title: `${response?.data?.message}`,
         description: "Product has been added successfully",
@@ -358,7 +371,7 @@ export const useProduct = () => {
       });
       navigate("/alert-success");
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       toast({
         title: `${error?.response?.data?.message}`,
         description: error?.message || "An unknown error occurred",
@@ -369,25 +382,20 @@ export const useProduct = () => {
     },
   });
 
-  const fetchCategories = async (limit: number, page: number) => {
+  const fetchCategories = async (limit: number) => {
     try {
-      const response = await apiClient.get(
-        `/category/fetch?limit=${limit}&page=${page}`
-      );
+      const response = await apiClient.get(`/category/fetch?limit=${limit}`);
       return response.data;
     } catch (error) {
       throw error;
     }
   };
 
-  const { 
-    data: categories,
-    isLoading: categoriesLoading,
-  } = useQuery({
-    queryKey: ["categories", currentPage, itemsPerPage],
-    queryFn: () => fetchCategories(itemsPerPage, currentPage),
-    enabled: false,
-    retry: false,
+  const { data: categories, isLoading: categoriesLoading } = useQuery({
+    queryKey: ["categories", itemsPerPage],
+    queryFn: () => fetchCategories(30),
+    enabled: true,
+    retry: true,
   });
 
   const {
@@ -396,7 +404,12 @@ export const useProduct = () => {
     isLoading: isProductsByCategory,
     error: errorProductsByCategory,
   } = useQuery({
-    queryKey: ["categoriesProducts", selectedCategoryId, currentPage, itemsPerPage],
+    queryKey: [
+      "categoriesProducts",
+      selectedCategoryId,
+      currentPage,
+      itemsPerPage,
+    ],
     queryFn: async () => {
       if (!selectedCategoryId) return null;
       return fetchProducts(itemsPerPage, currentPage, "", selectedCategoryId);
@@ -410,8 +423,9 @@ export const useProduct = () => {
     isSuccess: isFetched,
     error: searchError,
   } = useQuery({
-    queryKey: ['productSearch', searchQuery, currentPage, itemsPerPage],
-    queryFn: () => fetchProducts(itemsPerPage, currentPage, "", "", searchQuery),
+    queryKey: ["productSearch", searchQuery, currentPage, itemsPerPage],
+    queryFn: () =>
+      fetchProducts(itemsPerPage, currentPage, "", "", searchQuery),
     enabled: searchQuery.length >= 2,
     staleTime: 0,
   });
@@ -429,10 +443,10 @@ export const useProduct = () => {
     setCurrentPage(1);
   };
 
-  const fetchBusinessCategories = async (limit: number, page: number) => {
+  const fetchBusinessCategories = async (limit: number) => {
     try {
       const response = await apiClient.get(
-        `/business/fetch-business-categories?limit=${limit}&page=${page}`
+        `/business/fetch-business-categories?limit=${limit}`
       );
       return response.data;
     } catch (error) {
@@ -440,15 +454,13 @@ export const useProduct = () => {
     }
   };
 
-  const {
-    data: businessCategories,
-    isLoading: businessCategoriesLoading,
-  } = useQuery({
-    queryKey: ["businessCategories", currentPage, itemsPerPage],
-    queryFn: () => fetchBusinessCategories(itemsPerPage, currentPage),
-    enabled: false,
-    retry: false,
-  });
+  const { data: businessCategories, isLoading: businessCategoriesLoading } =
+    useQuery({
+      queryKey: ["businessCategories", itemsPerPage],
+      queryFn: () => fetchBusinessCategories(30),
+      enabled: true,
+      retry: true,
+    });
 
   return {
     useWishlist,
@@ -458,12 +470,14 @@ export const useProduct = () => {
     categories,
     isLoading:
       productsLoading ||
-      addMutation.isPending || reviewMutation.isPending ||
+      addMutation.isPending ||
+      reviewMutation.isPending ||
       // removeMutation.isPending ||
       useAddNewProduct.isPending,
     error:
       productsError ||
-      addMutation.error || reviewMutation.error ||
+      addMutation.error ||
+      reviewMutation.error ||
       // removeMutation.error ||
       useAddNewProduct.error,
     handleAddToCart,
@@ -510,7 +524,7 @@ export const useProduct = () => {
       pageSize: products?.data?.pagination?.pageSize || 10,
       hasNextPage: products?.data?.pagination?.hasNext || false,
     },
-   
+
     popularProductsPagination: {
       currentPage: PopularProducts?.data?.pagination?.currentPage || 1,
       totalPages: PopularProducts?.data?.pagination?.pageCount || 1,
@@ -542,5 +556,4 @@ export const useProduct = () => {
     businessCategories,
     businessCategoriesLoading,
   };
-  
 };
