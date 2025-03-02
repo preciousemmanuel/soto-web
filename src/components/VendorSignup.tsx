@@ -141,12 +141,11 @@ const Vendorsignup: React.FC = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-
       const formattedValues = {
         ...values,
-        phone_number: values.phone_number.startsWith('+234') 
-          ? values.phone_number 
-          : `+234${values.phone_number}`
+        phone_number: values.phone_number.startsWith("+234")
+          ? values.phone_number
+          : `+234${values.phone_number}`,
       };
       signupMutation.mutate(formattedValues);
     },
@@ -159,7 +158,7 @@ const Vendorsignup: React.FC = () => {
   };
 
   const { businessCategories: categories } = useProduct();
-
+  console.log(categories, "categories");
   return (
     <Box width="100%">
       <Container maxW="1200px" px={{ base: 4, md: 8 }}>

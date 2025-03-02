@@ -30,7 +30,7 @@ export const useOrder = () => {
       }
       return response.data;
     } catch (error) {
-      throw error; 
+      throw error;
     }
   };
 
@@ -42,7 +42,7 @@ export const useOrder = () => {
       }
       return response.data;
     } catch (error) {
-      throw error; 
+      throw error;
     }
   };
 
@@ -57,7 +57,7 @@ export const useOrder = () => {
       }
       return response.data;
     } catch (error) {
-      throw error; 
+      throw error;
     }
   };
 
@@ -72,7 +72,7 @@ export const useOrder = () => {
       }
       return response.data;
     } catch (error) {
-      throw error; 
+      throw error;
     }
   };
 
@@ -87,7 +87,7 @@ export const useOrder = () => {
       }
       return response.data;
     } catch (error) {
-      throw error; 
+      throw error;
     }
   };
 
@@ -102,10 +102,7 @@ export const useOrder = () => {
     return response.data;
   };
 
-  const fetchCoupons = async (
-    limit: number,
-    page: number,
-  ): Promise<any> => {
+  const fetchCoupons = async (limit: number, page: number): Promise<any> => {
     const response = await apiClient.get(
       `/coupon/fetch-available?limit=${limit}&page=${page}`
     );
@@ -191,7 +188,6 @@ export const useOrder = () => {
     },
   });
 
-  
   const {
     mutate: addNewOrderMutation,
     isPending: isAddingOrder,
@@ -207,7 +203,7 @@ export const useOrder = () => {
         isClosable: true,
       });
       setNewOrderResponse(res);
-      return res; 
+      return res;
     },
     onError: (error: any) => {
       // console.log(error, "error");
@@ -218,7 +214,7 @@ export const useOrder = () => {
         duration: 2000,
         isClosable: true,
       });
-      return error; 
+      return error;
     },
   });
 
@@ -309,7 +305,6 @@ export const useOrder = () => {
     },
   });
 
-
   const {
     data: orders,
     isLoading: isFetchingOrders,
@@ -318,11 +313,9 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["fetchOrders", currentPage, itemsPerPage],
     queryFn: () => fetchOrders(itemsPerPage, currentPage, ""),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
-
-  
 
   const {
     data: coupons,
@@ -332,8 +325,8 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["fetchCoupons", currentPage, itemsPerPage],
     queryFn: () => fetchCoupons(itemsPerPage, currentPage),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const {
@@ -344,8 +337,8 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["customOrders", currentPage, itemsPerPage],
     queryFn: () => fetchOrders(itemsPerPage, currentPage, "CUSTOM"),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const {
@@ -356,16 +349,16 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["fetchOrdersVendor", currentPage, itemsPerPage],
     queryFn: () => fetchVendorOrders(itemsPerPage, currentPage, status),
-    enabled:false,
-    retry: false,
+    enabled: false,
+    retry: true,
   });
 
   const useSingleOrder = (orderId: string) => {
     return useQuery({
       queryKey: ["buyer-orders", orderId],
       queryFn: () => fetchOneOrder(orderId),
-      enabled: false,
-      retry: false,
+      enabled: true,
+      retry: true,
     });
   };
 
@@ -373,8 +366,8 @@ export const useOrder = () => {
     return useQuery({
       queryKey: ["vendor-orders", orderId],
       queryFn: () => fetchOneVendorOrder(orderId),
-      enabled:false,
-      retry: false,
+      enabled: false,
+      retry: true,
     });
   };
 
@@ -385,8 +378,8 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["fetchStates"],
     queryFn: fetchStates,
-    retry: false,
-    enabled:false,
+    retry: true,
+    enabled: false,
   });
 
   const {
@@ -396,8 +389,8 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["fetchCities"],
     queryFn: () => fetchCities("NG", "LA"),
-    retry: false,
-    enabled:false,
+    retry: true,
+    enabled: false,
   });
 
   const handlePageChange = (newPage: number) => {

@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { useEffect, useState, useCallback } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import apiClient from "../../services/axios";
-import debounce from 'lodash/debounce';
+import debounce from "lodash/debounce";
 
 export const useVendor = () => {
   const toast = useToast();
@@ -100,11 +100,11 @@ export const useVendor = () => {
     onError: (error) => {
       toast({
         title: "Error marking notification as read",
-        status: "error", 
+        status: "error",
         duration: 2000,
         isClosable: true,
       });
-    }
+    },
   });
 
   const fetchBanks = async (limit: number, page: number) => {
@@ -120,9 +120,9 @@ export const useVendor = () => {
     isError: isErrorBanks,
     refetch: refetchBanks,
   } = useQuery({
-    queryKey: ["banks", { limit: 20, page: 1}],
+    queryKey: ["banks", { limit: 20, page: 1 }],
     queryFn: () => fetchBanks(179, currentPage),
-    enabled: false,
+    enabled: true,
     retry: true,
   });
 
@@ -133,8 +133,8 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["notifications", currentPage, itemsPerPage],
     queryFn: () => fetchNotifications(itemsPerPage, currentPage),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const getMyBankDetails = async () => {
@@ -149,13 +149,16 @@ export const useVendor = () => {
   const useGetMyBankDetails = useQuery({
     queryKey: ["get-my-bank-details"],
     queryFn: getMyBankDetails,
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const addMyBankDetails = async (bankDetails: any) => {
     try {
-      const response = await apiClient.post(`/business/add-my-bank-details`, bankDetails);
+      const response = await apiClient.post(
+        `/business/add-my-bank-details`,
+        bankDetails
+      );
       return response.data;
     } catch (error) {
       throw error;
@@ -174,7 +177,7 @@ export const useVendor = () => {
       });
     },
     onError: (error) => {
-      console.log(error)
+      console.log(error);
       toast({
         title: "Error Adding Bank Details",
         description: "An error occurred while adding your bank details.",
@@ -187,7 +190,10 @@ export const useVendor = () => {
 
   const makeWithdrawalRequest = async (withdrawalDetails: any) => {
     try {
-      const response = await apiClient.post(`/business/make-withdrawal-request`, withdrawalDetails);
+      const response = await apiClient.post(
+        `/business/make-withdrawal-request`,
+        withdrawalDetails
+      );
       return response.data;
     } catch (error) {
       throw error;
@@ -205,7 +211,7 @@ export const useVendor = () => {
         isClosable: true,
       });
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       toast({
         title: `${error?.response?.data?.message}`,
         status: "error",
@@ -222,11 +228,10 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["vendorOverview", { time_frame: selectedTimeframe }],
     queryFn: () => fetchVendorOverview(selectedTimeframe),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
-  
- 
+
   const {
     data: ordersByVendor,
     isLoading: isLoadingOrdersByVendor,
@@ -234,8 +239,8 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["ordersByVendor", currentPage, itemsPerPage],
     queryFn: () => fetchOrdersByVendor(itemsPerPage, currentPage),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const {
@@ -243,10 +248,10 @@ export const useVendor = () => {
     isLoading: isLoadingTopProductsByVendor,
     isError: isErrorTopProductsByVendor,
   } = useQuery({
-    queryKey: ["topProductsByVendor",  currentPage, itemsPerPage],
+    queryKey: ["topProductsByVendor", currentPage, itemsPerPage],
     queryFn: () => fetchTopProductsByVendor(itemsPerPage, currentPage),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const {
@@ -256,8 +261,8 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["allTopProductsByVendor", currentPage, itemsPerPage],
     queryFn: () => fetchTopProductsByVendor(itemsPerPage, currentPage),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const {
@@ -267,8 +272,8 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["transactionLogs", currentPage, itemsPerPage],
     queryFn: () => fetchTransactionLogs(itemsPerPage, currentPage),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const {
@@ -278,8 +283,8 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["vendorInventory", currentPage, itemsPerPage],
     queryFn: () => fetchVendorInventory(itemsPerPage, currentPage),
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const {
@@ -289,15 +294,15 @@ export const useVendor = () => {
   } = useQuery({
     queryKey: ["salesAnalytics"],
     queryFn: fetchSalesAnalytics,
-    enabled: false,
-    retry: false,
+    enabled: true,
+    retry: true,
   });
 
   const {
     data: myBankDetails,
     isLoading: isLoadingMyBankDetails,
     isError: isErrorMyBankDetails,
-    refetch: refetchMyBankDetails
+    refetch: refetchMyBankDetails,
   } = useGetMyBankDetails;
 
   const handlePageChange = (newPage: number) => {
@@ -311,7 +316,7 @@ export const useVendor = () => {
 
   const createDispute = async (disputeData: any) => {
     try {
-      const response = await apiClient.post('/dispute/create', disputeData,{
+      const response = await apiClient.post("/dispute/create", disputeData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return response.data;
@@ -329,7 +334,7 @@ export const useVendor = () => {
         status: "success",
         duration: 2000,
         isClosable: true,
-        position: "top"
+        position: "top",
       });
     },
     onError: (error: any) => {
@@ -338,7 +343,7 @@ export const useVendor = () => {
         status: "error",
         duration: 2000,
         isClosable: true,
-        position: "top"
+        position: "top",
       });
     },
   });
