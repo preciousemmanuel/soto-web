@@ -84,11 +84,11 @@ const AlatpayButton: React.FC<AlatpayButtonProps> = ({
       currency,
       amount,
       onTransaction: (response: AlatpayResponse) => {
-        console.log("API response is ", response);
+        // console.log("API response is ", response);
         if (onTransaction) onTransaction(response);
       },
       onClose: () => {
-        console.log("Payment gateway is closed");
+        // console.log("Payment gateway is closed");
         if (onClose) onClose();
       },
     });

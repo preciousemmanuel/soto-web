@@ -19,17 +19,19 @@ import { useOrder } from "../../hooks/useOrder";
 // import { useState } from "react";
 import AlatpayButton from "./AlatPay";
 import { useAuth } from "../../hooks/useAuth";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 // import ShippingOptions from "./shippingOptions";
 
 export default function PaymentMethod({
   paymentMethod,
   setPaymentMethod,
-  amount
+  amount,
 }: any) {
   const {
     generatePaymentLinkMutation,
-    newOrderResponse,
+    newOrderResponse: orderDataFromHook,
     isGeneratingPaymentLink,
     // generateAlATPaymentLinkMutation,
     // clearCart,
@@ -47,10 +49,24 @@ export default function PaymentMethod({
   // });
 
   const generatePayment = () => {
+    let orderData = orderDataFromHook;
+    if (!orderData) {
+      const savedOrder = localStorage.getItem("orderResponse");
+      if (savedOrder) {
+        orderData = JSON.parse(savedOrder);
+      }
+    }
+    const orderId = orderData?._id || orderData?.data?._id;
+
+    if (!orderId) {
+      console.error("Order ID is missing", orderData);
+      return;
+    }
+
     generatePaymentLinkMutation({
       amount: amount,
       narration: "ORDER",
-      narration_id: newOrderResponse?.data?._id,
+      narration_id: orderId,
       platform: "web",
     });
   };
@@ -82,7 +98,11 @@ export default function PaymentMethod({
         <Flex justifyContent="space-between" mb={6}>
           <HStack>
             <Image src={alat} w={{ base: "30px", md: "40px" }} rounded="full" />
-            <Text fontWeight="normal" color="#9F9F9F" fontSize={{ base: "sm", md: "md" }}>
+            <Text
+              fontWeight="normal"
+              color="#9F9F9F"
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Alat Pay
             </Text>
           </HStack>
@@ -98,7 +118,11 @@ export default function PaymentMethod({
         <Flex justifyContent="space-between" mb={6}>
           <HStack>
             <Image src={paystack} w={{ base: "80px", md: "auto" }} />
-            <Text fontWeight="normal" color="#9F9F9F" fontSize={{ base: "sm", md: "md" }}>
+            <Text
+              fontWeight="normal"
+              color="#9F9F9F"
+              fontSize={{ base: "sm", md: "md" }}
+            >
               PayStack
             </Text>
           </HStack>
@@ -208,11 +232,11 @@ export default function PaymentMethod({
         //     Pay now
         //   </Button>
         // </Box>
-        <AlatpayButton 
-          email={user?.Email}  
-          firstName={user?.FirstName} 
+        <AlatpayButton
+          email={user?.Email}
+          firstName={user?.FirstName}
           lastName={user?.FirstName}
-          amount={amount} 
+          amount={amount}
           // onTransaction={(response) => {
           //   setAlatResponse(response?.message)
           //   console.log("Transaction response:", response);
@@ -248,5 +272,5 @@ export default function PaymentMethod({
         </Button>
       )}
     </Box>
-  )
+  );
 }

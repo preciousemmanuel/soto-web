@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import apiClient from "../../services/axios";
 import { useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useOrder = () => {
   const toast = useToast();
@@ -11,7 +11,10 @@ export const useOrder = () => {
   const clearCart = () => {
     localStorage.removeItem("cart");
   };
-  const [newOrderResponse, setNewOrderResponse] = useState<any>(null);
+  const [newOrderResponse, setNewOrderResponse] = useState<any>(() => {
+    const savedOrder = localStorage.getItem("orderResponse");
+    return savedOrder ? JSON.parse(savedOrder) : null;
+  });
   const [isAuthenticated] = useState(() => {
     return !!(
       localStorage.getItem("userToken") || localStorage.getItem("token")
@@ -196,14 +199,17 @@ export const useOrder = () => {
   } = useMutation({
     mutationFn: addNewOrder,
     onSuccess: (res) => {
+      setNewOrderResponse(res);
+      localStorage.setItem("orderResponse", JSON.stringify(res));
+      // console.log(res);
       toast({
-        title: `${res?.data?.message}`,
-        status: res?.data?.status === "success" ? "success" : "error",
+        title: `${res?.message}`,
+        status: "success",
         duration: 2000,
         isClosable: true,
       });
-      setNewOrderResponse(res);
-      return res;
+
+      // return res;
     },
     onError: (error: any) => {
       // console.log(error, "error");
