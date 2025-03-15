@@ -22,7 +22,7 @@ export interface CartItem {
   price: number;
   image: string;
   quantity: number;
-  discount: any
+  discount: any;
 }
 
 export const ProductCard: React.FC<{
@@ -65,6 +65,9 @@ export const ProductCard: React.FC<{
       }}
       cursor="pointer"
       onClick={handleProductClick}
+      height="100%"
+      display="flex"
+      flexDirection="column"
     >
       <Flex
         direction="column"
@@ -88,7 +91,6 @@ export const ProductCard: React.FC<{
             : "Out of Stock"}
         </Badge>
 
-        
         <Box w="full">
           <Image
             src={product.images?.[0]}
@@ -120,7 +122,7 @@ export const ProductCard: React.FC<{
           )}
       </Flex>
 
-      <Box fontFamily="poppins">
+      <Box fontFamily="poppins" display="flex" flexDirection="column" flex="1">
         <Flex justify="space-between" align="start">
           <Box>
             <Text fontSize="sm" mb={1}>
