@@ -55,24 +55,44 @@ const AlatpayButton: React.FC<AlatpayButtonProps> = ({
   amount,
   onTransaction,
   onClose,
+  className,
 }) => {
+  const [sdkLoaded, setSdkLoaded] = React.useState(false);
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = import.meta.env.VITE_ALAT_WEMA_BASE_URL;
     script.async = true;
-    document.body?.appendChild(script);
+    script.id = "alatpay-script";
+
+    const handleScriptLoad = () => {
+      setSdkLoaded(true);
+    };
+
+    script.addEventListener("load", handleScriptLoad);
+
+    if (!document.getElementById("alatpay-script")) {
+      document.body.appendChild(script);
+    } else {
+      if (window.Alatpay) {
+        setSdkLoaded(true);
+      }
+    }
 
     return () => {
-      document.body?.removeChild(script);
+      script.removeEventListener("load", handleScriptLoad);
+      const scriptElement = document.getElementById("alatpay-script");
+      if (scriptElement && scriptElement.parentNode) {
+        scriptElement.parentNode.removeChild(scriptElement);
+      }
     };
   }, []);
 
   const handlePayment = (): void => {
-    if (typeof window?.Alatpay === "undefined") {
+    if (!window.Alatpay) {
       console.error("Alatpay SDK not loaded");
       return;
     }
-
     const popup = window.Alatpay.setup({
       apiKey: import.meta.env.VITE_ALAT_WEMA_PRY_KEY,
       businessId: import.meta.env.VITE_ALAT_WEMA_BUS_ID,
@@ -106,8 +126,10 @@ const AlatpayButton: React.FC<AlatpayButtonProps> = ({
       h="55px"
       size="lg"
       onClick={handlePayment}
+      isDisabled={!sdkLoaded}
+      className={className}
     >
-      Pay with Alatpay
+      {sdkLoaded ? "Pay with Alatpay" : "Loading..."}
     </Button>
   );
 };
