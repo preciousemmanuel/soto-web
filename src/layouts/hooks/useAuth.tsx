@@ -84,7 +84,7 @@ export const useAuth = () => {
       });
     },
   });
-// console.log(user,"userr")
+  // console.log(user,"userr")
   const vendorLoginMutation = useMutation({
     mutationFn: (credentials: {
       email_or_phone_number: string;
@@ -106,7 +106,7 @@ export const useAuth = () => {
         isClosable: true,
         position: "top-right",
       });
-        navigate("/vendor-overview");
+      navigate("/vendor-overview");
     },
     onError: (error: any) => {
       // console.error("Vendor login failed:", error);
@@ -256,6 +256,30 @@ export const useAuth = () => {
     },
   });
 
+  const updateProfileMutation = useMutation({
+    mutationFn: (profileData: any) =>
+      apiClient.put("/user/update-profile", profileData),
+    onSuccess: (response) => {
+      toast({
+        title: `${response?.data?.message}`,
+        description: "Your profile has been updated successfully.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      refetchProfile();
+    },
+    onError: (error: any) => {
+      toast({
+        title: `${error?.response?.data?.message}`,
+        description: "Please try again.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
   const logout = () => {
     localStorage.removeItem("userToken");
     setIsAuthenticated(false);
@@ -307,11 +331,13 @@ export const useAuth = () => {
       requestOtpMutation.isPending ||
       resetPasswordMutation.isPending ||
       addShippingAddressMutation.isPending ||
-      validateOtpMutation.isPending,
+      validateOtpMutation.isPending ||
+      updateProfileMutation.isPending,
     login: loginMutation.mutate,
     vendorLogin: vendorLoginMutation.mutate,
     logout,
     vendorLogout,
+    updateProfile: updateProfileMutation.mutate,
     signup: signupMutation.mutate,
     switchToVendor,
     requestOtp: requestOtpMutation.mutate,

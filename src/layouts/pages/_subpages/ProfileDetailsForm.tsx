@@ -1,9 +1,17 @@
-import { Box, Button, Grid, FormControl, FormLabel, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Grid,
+  FormControl,
+  FormLabel,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 
 const ProfileDetailsForm: React.FC = () => {
-  const { user, refetchProfile, loading } = useAuth();
+  const { user, refetchProfile, loading, updateProfile } = useAuth();
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",
@@ -38,7 +46,7 @@ const ProfileDetailsForm: React.FC = () => {
 
   const handleSaveChanges = () => {
     // Update the user state with new formData values
-    // updateUser(formData);
+    updateProfile(formData);
   };
 
   return (

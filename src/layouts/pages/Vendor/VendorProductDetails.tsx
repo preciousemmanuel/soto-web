@@ -1,13 +1,14 @@
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box, Button } from "@chakra-ui/react";
 import ProductImageGallery from "../product/productImage";
 import ProductDetails from "../product/productDetails";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useProduct } from "../../hooks/useProduct";
 import LoadingSpinner from "../../../features/helpers/LoadingSpinner";
 import { useEffect } from "react";
 
 const VendorProductDetailsPage = () => {
   const { productId } = useParams<{ productId: string }>();
+  const navigate = useNavigate();
   const { useSingleProduct } = useProduct();
   const { data: oneProduct, isLoading } = useSingleProduct(productId as string);
   const products = oneProduct?.data;
@@ -17,7 +18,6 @@ const VendorProductDetailsPage = () => {
     window.scrollTo(0, 0);
   }, [productId]);
 
- 
   return (
     <Box>
       {isLoading ? (
@@ -38,7 +38,7 @@ const VendorProductDetailsPage = () => {
 
           <Box w={{ base: "100%", md: "55%" }}>
             <ProductDetails
-            showOthers={false}
+              showOthers={false}
               product={{
                 _id: product?._id,
                 vendor: product?.vendor || "",
@@ -58,12 +58,25 @@ const VendorProductDetailsPage = () => {
                 is_deleted: product?.is_deleted || false,
                 // total_quantity_sold: product?.total_quantity_sold || 0,
                 status: product?.status,
-                ...product
+                ...product,
               }}
               // sizes={["", "", ""]}
               // colors={["", "", ""]}
             />
           </Box>
+          <Button
+            bg="black"
+            size="lg"
+            borderRadius="full"
+            color="white"
+            fontWeight="500"
+            height="50px"
+            width="250px"
+            fontSize="xl"
+            onClick={() => navigate(`/edit-product/${productId}`)}
+          >
+            Edit Product
+          </Button>
         </Flex>
       )}
     </Box>

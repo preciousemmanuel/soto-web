@@ -382,6 +382,54 @@ export const useProduct = () => {
     },
   });
 
+  const updateProductApiCall = async (formData: FormData): Promise<Product> => {
+    try {
+      const productId = formData.get("id");
+      if (!productId || typeof productId !== "string") {
+        throw new Error("Invalid product ID");
+      }
+
+      const response = await apiClient.put<Product>(
+        `/product/update/${productId}`,
+        formData
+        // {
+        //   headers: { "Content-Type": "multipart/form-data" },
+        // }
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error(
+        "An unexpected error occurred while updating the product"
+      );
+    }
+  };
+
+  const useUpdateProduct = useMutation<Product, Error, FormData>({
+    mutationFn: updateProductApiCall,
+    onSuccess: (response: any) => {
+      toast({
+        title: `${response?.data?.message}`,
+        description: "Product has been updated successfully",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      navigate("/alert-success");
+    },
+    onError: (error: any) => {
+      toast({
+        title: error?.response?.data?.message || "Update failed",
+        description: error?.message || "An unknown error occurred",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
   const fetchCategories = async (limit: number) => {
     try {
       const response = await apiClient.get(`/category/fetch?limit=${limit}`);
@@ -473,13 +521,16 @@ export const useProduct = () => {
       addMutation.isPending ||
       reviewMutation.isPending ||
       // removeMutation.isPending ||
-      useAddNewProduct.isPending,
+      useAddNewProduct.isPending ||
+      useUpdateProduct.isPending,
     error:
       productsError ||
       addMutation.error ||
       reviewMutation.error ||
       // removeMutation.error ||
-      useAddNewProduct.error,
+      useAddNewProduct.error ||
+      useUpdateProduct.error,
+
     handleAddToCart,
     handleRemoveFromCart,
     products: products?.data?.data || [],
@@ -491,6 +542,7 @@ export const useProduct = () => {
     // PopluarProductsError,
     createProductFormData,
     useAddNewProduct,
+    useUpdateProduct,
     updateCart,
     fetchProducts,
     setSelectedCategoryId,
