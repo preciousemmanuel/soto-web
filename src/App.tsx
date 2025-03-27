@@ -78,6 +78,7 @@ import VendorOtpVerification from "./layouts/pages/VendorOtpVerification";
 import OtpVerification from "./layouts/pages/OtpVerificationPage";
 import OrderDetails from "./layouts/pages/Vendor/VendorOrderDetails";
 import RaiseDisputePage from "./layouts/pages/RaiseDispute";
+import EditProduct from "./layouts/pages/product/editProduct";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -215,7 +216,7 @@ const App = () => {
       ],
     },
     {
-      path: "/auth", 
+      path: "/auth",
       element: <AuthLayout />,
       errorElement: <ErrorPage />,
       children: [
@@ -354,6 +355,14 @@ const App = () => {
           ),
         },
         {
+          path: "edit-product/:productId",
+          element: (
+            <VendorProtectedRoute>
+              <EditProduct />
+            </VendorProtectedRoute>
+          ),
+        },
+        {
           path: "vendor-product-list",
           element: (
             <VendorProtectedRoute>
@@ -369,7 +378,7 @@ const App = () => {
           path: "payment-success",
           element: <PaymentMessage />,
         },
-       
+
         // Add other seller-specific routes here
       ],
     },

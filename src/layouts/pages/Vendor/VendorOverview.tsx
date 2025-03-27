@@ -204,17 +204,17 @@ const VendorOverview = () => {
                       >
                         <StatCard
                           title="Sold"
-                          value={`₦${(
+                          value={`₦${
                             vendorOverviewData?.data?.total_unremitted || 0
-                          )}`}
+                          }`}
                           growth="+0%"
                           description="Amount To Be Remitted"
                         />
                         <StatCard
                           title="On Market"
-                          value={`₦${(
+                          value={`₦${
                             vendorOverviewData?.data?.total_in_stock || 0
-                          )}`}
+                          }`}
                           growth="+0%"
                           description="Amount In Stock"
                         />
@@ -261,7 +261,7 @@ const VendorOverview = () => {
                           {chartData ? (
                             <Line data={chartData} options={options} />
                           ) : (
-                            <LoadingSpinner/>
+                            <LoadingSpinner />
                           )}
                         </Box>
                       </Box>
@@ -295,11 +295,15 @@ const VendorOverview = () => {
                             key={product?._id}
                             justify="space-between"
                             align="center"
+                            cursor="pointer"
                             p={3}
                             bg="white"
                             borderRadius="md"
                             // boxShadow="sm"
                             wrap="wrap"
+                            onClick={() =>
+                              navigate(`/vendor-product/${product?._id}`)
+                            }
                           >
                             <Image
                               src={product?.images && product?.images[0]}
@@ -317,12 +321,17 @@ const VendorOverview = () => {
                                 color="gray.05"
                               >
                                 Status:{" "}
-                                <Text color={
-                                  product?.status === "PENDING" ? "yellow.500" :
-                                  product?.status === "APPROVED" ? "green.500" :
-                                  product?.status === "DECLINED" ? "red.500" :
-                                  "gray.500"
-                                }>
+                                <Text
+                                  color={
+                                    product?.status === "PENDING"
+                                      ? "yellow.500"
+                                      : product?.status === "APPROVED"
+                                      ? "green.500"
+                                      : product?.status === "DECLINED"
+                                      ? "red.500"
+                                      : "gray.500"
+                                  }
+                                >
                                   {product?.status}
                                 </Text>
                               </Text>
@@ -378,7 +387,7 @@ const VendorOverview = () => {
                         {leastOrder?.length > 0 ? (
                           leastOrder?.map((order: any) => (
                             <Tr key={order?._id}>
-                             <Td>{order?.tracking_id}</Td>
+                              <Td>{order?.tracking_id}</Td>
                               <Td>
                                 {new Date(
                                   order?.createdAt
@@ -397,7 +406,12 @@ const VendorOverview = () => {
                                 {order.status.replace("_", " ")}
                               </Td>
                               <Td>
-                                <Button size={buttonSize} onClick={() => handleProductClick(order?._id)}>View</Button>
+                                <Button
+                                  size={buttonSize}
+                                  onClick={() => handleProductClick(order?._id)}
+                                >
+                                  View
+                                </Button>
                               </Td>
                             </Tr>
                           ))
