@@ -64,19 +64,16 @@ export const useOrder = () => {
     }
   };
 
-  const generateAlATPaymentLink = async (orderData: any): Promise<any> => {
-    try {
-      const response = await apiClient.post(
-        "/transaction/alat-wema/initialize-card",
-        orderData
-      );
-      if (!response || !response.data) {
-        throw new Error("No response data received");
-      }
-      return response.data;
-    } catch (error) {
-      throw error;
+  const generateAlATPayment = async (orderData: any): Promise<any> => {
+    const response = await apiClient.post(
+      "/transaction/alat-wema/initialize-payment",
+      orderData
+    );
+
+    if (!response?.data) {
+      throw new Error("No response data received");
     }
+    return response.data;
   };
 
   const generateShippingRate = async (orderData: any): Promise<any> => {
@@ -280,30 +277,27 @@ export const useOrder = () => {
   });
 
   const {
-    mutate: generateAlATPaymentLinkMutation,
-    isPending: isGeneratingAlATPaymentLink,
-    isSuccess: generateAlATPaymentLinkSuccess,
-    error: generateAlATPaymentLinkError,
+    mutate: generateAlATPaymentMutation,
+    isPending: isGeneratingAlATPayment,
+    isSuccess: generateAlATPaymentSuccess,
+    error: generateAlATPaymentError,
   } = useMutation({
-    mutationFn: generateAlATPaymentLink,
-    onSuccess: (res) => {
-      if (res?.data?.data) {
-        clearCart();
-        window.location.href = res?.data?.data?.data?.authorization_url;
-      } else {
-        toast({
-          title: "Error",
-          description: "No authorization URL returned.",
-          status: "error",
-          duration: 2000,
-          isClosable: true,
-        });
-      }
-    },
-    onError: (error: any) => {
+    mutationFn: generateAlATPayment,
+    onSuccess: (response) => {
+      // console.log(response.data, "RESPONSE QUERY");
       toast({
-        title: `${error?.response?.data?.message}`,
-        description: "An error occurred while generating your payment link.",
+        title: "Payment Initialization Successfull",
+        description: "Initialize ALAT payment is successfull",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      return response.data;
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Payment Error",
+        description: "Failed to generate ALAT payment",
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -417,10 +411,10 @@ export const useOrder = () => {
     isAddingOrder,
     addOrderSuccess,
     addOrderError,
-    generateAlATPaymentLinkMutation,
-    isGeneratingAlATPaymentLink,
-    generateAlATPaymentLinkSuccess,
-    generateAlATPaymentLinkError,
+    generateAlATPaymentMutation,
+    isGeneratingAlATPayment,
+    generateAlATPaymentSuccess,
+    generateAlATPaymentError,
     generatePaymentLinkMutation,
     isGeneratingPaymentLink,
     generatePaymentLinkSuccess,

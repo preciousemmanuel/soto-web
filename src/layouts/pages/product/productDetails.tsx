@@ -91,7 +91,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
       updateCart(product, quantity);
     }
   }, [quantity, product, updateCart]);
-  
+  // console.log(quantity, "QUANTITY");
 
   return (
     <VStack align="start" spacing={5}>
@@ -236,12 +236,13 @@ const ProductDetails: React.FC<ProductDetails> = ({
               <Button
                 onClick={() =>
                   setQuantity((prev: any) =>
-                    Math.min(prev + 1, product?.product_quantity ?? 0)
+                    Math.min(prev + 1, product?.product_quantity || 0)
                   )
                 }
                 isDisabled={
-                  product?.product_quantity === undefined ||
-                  product.product_quantity < 0
+                  !product?.product_quantity ||
+                  product.product_quantity <= 0 ||
+                  quantity >= product.product_quantity
                 }
                 variant="ghost"
               >
@@ -271,10 +272,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
               isDisabled={
                 product?.product_quantity ? product.product_quantity < 0 : true
               }
-              // isDisabled={
-              //   product?.product_quantity !== undefined &&
-              //   product.product_quantity < 0
-              // }
               _hover={{ bg: "#FF5733" }}
               onClick={() => navigate("/cart")}
             >

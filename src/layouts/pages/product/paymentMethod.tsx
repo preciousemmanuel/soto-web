@@ -19,8 +19,10 @@ import { useOrder } from "../../hooks/useOrder";
 // import { useState } from "react";
 import AlatpayButton from "./AlatPay";
 import { useAuth } from "../../hooks/useAuth";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+// import { toast } from "react-toastify";
+// import { useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 // import ShippingOptions from "./shippingOptions";
 
@@ -33,7 +35,7 @@ export default function PaymentMethod({
     generatePaymentLinkMutation,
     newOrderResponse: orderDataFromHook,
     isGeneratingPaymentLink,
-    // generateAlATPaymentLinkMutation,
+    generateAlATPaymentMutation,
     // clearCart,
     // isGeneratingAlATPaymentLink,
   } = useOrder();
@@ -47,6 +49,33 @@ export default function PaymentMethod({
   //   card_year: "",
   //   sec_code: "",
   // });
+  const [alatResponse, setAlatResponse] = useState<any | null>(null);
+
+  const generateAlATPayment = async () => {
+    const savedOrder = localStorage.getItem("orderResponse");
+    const orderData =
+      orderDataFromHook || (savedOrder ? JSON.parse(savedOrder) : null);
+    const orderId = orderData?._id || orderData?.data?._id;
+
+    if (!orderId) {
+      return;
+    }
+
+    const paymentRequest: any = {
+      amount,
+      narration: "ORDER",
+      narration_id: orderId,
+    };
+
+    generateAlATPaymentMutation(paymentRequest, {
+      onSuccess: (response) => {
+        if (response.status === "success") {
+          setAlatResponse(response?.data);
+        }
+      },
+    });
+  };
+  // console.log(alatResponse, "ALAT");
 
   const generatePayment = () => {
     let orderData = orderDataFromHook;
@@ -233,26 +262,13 @@ export default function PaymentMethod({
         //   </Button>
         // </Box>
         <AlatpayButton
-          email={user?.Email}
-          firstName={user?.FirstName}
-          lastName={user?.FirstName}
+          email={alatResponse?.Email}
+          firstName={alatResponse?.FirstName}
+          lastName={alatResponse?.LastName}
+          phone={alatResponse?.Phone}
           amount={amount}
-          // onTransaction={(response) => {
-          //   setAlatResponse(response?.message)
-          //   console.log("Transaction response:", response);
-          // }}
-          // onClose={() => {
-          //   if(alatResponse === "Success") {
-          //   clearCart()
-          //   toast({
-          //     title: "Payment Successful",
-          //     status: "success",
-          //     duration: 2000,
-          //     isClosable: true,
-          //   });
-          //   navigate("/product-list")
-          // }
-          // }}
+          metadata={alatResponse?.Metadata}
+          onBeforePayment={generateAlATPayment}
         />
       )}
 
