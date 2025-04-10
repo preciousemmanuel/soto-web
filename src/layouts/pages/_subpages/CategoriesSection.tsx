@@ -32,7 +32,8 @@ export const ProductCard: React.FC<{
   const navigate = useNavigate();
   const [isWishlisted, setIsWishlisted] = React.useState(false);
   const { addToWishlist } = useProduct();
-  // console.log(product,"PRODUCT")
+  // console.log(product, "PRODUCT");
+
   const handleWishlistClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
@@ -179,11 +180,11 @@ export const ProductCard: React.FC<{
           variant="outline"
           size="md"
           width="full"
-          isDisabled={
-            product?.product_quantity ? product.product_quantity < 0 : true
-          }
+          // isDisabled={
+          //   product?.product_quantity ? product.product_quantity < 0 : true
+          // }
           h="40px"
-          onClick={() => product._id && onAddToCart(product._id)}
+          onClick={() => onAddToCart(product._id ?? "")}
           _hover={{
             background: "#FF5733",
             color: "white",
@@ -253,7 +254,7 @@ const BestSelling: React.FC = () => {
           <ProductCard
             key={product._id}
             product={product}
-            onAddToCart={handleAddToCart}
+            onAddToCart={() => handleAddToCart(product._id ?? "", product)}
           />
         ))}
       </Grid>

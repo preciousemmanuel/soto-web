@@ -36,6 +36,7 @@ export default function PaymentMethod({
     newOrderResponse: orderDataFromHook,
     isGeneratingPaymentLink,
     generateAlATPaymentMutation,
+    isGeneratingAlATPayment,
     // clearCart,
     // isGeneratingAlATPaymentLink,
   } = useOrder();
@@ -49,7 +50,13 @@ export default function PaymentMethod({
   //   card_year: "",
   //   sec_code: "",
   // });
-  const [alatResponse, setAlatResponse] = useState<any | null>(null);
+  const [alatResponse, setAlatResponse] = useState<any | null>({
+    Email: user?.Email || "",
+    FirstName: user?.FirstName || "",
+    LastName: user?.LastName || "",
+    Phone: user?.PhoneNumber || "",
+    Metadata: {},
+  });
 
   const generateAlATPayment = async () => {
     const savedOrder = localStorage.getItem("orderResponse");
@@ -67,15 +74,16 @@ export default function PaymentMethod({
       narration_id: orderId,
     };
 
-    generateAlATPaymentMutation(paymentRequest, {
+    await generateAlATPaymentMutation(paymentRequest, {
       onSuccess: (response) => {
-        if (response.status === "success") {
-          setAlatResponse(response?.data);
-        }
+        // if (response.status === "success") {
+        setAlatResponse(response?.data);
+        // }
       },
     });
   };
   // console.log(alatResponse, "ALAT");
+  // console.log(user, "USER");
 
   const generatePayment = () => {
     let orderData = orderDataFromHook;
@@ -262,12 +270,12 @@ export default function PaymentMethod({
         //   </Button>
         // </Box>
         <AlatpayButton
-          email={alatResponse?.Email}
-          firstName={alatResponse?.FirstName}
-          lastName={alatResponse?.LastName}
-          phone={alatResponse?.Phone}
+          email={alatResponse?.Email || user?.Email}
+          firstName={alatResponse?.FirstName || user?.FirstName}
+          lastName={alatResponse?.LastName || user?.LastName}
+          phone={alatResponse?.Phone || user?.PhoneNumber}
           amount={amount}
-          metadata={alatResponse?.Metadata}
+          metadata={alatResponse?.Metadata || user}
           onBeforePayment={generateAlATPayment}
         />
       )}

@@ -13,9 +13,9 @@ import {
 import { StarIcon } from "@chakra-ui/icons";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Mousewheel } from 'swiper/modules';
-import 'swiper/css';
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Mousewheel } from "swiper/modules";
+import "swiper/css";
 import { ProductCard } from "./CategoriesSection";
 
 interface Category {
@@ -146,9 +146,9 @@ const PopularProductsSection: React.FC = () => {
     categories,
     setSelectedCategoryId,
     refetchProductsByCategory,
-    handleAddToCart
+    handleAddToCart,
   } = useProduct();
-// console.log(popluarProducts,"popluar product")
+  // console.log(popluarProducts,"popluar product")
   const category = categories?.data?.data;
 
   const fetchProductsByCategory = async (categoryId: string) => {
@@ -161,7 +161,7 @@ const PopularProductsSection: React.FC = () => {
     }
   };
 
-  const handleProductClick = (productId:any) => {
+  const handleProductClick = (productId: any) => {
     navigate(`/products/${productId}`);
   };
 
@@ -187,13 +187,10 @@ const PopularProductsSection: React.FC = () => {
               768: { slidesPerView: 3.2 },
               1024: { slidesPerView: 4.2 },
             }}
-            style={{ padding: '10px' }}
+            style={{ padding: "10px" }}
           >
             {category?.map((category: any) => (
-              <SwiperSlide 
-                key={category?._id}
-                style={{ width: 'auto' }}
-              >
+              <SwiperSlide key={category?._id} style={{ width: "auto" }}>
                 <Box maxW="300px" w="100%">
                   <CategoryCard
                     category={category}
@@ -221,7 +218,11 @@ const PopularProductsSection: React.FC = () => {
             gap={4}
           >
             {popluarProducts?.slice(0, 5)?.map((product) => (
-              <ProductCard key={product?._id} product={product} onAddToCart={handleAddToCart}/>
+              <ProductCard
+                key={product?._id}
+                product={product}
+                onAddToCart={() => handleAddToCart(product?._id ?? "", product)}
+              />
             ))}
           </Grid>
         </Box>
