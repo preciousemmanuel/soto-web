@@ -10,7 +10,7 @@ import {
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { FaEye } from "react-icons/fa";
 import { useOrder } from "../hooks/useOrder";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import PaginationControls from "../../features/helpers/Pagination";
 
 const ReviewNewOrder = ({ order }: { order: any }) => (
@@ -36,7 +36,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
               Product Name
             </Text>
             <Text fontWeight="normal" color="#908D8D" fontSize="sm">
-              {order.product_name}
+              {order?.product_name}
             </Text>
           </GridItem>
           <GridItem>
@@ -44,7 +44,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
               Product Brand
             </Text>
             <Text fontWeight="normal" color="#908D8D" fontSize="sm">
-              {order.product_brand || "N/A"}
+              {order?.product_brand || "N/A"}
             </Text>
           </GridItem>
           <GridItem>
@@ -52,7 +52,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
               Type
             </Text>
             <Text fontWeight="normal" color="#908D8D" fontSize="sm">
-              {order.type}
+              {order?.type}
             </Text>
           </GridItem>
 
@@ -61,7 +61,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
               Size
             </Text>
             <Text fontWeight="normal" color="#908D8D" fontSize="sm">
-              {order.size}
+              {order?.size}
             </Text>
           </GridItem>
           <GridItem>
@@ -69,7 +69,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
               Color
             </Text>
             <Text fontWeight="normal" color="#908D8D" fontSize="sm">
-              {order.color}
+              {order?.color}
             </Text>
           </GridItem>
           <GridItem>
@@ -77,7 +77,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
               Qty
             </Text>
             <Text fontWeight="normal" color="#908D8D" fontSize="sm">
-              {order.quantity}
+              {order?.quantity}
             </Text>
           </GridItem>
 
@@ -86,10 +86,18 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
               Price Range
             </Text>
             <Text fontWeight="normal" color="#908D8D" fontSize="sm">
-              {order.min_price} - {order.max_price}
+              {order?.min_price} - {order?.max_price}
             </Text>
           </GridItem>
         </Grid>
+        <GridItem>
+          <Text fontWeight="medium" color="#616060" fontSize="md">
+            Order Status
+          </Text>
+          <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+            {order?.approval_status}
+          </Text>
+        </GridItem>
       </Box>
       <Flex
         direction="column"
@@ -137,25 +145,29 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
 );
 
 export default function ReviewOrder() {
-  const { customOrdersData: orders, customOrdersDataPagination,handlePageChange } = useOrder();
+  const {
+    customOrdersData: orders,
+    customOrdersDataPagination,
+    handlePageChange,
+  } = useOrder();
   const allOrder = orders;
   const order = allOrder?.data?.data;
 
   return (
     <Box mt={120}>
-        <Heading
-          size="lg"
-          textAlign="center"
-          mb={6}
-          bg={"#FFF2ED"}
-          color={"#FF5733"}
-          fontFamily={"Poppins"}
-          fontSize={"22px"}
-          px={6}
-          py={4}
-        >
-          Review Order
-        </Heading>
+      <Heading
+        size="lg"
+        textAlign="center"
+        mb={6}
+        bg={"#FFF2ED"}
+        color={"#FF5733"}
+        fontFamily={"Poppins"}
+        fontSize={"22px"}
+        px={6}
+        py={4}
+      >
+        Review Order
+      </Heading>
       <Flex justifyContent="space-between" alignItems="center" mb={6} px={10}>
         <Text
           fontWeight=""
@@ -168,7 +180,7 @@ export default function ReviewOrder() {
         {/* <Button rounded="full">Select All</Button> */}
       </Flex>
       <Box my={20} mx={12}>
-        {!order || order.length === 0 ? (
+        {!order || order?.length === 0 ? (
           <Text textAlign="center" color="gray" mt={120}>
             No orders to review.
           </Text>
@@ -176,7 +188,7 @@ export default function ReviewOrder() {
           order?.map((orderItem: { _id: string }) => (
             <ReviewNewOrder key={orderItem._id} order={orderItem} />
           ))
-        )}   
+        )}
       </Box>
       <Box px={24} py={8}>
         <PaginationControls
