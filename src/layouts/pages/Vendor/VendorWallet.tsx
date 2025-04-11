@@ -30,47 +30,71 @@ const VendorWallet = () => {
 
   const navigate = useNavigate();
 
-
   return (
     <Box
-      px="50px"
-      py="150px"
+      px={{ base: 4, sm: 6, md: 8, lg: 12, xl: 20 }}
+      py={{ base: 8, sm: 12, md: 20, lg: 32, xl: 40 }}
       h="100%"
       bg="linear-gradient(161.91deg, #FF5733 -17.77%, #FFF8F7 36.84%, #FFFFFF 91.46%)"
     >
-      <HStack mb={6} spacing={4} py={2} alignItems="center">
-        <Avatar name={`${user?.FirstName} ${user?.LastName}`} size={["md", "lg"]} />
+      <HStack
+        mb={{ base: 4, md: 6 }}
+        spacing={{ base: 2, md: 4 }}
+        py={2}
+        alignItems="center"
+      >
+        <Avatar
+          name={`${user?.FirstName} ${user?.LastName}`}
+          size={{ base: "sm", sm: "md", md: "lg" }}
+        />
         <VStack align="start" spacing={0}>
-          <Text fontWeight="500" color="white" fontSize={["md", "lg"]}>
-          {`${user?.FirstName} ${user?.LastName}`}
+          <Text
+            fontWeight="500"
+            color="white"
+            fontSize={{ base: "sm", sm: "md", md: "lg" }}
+          >
+            {`${user?.FirstName} ${user?.LastName}`}
           </Text>
-          <Text fontSize={["sm", "md"]} fontWeight="500" color="white">
+          <Text
+            fontSize={{ base: "xs", sm: "sm", md: "md" }}
+            fontWeight="500"
+            color="white"
+          >
             More sales today
           </Text>
         </VStack>
       </HStack>
 
-      <SimpleGrid columns={[1, 1, 2]} alignItems="flex-start" spacing={[4, 6]} mb={6}>
+      <SimpleGrid
+        columns={{ base: 1, md: 2 }}
+        alignItems="flex-start"
+        spacing={{ base: 4, md: 6 }}
+        mb={6}
+      >
         <Box>
-          <Text fontSize={["lg", "xl", "36px"]} fontWeight="500" color="#1A1A1A">
-          Wallets
+          <Text
+            fontSize={{ base: "md", sm: "lg", md: "xl", lg: "2xl" }}
+            fontWeight="500"
+            color="#1A1A1A"
+          >
+            Wallets
           </Text>
           <Box
-            p={8}
+            p={{ base: 4, sm: 6, md: 8 }}
             bg="rgba(208, 85, 59, 1)"
             borderRadius="34px"
-            height="200px"
+            height={{ base: "150px", sm: "180px", md: "200px" }}
             width="100%"
             maxW="400px"
           >
             <Box
               display="flex"
-              gap="50px"
+              gap={{ base: 4, sm: 6, md: 8 }}
               flexDirection="row"
               alignItems="center"
             >
               <Text
-                fontSize={["lg", "xl", "24px"]}
+                fontSize={{ base: "md", sm: "lg", md: "xl" }}
                 fontWeight="500"
                 color="white"
               >
@@ -84,63 +108,79 @@ const VendorWallet = () => {
                 bg="transparent"
                 color="white"
                 _hover={{ bg: "transparent" }}
-                size={["sm", "34px"]}
+                size={{ base: "sm", sm: "md", md: "lg" }}
               />
             </Box>
-            <Text fontSize={["2xl", "46px"]} fontWeight="bold" color="white">
+            <Text
+              fontSize={{ base: "xl", sm: "2xl", md: "3xl" }}
+              fontWeight="bold"
+              color="white"
+            >
               {showBalance ? `₦${user?.wallet?.current_balance}` : "****"}
             </Text>
           </Box>
-          <HStack spacing={4} mt={8} flexWrap="wrap">
+          <HStack
+            spacing={{ base: 2, md: 4 }}
+            mt={{ base: 4, md: 8 }}
+            flexWrap="wrap"
+          >
             <Button
               leftIcon={<FaMoneyBill />}
               bg="#FF5733"
               color="white"
-              size={["md", "lg"]}
+              size={{ base: "sm", sm: "md", md: "lg" }}
               rounded="full"
               onClick={() => navigate("/vendor-withdraw")}
-              width={["100%", "auto"]}
+              width={{ base: "100%", sm: "auto" }}
             >
               Withdraw Request
             </Button>
-            {/* <Button
-              leftIcon={<FaMoneyBill />}
-              colorScheme="orange"
-              size={["md", "lg"]}
-              rounded="full"
-              onClick={() => navigate("/vendor-request")}
-              variant="outline"
-              width={["100%", "auto"]}
-            >
-              Request
-            </Button> */}
           </HStack>
         </Box>
 
-        <Box>
-          <HStack justify="space-between" p={4}>
-            <Text fontSize={["md", "lg"]} fontWeight="bold">
+        <Box mt={{ base: 6, md: 0 }}>
+          <HStack justify="space-between" p={{ base: 2, md: 4 }}>
+            <Text
+              fontSize={{ base: "sm", sm: "md", md: "lg" }}
+              fontWeight="bold"
+            >
               Recent Transactions
             </Text>
             <Button
               variant="link"
               onClick={() => navigate("/vendor-transcactions")}
               color="#FF5733"
+              fontSize={{ base: "sm", sm: "md" }}
             >
               See all
             </Button>
           </HStack>
-         {isLoading ? <LoadingSpinner/> : 
-          transactions?.length > 0 ? (
-            <Box p={4} bg="white" borderRadius="md" boxShadow="md" height="100%">
-              {transactions?.slice(0, 10)?.map((trx:any) => (
-                <HStack key={trx._id} mt={4} spacing={4}>
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : transactions?.length > 0 ? (
+            <Box
+              p={{ base: 2, md: 4 }}
+              bg="white"
+              borderRadius="md"
+              boxShadow="md"
+              height="100%"
+            >
+              {transactions?.slice(0, 10)?.map((trx: any) => (
+                <HStack
+                  key={trx._id}
+                  mt={{ base: 2, md: 4 }}
+                  spacing={{ base: 2, md: 4 }}
+                >
                   <Icon
                     as={trx.type === "DEBIT" ? FaArrowUp : FaArrowDown}
                     color={trx.type === "DEBIT" ? "red.500" : "green.500"}
+                    boxSize={{ base: 4, sm: 5 }}
                   />
                   <VStack align="start" spacing={0}>
-                    <Text fontSize={["sm", "md"]} fontWeight="500">
+                    <Text
+                      fontSize={{ base: "xs", sm: "sm", md: "md" }}
+                      fontWeight="500"
+                    >
                       {trx.narration}
                     </Text>
                     <Text fontSize="xs" fontWeight="500">
@@ -148,7 +188,11 @@ const VendorWallet = () => {
                     </Text>
                   </VStack>
                   <VStack align="end" spacing={0} ml="auto">
-                    <Text fontSize={["sm", "md"]} fontWeight="500" color="green">
+                    <Text
+                      fontSize={{ base: "xs", sm: "sm", md: "md" }}
+                      fontWeight="500"
+                      color="green"
+                    >
                       ₦{trx.amount}
                     </Text>
                     <Text fontSize="xs" fontWeight="500">
@@ -159,9 +203,10 @@ const VendorWallet = () => {
               ))}
             </Box>
           ) : (
-            <Text>No transactions available.</Text>
-          )
-         }
+            <Text fontSize={{ base: "sm", md: "md" }}>
+              No transactions available.
+            </Text>
+          )}
         </Box>
       </SimpleGrid>
     </Box>

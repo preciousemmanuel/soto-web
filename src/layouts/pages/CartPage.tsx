@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Button, Image,Heading } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, Image, Heading } from "@chakra-ui/react";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useProduct } from "../hooks/useProduct";
@@ -29,7 +29,6 @@ const CartPage = () => {
   const discountedPrice = (product: CartItem) =>
     product.discount || product.price;
 
-
   const calculateTotals = () => {
     const subtotal = cart.reduce(
       (acc, item) => acc + discountedPrice(item) * item.quantity,
@@ -53,79 +52,80 @@ const CartPage = () => {
   }, [cart]);
 
   return (
-    <Box p={[4, 6, 8]} mt={120}>
-        <Flex 
-        align="center" 
-        justify="center" 
+    <Box p={[4, 6, 8]} mt={[120, 120, 120]}>
+      <Flex
+        align="center"
+        justify="center"
         position="relative"
         bg="#FFF2ED"
-        p={6}
-        mt={10}
-        mb={6}
+        p={[4, 5, 6]}
+        mt={[6, 8, 10]}
+        mb={[4, 5, 6]}
       >
         <Button
           position="absolute"
-          left={6}
+          left={[2, 4, 6]}
           onClick={() => navigate(-1)}
           leftIcon={<ChevronLeftIcon />}
           variant="ghost"
           color="#FF5753"
+          size={["sm", "md", "md"]}
         >
           Back
         </Button>
-        <Heading
-          size="lg"
-          fontFamily="Poppins"
-          color="#FF5753"
-        >
-            Shopping Cart
+        <Heading size={["md", "lg", "lg"]} fontFamily="Poppins" color="#FF5753">
+          Shopping Cart
         </Heading>
       </Flex>
-    
+
       <Flex
-        flexDirection={["column", "row"]}
+        flexDirection={["column", "column", "row"]}
         justifyContent="space-between"
-        gap={8}
-        mb={16}
+        gap={[4, 6, 8]}
+        mb={[8, 12, 16]}
       >
         {/* Product List Section */}
         <Box
           flex="2"
           bg="white"
-          p={6}
+          p={[4, 5, 6]}
           borderRadius="md"
           boxShadow="sm"
           position="relative"
         >
           <Flex
             bg={"#FBF5F5"}
-            py={4}
+            py={[2, 3, 4]}
             fontWeight="bold"
-            mb={6}
-            px={6}
+            mb={[4, 5, 6]}
+            px={[4, 5, 6]}
             justifyContent="space-between"
             borderRadius="md"
+            flexDirection={["column", "row", "row"]}
+            gap={[2, 0, 0]}
           >
-            <Text flex="2">Product</Text>
-            <Text flex="1" textAlign="center">
+            <Text flex="2" mb={[2, 0, 0]}>
+              Product
+            </Text>
+            <Text flex="1" textAlign={["left", "center", "center"]}>
               Price
             </Text>
-            <Text flex="1" textAlign="center">
+            <Text flex="1" textAlign={["left", "center", "center"]}>
               Qty
             </Text>
-            <Text flex="1" textAlign="center">
+            <Text flex="1" textAlign={["left", "center", "center"]}>
               Subtotal
             </Text>
             <Text flex="0.5"></Text>
           </Flex>
-          <Box mb="60px">
+          <Box mb={["40px", "50px", "60px"]}>
             <Button
               onClick={clearAllCart}
               color="#FF5733"
               variant="ghost"
               position="absolute"
               right="0px"
-              // float="right"
+              size={["sm", "md", "md"]}
             >
               Clear All
             </Button>
@@ -136,36 +136,52 @@ const CartPage = () => {
                 key={item.productId}
                 alignItems="center"
                 justifyContent="space-between"
-                py={5}
-                px={6}
+                py={[3, 4, 5]}
+                px={[2, 4, 6]}
                 borderBottom="1px solid"
                 borderColor="gray.100"
                 _hover={{ bg: "gray.50" }}
+                flexDirection={["column", "row", "row"]}
+                gap={[2, 0, 0]}
               >
-                <Flex alignItems="center" gap={4} flex="2">
+                <Flex alignItems="center" gap={[2, 3, 4]} flex="2">
                   <Image
                     src={item.image}
                     alt={item.productName}
-                    boxSize="60px"
+                    boxSize={["40px", "50px", "60px"]}
                     objectFit="cover"
                     borderRadius="md"
                   />
-                  <Text fontWeight="medium">{item.productName}</Text>
+                  <Text fontWeight="medium" fontSize={["sm", "md", "md"]}>
+                    {item.productName}
+                  </Text>
                 </Flex>
-                <Text flex="1" textAlign="center">
-                ₦{discountedPrice(item).toLocaleString()}
+                <Text
+                  flex="1"
+                  textAlign={["left", "center", "center"]}
+                  fontSize={["sm", "md", "md"]}
+                >
+                  ₦{discountedPrice(item).toLocaleString()}
                 </Text>
-                <Text flex="1" textAlign="center">
+                <Text
+                  flex="1"
+                  textAlign={["left", "center", "center"]}
+                  fontSize={["sm", "md", "md"]}
+                >
                   {item.quantity}
                 </Text>
-                <Text flex="1" textAlign="center" fontWeight="semibold">
-                  
-                  ₦
-                  {(
-                    discountedPrice(item) * item.quantity
-                  )?.toLocaleString()}
+                <Text
+                  flex="1"
+                  textAlign={["left", "center", "center"]}
+                  fontWeight="semibold"
+                  fontSize={["sm", "md", "md"]}
+                >
+                  ₦{(discountedPrice(item) * item.quantity)?.toLocaleString()}
                 </Text>
-                <Flex flex="0.5" justifyContent="flex-end">
+                <Flex
+                  flex="0.5"
+                  justifyContent={["flex-start", "flex-end", "flex-end"]}
+                >
                   <Box
                     as="button"
                     color="red.500"
@@ -184,26 +200,47 @@ const CartPage = () => {
           </Box>
         </Box>
 
-        <Box flex="1" p={6} height="400px" bg={"#FBF5F5"}>
-          <Text fontWeight="bold" mb={4} color={"#FF5733"} fontSize={"30px"}>
+        <Box
+          flex="1"
+          p={[4, 5, 6]}
+          height={["auto", "350px", "400px"]}
+          bg={"#FBF5F5"}
+          mt={[4, 0, 0]}
+        >
+          <Text
+            fontWeight="bold"
+            mb={[2, 3, 4]}
+            color={"#FF5733"}
+            fontSize={["24px", "28px", "30px"]}
+          >
             Cart Totals
           </Text>
           {(() => {
             const { subtotal, total } = calculateTotals();
             return (
               <>
-                <Flex justifyContent="space-between" mb={2}>
-                  <Text>Subtotal</Text>
-                  <Text>₦{subtotal?.toLocaleString()}</Text>
+                <Flex justifyContent="space-between" mb={[1, 1.5, 2]}>
+                  <Text fontSize={["sm", "md", "md"]}>Subtotal</Text>
+                  <Text fontSize={["sm", "md", "md"]}>
+                    ₦{subtotal?.toLocaleString()}
+                  </Text>
                 </Flex>
-                <Flex justifyContent="space-between" mb={4}>
-                  <Text fontWeight="bold">Total</Text>
-                  <Text fontWeight="bold">₦{total?.toLocaleString()}</Text>
+                <Flex justifyContent="space-between" mb={[2, 3, 4]}>
+                  <Text fontWeight="bold" fontSize={["sm", "md", "md"]}>
+                    Total
+                  </Text>
+                  <Text fontWeight="bold" fontSize={["sm", "md", "md"]}>
+                    ₦{total?.toLocaleString()}
+                  </Text>
                 </Flex>
               </>
             );
           })()}
-          <Flex flexDirection="column" gap={4} mt="30px">
+          <Flex
+            flexDirection="column"
+            gap={[2, 3, 4]}
+            mt={["20px", "25px", "30px"]}
+          >
             <Button
               width="full"
               color="#FF5733"
@@ -212,8 +249,11 @@ const CartPage = () => {
               _hover={{ bg: "#FF5733", color: "#ffff" }}
               borderRadius="md"
               variant="outline"
-              h="54px"
-              onClick={() => { navigate("/product-list")}}
+              h={["44px", "48px", "54px"]}
+              fontSize={["sm", "md", "md"]}
+              onClick={() => {
+                navigate("/product-list");
+              }}
             >
               Continue Shopping
             </Button>
@@ -224,7 +264,8 @@ const CartPage = () => {
               _hover={{ bg: "#FF5733", color: "#ffff" }}
               borderRadius="md"
               variant="outline"
-              h="54px"
+              h={["44px", "48px", "54px"]}
+              fontSize={["sm", "md", "md"]}
               onClick={() => navigate("/checkout")}
             >
               Proceed to Checkout
@@ -232,8 +273,6 @@ const CartPage = () => {
           </Flex>
         </Box>
       </Flex>
-
-      {/* <RelatedProducts title="You may also like"  /> */}
     </Box>
   );
 };

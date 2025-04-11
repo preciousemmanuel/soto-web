@@ -51,10 +51,10 @@ const ProfileDetailsForm: React.FC = () => {
 
   return (
     <Box
-      p={12}
+      p={{ base: 4, sm: 6, md: 8, lg: 12 }}
       bg="white"
       borderRadius="lg"
-      width={{ base: "100%", md: "100%" }}
+      width="100%"
       display="flex"
       flexDirection="column"
       alignItems="center"
@@ -63,14 +63,19 @@ const ProfileDetailsForm: React.FC = () => {
         color="#FF5733"
         fontWeight="bold"
         textAlign="left"
-        fontSize="17px"
-        mb={4}
+        fontSize={{ base: "14px", sm: "15px", md: "16px", lg: "17px" }}
+        mb={{ base: 2, sm: 3, md: 4 }}
         textDecoration="underline"
         fontFamily="Poppins"
+        w="100%"
       >
         Edit Profile
       </Text>
-      <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={6}>
+      <Grid
+        templateColumns={{ base: "1fr", sm: "1fr", md: "1fr 1fr" }}
+        gap={{ base: 3, sm: 4, md: 5, lg: 6 }}
+        w="100%"
+      >
         {[
           { label: "First Name", field: "FirstName" },
           { label: "Last Name", field: "LastName" },
@@ -78,9 +83,10 @@ const ProfileDetailsForm: React.FC = () => {
           { label: "Shipping Address", field: "ShippingAddress" },
         ].map(({ label, field }, index) => (
           <FormControl key={index}>
-            <FormLabel>{label}</FormLabel>
+            <FormLabel fontSize={{ base: "sm", md: "md" }}>{label}</FormLabel>
             <Input
               borderRadius="md"
+              size={{ base: "md", md: "md" }}
               value={
                 field === "ShippingAddress"
                   ? formData.ShippingAddress.country
@@ -94,10 +100,11 @@ const ProfileDetailsForm: React.FC = () => {
       <Button
         bg="#FF5733"
         color="white"
-        height="65px"
-        width="45%"
-        mt={8}
+        height={{ base: "50px", sm: "55px", md: "60px", lg: "65px" }}
+        width={{ base: "80%", sm: "70%", md: "60%", lg: "45%" }}
+        mt={{ base: 4, sm: 6, md: 7, lg: 8 }}
         rounded="full"
+        fontSize={{ base: "sm", md: "md" }}
         onClick={handleSaveChanges}
         isLoading={loading}
       >

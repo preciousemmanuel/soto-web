@@ -33,12 +33,10 @@ const ProfileInfoBox = ({ onSelectOption }: any) => {
     window.scrollTo(0, 0);
   }, []);
 
-
-
   if (loading) {
     return (
       <Flex justify="center" align="center" minH="200px">
-        <LoadingSpinner/>
+        <LoadingSpinner />
       </Flex>
     );
   }
@@ -54,31 +52,38 @@ const ProfileInfoBox = ({ onSelectOption }: any) => {
   // Render Profile Data
   return (
     <Box
-      p={6}
+      p={{ base: 4, md: 6 }}
       bg="#FFEFEB"
       borderRadius="lg"
-      mb={6}
+      mb={{ base: 4, md: 6 }}
       width={{ base: "100%", md: "45%" }}
     >
-      <Flex align="center" mb={4}>
-        <Avatar size="md" name={`${user.FirstName} ${user.LastName}`} />
-        <Box ml={4}>
-          <Text fontWeight="bold">{`${user.FirstName}`}</Text>
-          <Text color="gray.500" fontSize={"sm"}>
+      <Flex align="center" mb={{ base: 3, md: 4 }}>
+        <Avatar
+          size={{ base: "sm", md: "md" }}
+          name={`${user.FirstName} ${user.LastName}`}
+        />
+        <Box ml={{ base: 3, md: 4 }}>
+          <Text
+            fontWeight="bold"
+            fontSize={{ base: "md", md: "lg" }}
+          >{`${user.FirstName}`}</Text>
+          <Text color="gray.500" fontSize={{ base: "xs", md: "sm" }}>
             {user.Email}
           </Text>
           <Button
-            size="xs"
+            size={{ base: "xs", sm: "sm" }}
             colorScheme="green"
-            mt={2}
+            mt={{ base: 1, md: 2 }}
             leftIcon={<FaCheckCircle />}
+            fontSize={{ base: "xs", md: "sm" }}
           >
             Verified
           </Button>
         </Box>
         <Icon
           as={CiEdit}
-          boxSize={8}
+          boxSize={{ base: 6, md: 8 }}
           ml="auto"
           cursor="pointer"
           color={"#FF5733"}
@@ -88,9 +93,9 @@ const ProfileInfoBox = ({ onSelectOption }: any) => {
         {["Help Center", "Feedback", "Logout"].map((item, index) => (
           <Flex
             key={index}
-            px={8}
+            px={{ base: 4, md: 8 }}
             align="center"
-            p={3}
+            p={{ base: 2, md: 3 }}
             bg={index === 0 ? "" : "transparent"}
             cursor="pointer"
             borderRadius="md"
@@ -113,10 +118,13 @@ const ProfileInfoBox = ({ onSelectOption }: any) => {
               color={"#FF5733"}
               fontWeight={"700"}
               as={item === "Logout" ? FaPowerOff : FaEnvelope}
-              mr={4}
+              mr={{ base: 2, md: 4 }}
+              boxSize={{ base: 4, md: 5 }}
             />
-            <Text flex="1">{item}</Text>
-            <Icon as={FaAngleRight} />
+            <Text flex="1" fontSize={{ base: "sm", md: "md" }}>
+              {item}
+            </Text>
+            <Icon as={FaAngleRight} boxSize={{ base: 4, md: 5 }} />
           </Flex>
         ))}
       </Box>

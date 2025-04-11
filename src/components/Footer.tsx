@@ -45,24 +45,33 @@ const Footer = () => {
         {/* First Section: Logo and Subscription */}
         <VStack spacing={4} align="start" w={{ base: "100%", md: "25%" }}>
           <Image src={Logo} alt="Logo" boxSize="80px" mb={4} />
-          <Flex gap={2}>
+          <Flex
+            gap={2}
+            direction={{ base: "column", md: "row" }}
+            align={{ base: "center", md: "stretch" }}
+            w={{ base: "100%", md: "auto" }}
+          >
             <Input
               placeholder="Enter your email"
               bg="white"
               variant="unstyled"
               px={4}
               flex="1"
-              w="250px"
+              w={{ base: "100%", md: "250px" }}
               rounded="full"
               overflow="hidden"
+              mb={{ base: 2, md: 0 }}
+              h="36px"
             />
             <Button
               bg={"#FF5733"}
               px={4}
               rounded="full"
-              size={"lg"}
+              size="sm"
               color={"white"}
-              fontSize={"14px"}
+              fontSize={{ base: "12px", md: "14px" }}
+              w={{ base: "100%", md: "auto" }}
+              h="36px"
             >
               Subscribe
             </Button>

@@ -12,34 +12,62 @@ const SummaryBoxes: React.FC<SummaryBoxesProps> = ({
   total_sold,
 }) => {
   return (
-    <SimpleGrid columns={[1, 3]} spacing={6} mb={6}>
+    <SimpleGrid
+      columns={{ base: 1, sm: 2, md: 3 }}
+      spacing={{ base: 4, md: 6 }}
+      mb={{ base: 4, md: 6 }}
+    >
       <Box
         bg="#FFF0ED"
-        p={4}
+        p={{ base: 3, md: 4 }}
         borderRadius="md"
         textAlign="center"
-        height={"163px"}
+        height={{ base: "120px", md: "163px" }}
       >
-        <Text fontSize="26px" fontWeight="500" mt={6}>
+        <Text
+          fontSize={{ base: "xl", md: "26px" }}
+          fontWeight="500"
+          mt={{ base: 4, md: 6 }}
+        >
           Total Products
         </Text>
-        <Text fontSize="2xl" fontWeight="bold">
+        <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold">
           {total_products}
         </Text>
       </Box>
-      <Box bg="#60DD9833" p={4} borderRadius="md" textAlign="center">
-        <Text fontSize="26px" fontWeight="500" mt={6}>
+      <Box
+        bg="#60DD9833"
+        p={{ base: 3, md: 4 }}
+        borderRadius="md"
+        textAlign="center"
+        height={{ base: "120px", md: "163px" }}
+      >
+        <Text
+          fontSize={{ base: "xl", md: "26px" }}
+          fontWeight="500"
+          mt={{ base: 4, md: 6 }}
+        >
           Total Sold
         </Text>
-        <Text fontSize="2xl" fontWeight="bold">
+        <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold">
           {total_sold}
         </Text>
       </Box>
-      <Box bg="#F2F1F3" p={4} borderRadius="md" textAlign="center">
-        <Text fontSize="26px" fontWeight="500" mt={6}>
+      <Box
+        bg="#F2F1F3"
+        p={{ base: 3, md: 4 }}
+        borderRadius="md"
+        textAlign="center"
+        height={{ base: "120px", md: "163px" }}
+      >
+        <Text
+          fontSize={{ base: "xl", md: "26px" }}
+          fontWeight="500"
+          mt={{ base: 4, md: 6 }}
+        >
           Total in Stock
         </Text>
-        <Text fontSize="2xl" fontWeight="bold">
+        <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="bold">
           {total_in_stock}
         </Text>
       </Box>

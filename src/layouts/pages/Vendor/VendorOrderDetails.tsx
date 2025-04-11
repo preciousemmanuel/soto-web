@@ -17,8 +17,8 @@ import { useOrder } from "../../hooks/useOrder";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const OrderDetails = () => {
-    const { orderId } = useParams<{ orderId: string }>();
-    const navigate = useNavigate();
+  const { orderId } = useParams<{ orderId: string }>();
+  const navigate = useNavigate();
   const { useSingleVendorOrder } = useOrder();
   const { data: oneOrder, isPending } = useSingleVendorOrder(orderId as string);
 
@@ -30,160 +30,213 @@ const OrderDetails = () => {
     return <LoadingSpinner />;
   }
 
-  
-
   const {
-    data: {
-      status,
-    },
+    data: { status },
   } = oneOrder ?? {};
 
-    
   return (
-    <Box p={8} h="100vh" fontFamily="Poppins" mt={100}>
-    <Flex 
-        align="center" 
-        justify="center" 
+    <Box
+      p={{ base: 4, md: 8 }}
+      h="100vh"
+      fontFamily="Poppins"
+      mt={{ base: 20, md: 100 }}
+    >
+      <Flex
+        align="center"
+        justify="center"
         position="relative"
         bg="#FFF2ED"
-        p={6}
-        mt={10}
-        mb={6}
+        p={{ base: 4, md: 6 }}
+        mt={{ base: 4, md: 10 }}
+        mb={{ base: 4, md: 6 }}
       >
         <Button
           position="absolute"
-          left={6}
+          left={{ base: 2, md: 6 }}
           onClick={() => navigate(-1)}
           leftIcon={<ChevronLeftIcon />}
           variant="ghost"
           color="#FF5753"
+          size={{ base: "sm", md: "md" }}
         >
           Back
         </Button>
         <Heading
-          size="lg"
+          size={{ base: "md", md: "lg" }}
           fontFamily="Poppins"
           color="#FF5753"
         >
-            Order Details
+          Order Details
         </Heading>
       </Flex>
-    {isPending ? (
-      <LoadingSpinner />
-    ) : (
-      <Box p={8} bg="white" maxW="1000px" mx="auto">
-        <HStack spacing={8} align="stretch">
-          <Box flex={1} bg="orange.50" p={6} borderRadius="md">
-            <HStack justify="space-between" w="full">
-              <Text fontSize="md" fontWeight="medium">
-                Delivery Status
-              </Text>
-              <Badge
-                colorScheme={
-                  status === "PENDING" ? "blue" :
-                  status === "BOOKED" ? "green" :
-                  status === "CANCELLED" ? "red" :
-                  status === "DELIVERED" ? "purple" :
-                  status === "FAILED" ? "red" :
-                  status === "CUSTOM" ? "teal" : "yellow"
-                }
-                px={4} py={1} borderRadius="md"
+      {isPending ? (
+        <LoadingSpinner />
+      ) : (
+        <Box p={{ base: 4, md: 8 }} bg="white" maxW="1000px" mx="auto">
+          <HStack
+            spacing={{ base: 4, md: 8 }}
+            align="stretch"
+            direction={{ base: "column", md: "row" }}
+          >
+            <Box
+              flex={1}
+              bg="orange.50"
+              p={{ base: 4, md: 6 }}
+              borderRadius="md"
+            >
+              <HStack justify="space-between" w="full">
+                <Text fontSize={{ base: "sm", md: "md" }} fontWeight="medium">
+                  Delivery Status
+                </Text>
+                <Badge
+                  colorScheme={
+                    status === "PENDING"
+                      ? "blue"
+                      : status === "BOOKED"
+                      ? "green"
+                      : status === "CANCELLED"
+                      ? "red"
+                      : status === "DELIVERED"
+                      ? "purple"
+                      : status === "FAILED"
+                      ? "red"
+                      : status === "CUSTOM"
+                      ? "teal"
+                      : "yellow"
+                  }
+                  px={{ base: 2, md: 4 }}
+                  py={1}
+                  borderRadius="md"
+                >
+                  {status.replace("_", " ")}
+                </Badge>
+              </HStack>
+
+              <VStack align="start" spacing={2} mt={{ base: 3, md: 4 }}>
+                <Text fontSize={{ base: "sm", md: "md" }} fontWeight="semibold">
+                  General Info
+                </Text>
+                <Box
+                  p={{ base: 2, md: 4 }}
+                  bg="white"
+                  borderRadius="md"
+                  boxShadow="sm"
+                  w="full"
+                >
+                  <HStack justify="space-between" w="full">
+                    <Text fontSize={{ base: "xs", md: "sm" }} color="gray.600">
+                      Order ID
+                    </Text>
+                    <Text fontSize={{ base: "xs", md: "sm" }} fontWeight="bold">
+                      {oneOrder?.data?.tracking_id}
+                    </Text>
+                  </HStack>
+                  <Divider my={{ base: 2, md: 4 }} />
+                  <HStack justify="space-between" w="full">
+                    <Text fontSize={{ base: "xs", md: "sm" }} color="gray.600">
+                      Order date
+                    </Text>
+                    <Text fontSize={{ base: "xs", md: "sm" }}>
+                      {new Date(oneOrder?.data?.createdAt).toLocaleString()}
+                    </Text>
+                  </HStack>
+                </Box>
+              </VStack>
+
+              <HStack justify="space-between" w="full" py={{ base: 3, md: 4 }}>
+                <Text fontSize={{ base: "sm", md: "md" }} fontWeight="semibold">
+                  Payment Status
+                </Text>
+                <Badge
+                  colorScheme="green"
+                  px={{ base: 2, md: 4 }}
+                  py={1}
+                  borderRadius="md"
+                >
+                  {oneOrder?.data?.payment_type}
+                </Badge>
+              </HStack>
+
+              <Box
+                p={{ base: 2, md: 4 }}
+                bg="white"
+                borderRadius="md"
+                boxShadow="sm"
+                w="full"
               >
-                {status.replace("_", " ")}
-              </Badge>
-            </HStack>
-
-            <VStack align="start" spacing={2} mt="16px">
-              <Text fontSize="md" fontWeight="semibold">
-                General Info
-              </Text>
-              <Box p={4} bg="white" borderRadius="md" boxShadow="sm" w="full">
-                <HStack justify="space-between" w="full">
-                  <Text fontSize="sm" color="gray.600">
-                    Order ID
-                  </Text>
-                  <Text fontSize="sm" fontWeight="bold">
-                    {oneOrder?.data?.tracking_id}
-                  </Text>
-                </HStack>
-                <Divider my={4} />
-                <HStack justify="space-between" w="full">
-                  <Text fontSize="sm" color="gray.600">
-                    Order date
-                  </Text>
-                  <Text fontSize="sm">
-                    {new Date(oneOrder?.data?.createdAt).toLocaleString()}
-                  </Text>
-                </HStack>
+                <VStack align="start" spacing={2}>
+                  <HStack justify="space-between" w="full">
+                    <Text fontSize={{ base: "xs", md: "sm" }} color="gray.600">
+                      Total Amount
+                    </Text>
+                    <Text
+                      fontSize={{ base: "xs", md: "sm" }}
+                      fontWeight="bold"
+                      color="red.500"
+                    >
+                      ₦{oneOrder?.data?.grand_total}
+                    </Text>
+                  </HStack>
+                </VStack>
               </Box>
-            </VStack>
-
-            <HStack justify="space-between" w="full" py="16px">
-              <Text fontSize="md" fontWeight="semibold">
-                Payment Status
-              </Text>
-              <Badge colorScheme="green" px={4} py={1} borderRadius="md">
-                {oneOrder?.data?.payment_type}
-              </Badge>
-            </HStack>
-
-            <Box p={4} bg="white" borderRadius="md" boxShadow="sm" w="full">
-              <VStack align="start" spacing={2}>
-                <HStack justify="space-between" w="full">
-                  <Text fontSize="sm" color="gray.600">
-                    Total Amount
-                  </Text>
-                  <Text fontSize="sm" fontWeight="bold" color="red.500">
-                    ₦{oneOrder?.data?.grand_total}
-                  </Text>
-                </HStack>
-              </VStack>
             </Box>
-          </Box>
-          <Flex direction="column" flex={1} h="100%">
-            <Box bg="orange.50" p={6} borderRadius="md" >
-              <Text fontSize="md" fontWeight="semibold" mb={4}>
-                Product List
-              </Text>
+            <Flex direction="column" flex={1} h="100%">
+              <Box bg="orange.50" p={{ base: 4, md: 6 }} borderRadius="md">
+                <Text
+                  fontSize={{ base: "sm", md: "md" }}
+                  fontWeight="semibold"
+                  mb={{ base: 2, md: 4 }}
+                >
+                  Product List
+                </Text>
 
-              <VStack spacing={4} align="stretch">
-                {oneOrder?.data?.items?.map((item: any) => (
-                  <Box
-                    key={item?._id}
-                    p={4}
-                    bg="white"
-                    borderRadius="md"
-                    boxShadow="sm"
-                  >
-                    <HStack spacing={4}>
-                      <Image
-                        src={item?.images[0]}
-                        alt={item?.product_name}
-                        boxSize="50px"
-                        objectFit="cover"
-                        borderRadius="md"
-                      />
-                      <VStack align="start">
-                        <Text fontSize="sm" fontWeight="bold">
-                          {item?.product_name}
-                        </Text>
-                        <Text fontSize="xs" color="gray.600">
-                          Size: {item?.description}
-                        </Text>
-                        <Text fontSize="xs" color="gray.600">
-                          Qty: {item?.quantity}
-                        </Text>
-                      </VStack>
-                    </HStack>
-                  </Box>
-                ))}
-              </VStack>
-            </Box>
-          </Flex>
-        </HStack>
-      </Box>
-    )}
-  </Box>
+                <VStack spacing={{ base: 2, md: 4 }} align="stretch">
+                  {oneOrder?.data?.items?.map((item: any) => (
+                    <Box
+                      key={item?._id}
+                      p={{ base: 2, md: 4 }}
+                      bg="white"
+                      borderRadius="md"
+                      boxShadow="sm"
+                    >
+                      <HStack spacing={{ base: 2, md: 4 }}>
+                        <Image
+                          src={item?.images[0]}
+                          alt={item?.product_name}
+                          boxSize={{ base: "40px", md: "50px" }}
+                          objectFit="cover"
+                          borderRadius="md"
+                        />
+                        <VStack align="start">
+                          <Text
+                            fontSize={{ base: "xs", md: "sm" }}
+                            fontWeight="bold"
+                          >
+                            {item?.product_name}
+                          </Text>
+                          <Text
+                            fontSize={{ base: "2xs", md: "xs" }}
+                            color="gray.600"
+                          >
+                            Size: {item?.description}
+                          </Text>
+                          <Text
+                            fontSize={{ base: "2xs", md: "xs" }}
+                            color="gray.600"
+                          >
+                            Qty: {item?.quantity}
+                          </Text>
+                        </VStack>
+                      </HStack>
+                    </Box>
+                  ))}
+                </VStack>
+              </Box>
+            </Flex>
+          </HStack>
+        </Box>
+      )}
+    </Box>
   );
 };
 

@@ -20,12 +20,18 @@ export default function ShippingAddress() {
   const onSubmit = (data: any) => addShippingAddress(data);
 
   return (
-    <Box pt="25px">
-      <Image src={Logo} alt="Logo" py={4} px={8} width="150px" />
+    <Box pt={{ base: "15px", md: "25px" }}>
+      <Image
+        src={Logo}
+        alt="Logo"
+        py={{ base: 2, md: 4 }}
+        px={{ base: 4, md: 8 }}
+        width={{ base: "100px", md: "150px" }}
+      />
       <Flex
         direction={{ base: "column", md: "row" }}
-        minHeight="calc(100vh - 56px)"
-        gap="4"
+        minHeight={{ base: "auto", md: "calc(100vh - 56px)" }}
+        gap={{ base: 2, md: 4 }}
       >
         <Box
           flex="1"
@@ -33,98 +39,59 @@ export default function ShippingAddress() {
           bgSize="cover"
           bgPosition="center"
           display={{ base: "none", md: "block" }}
+          minHeight={{ base: "200px", md: "auto" }}
         />
 
-        <form style={{ flex: 1, paddingInline: "42px" }}>
-          <Box mb={4}>
-            <Text fontSize="30px" fontWeight="bold" mb={4}>
+        <form
+          style={{
+            flex: 1,
+            paddingInline: "42px",
+          }}
+        >
+          <Box mb={{ base: 2, md: 4 }}>
+            <Text
+              fontSize={{ base: "24px", md: "30px" }}
+              fontWeight="bold"
+              mb={{ base: 2, md: 4 }}
+            >
               Shipping Address
             </Text>
-            <Text fontSize="sm" fontWeight="normal">
+            <Text fontSize={{ base: "xs", md: "sm" }} fontWeight="normal">
               Enter your shipping address details
             </Text>
           </Box>
-          <Stack spacing="4" py={9}>
-            <FormControl>
-              <FormLabel>Address</FormLabel>
-              <Input
-                placeholder="Address"
-                height="52px"
-                bg="#F8EDEA80"
-                outline="none"
-                borderRadius="xl"
-                fontSize="sm"
-                width="100%"
-                {...register("address", { required: true })}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>State</FormLabel>
-              <Input
-                placeholder="State"
-                height="52px"
-                bg="#F8EDEA80"
-                outline="none"
-                borderRadius="xl"
-                fontSize="sm"
-                width="100%"
-                {...register("state", { required: true })}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>City</FormLabel>
-              <Input
-                placeholder="City"
-                height="52px"
-                bg="#F8EDEA80"
-                outline="none"
-                borderRadius="xl"
-                fontSize="sm"
-                width="100%"
-                {...register("city", { required: true })}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Country</FormLabel>
-              <Input
-                placeholder="Country"
-                height="52px"
-                bg="#F8EDEA80"
-                outline="none"
-                borderRadius="xl"
-                fontSize="sm"
-                width="100%"
-                {...register("country", { required: true })}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Postal Code</FormLabel>
-              <Input
-                placeholder="Postal Code"
-                height="52px"
-                bg="#F8EDEA80"
-                outline="none"
-                borderRadius="xl"
-                fontSize="sm"
-                width="100%"
-                {...register("postal_code", {
-                  
-                  pattern: /^\d+$/,
-                })}
-              />
-            </FormControl>
+          <Stack spacing={{ base: 2, md: 4 }} py={{ base: 4, md: 9 }}>
+            {["address", "state", "city", "country", "postal_code"].map(
+              (field) => (
+                <FormControl key={field}>
+                  <FormLabel>{field.replace("_", " ").toUpperCase()}</FormLabel>
+                  <Input
+                    placeholder={field.replace("_", " ").toUpperCase()}
+                    height={{ base: "40px", md: "52px" }}
+                    bg="#F8EDEA80"
+                    outline="none"
+                    borderRadius="xl"
+                    fontSize={{ base: "xs", md: "sm" }}
+                    width="100%"
+                    {...register(field, {
+                      required: field !== "postal_code",
+                      ...(field === "postal_code" && { pattern: /^\d+$/ }),
+                    })}
+                  />
+                </FormControl>
+              )
+            )}
             <Button
               type="submit"
               color="white"
               bg="#FF5733"
               borderRadius="full"
-              mt={6}
+              mt={{ base: 4, md: 6 }}
               w="full"
               isLoading={loading}
               loadingText="Saving..."
-              h="55px"
-              size="lg"
-              width="100%"
+              h={{ base: "45px", md: "55px" }}
+              size={{ base: "md", md: "lg" }}
               onClick={handleSubmit(onSubmit)}
             >
               Save

@@ -26,7 +26,8 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const isOutOfStock = product.product_quantity !== undefined && product.product_quantity < 0;
+  const isOutOfStock =
+    product.product_quantity !== undefined && product.product_quantity < 0;
   const navigate = useNavigate();
 
   const handleProductClick = (e: React.MouseEvent) => {
@@ -39,7 +40,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
 
   return (
     <Box p={4} w="300px">
@@ -81,22 +81,28 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </Box>
           )}
           <Box
-              bg={product?.status === 'APPROVED' ? 'green' : product?.status === 'PENDING' ? '#FFC900' : 'red'}
-              color="white"
-              h="26px"
-              w="90px"
-              position="absolute"
-              top={2}
-              right={2}
-              borderRadius="full"
-              fontSize="12px"
-              fontWeight="bold"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              {product?.status}
-            </Box>
+            bg={
+              product?.status === "APPROVED"
+                ? "green"
+                : product?.status === "PENDING"
+                ? "#FFC900"
+                : "red"
+            }
+            color="white"
+            h="26px"
+            w="90px"
+            position="absolute"
+            top={2}
+            right={2}
+            borderRadius="full"
+            fontSize="12px"
+            fontWeight="bold"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {product?.status}
+          </Box>
         </Box>
         <Box
           bg="#FBDED3"
@@ -117,10 +123,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </Text>
 
         <Flex gap={4} alignItems="center">
-          
-            <Text as="s" color="#FF5743" fontSize="sm">
-              ₦{product?.raw_price}
-            </Text>
+          <Text as="s" color="#FF5743" fontSize="sm">
+            ₦{product?.raw_price}
+          </Text>
         </Flex>
       </Stack>
     </Box>
@@ -137,50 +142,43 @@ export default function VendorProductList() {
   const navigate = useNavigate();
   const products = allProductsByVendor?.data?.data;
   return (
-    <Box py="120px">
-      {/* <Text
-        textAlign="center"
-        bg={"#FFF2ED"}
-        pt={4}
-        pb={4}
-        fontSize="2xl"
-        fontWeight="bold"
-        mb={8}
-      >
-        Product List
-      </Text> */}
-      <Flex 
-        align="center" 
-        justify="center" 
+    <Box py={{ base: "80px", md: "120px" }}>
+      <Flex
+        align="center"
+        justify="center"
         position="relative"
         bg="#FFF2ED"
-        p={6}
-        mt={20}
-        mb={6}
+        p={{ base: 4, md: 6 }}
+        mt={{ base: 10, md: 20 }}
+        mb={{ base: 4, md: 6 }}
       >
         <Button
           position="absolute"
-          left={6}
+          left={{ base: 2, md: 6 }}
           onClick={() => navigate(-1)}
           leftIcon={<ChevronLeftIcon />}
           variant="ghost"
           color="#FF5753"
+          size={{ base: "sm", md: "md" }}
         >
           Back
         </Button>
         <Heading
-          size="lg"
+          size={{ base: "md", md: "lg" }}
           fontFamily="Poppins"
           color="#FF5753"
         >
-            Product List
+          Product List
         </Heading>
       </Flex>
       {isLoadingAllProductsByVendor ? (
         <LoadingSpinner />
       ) : (
-        <Box py={8} px="140px">
-          <SimpleGrid columns={[1, 2, 3]} spacing={0.5}>
+        <Box py={{ base: 4, md: 8 }} px={{ base: 4, sm: 8, md: "140px" }}>
+          <SimpleGrid
+            columns={{ base: 1, sm: 2, md: 3 }}
+            spacing={{ base: 2, md: 4 }}
+          >
             {products?.map((product: any) => (
               <ProductCard key={product?._id} product={product} />
             ))}

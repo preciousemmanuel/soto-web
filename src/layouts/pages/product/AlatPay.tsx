@@ -47,6 +47,7 @@ declare global {
 import { Button } from "@chakra-ui/react";
 import React, { useEffect, useState, useCallback } from "react";
 import { useOrder } from "../../hooks/useOrder";
+import { useNavigate } from "react-router-dom";
 
 const AlatpayButton: React.FC<AlatpayButtonProps> = ({
   apiKey,
@@ -69,6 +70,7 @@ const AlatpayButton: React.FC<AlatpayButtonProps> = ({
   const [loadError, setLoadError] = useState<string | null>(null);
   const scriptId = "alatpay-script";
   const { clearCart } = useOrder();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (window.Alatpay) {
@@ -181,6 +183,9 @@ const AlatpayButton: React.FC<AlatpayButtonProps> = ({
         onTransaction: (response: AlatpayResponse) => {
           onTransaction?.(response);
           clearCart();
+          if (response.status === "success") {
+            navigate("/payment-success");
+          }
         },
         onClose: () => {
           onClose?.();
@@ -233,8 +238,8 @@ const AlatpayButton: React.FC<AlatpayButtonProps> = ({
         borderRadius="full"
         mt={6}
         w="full"
-        h="55px"
-        size="lg"
+        h={{ base: "50px", md: "55px", lg: "55px" }}
+        size={{ base: "md", md: "lg" }}
         onClick={handlePayment}
         isDisabled={isDisabled}
         className={className}

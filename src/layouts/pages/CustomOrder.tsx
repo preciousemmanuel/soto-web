@@ -49,55 +49,40 @@ function CustomOrder() {
 
     return (
       <Box w="full" mx="auto" bg="" rounded="lg" boxShadow="">
-        
-        <Flex 
-        align="center" 
-        justify="center" 
-        position="relative"
-        bg="#FFF2ED"
-        p={6}
-        mt={20}
-        mb={6}
-      >
-        <Button
-          position="absolute"
-          left={6}
-          onClick={() => navigate(-1)}
-          leftIcon={<ChevronLeftIcon />}
-          variant="ghost"
-          color="#FF5753"
+        <Flex
+          align="center"
+          justify="center"
+          position="relative"
+          bg="#FFF2ED"
+          p={{ base: 4, md: 6 }}
+          mt={{ base: 6, md: 20 }}
+          mb={6}
         >
-          Back
-        </Button>
-        <Heading
-          size="lg"
-          fontFamily="Poppins"
-          color="#FF5753"
-        >
+          <Button
+            position="absolute"
+            left={{ base: 2, md: 6 }}
+            onClick={() => navigate(-1)}
+            leftIcon={<ChevronLeftIcon />}
+            variant="ghost"
+            color="#FF5753"
+            size={{ base: "sm", md: "md" }}
+          >
+            Back
+          </Button>
+          <Heading size="100px" fontFamily="Poppins" color="#FF5753">
             Create Order
-        </Heading>
-      </Flex>
+          </Heading>
+        </Flex>
 
-        {/* <Heading
-          size="lg"
+        <Text
           textAlign="center"
-          color={"#FF5733"}
-          mb={4}
-          mt={8}
-          bg={"#FFF2ED"}
-          px={6}
-          py={6}
-          fontFamily={"Poppins"}
-          width={"100%"}
-          fontWeight={"bold"}
-          fontSize={"22px"}
+          mb={8}
+          color="gray"
+          fontSize={{ base: "sm", md: "md" }}
         >
-          
-        </Heading> */}
-        <Text textAlign="center" mb={8} color={"gray"}>
           Kindly enter your order details
         </Text>
-        <Box px={{ base: "30px", md: "30px", lg: "300px" }}>
+        <Box px={{ base: 4, md: 6, lg: 300 }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             {renderFormFields(register)}
             <Button
@@ -105,11 +90,13 @@ function CustomOrder() {
               loadingText="Submitting..."
               bg="#FF5733"
               color="white"
-              h="50px"
+              h={{ base: "40px", md: "50px" }}
               borderRadius="xl"
               variant="outline"
               type="submit"
               mt={6}
+              width={{ base: "full", md: "auto" }}
+              fontSize={{ base: "sm", md: "md" }}
             >
               Save & Submit
             </Button>
@@ -119,7 +106,6 @@ function CustomOrder() {
     );
   };
 
-  // Second Step Layout (Add Order)
   const AddOrder = () => {
     const { register, handleSubmit } = useForm();
     const { createCustomOrders, isCreatingOrder, orderSuccess, refetchOrders } =
@@ -139,38 +125,43 @@ function CustomOrder() {
       }
     };
     return (
-      <Box w="full" mx="auto" p={6} rounded="lg">
+      <Box w="full" mx="auto" p={{ base: 4, md: 6 }} rounded="lg">
         <Flex
           justifyContent="space-between"
           alignItems="center"
           mb={8}
-          bg={"#FFF2ED"}
-          px={6}
+          bg="#FFF2ED"
+          px={{ base: 4, md: 6 }}
           py={4}
         >
           <Heading
-            size="lg"
-            color={"#FF5733"}
-            fontFamily={"Poppins"}
-            width={"100%"}
-            fontWeight={"bold"}
-            fontSize={"22px"}
+            size={{ base: "md", md: "lg" }}
+            color="#FF5733"
+            fontFamily="Poppins"
+            width="100%"
+            fontWeight="bold"
+            fontSize={{ base: "18px", md: "22px" }}
           >
             Add Order
           </Heading>
           <Button
-            bg={"black"}
+            bg="black"
             color="white"
-            fontSize={"14px"}
-            // onClick={() => setStep(3)}
+            fontSize={{ base: "12px", md: "14px" }}
+            size={{ base: "sm", md: "md" }}
           >
             Review Order
           </Button>
         </Flex>
-        <Text mb={4} textAlign="center" color={"gray"}>
+        <Text
+          mb={4}
+          textAlign="center"
+          color="gray"
+          fontSize={{ base: "sm", md: "md" }}
+        >
           Kindly enter your order details
         </Text>
-        <Box px={{ base: "30px", md: "30px", lg: "300px" }}>
+        <Box px={{ base: 4, md: 6, lg: 300 }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             {renderFormFields(register)}
             <Button
@@ -178,11 +169,13 @@ function CustomOrder() {
               loadingText="Submitting..."
               bg="#FF5733"
               color="white"
-              h="50px"
+              h={{ base: "40px", md: "50px" }}
               borderRadius="xl"
               variant="outline"
               type="submit"
               mt={6}
+              width={{ base: "full", md: "auto" }}
+              fontSize={{ base: "sm", md: "md" }}
             >
               Save & Submit
             </Button>
@@ -491,7 +484,7 @@ function CustomOrder() {
   );
 
   return (
-    <Box p={6} minH="100vh" mt={20}>
+    <Box p={4} minH="100vh" mt="100px">
       <CreateOrder />
     </Box>
   );

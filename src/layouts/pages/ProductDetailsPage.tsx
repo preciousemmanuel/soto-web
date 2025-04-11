@@ -23,77 +23,86 @@ const ProductDetailsPage = () => {
 
   return (
     <Box pt={14}>
-       <Flex 
-        align="start" 
-        justify="start" 
+      <Flex
+        align="start"
+        justify="start"
         position="relative"
-        mt={140}
-        mx={6}
+        mt={{ base: 20, md: 140 }}
+        mx={{ base: 4, md: 6 }}
       >
-        <Button 
+        <Button
           onClick={() => navigate(-1)}
           leftIcon={<ChevronLeftIcon />}
           variant="ghost"
           color="#FF5753"
+          size={{ base: "sm", md: "md" }}
         >
           Back
         </Button>
       </Flex>
-      <Box mt={-120}>
-      {isLoading ? (
-        <Box display="flex" justifyContent="center" alignItems="center">
-          <LoadingSpinner />
-        </Box>
-      ) : (
-        <Flex
-          direction={{ base: "column", md: "row" }}
-          p={{ base: 4, md: 10 }}
-          gap={{ base: 8, md: 20, lg: 40 }}
-          mt={{ base: 30, md: 120 }}
-          align={{ base: "center", md: "flex-start" }}
-        >
-          <Box w={{ base: "100%", md: "45%" }}>
-            <ProductImageGallery images={product?.images || []} />
+      <Box mt={{ base: -20, md: -120 }}>
+        {isLoading ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minH="50vh"
+          >
+            <LoadingSpinner />
           </Box>
+        ) : (
+          <Flex
+            direction={{ base: "column", md: "row" }}
+            p={{ base: 2, md: 4, lg: 10 }}
+            gap={{ base: 4, md: 8, lg: 20 }}
+            mt={{ base: 4, md: 8, lg: 120 }}
+            align={{ base: "center", md: "flex-start" }}
+          >
+            <Box w={{ base: "100%", sm: "90%", md: "45%" }}>
+              <ProductImageGallery images={product?.images || []} />
+            </Box>
 
-          <Box w={{ base: "100%", md: "55%" }}>
-            <ProductDetails
-              showColor={false}
-              product={{
-                _id: product?._id,
-                vendor: product?.vendor || "",
-                height: product?.height || 0,
-                width: product?.width || 0,
-                weight: product?.weight || 0,
-                product_name: product?.product_name || "",
-                unit_price: product?.unit_price || 0,
-                description: product?.description || "",
-                product_quantity: product?.product_quantity || 0,
-                category: product?.category?.name,
-                rating: product?.rating,
-                in_stock: false,
-                images: product?.images || [],
-                is_discounted: product?.is_discounted || false,
-                is_verified: product?.is_verified || false,
-                is_deleted: product?.is_deleted || false,
-                total_quantity_sold: product?.total_quantity_sold || 0,
-              }}
-              // sizes={["", "", ""]}
-              // colors={["", "", ""]}
-            />
-          </Box>
-        </Flex>
-      )}
+            <Box
+              w={{ base: "100%", sm: "90%", md: "55%" }}
+              mt={{ base: 4, md: 0 }}
+            >
+              <ProductDetails
+                showColor={false}
+                product={{
+                  _id: product?._id,
+                  vendor: product?.vendor || "",
+                  height: product?.height || 0,
+                  width: product?.width || 0,
+                  weight: product?.weight || 0,
+                  product_name: product?.product_name || "",
+                  unit_price: product?.unit_price || 0,
+                  description: product?.description || "",
+                  product_quantity: product?.product_quantity || 0,
+                  category: product?.category?.name,
+                  rating: product?.rating,
+                  in_stock: false,
+                  images: product?.images || [],
+                  is_discounted: product?.is_discounted || false,
+                  is_verified: product?.is_verified || false,
+                  is_deleted: product?.is_deleted || false,
+                  total_quantity_sold: product?.total_quantity_sold || 0,
+                }}
+              />
+            </Box>
+          </Flex>
+        )}
       </Box>
-      <ProductDescription
-        reviews={products?.reviews}
-        description={product?.description || ""}
-        productId={productId}
-      />
-      <RelatedProducts
-        title="Related Products"
-        categoryId={product?.category?._id}
-      />
+      <Box px={{ base: 2, md: 4, lg: 6 }}>
+        <ProductDescription
+          reviews={products?.reviews}
+          description={product?.description || ""}
+          productId={productId}
+        />
+        <RelatedProducts
+          title="Related Products"
+          categoryId={product?.category?._id}
+        />
+      </Box>
     </Box>
   );
 };

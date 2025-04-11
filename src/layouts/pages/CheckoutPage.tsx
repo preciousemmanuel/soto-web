@@ -129,65 +129,76 @@ const CheckoutPage = () => {
   };
 
   return (
-    <Box py="120px">
+    <Box py={{ base: "120px", md: "120px", lg: "120px" }}>
       <Flex
         align="center"
         justify="center"
         position="relative"
         bg="#FFF2ED"
-        p={6}
-        mt={14}
-        mb={6}
+        p={{ base: 4, md: 5, lg: 6 }}
+        mt={{ base: 8, md: 12, lg: 14 }}
+        mb={{ base: 4, md: 5, lg: 6 }}
       >
         <Button
           position="absolute"
-          left={6}
+          left={{ base: 2, md: 4, lg: 6 }}
           onClick={() => navigate(-1)}
           leftIcon={<ChevronLeftIcon />}
           variant="ghost"
           color="#FF5753"
+          size={{ base: "sm", md: "md" }}
         >
           Back
         </Button>
-        <Heading size="lg" fontFamily="Poppins" color="#FF5753">
+        <Heading
+          size={{ base: "md", md: "lg" }}
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
           Checkout
         </Heading>
       </Flex>
 
-      <Box 
-        display="flex" 
+      <Box
+        display="flex"
         flexDirection={{ base: "column", md: "row" }}
-        p={{ base: 4, md: 6 }} 
-        justifyContent="space-between" 
-        gap={6} 
-        px={{ base: 4, md: 20 }}
+        p={{ base: 2, md: 4, lg: 6 }}
+        justifyContent="space-between"
+        gap={{ base: 4, md: 5, lg: 6 }}
+        px={{ base: 2, md: 6, lg: 20 }}
       >
-        <Box w={{ base: "100%", md: "70%" }}>
+        <Box w={{ base: "100%", md: "60%", lg: "70%" }}>
           <Box
             as="div"
             bg="#F9F9F9"
             borderRadius="15px"
-            p={3}
-            mb={6}
+            p={{ base: 2, md: 3 }}
+            mb={{ base: 4, md: 5, lg: 6 }}
             display="flex"
             justifyContent="space-between"
           >
             <Text>
-              <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="medium">
+              <Text
+                fontSize={{ base: "md", md: "lg", lg: "xl" }}
+                fontWeight="medium"
+              >
                 Shipping Address
               </Text>
-              <Text fontSize="sm" w={{ base: "100%", md: "60%" }}>
+              <Text
+                fontSize={{ base: "xs", md: "sm" }}
+                w={{ base: "100%", md: "60%" }}
+              >
                 {user?.ShippingAddress?.full_address}
               </Text>
             </Text>
             <Text
               color="white"
               bg="#FF5733"
-              fontSize="sm"
-              h="30px"
-              w="30px"
+              fontSize={{ base: "sm", md: "sm" }}
+              h={{ base: "30px", md: "30px" }}
+              w={{ base: "30px", md: "30px" }}
               p={2}
-              borderRadius={"full"}
+              borderRadius="full"
               mt={1}
               cursor="pointer"
             >
@@ -199,24 +210,29 @@ const CheckoutPage = () => {
             as="div"
             bg="#F9F9F9"
             borderRadius="15px"
-            p={3}
+            p={{ base: 2, md: 3 }}
             display="flex"
             justifyContent="space-between"
           >
             <Text>
-              <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="medium">
+              <Text
+                fontSize={{ base: "md", md: "lg", lg: "xl" }}
+                fontWeight="medium"
+              >
                 Contact Information
               </Text>
-              <Text fontSize="sm">{user?.PhoneNumber}</Text>
+              <Text fontSize={{ base: "xs", md: "sm" }}>
+                {user?.PhoneNumber}
+              </Text>
             </Text>
             <Text
               color="white"
               bg="#FF5733"
-              fontSize="sm"
-              h="30px"
-              w="30px"
+              fontSize={{ base: "xs", md: "sm" }}
+              h={{ base: "30px", md: "30px" }}
+              w={{ base: "30px", md: "30px" }}
               p={2}
-              borderRadius={"full"}
+              borderRadius="full"
               mt={1}
               cursor="pointer"
             >
@@ -225,29 +241,31 @@ const CheckoutPage = () => {
           </Box>
 
           <Box>
-            <FormControl mt={8}>
-              <FormLabel>Coupon Code</FormLabel>
+            <FormControl mt={{ base: 4, md: 6, lg: 8 }}>
+              <FormLabel fontSize={{ base: "sm", md: "md" }}>
+                Coupon Code
+              </FormLabel>
               <Input
                 placeholder="Coupon Code"
-                height="52px"
+                height={{ base: "40px", md: "48px", lg: "52px" }}
                 bg="#F8EDEA80"
                 outline="none"
                 borderRadius="xl"
-                fontSize="sm"
+                fontSize={{ base: "xs", md: "sm" }}
                 width="100%"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
               />
             </FormControl>
-            
+
             <Button
               color="white"
               bg="#FF5733"
               borderRadius="full"
-              mt={6}
+              mt={{ base: 4, md: 5, lg: 6 }}
               w="full"
-              h="55px"
-              size="lg"
+              h={{ base: "40px", md: "48px", lg: "55px" }}
+              size={{ base: "sm", md: "md", lg: "lg" }}
               loadingText={
                 isAddingOrder
                   ? "Creating order..."
@@ -261,13 +279,22 @@ const CheckoutPage = () => {
           </Box>
         </Box>
 
-        <Box w={{ base: "100%", md: "70%" }} p={{ base: 2, md: 4 }}>
-          <Box mb={6}>
-            <Flex justifyContent="space-between" mb={4}>
-              <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="semibold">
+        <Box
+          w={{ base: "100%", md: "60%", lg: "70%" }}
+          p={{ base: 1, md: 2, lg: 4 }}
+        >
+          <Box mb={{ base: 4, md: 5, lg: 6 }}>
+            <Flex justifyContent="space-between" mb={{ base: 2, md: 3, lg: 4 }}>
+              <Text
+                fontSize={{ base: "md", md: "lg", lg: "xl" }}
+                fontWeight="semibold"
+              >
                 Product
               </Text>
-              <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="semibold">
+              <Text
+                fontSize={{ base: "md", md: "lg", lg: "xl" }}
+                fontWeight="semibold"
+              >
                 Subtotal
               </Text>
             </Flex>
@@ -276,12 +303,12 @@ const CheckoutPage = () => {
               <Flex
                 key={product.productId}
                 justifyContent="space-between"
-                mb={2}
+                mb={{ base: 1, md: 2 }}
               >
-                <Text fontSize="14px" color="#9F9F9F">
+                <Text fontSize={{ base: "xs", md: "sm" }} color="#9F9F9F">
                   {product.productName} x {product.quantity}
                 </Text>
-                <Text>
+                <Text fontSize={{ base: "xs", md: "sm" }}>
                   ₦
                   {(
                     discountedPrice(product) * product.quantity
@@ -290,13 +317,15 @@ const CheckoutPage = () => {
               </Flex>
             ))}
 
-            <Flex justifyContent="space-between" mt={4}>
-              <Text>Shipping Rate</Text>
-              <Text>{isShippingRateLink ? <Spinner /> : shippingRate}</Text>
+            <Flex justifyContent="space-between" mt={{ base: 2, md: 3, lg: 4 }}>
+              <Text fontSize={{ base: "xs", md: "sm" }}>Shipping Rate</Text>
+              <Text fontSize={{ base: "xs", md: "sm" }}>
+                {isShippingRateLink ? <Spinner /> : shippingRate}
+              </Text>
             </Flex>
-            <Flex justifyContent="space-between" mt={4}>
-              <Text>Subtotal</Text>
-              <Text>
+            <Flex justifyContent="space-between" mt={{ base: 2, md: 3, lg: 4 }}>
+              <Text fontSize={{ base: "xs", md: "sm" }}>Subtotal</Text>
+              <Text fontSize={{ base: "xs", md: "sm" }}>
                 ₦
                 {newOrderResponse?.data?.is_coupon_applied
                   ? newOrderResponse?.data?.grand_total
@@ -304,15 +333,25 @@ const CheckoutPage = () => {
               </Text>
             </Flex>
 
-            <Flex justifyContent="space-between" mt={2}>
-              <Text fontWeight="medium">Total Amount</Text>
-              <Text>₦{calculateSubtotal(shippingRate)?.toLocaleString()}</Text>
+            <Flex justifyContent="space-between" mt={{ base: 1, md: 2 }}>
+              <Text fontSize={{ base: "sm", md: "md" }} fontWeight="medium">
+                Total Amount
+              </Text>
+              <Text fontSize={{ base: "sm", md: "md" }}>
+                ₦{calculateSubtotal(shippingRate)?.toLocaleString()}
+              </Text>
             </Flex>
           </Box>
 
-          <VStack spacing={4} p={{ base: 2, md: 5 }}>
+          <VStack
+            spacing={{ base: 2, md: 3, lg: 4 }}
+            p={{ base: 1, md: 2, lg: 5 }}
+          >
             {coupons?.data?.data?.length === 0 ? (
-              <Text fontSize={{ base: "md", lg: "lg" }} color="gray.500">
+              <Text
+                fontSize={{ base: "sm", md: "md", lg: "lg" }}
+                color="gray.500"
+              >
                 No coupons available.
               </Text>
             ) : (
@@ -331,13 +370,13 @@ const CheckoutPage = () => {
               )
             )}
           </VStack>
-           {isOpen && (   
+          {isOpen && (
             <PaymentMethod
               setPaymentMethod={setPaymentMethod}
               paymentMethod={paymentMethod}
               amount={newOrderResponse?.data?.grand_total}
             />
-            )}  
+          )}
         </Box>
       </Box>
     </Box>

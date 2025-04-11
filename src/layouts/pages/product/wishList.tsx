@@ -148,38 +148,54 @@ export default function WishListPage() {
   const { data: product, isLoading } = useWishlist(20, 1);
   const products = product?.data?.data;
   return (
-    <Box py="120px">
+    <Box py={{ base: "60px", md: "80px", lg: "120px" }}>
       <Flex
         align="center"
         justify="center"
         position="relative"
         bg="#FFF2ED"
-        p={6}
-        mt={10}
-        mb={6}
+        p={{ base: 3, md: 6 }}
+        mt={{ base: 6, md: 10 }}
+        mb={{ base: 4, md: 6 }}
       >
         <Button
           position="absolute"
-          left={6}
+          left={{ base: 3, md: 6 }}
           onClick={() => navigate(-1)}
           leftIcon={<ChevronLeftIcon />}
           variant="ghost"
           color="#FF5753"
+          size={{ base: "sm", md: "md" }}
         >
           Back
         </Button>
-        <Heading size="lg" fontFamily="Poppins" color="#FF5753">
+        <Heading
+          size={{ base: "md", md: "lg" }}
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
           WishList
         </Heading>
       </Flex>
-      <Box py={4} px="140px">
-        <Text fontSize="lg" mb={6} textAlign={"left"} color={"#FF5733"}>
+      <Box
+        py={{ base: 2, md: 4 }}
+        px={{ base: 4, sm: 6, md: "60px", lg: "100px", xl: "140px" }}
+      >
+        <Text
+          fontSize={{ base: "md", md: "lg" }}
+          mb={{ base: 4, md: 6 }}
+          textAlign="left"
+          color="#FF5733"
+        >
           Wishlist ({products?.length})
         </Text>
         {isLoading ? (
           <LoadingSpinner />
         ) : (
-          <SimpleGrid columns={[1, 2, 3]} spacing={0.5}>
+          <SimpleGrid
+            columns={{ base: 1, sm: 2, md: 3 }}
+            spacing={{ base: 2, md: 4 }}
+          >
             {products?.map((product: Product) => (
               <ProductCard
                 key={product?._id}

@@ -22,21 +22,37 @@ const ProductDescription = ({
   productId,
 }: ProductDescriptionProps) => {
   return (
-    <Box p={12}>
+    <Box p={{ base: 4, md: 8, lg: 12 }}>
       <Box
         borderTop="1px solid"
         borderBottom="1px solid"
         borderColor="gray.200"
-        py={5}
-        px={14}
+        py={{ base: 3, md: 4, lg: 5 }}
+        px={{ base: 4, md: 8, lg: 14 }}
       >
         <Tabs variant="soft-rounded" isFitted>
-          <TabList alignItems="center">
-            <Tab _selected={{ color: "#FF5733", bg: "#fff" }}>Description</Tab>
-            <Tab _selected={{ color: "#FF5733", bg: "#fff" }}>
+          <TabList
+            alignItems="center"
+            flexDirection={{ base: "column", md: "row" }}
+          >
+            <Tab
+              _selected={{ color: "#FF5733", bg: "#fff" }}
+              fontSize={{ base: "sm", md: "md" }}
+              mb={{ base: 2, md: 0 }}
+            >
+              Description
+            </Tab>
+            <Tab
+              _selected={{ color: "#FF5733", bg: "#fff" }}
+              fontSize={{ base: "sm", md: "md" }}
+              mb={{ base: 2, md: 0 }}
+            >
               Additional Information
             </Tab>
-            <Tab _selected={{ color: "#FF5733", bg: "#fff" }}>
+            <Tab
+              _selected={{ color: "#FF5733", bg: "#fff" }}
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Reviews [{reviews?.length}]
             </Tab>
           </TabList>
@@ -44,22 +60,22 @@ const ProductDescription = ({
           <TabPanels alignItems="center">
             <TabPanel>
               <Text
-                fontSize="14px"
+                fontSize={{ base: "sm", md: "14px" }}
                 fontWeight="normal"
-                lineHeight="24px"
+                lineHeight={{ base: "20px", md: "24px" }}
                 color="#999999"
-                px={18}
+                px={{ base: 2, md: 4, lg: 18 }}
               >
                 {description}
               </Text>
             </TabPanel>
             <TabPanel>
               <Text
-                fontSize="14px"
+                fontSize={{ base: "sm", md: "14px" }}
                 fontWeight="normal"
-                lineHeight="24px"
+                lineHeight={{ base: "20px", md: "24px" }}
                 color="#999999"
-                px={18}
+                px={{ base: 2, md: 4, lg: 18 }}
               >
                 clear midrange and extended highs for a sound that is both
                 articulate and pronounced. The analogue knobs allow you to fine

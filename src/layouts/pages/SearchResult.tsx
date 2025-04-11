@@ -53,14 +53,23 @@ const SearchResults = () => {
   }
 
   return (
-    <Box p={6} maxWidth="container.xl" margin="auto" mt={180} mx={24}>
-      <Text fontSize="2xl" mb={4}>
+    <Box
+      p={{ base: 4, md: 6 }}
+      maxWidth="container.xl"
+      margin="auto"
+      mt={{ base: "120px", md: "150px", lg: "180px" }}
+      mx={{ base: 2, sm: 4, md: 6, lg: 24 }}
+    >
+      <Text fontSize={{ base: "xl", md: "2xl" }} mb={4}>
         Search Results for "{new URLSearchParams(location.search).get("query")}"
       </Text>
       {searchResults?.length === 0 ? (
-        <Text>No results found.</Text>
+        <Text fontSize={{ base: "md", md: "lg" }}>No results found.</Text>
       ) : (
-        <SimpleGrid columns={[1, 2, 3]} spacing={8}>
+        <SimpleGrid
+          columns={{ base: 1, sm: 2, md: 3 }}
+          spacing={{ base: 4, md: 6, lg: 8 }}
+        >
           {searchResults?.map((product) => (
             <ProductCard
               key={product._id}

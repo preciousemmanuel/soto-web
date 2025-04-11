@@ -21,30 +21,44 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
   }
 
   return (
-    <HStack spacing={16} align="start">
-      <Flex flexDirection="column" gap={8}>
+    <Flex
+      direction={{ base: "column", md: "row" }}
+      gap={{ base: 4, md: 16 }}
+      align={{ base: "center", md: "start" }}
+      mt={{ base: 16, md: 0 }}
+    >
+      <Flex
+        direction={{ base: "row", md: "column" }}
+        gap={{ base: 2, md: 8 }}
+        overflowX={{ base: "auto", md: "visible" }}
+        w={{ base: "100%", md: "auto" }}
+        py={{ base: 2, md: 0 }}
+        display={{ base: "none", md: "flex" }}
+      >
         {images?.map((image, index) => (
           <Image
             key={index}
             src={image}
             alt={`Thumbnail ${index}`}
-            boxSize="60px"
+            boxSize={{ base: "50px", md: "60px" }}
             borderRadius="md"
             cursor="pointer"
             border={
               selectedImage === image ? "2px solid red" : "1px solid gray"
             }
             onClick={() => setSelectedImage(image)}
+            flexShrink={0}
           />
         ))}
       </Flex>
       <Box
         bg="#F6F6F6"
-        w="400px"
-        h="550px"
+        w={{ base: "100%", sm: "80%", md: "400px" }}
+        h={{ base: "300px", sm: "400px", md: "550px" }}
         display="flex"
         alignItems="center"
         justifyContent="center"
+        borderRadius="md"
       >
         <Image
           src={selectedImage}
@@ -55,7 +69,7 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({
           objectFit="contain"
         />
       </Box>
-    </HStack>
+    </Flex>
   );
 };
 

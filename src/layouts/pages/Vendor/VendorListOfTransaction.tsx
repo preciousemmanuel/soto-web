@@ -32,16 +32,16 @@ const VendorListOfTransaction = () => {
   } = useVendor();
   const { user } = useAuth();
   const transactions = transactionLogs?.data?.data || [];
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   return (
     <Box
-      px="20px"
-      py="150px"
-      h="100vh"
+      px={{ base: 4, md: 6, lg: 8 }}
+      py={{ base: 20, md: 32, lg: 40 }}
+      minH="100vh"
       bg="linear-gradient(161.91deg, #FF5733 -17.77%, #FFF8F7 36.84%, #FFFFFF 91.46%)"
     >
       <IconButton
@@ -50,24 +50,36 @@ const VendorListOfTransaction = () => {
         onClick={() => navigate(-1)}
         variant="ghost"
         size={useBreakpointValue({ base: "sm", md: "md" })}
+        mb={{ base: 4, md: 6 }}
       />
-      <Box mx="70px">
-        <HStack mb={6} spacing={4} py={2} alignItems="center">
+      <Box mx={{ base: 4, sm: 6, md: 8, lg: 12, xl: 20 }}>
+        <HStack mb={{ base: 4, md: 6 }} spacing={4} py={2} alignItems="center">
           <Avatar
             name={`${user?.FirstName} ${user?.LastName}`}
-            size={["md", "lg"]}
+            size={useBreakpointValue({ base: "md", md: "lg" })}
           />
           <VStack align="start" spacing={0}>
-            <Text fontWeight="500" color="white" fontSize={["md", "lg"]}>
+            <Text
+              fontWeight="500"
+              color="white"
+              fontSize={{ base: "md", md: "lg" }}
+            >
               {`${user?.FirstName} ${user?.LastName}`}
             </Text>
-            <Text fontSize={["sm", "md"]} fontWeight="500" color="white">
+            <Text
+              fontSize={{ base: "sm", md: "md" }}
+              fontWeight="500"
+              color="white"
+            >
               More sales today
             </Text>
           </VStack>
         </HStack>
-        <HStack spacing={2} my={8}>
-          <Text fontSize={["27px", "xl"]} fontWeight="500">
+        <HStack spacing={2} my={{ base: 4, md: 6 }}>
+          <Text
+            fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}
+            fontWeight="500"
+          >
             All Transactions
           </Text>
         </HStack>
@@ -80,8 +92,9 @@ const VendorListOfTransaction = () => {
           boxShadow="md"
           overflowX="auto"
           bg="white"
-          p={4}
-          mx="70px"
+          p={{ base: 2, md: 4 }}
+          mx={{ base: 4, sm: 6, md: 8, lg: 12, xl: 20 }}
+          mb={{ base: 4, md: 6 }}
         >
           <Table
             variant="simple"
@@ -89,24 +102,33 @@ const VendorListOfTransaction = () => {
           >
             <Thead>
               <Tr>
-                <Th>Payment ID</Th>
-                <Th>Title</Th>
-                <Th>Trx. Date</Th>
-                <Th>Amount</Th>
-                <Th>Status</Th>
-                <Th>Action</Th>
+                <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                  Payment ID
+                </Th>
+                <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Title</Th>
+                <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Trx. Date</Th>
+                <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Amount</Th>
+                <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Status</Th>
+                <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Action</Th>
               </Tr>
             </Thead>
             <Tbody>
               {transactions?.map((trx: any) => (
                 <Tr key={trx?._id}>
-                  <Td>{trx?.reference}</Td>
-                  <Td>{trx?.narration}</Td>
-                  <Td>{new Date(trx?.createdAt).toLocaleDateString()}</Td>
-                  <Td>{`${trx?.currency} ${(
-                    trx?.amount / 100
-                  ).toLocaleString()}`}</Td>
+                  <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                    {trx?.reference}
+                  </Td>
+                  <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                    {trx?.narration}
+                  </Td>
+                  <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                    {new Date(trx?.createdAt).toLocaleDateString()}
+                  </Td>
+                  <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>{`${
+                    trx?.currency
+                  } ${(trx?.amount / 100).toLocaleString()}`}</Td>
                   <Td
+                    fontSize={{ base: "xs", sm: "sm", md: "md" }}
                     color={
                       trx?.status === "SUCCESSFUL"
                         ? "green.500"
@@ -118,7 +140,15 @@ const VendorListOfTransaction = () => {
                     {trx?.status}
                   </Td>
                   <Td>
-                    <Button size="sm" colorScheme="teal" variant="outline">
+                    <Button
+                      size={useBreakpointValue({
+                        base: "xs",
+                        sm: "sm",
+                        md: "md",
+                      })}
+                      colorScheme="teal"
+                      variant="outline"
+                    >
                       View
                     </Button>
                   </Td>
@@ -126,7 +156,7 @@ const VendorListOfTransaction = () => {
               ))}
             </Tbody>
           </Table>
-          <Box px={4} pt={8}>
+          <Box px={{ base: 2, md: 4 }} pt={{ base: 4, md: 6 }}>
             <PaginationControls
               currentPage={transactionLogsPagination.currentPage}
               totalPages={transactionLogsPagination.totalPages}
