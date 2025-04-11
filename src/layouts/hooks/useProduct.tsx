@@ -248,27 +248,54 @@ export const useProduct = () => {
     },
   });
 
-  const handleAddToCart = (productId: string) => {
+  const handleAddToCart = (productId: string, productData: any) => {
     const existingCart = localStorage.getItem("cart");
     let cartItems: CartItem[] = existingCart ? JSON.parse(existingCart) : [];
 
-    const productToAdd = products?.data?.data?.find(
-      (p: any) => p._id === productId
-    );
-    if (!productToAdd) return;
+    const productToAdd: any = Array.isArray(productData)
+      ? productData.find((p: any) => p._id === productId)
+      : productData;
+    console.log(productToAdd, "productToAdd");
+    // // Add validation for product quantity
+    if (!productToAdd) {
+      toast({
+        title: "Product not found",
+        description: "The product you're trying to add doesn't exist",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
+    if ((productToAdd?.product_quantity ?? 0) <= 0) {
+      toast({
+        title: "Out of stock",
+        description: "This product is currently out of stock",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+      return;
+    }
 
     const existingItemIndex = cartItems.findIndex(
       (item) => item.productId === productId
     );
 
     if (existingItemIndex !== -1) {
-      cartItems[existingItemIndex].quantity += 1;
+      // Check if adding more would exceed available quantity
+      if (
+        cartItems[existingItemIndex]?.quantity <
+        (productToAdd?.product_quantity ?? 0)
+      ) {
+        cartItems[existingItemIndex].quantity += 1;
+      }
     } else {
       cartItems.push({
         productId,
-        productName: productToAdd.product_name ?? "",
-        price: productToAdd.unit_price ?? 0,
-        image: productToAdd.images?.[0] ?? "",
+        productName: productToAdd?.product_name ?? "",
+        price: productToAdd?.unit_price ?? 0,
+        image: productToAdd?.images?.[0] ?? "",
         quantity: 1,
         discount: productToAdd?.is_discounted
           ? productToAdd?.discount_price

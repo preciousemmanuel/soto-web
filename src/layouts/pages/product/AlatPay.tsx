@@ -152,7 +152,7 @@ const AlatpayButton: React.FC<AlatpayButtonProps> = ({
 
     try {
       if (onBeforePayment) {
-        await onBeforePayment();
+        onBeforePayment();
       }
 
       if (!window.Alatpay) {
@@ -187,7 +187,7 @@ const AlatpayButton: React.FC<AlatpayButtonProps> = ({
         },
       });
 
-      popup.show();
+      await popup.show();
     } catch (error) {
       setLoadError(
         `Payment initialization failed: ${
@@ -211,7 +211,8 @@ const AlatpayButton: React.FC<AlatpayButtonProps> = ({
     onBeforePayment,
   ]);
 
-  // Generate button state and text
+  console.log(email, phone, firstName, lastName, metadata, "DATA");
+
   const isDisabled = !sdkLoaded || !!loadError;
   const displayText = loadError
     ? "Payment unavailable"

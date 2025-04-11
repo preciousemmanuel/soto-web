@@ -36,14 +36,13 @@ function OrderHistoryPage() {
   useEffect(() => {
     refetchOrders();
   }, []);
-  // console.log(orders,"helloo")
+  console.log(orders, "helloo");
 
   const orderData = orders?.data?.data;
   const filteredOrders = orderData?.filter(
     (order: any) => order.status === activeStatus
   );
 
- 
   const handleProductClick = (orderId: string) => {
     navigate(`/my-orders/${orderId}`);
   };
@@ -169,9 +168,9 @@ function OrderHistoryPage() {
 
   return (
     <Box p={4} minH="100%" textAlign="center" mt={120} my={20}>
-      <Flex 
-        align="center" 
-        justify="center" 
+      <Flex
+        align="center"
+        justify="center"
         position="relative"
         bg="#FFF2ED"
         p={6}
@@ -188,31 +187,32 @@ function OrderHistoryPage() {
         >
           Back
         </Button>
-        <Heading
-          size="lg"
-          fontFamily="Poppins"
-          color="#FF5753"
-        >
+        <Heading size="lg" fontFamily="Poppins" color="#FF5753">
           My Orders
         </Heading>
       </Flex>
 
       <Flex justifyContent={"left"} alignItems={"left"}>
         <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">
-          {["BOOKED","PENDING","PICKED_UP", "DELIVERED", "CANCELLED", "FAILED"].map(
-            (buttonStatus) => (
-              <Button
-                key={buttonStatus}
-                bg={activeStatus === buttonStatus ? "#FF5733" : "#F4F6F9"}
-                color={activeStatus === buttonStatus ? "white" : "black"}
-                borderRadius="full"
-                size="md"
-                onClick={() => setActiveStatus(buttonStatus)}
-              >
-                {buttonStatus.replace("_", " ")}
-              </Button>
-            )
-          )}
+          {[
+            "BOOKED",
+            "PENDING",
+            "PICKED_UP",
+            "DELIVERED",
+            "CANCELLED",
+            "FAILED",
+          ].map((buttonStatus) => (
+            <Button
+              key={buttonStatus}
+              bg={activeStatus === buttonStatus ? "#FF5733" : "#F4F6F9"}
+              color={activeStatus === buttonStatus ? "white" : "black"}
+              borderRadius="full"
+              size="md"
+              onClick={() => setActiveStatus(buttonStatus)}
+            >
+              {buttonStatus.replace("_", " ")}
+            </Button>
+          ))}
         </Flex>
       </Flex>
       {isFetchingOrders ? (
