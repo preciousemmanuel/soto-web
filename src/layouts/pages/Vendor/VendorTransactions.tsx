@@ -39,50 +39,65 @@ const VendorTransactions = ({
   currentPage,
   totalPages,
   onPageChange,
-  hasNextPage
+  hasNextPage,
 }: VendorTransactionsProps) => {
   return (
     <Box
       bg="white"
-      // boxShadow="lg"
       border="1px"
       borderColor="gray.200"
       borderRadius="md"
-      p={4}
+      p={{ base: 2, md: 4 }}
       overflowX="auto"
-      mt={6}
+      mt={{ base: 4, md: 6 }}
+      mx={{ base: 2, md: 0 }}
     >
-      <Text fontSize="lg" fontWeight="500" mb={4}>
+      <Text
+        fontSize={{ base: "md", md: "lg" }}
+        fontWeight="500"
+        mb={{ base: 2, md: 4 }}
+      >
         Recent Transactions
       </Text>
-      <Table variant="simple" size="sm">
+      <Table variant="simple" size={{ base: "xs", sm: "sm", md: "md" }}>
         <Thead>
           <Tr>
-            <Th>Payment ID</Th>
-            <Th>Title</Th>
-            <Th>Trx. Date</Th>
-            <Th>Amount</Th>
-            <Th>Status</Th>
-            <Th>Action</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Payment ID</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Title</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Trx. Date</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Amount</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Status</Th>
+            {/* <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Action</Th> */}
           </Tr>
         </Thead>
         <Tbody>
           {transactions?.length === 0 ? (
             <Tr>
-              <Td colSpan={6} textAlign="center">
+              <Td
+                colSpan={6}
+                textAlign="center"
+                fontSize={{ base: "xs", sm: "sm", md: "md" }}
+              >
                 No transactions available
               </Td>
             </Tr>
           ) : (
             transactions?.map((transaction: Transaction) => (
               <Tr key={transaction?._id}>
-                <Td>{transaction?.reference}</Td>
-                <Td>{transaction?.narration}</Td>
-                <Td>{new Date(transaction?.createdAt).toLocaleDateString()}</Td>
-                <Td>
+                <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                  {transaction?.reference}
+                </Td>
+                <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                  {transaction?.narration}
+                </Td>
+                <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                  {new Date(transaction?.createdAt).toLocaleDateString()}
+                </Td>
+                <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
                   {transaction?.amount} {transaction?.currency}
                 </Td>
                 <Td
+                  fontSize={{ base: "xs", sm: "sm", md: "md" }}
                   color={
                     transaction?.status === "SUCCESSFUL"
                       ? "green.500"
@@ -93,15 +108,12 @@ const VendorTransactions = ({
                 >
                   {transaction?.status}
                 </Td>
-                {/* <Td>
-                <Button size="sm">View</Button>
-              </Td> */}
               </Tr>
             ))
           )}
         </Tbody>
       </Table>
-      <Box px={4} pt={8}>
+      <Box px={{ base: 2, md: 4 }} pt={{ base: 4, md: 8 }}>
         <PaginationControls
           currentPage={currentPage}
           totalPages={totalPages}

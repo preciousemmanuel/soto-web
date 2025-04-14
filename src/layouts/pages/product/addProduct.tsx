@@ -19,7 +19,6 @@ import { useForm } from "react-hook-form";
 import { FaRegImages } from "react-icons/fa";
 import { useProduct } from "../../hooks/useProduct";
 
-
 const AddProduct: React.FC = () => {
   const {
     register,
@@ -47,7 +46,7 @@ const AddProduct: React.FC = () => {
     }
   };
 
-  const onSubmit = async (data:any) => {
+  const onSubmit = async (data: any) => {
     if (selectedImages) {
       const {
         product_name,
@@ -59,7 +58,7 @@ const AddProduct: React.FC = () => {
         length,
         height,
         width,
-        description
+        description,
       } = data;
 
       const newProduct = {
@@ -74,7 +73,7 @@ const AddProduct: React.FC = () => {
         ...(length && length !== "" && { length: Number(length) }),
         ...(height && height !== "" && { height: Number(height) }),
         ...(width && width !== "" && { width: Number(width) }),
-        ...(discount_price && { discount_price: Number(discount_price) })
+        ...(discount_price && { discount_price: Number(discount_price) }),
       };
       const formData = createProductFormData(newProduct, selectedImages);
       useAddNewProduct.mutate(formData);
@@ -82,41 +81,47 @@ const AddProduct: React.FC = () => {
   };
 
   return (
-    <Box py="120px">
+    <Box py={{ base: "60px", md: "90px", lg: "120px" }}>
       <Text
         textAlign="center"
         bg={"#FFF2ED"}
-        pt={4}
-        pb={4}
+        pt={{ base: 2, md: 3, lg: 4 }}
+        pb={{ base: 2, md: 3, lg: 4 }}
         color="#FF5733"
-        fontSize="2xl"
+        fontSize={{ base: "xl", md: "2xl" }}
         fontWeight="bold"
-        mb={8}
+        mb={{ base: 4, md: 6, lg: 8 }}
       >
         {useAddNewProduct.isSuccess === false
           ? "Add Product"
           : "Review Product"}
       </Text>
-      <Box my={6} textAlign="center">
-        <Text fontSize="md" fontWeight="normal" color="#908D8D">
+      <Box my={{ base: 3, md: 4, lg: 6 }} textAlign="center">
+        <Text
+          fontSize={{ base: "sm", md: "md" }}
+          fontWeight="normal"
+          color="#908D8D"
+        >
           Kindly enter your product details
         </Text>
       </Box>
       <Box
         bg="pink.50"
-        p={8}
+        p={{ base: 4, md: 6, lg: 8 }}
         borderWidth="1px"
         borderColor="#FF5733"
         borderRadius="md"
         boxShadow="md"
-        maxW="750px"
+        maxW={{ base: "90%", sm: "80%", md: "750px" }}
         mx="auto"
       >
-        <VStack spacing={4} align="center">
+        <VStack spacing={{ base: 3, md: 4 }} align="center">
           <FormControl>
-            <FormLabel>Product name</FormLabel>
+            <FormLabel fontSize={{ base: "sm", md: "md" }}>
+              Product name
+            </FormLabel>
             <Input
-              h="60px"
+              h={{ base: "50px", md: "60px" }}
               bg="white"
               borderRadius="15px"
               placeholder="Enter name"
@@ -124,11 +129,17 @@ const AddProduct: React.FC = () => {
             />
           </FormControl>
 
-          <HStack spacing={4}>
-            <FormControl>
-              <FormLabel>Product Category</FormLabel>
+          <HStack
+            spacing={{ base: 2, md: 4 }}
+            w="100%"
+            flexWrap={{ base: "wrap", md: "nowrap" }}
+          >
+            <FormControl mb={{ base: 3, md: 0 }}>
+              <FormLabel fontSize={{ base: "sm", md: "md" }}>
+                Product Category
+              </FormLabel>
               <Select
-                h="60px"
+                h={{ base: "50px", md: "60px" }}
                 bg="white"
                 borderRadius="15px"
                 placeholder="Select category"
@@ -143,9 +154,11 @@ const AddProduct: React.FC = () => {
             </FormControl>
 
             <FormControl>
-              <FormLabel>Quantity</FormLabel>
+              <FormLabel fontSize={{ base: "sm", md: "md" }}>
+                Quantity
+              </FormLabel>
               <Input
-                h="60px"
+                h={{ base: "50px", md: "60px" }}
                 bg="white"
                 borderRadius="15px"
                 placeholder="Enter quantity"
@@ -155,11 +168,17 @@ const AddProduct: React.FC = () => {
             </FormControl>
           </HStack>
 
-          <HStack spacing={4}>
-            <FormControl>
-              <FormLabel>Unit Price</FormLabel>
+          <HStack
+            spacing={{ base: 2, md: 4 }}
+            w="100%"
+            flexWrap={{ base: "wrap", md: "nowrap" }}
+          >
+            <FormControl mb={{ base: 3, md: 0 }}>
+              <FormLabel fontSize={{ base: "sm", md: "md" }}>
+                Unit Price
+              </FormLabel>
               <Input
-                h="60px"
+                h={{ base: "50px", md: "60px" }}
                 bg="white"
                 borderRadius="15px"
                 placeholder="Enter price"
@@ -167,10 +186,10 @@ const AddProduct: React.FC = () => {
                 {...register("unit_price")}
               />
             </FormControl>
-            <FormControl>
-              <FormLabel>Weight</FormLabel>
+            <FormControl mb={{ base: 3, md: 0 }}>
+              <FormLabel fontSize={{ base: "sm", md: "md" }}>Weight</FormLabel>
               <Input
-                h="60px"
+                h={{ base: "50px", md: "60px" }}
                 bg="white"
                 borderRadius="15px"
                 placeholder="Enter weight"
@@ -179,18 +198,20 @@ const AddProduct: React.FC = () => {
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Discount (optional)</FormLabel>
+              <FormLabel fontSize={{ base: "sm", md: "md" }}>
+                Discount (optional)
+              </FormLabel>
               {isDiscounted ? null : (
                 <Switch
                   colorScheme="red"
-                  size="lg"
+                  size={{ base: "md", md: "lg" }}
                   isChecked={isDiscounted}
                   onChange={(e) => setIsDiscounted(e.target.checked)}
                 />
               )}
               {isDiscounted && (
                 <Input
-                  h="60px"
+                  h={{ base: "50px", md: "60px" }}
                   bg="white"
                   borderRadius="15px"
                   placeholder="0%"
@@ -202,10 +223,12 @@ const AddProduct: React.FC = () => {
           </HStack>
 
           <FormControl>
-            <FormLabel>Dimensions (optional)</FormLabel>
-            <HStack spacing={4}>
+            <FormLabel fontSize={{ base: "sm", md: "md" }}>
+              Dimensions (optional)
+            </FormLabel>
+            <HStack spacing={{ base: 2, md: 4 }} w="100%">
               <Input
-                h="60px"
+                h={{ base: "50px", md: "60px" }}
                 bg="white"
                 borderRadius="15px"
                 placeholder="Length (mm)"
@@ -213,7 +236,7 @@ const AddProduct: React.FC = () => {
                 {...register("length")}
               />
               <Input
-                h="60px"
+                h={{ base: "50px", md: "60px" }}
                 bg="white"
                 borderRadius="15px"
                 placeholder="Height (mm)"
@@ -221,7 +244,7 @@ const AddProduct: React.FC = () => {
                 {...register("height")}
               />
               <Input
-                h="60px"
+                h={{ base: "50px", md: "60px" }}
                 bg="white"
                 borderRadius="15px"
                 placeholder="Width (mm)"
@@ -232,15 +255,23 @@ const AddProduct: React.FC = () => {
           </FormControl>
 
           <FormControl>
-            <FormLabel>Upload Product Image</FormLabel>
-            <Text fontSize={12} py={4}>To upload multiple images, please select the multiple images from the image dialog</Text>
+            <FormLabel fontSize={{ base: "sm", md: "md" }}>
+              Upload Product Image
+            </FormLabel>
+            <Text
+              fontSize={{ base: "xs", sm: "sm", md: "12px" }}
+              py={{ base: 2, md: 4 }}
+            >
+              To upload multiple images, please select the multiple images from
+              the image dialog
+            </Text>
             <Input
               type="file"
               multiple
               onChange={handleImageChange}
               accept=".jpg, .jpeg, .png"
-              p={4}
-              h="150px"
+              p={{ base: 2, md: 4 }}
+              h={{ base: "120px", md: "150px" }}
               bg="white"
               textAlign="center"
               borderRadius="lg"
@@ -254,7 +285,7 @@ const AddProduct: React.FC = () => {
               flexDirection="column"
               alignItems="center"
               justifyContent="center"
-              h="150px"
+              h={{ base: "120px", md: "150px" }}
               bg="white"
               borderRadius="lg"
               color="gray.500"
@@ -263,25 +294,34 @@ const AddProduct: React.FC = () => {
               <IconButton
                 variant="outline"
                 aria-label="Images"
-                onClick={() => document.getElementById('file-upload')?.click()}
-                fontSize="50px"
+                onClick={() => document.getElementById("file-upload")?.click()}
+                fontSize={{ base: "40px", md: "50px" }}
                 icon={<FaRegImages color="#979797" />}
               />
-              <Text fontSize="md">Upload Product Image</Text>
-              <Text fontSize="sm">Image should be under 5MB</Text>
+              <Text fontSize={{ base: "sm", md: "md" }}>
+                Upload Product Image
+              </Text>
+              <Text fontSize={{ base: "xs", sm: "sm" }}>
+                Image should be under 5MB
+              </Text>
             </FormLabel>
           </FormControl>
-          <Box my={4} borderRadius="10px">
+          <Box my={{ base: 2, md: 4 }} borderRadius="10px" w="100%">
             {selectedImages && (
-              <Box mt={4}>
-                <Text fontSize="md"> Product Images</Text>
-                <Box display="flex" flexWrap="wrap">
+              <Box mt={{ base: 2, md: 4 }}>
+                <Text fontSize={{ base: "sm", md: "md" }}> Product Images</Text>
+                <Box display="flex" flexWrap="wrap" justifyContent="center">
                   {imagePreviews?.map((preview, index) => (
-                    <Box key={index} m={2} p={2} borderRadius="lg">
+                    <Box
+                      key={index}
+                      m={{ base: 1, md: 2 }}
+                      p={{ base: 1, md: 2 }}
+                      borderRadius="lg"
+                    >
                       <Image
                         src={preview}
                         alt={`Preview ${index}`}
-                        boxSize="150px"
+                        boxSize={{ base: "100px", md: "150px" }}
                         objectFit="cover"
                       />
                     </Box>
@@ -292,10 +332,12 @@ const AddProduct: React.FC = () => {
           </Box>
 
           <FormControl>
-            <FormLabel>Description</FormLabel>
+            <FormLabel fontSize={{ base: "sm", md: "md" }}>
+              Description
+            </FormLabel>
             <Textarea
               placeholder="Describe your product"
-              h="150px"
+              h={{ base: "120px", md: "150px" }}
               bg="white"
               borderRadius="15px"
               {...register("description")}
@@ -306,9 +348,11 @@ const AddProduct: React.FC = () => {
             display="flex"
             alignItems="center"
             justifyContent="space-between"
-            my="12px"
+            my={{ base: 2, md: "12px" }}
           >
-            <FormLabel mb="0">Mark Product in stock</FormLabel>
+            <FormLabel mb="0" fontSize={{ base: "sm", md: "md" }}>
+              Mark Product in stock
+            </FormLabel>
             <Switch
               colorScheme="red"
               size="lg"

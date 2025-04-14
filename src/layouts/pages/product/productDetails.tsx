@@ -94,12 +94,15 @@ const ProductDetails: React.FC<ProductDetails> = ({
   // console.log(quantity, "QUANTITY");
 
   return (
-    <VStack align="start" spacing={5}>
+    <VStack align="start" spacing={{ base: 3, md: 5 }}>
       <Box>
-        <Text fontSize="44px" fontWeight="bold">
+        <Text
+          fontSize={{ base: "28px", sm: "36px", md: "44px" }}
+          fontWeight="bold"
+        >
           {product?.product_name}
         </Text>
-        <Text fontSize="25px" color="#FF5733">
+        <Text fontSize={{ base: "20px", md: "25px" }} color="#FF5733">
           {formattedPrice}
         </Text>
         <HStack spacing={1}>
@@ -109,16 +112,16 @@ const ProductDetails: React.FC<ProductDetails> = ({
               <StarIcon
                 key={i}
                 color={i < (product?.rating || 0) ? "#FF8A00" : "gray.200"}
-                fontSize="16px"
+                fontSize={{ base: "14px", md: "16px" }}
               />
             ))}
-          <Text fontSize="sm" ml={2}>
+          <Text fontSize={{ base: "xs", sm: "sm" }} ml={2}>
             ({total_reviews} Customer Reviews)
           </Text>
         </HStack>
       </Box>
 
-      <Text fontSize="md">{product?.description}</Text>
+      <Text fontSize={{ base: "sm", md: "md" }}>{product?.description}</Text>
 
       <Badge
         colorScheme={
@@ -142,10 +145,10 @@ const ProductDetails: React.FC<ProductDetails> = ({
               : "red"
           }
           color="white"
-          h="26px"
-          w="90px"
+          h={{ base: "22px", md: "26px" }}
+          w={{ base: "80px", md: "90px" }}
           borderRadius="full"
-          fontSize="12px"
+          fontSize={{ base: "10px", md: "12px" }}
           fontWeight="bold"
           display="flex"
           alignItems="center"
@@ -159,14 +162,18 @@ const ProductDetails: React.FC<ProductDetails> = ({
           {showColor && (
             <>
               <Box>
-                <Text fontWeight="bold" mb={2}>
+                <Text
+                  fontWeight="bold"
+                  mb={2}
+                  fontSize={{ base: "sm", md: "md" }}
+                >
                   Size
                 </Text>
-                <HStack spacing={3}>
+                <HStack spacing={{ base: 2, md: 3 }}>
                   {sizes?.map((size) => (
                     <Button
                       key={size}
-                      size="sm"
+                      size={{ base: "xs", sm: "sm" }}
                       variant={selectedSize === size ? "solid" : "outline"}
                       colorScheme="orange"
                       onClick={() => setSelectedSize(size)}
@@ -178,14 +185,18 @@ const ProductDetails: React.FC<ProductDetails> = ({
               </Box>
 
               <Box>
-                <Text fontWeight="bold" mb={2}>
+                <Text
+                  fontWeight="bold"
+                  mb={2}
+                  fontSize={{ base: "sm", md: "md" }}
+                >
                   Color
                 </Text>
-                <HStack spacing={3}>
+                <HStack spacing={{ base: 2, md: 3 }}>
                   {colors?.map((color) => (
                     <Box
                       key={color}
-                      boxSize="30px"
+                      boxSize={{ base: "25px", md: "30px" }}
                       borderRadius="full"
                       bg={color}
                       border={
@@ -201,23 +212,18 @@ const ProductDetails: React.FC<ProductDetails> = ({
               </Box>
             </>
           )}
-          <Flex
-            direction={{ base: "column", md: "row" }}
-            gap={{ base: 3, md: 4 }}
-            align={{ base: "stretch", md: "center" }}
-            wrap="wrap"
-          >
+          <Flex direction="row" gap={{ base: 2, md: 4 }} w="100%">
             <Box
               border="1px solid black"
               bg="transparent"
               borderRadius="5px"
               w={{ base: "100%", md: "170px" }}
-              h="50px"
+              h={{ base: "40px", md: "50px" }}
               display="flex"
               alignItems="center"
               justifyContent="space-between"
               px={4}
-              mb={{ base: 3, md: 0 }}
+              mb={{ base: 2, md: 0 }}
             >
               <Button
                 onClick={() =>
@@ -229,10 +235,11 @@ const ProductDetails: React.FC<ProductDetails> = ({
                     product.product_quantity < 0)
                 }
                 variant="ghost"
+                size={{ base: "xs", sm: "sm" }}
               >
                 -
               </Button>
-              <Text>{quantity}</Text>
+              <Text fontSize={{ base: "sm", md: "md" }}>{quantity}</Text>
               <Button
                 onClick={() =>
                   setQuantity((prev: any) =>
@@ -245,30 +252,17 @@ const ProductDetails: React.FC<ProductDetails> = ({
                   quantity >= product.product_quantity
                 }
                 variant="ghost"
+                size={{ base: "xs", sm: "sm" }}
               >
                 +
               </Button>
             </Box>
-            {/* <Button
-              border="1px solid black"
-              bg="transparent"
-              w={{ base: "100%", md: "170px" }}
-              h="50px"
-              _hover={{ bg: "transparent" }}
-              mb={{ base: 3, md: 0 }}
-              onClick={() =>
-                setQuantity((prev) =>
-                  Math.min(prev + 1, product?.product_quantity ?? 0)
-                )
-              }
-            >
-              Add To Cart
-            </Button> */}
             <Button
               bg="#FF5733"
               color="white"
               w={{ base: "100%", md: "170px" }}
-              h="50px"
+              h={{ base: "40px", md: "50px" }}
+              fontSize={{ base: "sm", md: "md" }}
               isDisabled={
                 product?.product_quantity ? product.product_quantity < 0 : true
               }
@@ -278,34 +272,42 @@ const ProductDetails: React.FC<ProductDetails> = ({
               Buy Now
             </Button>
           </Flex>
-          <Box mt={6} p={4} borderTop="1px" borderColor="gray.200">
-            <HStack spacing={4} mb={2}>
-              <Text fontWeight="normal" color="gray.600">
+          <Box
+            mt={{ base: 4, md: 6 }}
+            p={{ base: 2, md: 4 }}
+            borderTop="1px"
+            borderColor="gray.200"
+          >
+            <HStack spacing={{ base: 2, md: 4 }} mb={2}>
+              <Text
+                fontWeight="normal"
+                color="gray.600"
+                fontSize={{ base: "sm", md: "md" }}
+              >
                 Category:
               </Text>
-              <Text>{product?.category}</Text>
+              <Text fontSize={{ base: "sm", md: "md" }}>
+                {product?.category}
+              </Text>
             </HStack>
 
-            {/* <HStack spacing={4} mb={2}>
-              <Text fontWeight="normal" color="gray.600">
-                Tags:
-              </Text>
-              <Text color="gray.600">Sofa, Chair, Home, Shop</Text>
-            </HStack> */}
-
-            <HStack spacing={4}>
-              <Text fontWeight="normal" color="gray.600">
+            <HStack spacing={{ base: 2, md: 4 }}>
+              <Text
+                fontWeight="normal"
+                color="gray.600"
+                fontSize={{ base: "sm", md: "md" }}
+              >
                 Share:
               </Text>
               <HStack spacing={2}>
                 <Link href="#" isExternal>
-                  <Icon as={FaFacebook} boxSize={5} />
+                  <Icon as={FaFacebook} boxSize={{ base: 4, md: 5 }} />
                 </Link>
                 <Link href="#" isExternal>
-                  <Icon as={FaLinkedin} boxSize={5} />
+                  <Icon as={FaLinkedin} boxSize={{ base: 4, md: 5 }} />
                 </Link>
                 <Link href="#" isExternal>
-                  <Icon as={FaTwitter} boxSize={5} />
+                  <Icon as={FaTwitter} boxSize={{ base: 4, md: 5 }} />
                 </Link>
               </HStack>
             </HStack>

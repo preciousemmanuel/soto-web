@@ -122,23 +122,31 @@ export default function PaymentMethod({
   // };
 
   return (
-    <Box mb={6} px={{ base: 4, md: 0 }}>
-      <Text fontSize={{ base: "18px", md: "20px" }} fontWeight="medium" mb={6}>
+    <Box mb={{ base: 4, md: 6 }} px={{ base: 4, md: 0 }}>
+      <Text
+        fontSize={{ base: "18px", md: "20px", lg: "22px" }}
+        fontWeight="medium"
+        mb={{ base: 4, md: 6 }}
+      >
         Payment Methods
       </Text>
       <RadioGroup
         flexDirection="column"
-        gap={6}
+        gap={{ base: 4, md: 6 }}
         value={paymentMethod}
         onChange={setPaymentMethod}
       >
-        <Flex justifyContent="space-between" mb={6}>
-          <HStack>
-            <Image src={alat} w={{ base: "30px", md: "40px" }} rounded="full" />
+        <Flex justifyContent="space-between" mb={{ base: 4, md: 6 }}>
+          <HStack spacing={{ base: 2, md: 3 }}>
+            <Image
+              src={alat}
+              w={{ base: "30px", md: "40px", lg: "50px" }}
+              rounded="full"
+            />
             <Text
               fontWeight="normal"
               color="#9F9F9F"
-              fontSize={{ base: "sm", md: "md" }}
+              fontSize={{ base: "sm", md: "md", lg: "lg" }}
             >
               Alat Pay
             </Text>
@@ -149,16 +157,19 @@ export default function PaymentMethod({
             _checked={{
               bg: "#FF5733",
             }}
-          ></Radio>
+          />
         </Flex>
 
-        <Flex justifyContent="space-between" mb={6}>
-          <HStack>
-            <Image src={paystack} w={{ base: "80px", md: "auto" }} />
+        <Flex justifyContent="space-between" mb={{ base: 4, md: 6 }}>
+          <HStack spacing={{ base: 2, md: 3 }}>
+            <Image
+              src={paystack}
+              w={{ base: "30px", md: "40px", lg: "50px" }}
+            />
             <Text
               fontWeight="normal"
               color="#9F9F9F"
-              fontSize={{ base: "sm", md: "md" }}
+              fontSize={{ base: "sm", md: "md", lg: "lg" }}
             >
               PayStack
             </Text>
@@ -169,7 +180,7 @@ export default function PaymentMethod({
             _checked={{
               bg: "#FF5733",
             }}
-          ></Radio>
+          />
         </Flex>
       </RadioGroup>
       {paymentMethod === "alat" && (
@@ -286,7 +297,7 @@ export default function PaymentMethod({
           bg="#FF5733"
           borderRadius="full"
           w="full"
-          h={{ base: "50px", md: "55px" }}
+          h={{ base: "50px", md: "55px", lg: "60px" }}
           size={{ base: "md", md: "lg" }}
           loadingText="Making payment..."
           isLoading={isGeneratingPaymentLink}

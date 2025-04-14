@@ -48,24 +48,40 @@ interface CustomerReviewsProps {
 
 const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
   return (
-    <Box bg="#F9F7F7" p={4} borderRadius="md" maxW="320px" mx="auto">
-      <HStack align="start" spacing={4}>
+    <Box
+      bg="#F9F7F7"
+      p={{ base: 3, md: 4 }}
+      borderRadius="md"
+      maxW={{ base: "100%", sm: "400px", md: "500px" }}
+      mx="auto"
+    >
+      <HStack align="start" spacing={{ base: 3, md: 4 }}>
         <Avatar
+          size={{ base: "sm", md: "md" }}
           src={`https://via.placeholder.com/50`}
           name={`${review?.user?.FirstName} ${review?.user?.LastName}`}
         />
         <Box>
-          <Text fontWeight="bold" fontSize="lg">
+          <Text fontWeight="bold" fontSize={{ base: "md", md: "lg" }}>
             {`${review?.user?.FirstName} ${review?.user?.LastName}`}
           </Text>
           <HStack spacing={1}>
             {Array.from({ length: review?.rating })?.map((_, index) => (
-              <Icon key={index} as={FaStar} color="#FF5733" />
+              <Icon
+                key={index}
+                as={FaStar}
+                color="#FF5733"
+                boxSize={{ base: "12px", md: "16px" }}
+              />
             ))}
           </HStack>
         </Box>
       </HStack>
-      <Text mt={4} fontSize="sm" color="gray.600">
+      <Text
+        mt={{ base: 3, md: 4 }}
+        fontSize={{ base: "xs", md: "sm" }}
+        color="gray.600"
+      >
         {review.comment}
       </Text>
     </Box>
@@ -78,8 +94,12 @@ const CustomerReviews: React.FC<CustomerReviewsProps> = ({
 }) => {
   const { control, handleSubmit } = useForm();
   const [selectedRating, setSelectedRating] = useState<number>(0);
-  const { reviewMutation,refetch } = useProduct();
-  const { mutate: createReview, isPending: isLoadings, isSuccess } = reviewMutation;
+  const { reviewMutation, refetch } = useProduct();
+  const {
+    mutate: createReview,
+    isPending: isLoadings,
+    isSuccess,
+  } = reviewMutation;
 
   const onSubmit = (data: any) => {
     createReview({
@@ -92,9 +112,8 @@ const CustomerReviews: React.FC<CustomerReviewsProps> = ({
   };
 
   useEffect(() => {
-    refetch()
-  }, [isSuccess])
-  
+    refetch();
+  }, [isSuccess]);
 
   const renderStars = (rating: number) => {
     return Array(5)
@@ -111,36 +130,39 @@ const CustomerReviews: React.FC<CustomerReviewsProps> = ({
   };
 
   return (
-    <Box p={8}>
-      <Flex justify="space-between" align="center" mb={6}>
+    <Box p={{ base: 4, md: 8 }}>
+      <Flex justify="space-between" align="center" mb={{ base: 4, md: 6 }}>
         <Box>
-          <Heading as="h3" size="lg" mb={2}>
+          <Heading as="h3" size={{ base: "md", md: "lg" }} mb={2}>
             Customer’s Reviews
           </Heading>
-          <Text color="gray.500">Hear what other customers say</Text>
+          <Text color="gray.500" fontSize={{ base: "sm", md: "md" }}>
+            Hear what other customers say
+          </Text>
         </Box>
-        {/* <Button size="md" variant="link" color="#FF5733" fontWeight="bold">
+        {/* <Button size={{ base: "sm", md: "md" }} variant="link" color="#FF5733" fontWeight="bold">
           View more →
         </Button> */}
       </Flex>
       {reviews?.length === 0 ? (
         <VStack
-          spacing={6}
+          spacing={{ base: 4, md: 6 }}
           align="stretch"
-          maxWidth="700px"
+          maxWidth={{ base: "100%", md: "700px" }}
           mx="auto"
-          py="40px"
+          py={{ base: 6, md: 10 }}
+          px={{ base: 2, md: 0 }}
         >
           <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl pb="18px">
-              <FormLabel fontSize="md" color="gray.700">
+            <FormControl pb={{ base: 3, md: 4 }}>
+              <FormLabel fontSize={{ base: "sm", md: "md" }} color="gray.700">
                 Your rating
               </FormLabel>
               {renderStars(selectedRating)}
             </FormControl>
 
             <FormControl>
-              <FormLabel fontSize="md" color="gray.700">
+              <FormLabel fontSize={{ base: "sm", md: "md" }} color="gray.700">
                 Comment
               </FormLabel>
               <Controller
@@ -150,12 +172,13 @@ const CustomerReviews: React.FC<CustomerReviewsProps> = ({
                 render={({ field }) => (
                   <Textarea
                     {...field}
-                    height="200px"
+                    height={{ base: "150px", md: "200px" }}
                     placeholder="Type your comment"
                     borderColor="gray.300"
                     _focus={{ borderColor: "orange.400" }}
                     _hover={{ borderColor: "gray.400" }}
                     resize="none"
+                    fontSize={{ base: "sm", md: "md" }}
                   />
                 )}
               />
@@ -165,19 +188,27 @@ const CustomerReviews: React.FC<CustomerReviewsProps> = ({
               mt={4}
               color="white"
               bg="#FF5753"
-              size="lg"
+              size={{ base: "md", md: "lg" }}
               w="full"
               borderRadius="md"
               type="submit"
               loadingText="Submit..."
               isLoading={isLoadings}
+              fontSize={{ base: "sm", md: "md" }}
             >
               Submit
             </Button>
           </form>
         </VStack>
       ) : (
-        <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={6}>
+        <Grid
+          templateColumns={{
+            base: "repeat(1, 1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(auto-fit, minmax(300px, 1fr))",
+          }}
+          gap={{ base: 4, md: 6 }}
+        >
           {reviews?.slice(0, 3)?.map((review) => (
             <GridItem key={review?._id}>
               <ReviewCard review={review} />

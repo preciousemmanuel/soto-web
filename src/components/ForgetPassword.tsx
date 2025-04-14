@@ -51,55 +51,65 @@ const ForgetPassword = () => {
     <Box height="100%">
       <Flex
         bg="#FFF2ED"
-        px={4}
-        py={4}
+        px={{ base: 2, md: 4 }}
+        py={{ base: 2, md: 4 }}
         justify="space-between"
         align="center"
-        fontSize="sm"
+        fontSize={{ base: "xs", sm: "sm" }}
+        flexWrap="wrap"
+        gap={2}
       >
         <Text fontWeight="500" color="gray">
           20% off store
         </Text>
-        <Flex align="center" gap={4}>
+        <Flex align="center" gap={{ base: 2, md: 4 }} flexWrap="wrap">
           <Flex align="center" color="gray">
-            <Icon as={FaMapMarkerAlt} mr={1} />
-            <Text>Location</Text>
+            <Icon as={FaMapMarkerAlt} mr={1} boxSize={{ base: 3, md: 4 }} />
+            <Text fontSize={{ base: "xs", sm: "sm" }}>Location</Text>
           </Flex>
           <Flex align="center" color="gray">
-            <Icon as={FaGlobe} mr={1} />
-            <Text>ENG</Text>
+            <Icon as={FaGlobe} mr={1} boxSize={{ base: 3, md: 4 }} />
+            <Text fontSize={{ base: "xs", sm: "sm" }}>ENG</Text>
           </Flex>
           <Link to="/auth/vendor-signup">
-            <Text color="#FF5733" textDecoration="underline" fontWeight="bold">Sell on Soto</Text>
+            <Text
+              color="#FF5733"
+              textDecoration="underline"
+              fontWeight="bold"
+              fontSize={{ base: "xs", sm: "sm" }}
+            >
+              Sell on Soto
+            </Text>
           </Link>
         </Flex>
       </Flex>
       <Flex
         direction={{ base: "column", md: "row" }}
-        minHeight="calc(100vh - 56px)"
+        minHeight={{ base: "calc(100vh - 48px)", md: "calc(100vh - 56px)" }}
       >
         <Box
           flex="1"
           bgImage={AuthImage}
-          bgSize="50% 50%"
+          bgSize={{ md: "60% 60%", lg: "50% 50%" }}
           bgRepeat="no-repeat"
           bgPosition="center"
           display={{ base: "none", md: "block" }}
+          minHeight={{ base: "200px", md: "auto" }}
         />
 
         <Box
           flex="1"
-          p={8}
+          p={{ base: 4, md: 8 }}
           display="flex"
           alignItems="center"
           justifyContent="center"
-          py={6}
-          px={6}
+          py={{ base: 4, md: 6 }}
+          px={{ base: 4, md: 6 }}
           bg="#FFFAF8"
         >
-          <Box width="100%" maxWidth="400px">
+          <Box width="100%" maxWidth={{ base: "100%", sm: "400px" }}>
             <Text
-              fontSize="3xl"
+              fontSize={{ base: "2xl", sm: "3xl" }}
               fontWeight="600"
               mb={2}
               textAlign="center"
@@ -108,20 +118,26 @@ const ForgetPassword = () => {
             >
               Forgot Password
             </Text>
-            <Text color="black" mb={6} textAlign="center" fontFamily="Poppins">
+            <Text
+              color="black"
+              mb={{ base: 4, sm: 6 }}
+              textAlign="center"
+              fontFamily="Poppins"
+              fontSize={{ base: "sm", sm: "md" }}
+            >
               Kindly enter your registered email or phone number to reset your
               password
             </Text>
             {!isSuccesRequest ? (
               <>
-                <Box mb={4}>
+                <Box mb={{ base: 3, sm: 4 }}>
                   <Input
                     placeholder="Enter your email or username"
-                    height="52px"
+                    height={{ base: "48px", sm: "52px" }}
                     bg="#F8EDEA80"
                     outline="none"
                     borderRadius="xl"
-                    fontSize="sm"
+                    fontSize={{ base: "sm", sm: "md" }}
                     value={emailOrPhone}
                     onChange={(e) => setEmailOrPhone(e.target.value)}
                   />
@@ -130,13 +146,14 @@ const ForgetPassword = () => {
                 <Button
                   color="white"
                   bg="#FF5733"
-                  height="48px"
+                  height={{ base: "44px", sm: "48px" }}
                   width="100%"
                   borderRadius="full"
-                  mb={4}
+                  mb={{ base: 3, sm: 4 }}
                   onClick={handleRequestOtp}
                   isLoading={loading}
                   loadingText="Loading..."
+                  fontSize={{ base: "sm", sm: "md" }}
                 >
                   Continue
                 </Button>
@@ -150,9 +167,9 @@ const ForgetPassword = () => {
               >
                 <OtpInput otp={otp} setOtp={setOtp} />
                 <Button
-                  mt={6}
-                  w="300px"
-                  h="50px"
+                  mt={{ base: 4, sm: 6 }}
+                  w={{ base: "100%", sm: "300px" }}
+                  h={{ base: "48px", sm: "50px" }}
                   bg="#FF5733"
                   color="white"
                   borderRadius="full"
@@ -160,6 +177,7 @@ const ForgetPassword = () => {
                   _hover={{ bg: "#E04E2C" }}
                   isDisabled={otp.some((digit) => digit === "")}
                   onClick={handleValidateOTP}
+                  fontSize={{ base: "sm", sm: "md" }}
                 >
                   Continue
                 </Button>

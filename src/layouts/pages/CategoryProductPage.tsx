@@ -157,35 +157,43 @@ export default function CategoryProductPage() {
   }
 
   return (
-    <Box py="120px">
+    <Box py={{ base: "60px", md: "80px", lg: "120px" }}>
       <Flex
         align="center"
         justify="center"
         position="relative"
         bg="#FFF2ED"
-        p={6}
-        mt={16}
-        mb={6}
+        p={{ base: 4, md: 6 }}
+        mt={{ base: 16, md: 12, lg: 16 }}
+        mb={{ base: 4, md: 6 }}
       >
         <Button
           position="absolute"
-          left={6}
+          left={{ base: 2, md: 4, lg: 6 }}
           onClick={() => navigate(-1)}
           leftIcon={<ChevronLeftIcon />}
           variant="ghost"
           color="#FF5753"
+          size={{ base: "sm", md: "md" }}
         >
           Back
         </Button>
-        <Heading size="lg" fontFamily="Poppins" color="#FF5753">
+        <Heading
+          size={{ base: "md", md: "lg" }}
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
           Product List
         </Heading>
       </Flex>
-      <Box py={8} px="140px">
+      <Box py={{ base: 4, md: 6, lg: 8 }} px={{ base: 4, md: 8, lg: "140px" }}>
         {!products || products?.length === 0 ? (
           <Text textAlign="center">No products found for this category.</Text>
         ) : (
-          <SimpleGrid columns={[1, 2, 3]} spacing={0.5}>
+          <SimpleGrid
+            columns={{ base: 1, md: 2, lg: 3 }}
+            spacing={{ base: 4, md: 6, lg: 8 }}
+          >
             {products?.map((product: Product) => (
               <ProductCard
                 key={product._id}

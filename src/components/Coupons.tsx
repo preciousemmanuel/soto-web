@@ -13,7 +13,7 @@ import {
 import { FiCopy } from "react-icons/fi";
 import { format, formatDate } from "date-fns";
 
-export const CouponCard = ({ title, code, expiryDate }:any) => {
+export const CouponCard = ({ title, code, expiryDate }: any) => {
   const { hasCopied, onCopy } = useClipboard(code);
   const formattedExpiryDate = format(new Date(expiryDate), "do MMMM yyyy");
   return (
@@ -22,11 +22,16 @@ export const CouponCard = ({ title, code, expiryDate }:any) => {
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
-      p={4}
+      p={{ base: 3, md: 4 }}
       bg="white"
     >
       {/* Title Section */}
-      <Text fontSize="lg" fontWeight="bold" color="gray.800" mb={2}>
+      <Text
+        fontSize={{ base: "md", md: "lg" }}
+        fontWeight="bold"
+        color="gray.800"
+        mb={{ base: 1, md: 2 }}
+      >
         {title}
       </Text>
 
@@ -35,26 +40,35 @@ export const CouponCard = ({ title, code, expiryDate }:any) => {
         align="center"
         justify="space-between"
         bg="gray.100"
-        p={3}
+        p={{ base: 2, md: 3 }}
         borderRadius="md"
-        mb={3}
+        mb={{ base: 2, md: 3 }}
       >
-        <Text fontWeight="medium" color="gray.700">
+        <Text
+          fontWeight="medium"
+          color="gray.700"
+          fontSize={{ base: "sm", md: "md" }}
+        >
           {code}
         </Text>
-        
-         <IconButton
+
+        <IconButton
           aria-label="Copy code"
           icon={hasCopied ? <FiCopy color="green" /> : <FiCopy />}
           onClick={onCopy}
-          size="sm"
+          size={{ base: "xs", md: "sm" }}
           variant="ghost"
-        /> 
+        />
       </Flex>
 
-      <HStack justify="space-between" mb={2}>
-        <Badge colorScheme="green" fontSize="0.8em">
-        Expires on: {formattedExpiryDate}
+      <HStack justify="space-between" mb={{ base: 1, md: 2 }}>
+        <Badge
+          colorScheme="green"
+          fontSize={{ base: "0.7em", md: "0.8em" }}
+          px={{ base: 2, md: 3 }}
+          py={{ base: 1, md: 1.5 }}
+        >
+          Expires on: {formattedExpiryDate}
         </Badge>
       </HStack>
     </Box>

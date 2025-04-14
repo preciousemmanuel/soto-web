@@ -137,33 +137,49 @@ const VendorOverview = () => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <Box p={4} height="100%" mt="130px" px={16}>
-          <Flex justify="space-between" align="center" mb={8} flexWrap="wrap">
-            <Flex align="center" gap={2} mb={[4, 0]}>
-              <Avatar size="lg" src={businessData?.business_logo} />
+        <Box
+          p={{ base: 2, md: 4 }}
+          height="100%"
+          mt={{ base: "80px", md: "130px" }}
+          px={{ base: 2, md: 16 }}
+        >
+          <Flex
+            justify="space-between"
+            align="center"
+            mb={8}
+            flexWrap="wrap"
+            direction={{ base: "column", md: "row" }}
+          >
+            <Flex align="center" gap={2} mb={{ base: 4, md: 0 }}>
+              <Avatar
+                size={{ base: "md", md: "lg" }}
+                src={businessData?.business_logo}
+              />
               <Box>
-                <Text fontSize="2xl" fontWeight="500">
+                <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="500">
                   {businessData?.business_name}
                 </Text>
-                <Text fontSize="lg" color="gray.500">
+                <Text fontSize={{ base: "md", md: "lg" }} color="gray.500">
                   {businessData?.category}
                 </Text>
               </Box>
             </Flex>
             <Button
               bg="black"
-              size="lg"
+              size={{ base: "md", md: "lg" }}
               borderRadius="full"
               color="white"
               fontWeight="500"
               onClick={() => navigate("/add-product")}
+              width={{ base: "full", md: "auto" }}
+              mt={{ base: 4, md: 0 }}
             >
               Add Product
             </Button>
           </Flex>
 
           {/* Tabs Section */}
-          <Box p={4} borderRadius="md">
+          <Box p={{ base: 2, md: 4 }} borderRadius="md">
             <Tabs
               index={activeTab}
               onChange={(index) => setActiveTab(index)}
@@ -176,13 +192,25 @@ const VendorOverview = () => {
                 alignItems="center"
                 gap={2}
               >
-                <Tab fontSize="lg" fontWeight="500" color="gray.500">
+                <Tab
+                  fontSize={{ base: "md", md: "lg" }}
+                  fontWeight="500"
+                  color="gray.500"
+                >
                   Overview
                 </Tab>
-                <Tab fontSize="lg" fontWeight="500" color="gray.500">
+                <Tab
+                  fontSize={{ base: "md", md: "lg" }}
+                  fontWeight="500"
+                  color="gray.500"
+                >
                   Inventory
                 </Tab>
-                <Tab fontSize="lg" fontWeight="500" color="gray.500">
+                <Tab
+                  fontSize={{ base: "md", md: "lg" }}
+                  fontWeight="500"
+                  color="gray.500"
+                >
                   Transactions
                 </Tab>
               </TabList>
@@ -194,11 +222,14 @@ const VendorOverview = () => {
               />
               <TabPanels>
                 <TabPanel>
-                  <Flex gap={12} direction="row">
-                    <Flex direction="column" gap={6}>
+                  <Flex
+                    gap={{ base: 4, md: 12 }}
+                    direction={{ base: "column", md: "row" }}
+                  >
+                    <Flex direction="column" gap={6} width="100%">
                       <Flex
                         justifyContent="space-between"
-                        direction="row"
+                        direction={{ base: "column", md: "row" }}
                         mb={8}
                         gap={4}
                       >
@@ -226,21 +257,23 @@ const VendorOverview = () => {
                         width="100%"
                         border="1px"
                         borderColor="#FF5733"
-                        // boxShadow="lg"
-                        p={4}
+                        p={{ base: 2, md: 4 }}
                         borderRadius="md"
                       >
                         <Flex
                           justifyContent="space-between"
                           alignItems="center"
                           mb={4}
+                          direction={{ base: "column", md: "row" }}
+                          gap={2}
                         >
-                          <Text fontWeight="bold">Income stats</Text>
-
+                          <Text fontWeight="bold" mb={{ base: 2, md: 0 }}>
+                            Income stats
+                          </Text>
                           <Select
                             value={selectedTimeframe}
                             onChange={handleTimeframeChange}
-                            width="150px"
+                            width={{ base: "100%", md: "150px" }}
                             size="sm"
                             bg="white"
                             borderColor="gray.300"
@@ -257,7 +290,10 @@ const VendorOverview = () => {
                             </option>
                           </Select>
                         </Flex>
-                        <Box height="300px" width="600px">
+                        <Box
+                          height={{ base: "200px", md: "300px" }}
+                          width={{ base: "100%", md: "600px" }}
+                        >
                           {chartData ? (
                             <Line data={chartData} options={options} />
                           ) : (
@@ -271,10 +307,9 @@ const VendorOverview = () => {
                       gap={4}
                       width="100%"
                       h="100%"
-                      // maxWidth="500px"
                       border="1px"
                       borderColor="gray.200"
-                      p={4}
+                      p={{ base: 2, md: 4 }}
                     >
                       <Flex justify="space-between" align="center" mb={4}>
                         <Text fontSize="md" fontWeight="900">
@@ -299,18 +334,22 @@ const VendorOverview = () => {
                             p={3}
                             bg="white"
                             borderRadius="md"
-                            // boxShadow="sm"
-                            wrap="wrap"
+                            direction={{ base: "column", md: "row" }}
+                            gap={2}
                             onClick={() =>
                               navigate(`/vendor-product/${product?._id}`)
                             }
                           >
                             <Image
                               src={product?.images && product?.images[0]}
-                              boxSize="100px"
+                              boxSize={{ base: "80px", md: "100px" }}
                               alt={product?.product_name}
                             />
-                            <Box flex="1" ml={4}>
+                            <Box
+                              flex="1"
+                              ml={{ base: 0, md: 4 }}
+                              textAlign={{ base: "center", md: "left" }}
+                            >
                               <Text fontSize="md" fontWeight="bold" mb={2}>
                                 {product?.product_name}
                               </Text>
@@ -350,6 +389,7 @@ const VendorOverview = () => {
                               size="sm"
                               variant="outline"
                               fontWeight="500"
+                              width={{ base: "100%", md: "auto" }}
                             >
                               {`${product?.product_quantity} in stock`}
                             </Button>
@@ -362,11 +402,10 @@ const VendorOverview = () => {
                   </Flex>
                   <Box
                     bg="white"
-                    // boxShadow="lg"
                     border="1px"
                     borderColor="gray.200"
                     borderRadius="md"
-                    p={4}
+                    p={{ base: 2, md: 4 }}
                     overflowX="auto"
                     mt={6}
                   >

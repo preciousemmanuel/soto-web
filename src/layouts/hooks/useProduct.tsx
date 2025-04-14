@@ -66,7 +66,7 @@ export const useProduct = () => {
     categoryId: string,
     productName?: string
   ): Promise<ProductResponse> => {
-    let url = `/product/fetch?limit=${limit}&page=${page}`;
+    let url = `/product/fetch?limit=${20}&page=${page}`;
 
     if (status) url += `&fetch_type=${status}`;
     if (categoryId) url += `&category=${categoryId}`;
@@ -94,7 +94,7 @@ export const useProduct = () => {
     refetch,
   } = useQuery({
     queryKey: ["products", currentPage, itemsPerPage],
-    queryFn: () => fetchProducts(itemsPerPage, currentPage, "", ""),
+    queryFn: () => fetchProducts(20, currentPage, "", ""),
     enabled: true,
     retry: false,
   });
@@ -487,7 +487,7 @@ export const useProduct = () => {
     ],
     queryFn: async () => {
       if (!selectedCategoryId) return null;
-      return fetchProducts(itemsPerPage, currentPage, "", selectedCategoryId);
+      return fetchProducts(20, currentPage, "", selectedCategoryId);
     },
     enabled: Boolean(selectedCategoryId),
   });

@@ -14,105 +14,182 @@ import { useOrder } from "../hooks/useOrder";
 import PaginationControls from "../../features/helpers/Pagination";
 
 const ReviewNewOrder = ({ order }: { order: any }) => (
-  <Box mt={8}>
+  <Box mt={{ base: 8, md: 8 }}>
     <Flex
       bg="pink.50"
-      p={5}
+      p={{ base: 3, md: 5 }}
       borderRadius="md"
       justify="space-between"
       align="center"
+      flexDirection={{ base: "column", md: "row" }}
+      gap={{ base: 4, md: 0 }}
     >
       <Box
         bg="white"
-        p={3}
+        p={{ base: 2, md: 3 }}
         borderRadius="md"
         borderWidth="2px"
         borderColor="#908D8D"
         boxShadow="sm"
+        width={{ base: "100%", md: "auto" }}
       >
-        <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+        <Grid
+          templateColumns={{
+            base: "repeat(1, 1fr)",
+            md: "repeat(2, 1fr)",
+            lg: "repeat(3, 1fr)",
+          }}
+          gap={{ base: 3, md: 4 }}
+        >
           <GridItem>
-            <Text fontWeight="medium" color="#616060" fontSize="md">
+            <Text
+              fontWeight="medium"
+              color="#616060"
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Product Name
             </Text>
-            <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+            <Text
+              fontWeight="normal"
+              color="#908D8D"
+              fontSize={{ base: "xs", md: "sm" }}
+            >
               {order?.product_name}
             </Text>
           </GridItem>
           <GridItem>
-            <Text fontWeight="medium" color="#616060" fontSize="md">
+            <Text
+              fontWeight="medium"
+              color="#616060"
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Product Brand
             </Text>
-            <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+            <Text
+              fontWeight="normal"
+              color="#908D8D"
+              fontSize={{ base: "xs", md: "sm" }}
+            >
               {order?.product_brand || "N/A"}
             </Text>
           </GridItem>
           <GridItem>
-            <Text fontWeight="medium" color="#616060" fontSize="md">
+            <Text
+              fontWeight="medium"
+              color="#616060"
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Type
             </Text>
-            <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+            <Text
+              fontWeight="normal"
+              color="#908D8D"
+              fontSize={{ base: "xs", md: "sm" }}
+            >
               {order?.type}
             </Text>
           </GridItem>
 
           <GridItem>
-            <Text fontWeight="medium" color="#616060" fontSize="md">
+            <Text
+              fontWeight="medium"
+              color="#616060"
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Size
             </Text>
-            <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+            <Text
+              fontWeight="normal"
+              color="#908D8D"
+              fontSize={{ base: "xs", md: "sm" }}
+            >
               {order?.size}
             </Text>
           </GridItem>
           <GridItem>
-            <Text fontWeight="medium" color="#616060" fontSize="md">
+            <Text
+              fontWeight="medium"
+              color="#616060"
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Color
             </Text>
-            <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+            <Text
+              fontWeight="normal"
+              color="#908D8D"
+              fontSize={{ base: "xs", md: "sm" }}
+            >
               {order?.color}
             </Text>
           </GridItem>
           <GridItem>
-            <Text fontWeight="medium" color="#616060" fontSize="md">
+            <Text
+              fontWeight="medium"
+              color="#616060"
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Qty
             </Text>
-            <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+            <Text
+              fontWeight="normal"
+              color="#908D8D"
+              fontSize={{ base: "xs", md: "sm" }}
+            >
               {order?.quantity}
             </Text>
           </GridItem>
 
           <GridItem>
-            <Text fontWeight="medium" color="#616060" fontSize="md">
+            <Text
+              fontWeight="medium"
+              color="#616060"
+              fontSize={{ base: "sm", md: "md" }}
+            >
               Price Range
             </Text>
-            <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+            <Text
+              fontWeight="normal"
+              color="#908D8D"
+              fontSize={{ base: "xs", md: "sm" }}
+            >
               {order?.min_price} - {order?.max_price}
             </Text>
           </GridItem>
         </Grid>
-        <GridItem>
-          <Text fontWeight="medium" color="#616060" fontSize="md">
+        <GridItem mt={{ base: 2, md: 3 }}>
+          <Text
+            fontWeight="medium"
+            color="#616060"
+            fontSize={{ base: "sm", md: "md" }}
+          >
             Order Status
           </Text>
-          <Text fontWeight="normal" color="#908D8D" fontSize="sm">
+          <Text
+            fontWeight="normal"
+            color="#908D8D"
+            fontSize={{ base: "xs", md: "sm" }}
+          >
             {order?.approval_status}
           </Text>
         </GridItem>
       </Box>
       <Flex
-        direction="column"
+        direction={{ base: "row", md: "column" }}
         bg="gray.800"
-        p={5}
+        p={{ base: 2, md: 5 }}
         color="white"
         align="center"
         justify="space-around"
+        gap={{ base: 2, md: 0 }}
+        width={{ base: "100%", md: "auto" }}
+        borderRadius="md"
       >
         <Button
           leftIcon={<EditIcon />}
           color="white"
           variant="solid"
-          mb={2}
-          size="sm"
+          mb={{ base: 0, md: 2 }}
+          size={{ base: "xs", md: "sm" }}
           bg="gray.800"
           _hover="gray.800"
         >
@@ -123,8 +200,8 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
           bg="gray.800"
           color="white"
           variant="solid"
-          mb={2}
-          size="sm"
+          mb={{ base: 0, md: 2 }}
+          size={{ base: "xs", md: "sm" }}
           _hover="gray.800"
         >
           Review Order
@@ -134,7 +211,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
           bg="gray.800"
           color="red"
           variant="solid"
-          size="sm"
+          size={{ base: "xs", md: "sm" }}
           _hover="gray.800"
         >
           Delete Order
@@ -154,34 +231,38 @@ export default function ReviewOrder() {
   const order = allOrder?.data?.data;
 
   return (
-    <Box mt={120}>
+    <Box mt={{ base: 20, md: 120 }}>
       <Heading
         size="lg"
         textAlign="center"
-        mb={6}
+        mb={{ base: 4, md: 6 }}
         bg={"#FFF2ED"}
         color={"#FF5733"}
         fontFamily={"Poppins"}
-        fontSize={"22px"}
-        px={6}
-        py={4}
+        fontSize={{ base: "18px", md: "22px" }}
+        px={{ base: 3, md: 6 }}
+        py={{ base: 3, md: 4 }}
       >
         Review Order
       </Heading>
-      <Flex justifyContent="space-between" alignItems="center" mb={6} px={10}>
+      <Flex
+        justifyContent="space-between"
+        alignItems="center"
+        mb={{ base: 4, md: 6 }}
+        px={{ base: 4, md: 10 }}
+      >
         <Text
           fontWeight=""
-          fontSize="17px"
+          fontSize={{ base: "sm", md: "17px" }}
           fontFamily={"Poppins"}
           color={"gray"}
         >
           Recently Added
         </Text>
-        {/* <Button rounded="full">Select All</Button> */}
       </Flex>
-      <Box my={20} mx={12}>
+      <Box my={{ base: 8, md: 20 }} mx={{ base: 4, md: 12 }}>
         {!order || order?.length === 0 ? (
-          <Text textAlign="center" color="gray" mt={120}>
+          <Text textAlign="center" color="gray" mt={{ base: 20, md: 120 }}>
             No orders to review.
           </Text>
         ) : (
@@ -190,7 +271,7 @@ export default function ReviewOrder() {
           ))
         )}
       </Box>
-      <Box px={24} py={8}>
+      <Box px={{ base: 4, md: 24 }} py={{ base: 4, md: 8 }}>
         <PaginationControls
           currentPage={customOrdersDataPagination.currentPage}
           totalPages={customOrdersDataPagination.totalPages}

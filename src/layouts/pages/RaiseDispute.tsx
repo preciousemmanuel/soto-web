@@ -29,13 +29,13 @@ interface DisputeFormData {
 
 const RaiseDisputePage = () => {
   const { useCreateDispute } = useVendor();
-  const {createProductFormData} = useProduct()
+  const { createProductFormData } = useProduct();
   const { orderId } = useParams<{ orderId: string }>();
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors},
+    formState: { errors },
   } = useForm<DisputeFormData>();
   const [selectedImages, setSelectedImages] = useState<FileList | any>(null);
   const loading = useCreateDispute.isPending;
@@ -43,7 +43,6 @@ const RaiseDisputePage = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      
       setSelectedImages(e.target.files);
     }
   };
@@ -52,36 +51,35 @@ const RaiseDisputePage = () => {
     const disputeData = {
       title: data.title,
       description: data.description,
-      order: orderId || ""
+      order: orderId || "",
     };
-    
+
     const formData = createProductFormData(disputeData, selectedImages || []);
-    
+
     await useCreateDispute.mutate(formData);
   };
   useEffect(() => {
-    if(success){
-      reset()
+    if (success) {
+      reset();
     }
-  }, [success])
-  
+  }, [success]);
 
   return (
-    <Box bg="white" borderRadius="md" mt="120px">
+    <Box bg="white" borderRadius="md" mt={{ base: "80px", md: "120px" }}>
       <Heading
         size="lg"
-        mb={6}
-        mt={6}
+        mb={{ base: 4, md: 6 }}
+        mt={{ base: 4, md: 6 }}
         fontFamily="Poppins"
         bg="#FFF2ED"
-        py={6}
+        py={{ base: 4, md: 6 }}
         textAlign="center"
       >
         Raise Dispute
       </Heading>
-      <Box mx="auto">
+      <Box mx="auto" px={{ base: 4, md: 0 }}>
         <Text
-          fontSize="xl"
+          fontSize={{ base: "lg", md: "xl" }}
           fontWeight="bold"
           textAlign="center"
           color="#FF5753"
@@ -89,16 +87,32 @@ const RaiseDisputePage = () => {
         >
           Raise Dispute
         </Text>
-        <Text fontSize="sm" color="gray.600" textAlign="center" mb={6}>
+        <Text
+          fontSize={{ base: "xs", md: "sm" }}
+          color="gray.600"
+          textAlign="center"
+          mb={{ base: 4, md: 6 }}
+        >
           Kindly input your dispute title and let us know your complaint
         </Text>
       </Box>
 
-      <VStack spacing={6} align="stretch" maxWidth="700px" mx="auto" py="40px">
-        <form >
-          <Flex gap={20} w="full">
+      <VStack
+        spacing={{ base: 4, md: 6 }}
+        align="stretch"
+        maxWidth="700px"
+        mx="auto"
+        py={{ base: "20px", md: "40px" }}
+        px={{ base: 4, md: 0 }}
+      >
+        <form>
+          <Flex
+            gap={{ base: 4, md: 20 }}
+            w="full"
+            direction={{ base: "column", md: "row" }}
+          >
             <FormControl isInvalid={!!errors.title}>
-              <FormLabel fontSize="sm" color="gray.700">
+              <FormLabel fontSize={{ base: "xs", md: "sm" }} color="gray.700">
                 Dispute Title
               </FormLabel>
               <Select
@@ -108,16 +122,19 @@ const RaiseDisputePage = () => {
                 borderColor="gray.300"
                 _focus={{ borderColor: "orange.400" }}
                 _hover={{ borderColor: "gray.400" }}
+                size={{ base: "sm", md: "md" }}
               >
                 <option value="Order and Delivery">Order and Delivery</option>
                 <option value="Payment and Refund">Payment and Refund</option>
-                <option value="Product quality and authenticity">Product quality and authenticity</option>
+                <option value="Product quality and authenticity">
+                  Product quality and authenticity
+                </option>
                 <option value="Warranty and Return">Warranty and Return</option>
                 <option value="Fraud and security">Fraud and security</option>
               </Select>
             </FormControl>
-            <HStack gap="16px" w="full" alignItems="center">
-              <FormLabel fontSize="sm" color="gray.700">
+            <HStack gap={{ base: 2, md: "16px" }} w="full" alignItems="center">
+              <FormLabel fontSize={{ base: "xs", md: "sm" }} color="gray.700">
                 Attach Photos (Optional)
               </FormLabel>
               <Input
@@ -138,23 +155,28 @@ const RaiseDisputePage = () => {
                 color="#FF5753"
                 _hover={{ bg: "orange.50" }}
                 cursor="pointer"
+                size={{ base: "sm", md: "md" }}
               />
             </HStack>
           </Flex>
-          <FormControl isInvalid={!!errors?.description} mt={6}>
-            <FormLabel fontSize="sm" color="gray.700">
+          <FormControl
+            isInvalid={!!errors?.description}
+            mt={{ base: 4, md: 6 }}
+          >
+            <FormLabel fontSize={{ base: "xs", md: "sm" }} color="gray.700">
               Type your complaint
             </FormLabel>
             <Textarea
               {...register("description", {
                 // required: "description is required",
               })}
-              height="200px"
+              height={{ base: "150px", md: "200px" }}
               placeholder="Type your description"
               borderColor="gray.300"
               _focus={{ borderColor: "orange.400" }}
               _hover={{ borderColor: "gray.400" }}
               resize="none"
+              size={{ base: "sm", md: "md" }}
             />
           </FormControl>
 
@@ -162,7 +184,7 @@ const RaiseDisputePage = () => {
             mt={4}
             color="white"
             bg="#FF5753"
-            size="lg"
+            size={{ base: "md", md: "lg" }}
             w="full"
             borderRadius="md"
             // type="submit"

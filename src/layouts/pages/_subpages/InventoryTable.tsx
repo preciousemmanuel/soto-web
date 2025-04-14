@@ -35,31 +35,41 @@ const InventoryTable = ({ inventory }: { inventory: InventoryRecord[] }) => {
       border="1px"
       borderColor="gray.200"
       borderRadius="md"
-      p={4}
+      p={{ base: 2, md: 4 }}
       overflowX="auto"
+      mx={{ base: 2, md: 0 }}
+      mt={{ base: 4, md: 6 }}
     >
-      <Table variant="simple" size="sm">
+      <Table variant="simple" size={{ base: "xs", sm: "sm", md: "md" }}>
         <Thead>
           <Tr>
-            <Th>S/N</Th>
-            <Th>Product Name</Th>
-            <Th>Buyer Name</Th>
-            <Th>Quantity</Th>
-            <Th>Unit Price</Th>
-            <Th>Status</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>S/N</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Product Name</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Buyer Name</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Quantity</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Unit Price</Th>
+            <Th fontSize={{ base: "xs", sm: "sm", md: "md" }}>Status</Th>
           </Tr>
         </Thead>
         <Tbody>
           {inventory?.map((item: InventoryRecord, index: number) => (
             <Tr key={item?._id}>
-              <Td>{index + 1}</Td>
-              <Td>{item?.product_name}</Td>
-              <Td>
+              <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>{index + 1}</Td>
+              <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                {item?.product_name}
+              </Td>
+              <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
                 {item?.buyer?.FirstName} {item?.buyer?.LastName}
               </Td>
-              <Td>{item?.quantity}</Td>
-              <Td>{item?.unit_price}</Td>
-              <Td>{item?.status}</Td>
+              <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                {item?.quantity}
+              </Td>
+              <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                {item?.unit_price}
+              </Td>
+              <Td fontSize={{ base: "xs", sm: "sm", md: "md" }}>
+                {item?.status}
+              </Td>
             </Tr>
           ))}
         </Tbody>

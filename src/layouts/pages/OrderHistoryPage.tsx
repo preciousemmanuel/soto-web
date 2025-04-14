@@ -167,33 +167,51 @@ function OrderHistoryPage() {
   };
 
   return (
-    <Box p={4} minH="100%" textAlign="center" mt={120} my={20}>
+    <Box
+      p={{ base: 2, md: 4 }}
+      minH="100%"
+      textAlign="center"
+      mt={{ base: 100, md: 120 }}
+      my={{ base: 10, md: 20 }}
+    >
       <Flex
         align="center"
         justify="center"
         position="relative"
         bg="#FFF2ED"
-        p={6}
-        mt={20}
+        p={{ base: 4, md: 6 }}
+        mt={{ base: 16, md: 20 }}
         mb={6}
       >
         <Button
           position="absolute"
-          left={6}
+          left={{ base: 2, md: 6 }}
           onClick={() => navigate(-1)}
           leftIcon={<ChevronLeftIcon />}
           variant="ghost"
           color="#FF5753"
+          size={{ base: "sm", md: "md" }}
         >
           Back
         </Button>
-        <Heading size="lg" fontFamily="Poppins" color="#FF5753">
+        <Heading
+          size={{ base: "md", md: "lg" }}
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
           My Orders
         </Heading>
       </Flex>
 
-      <Flex justifyContent={"left"} alignItems={"left"}>
-        <Flex justifyContent="center" gap={4} mb={8} maxW="100%" mx="auto">
+      <Flex justifyContent={{ base: "center", md: "left" }} alignItems="center">
+        <Flex
+          justifyContent="center"
+          gap={{ base: 2, md: 4 }}
+          mb={8}
+          maxW="100%"
+          mx="auto"
+          flexWrap="wrap"
+        >
           {[
             "BOOKED",
             "PENDING",
@@ -207,8 +225,9 @@ function OrderHistoryPage() {
               bg={activeStatus === buttonStatus ? "#FF5733" : "#F4F6F9"}
               color={activeStatus === buttonStatus ? "white" : "black"}
               borderRadius="full"
-              size="md"
+              size={{ base: "sm", md: "md" }}
               onClick={() => setActiveStatus(buttonStatus)}
+              m={{ base: "2px", md: 0 }}
             >
               {buttonStatus.replace("_", " ")}
             </Button>
@@ -218,48 +237,73 @@ function OrderHistoryPage() {
       {isFetchingOrders ? (
         <LoadingSpinner />
       ) : (
-        <Flex justifyContent="center" px={4}>
-          <Table variant="simple" w="100%" maxW="850px" textAlign="left">
-            <Thead>
-              <Tr>
-                <Th>Order ID</Th>
-                <Th>Order Date</Th>
-                <Th>Product</Th>
-                <Th>Status</Th>
-                <Th textAlign="center">Action</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {filteredOrders?.length > 0 ? (
-                filteredOrders?.map((order: any) => {
-                  const { status } = order;
-                  const { status: statusText, action } = renderStatusAndAction(
-                    status,
-                    order?._id
-                  );
-                  // console.log(order,"stta")
-                  return (
-                    <Tr key={order?._id}>
-                      <Td>{order?.tracking_id}</Td>
-                      <Td>{new Date(order?.createdAt).toLocaleDateString()}</Td>
-                      <Td>{order?.items?.length}</Td>
-                      <Td>{statusText}</Td>
-                      <Td textAlign="center">{action}</Td>
-                    </Tr>
-                  );
-                })
-              ) : (
+        <Flex justifyContent="center" px={{ base: 2, md: 4 }} overflowX="auto">
+          <Box width="100%" overflowX="auto">
+            <Table
+              variant="simple"
+              w={{ base: "100%", md: "850px" }}
+              textAlign="left"
+              size={{ base: "sm", md: "md" }}
+              whiteSpace={{ base: "nowrap", md: "normal" }}
+            >
+              <Thead>
                 <Tr>
-                  <Td colSpan={5} textAlign="center" color="gray.500">
-                    No data for the selected status.
-                  </Td>
+                  <Th fontSize={{ base: "xs", md: "sm" }}>Order ID</Th>
+                  <Th fontSize={{ base: "xs", md: "sm" }}>Order Date</Th>
+                  <Th fontSize={{ base: "xs", md: "sm" }}>Product</Th>
+                  <Th fontSize={{ base: "xs", md: "sm" }}>Status</Th>
+                  <Th fontSize={{ base: "xs", md: "sm" }} textAlign="center">
+                    Action
+                  </Th>
                 </Tr>
-              )}
-            </Tbody>
-          </Table>
+              </Thead>
+              <Tbody>
+                {filteredOrders?.length > 0 ? (
+                  filteredOrders?.map((order: any) => {
+                    const { status } = order;
+                    const { status: statusText, action } =
+                      renderStatusAndAction(status, order?._id);
+                    return (
+                      <Tr key={order?._id}>
+                        <Td fontSize={{ base: "xs", md: "sm" }}>
+                          {order?.tracking_id}
+                        </Td>
+                        <Td fontSize={{ base: "xs", md: "sm" }}>
+                          {new Date(order?.createdAt).toLocaleDateString()}
+                        </Td>
+                        <Td fontSize={{ base: "xs", md: "sm" }}>
+                          {order?.items?.length}
+                        </Td>
+                        <Td fontSize={{ base: "xs", md: "sm" }}>
+                          {statusText}
+                        </Td>
+                        <Td
+                          fontSize={{ base: "xs", md: "sm" }}
+                          textAlign="center"
+                        >
+                          {action}
+                        </Td>
+                      </Tr>
+                    );
+                  })
+                ) : (
+                  <Tr>
+                    <Td
+                      colSpan={5}
+                      textAlign="center"
+                      color="gray.500"
+                      fontSize={{ base: "xs", md: "sm" }}
+                    >
+                      No data for the selected status.
+                    </Td>
+                  </Tr>
+                )}
+              </Tbody>
+            </Table>
+          </Box>
         </Flex>
       )}
-      <Box px={24} pt={8}>
+      <Box px={{ base: 2, md: 24 }} pt={8}>
         <PaginationControls
           currentPage={ordersPagination.currentPage}
           totalPages={ordersPagination.totalPages}

@@ -20,7 +20,7 @@ export default function ApprovePage() {
   // console.log(user,"USERR")
   const handleApprovedPage = useCallback(async () => {
     try {
-      const { data } = await refetchProfile(); 
+      const { data } = await refetchProfile();
       if (user?.vendor_status === "APPROVED") {
         toast({
           title: `Status: ${data?.vendor_status}`,
@@ -53,19 +53,24 @@ export default function ApprovePage() {
   }, [user?.vendor_status, navigate]);
 
   return (
-    <Box height="100%">
-      <Flex dir="row" alignItems="center">
+    <Box height="100vh" px={{ base: 4, md: 8 }}>
+      <Flex dir="row" alignItems="center" justifyContent="center">
         <Image
           src={Logo}
           alt="Logo"
-          py={4}
-          px={8}
-          width="120px"
+          py={{ base: 2, md: 4 }}
+          px={{ base: 4, md: 8 }}
+          width={{ base: "80px", md: "120px" }}
           onClick={() => navigate("/")}
           cursor="pointer"
         />
       </Flex>
-      <Heading size="lg" textAlign="center" py={2}>
+      <Heading
+        size={{ base: "md", md: "lg" }}
+        textAlign="center"
+        py={{ base: 1, md: 2 }}
+        fontSize={{ base: "xl", md: "2xl" }}
+      >
         Awaiting Admin Approval!!!
       </Heading>
       <Flex
@@ -77,29 +82,34 @@ export default function ApprovePage() {
             : undefined
         }
         color="white"
-        h="30px"
-        w="100px"
+        h={{ base: "24px", md: "30px" }}
+        w={{ base: "80px", md: "100px" }}
         borderRadius="5"
-        fontSize="16px"
+        fontSize={{ base: "sm", md: "16px" }}
         fontWeight="bold"
         alignItems="center"
         justifyContent="center"
         mx="auto"
-        mb={4}
+        mb={{ base: 2, md: 4 }}
       >
         {user?.vendor_status}
       </Flex>
-      <Flex direction={{ base: "column" }} minHeight="100%" position="relative">
+      <Flex
+        direction="column"
+        minHeight="100%"
+        position="relative"
+        mt={{ base: 4, md: 8 }}
+      >
         <Box
           bgImage={AuthImage}
           bgSize="contain"
           bgRepeat="no-repeat"
           bgPosition="center"
           display={{ base: "none", md: "block" }}
-          height="300px"
+          height={{ base: "200px", md: "300px" }}
           width="100%"
           opacity={0.8}
-          mb={8}
+          mb={{ base: 4, md: 8 }}
         />
 
         <Box
@@ -107,19 +117,26 @@ export default function ApprovePage() {
           flexDir="column"
           justifyContent="center"
           alignItems="center"
-          mt={{ base: 20, md: 0 }}
+          mt={{ base: 8, md: 0 }}
+          px={{ base: 2, md: 0 }}
         >
-          <Text>
+          <Text
+            fontSize={{ base: "sm", md: "md" }}
+            textAlign="center"
+            mb={{ base: 2, md: 4 }}
+          >
             Your registration will be approved by the admin within a short time
           </Text>
           <Button
             color="white"
             bg="#FF5733"
-            height="48px"
-            width="300px"
+            height={{ base: "40px", md: "48px" }}
+            width={{ base: "80%", sm: "300px" }}
+            maxW="300px"
             justifySelf="center"
             borderRadius="md"
-            my={2}
+            my={{ base: 1, md: 2 }}
+            fontSize={{ base: "sm", md: "md" }}
             onClick={handleApprovedPage}
           >
             Check Status

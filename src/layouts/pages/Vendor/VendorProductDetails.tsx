@@ -21,22 +21,36 @@ const VendorProductDetailsPage = () => {
   return (
     <Box>
       {isLoading ? (
-        <Box display="flex" justifyContent="center" alignItems="center">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          h="100vh"
+        >
           <LoadingSpinner />
         </Box>
       ) : (
         <Flex
           direction={{ base: "column", md: "row" }}
-          p={{ base: 4, md: 10 }}
-          gap={{ base: 8, md: 20, lg: 40 }}
-          mt={{ base: 30, md: 120 }}
+          p={{ base: 4, sm: 6, md: 8, lg: 10 }}
+          gap={{ base: 6, sm: 8, md: 12, lg: 20 }}
+          mt={{ base: 4, sm: 6, md: 8, lg: 12 }}
+          mb={{ base: 4, sm: 6, md: 8, lg: 12 }}
           align={{ base: "center", md: "flex-start" }}
+          maxW="container.xl"
+          mx="auto"
         >
-          <Box w={{ base: "100%", md: "45%" }}>
+          <Box
+            w={{ base: "100%", sm: "90%", md: "45%" }}
+            mb={{ base: 6, md: 0 }}
+          >
             <ProductImageGallery images={product?.images || []} />
           </Box>
 
-          <Box w={{ base: "100%", md: "55%" }}>
+          <Box
+            w={{ base: "100%", sm: "90%", md: "55%" }}
+            mb={{ base: 6, md: 0 }}
+          >
             <ProductDetails
               showOthers={false}
               product={{
@@ -56,24 +70,23 @@ const VendorProductDetailsPage = () => {
                 is_discounted: product?.is_discounted || false,
                 is_verified: product?.is_verified || false,
                 is_deleted: product?.is_deleted || false,
-                // total_quantity_sold: product?.total_quantity_sold || 0,
                 status: product?.status,
                 ...product,
               }}
-              // sizes={["", "", ""]}
-              // colors={["", "", ""]}
             />
           </Box>
           <Button
             bg="black"
-            size="lg"
+            size={{ base: "md", sm: "lg" }}
             borderRadius="full"
             color="white"
             fontWeight="500"
-            height="50px"
-            width="250px"
-            fontSize="xl"
+            height={{ base: "40px", sm: "50px" }}
+            width={{ base: "200px", sm: "250px" }}
+            fontSize={{ base: "lg", sm: "xl" }}
             onClick={() => navigate(`/edit-product/${productId}`)}
+            mt={{ base: 4, sm: 6 }}
+            mb={{ base: 8, sm: 0 }}
           >
             Edit Product
           </Button>
