@@ -6,16 +6,14 @@ import {
   Text,
   Image,
   Flex,
-  HStack,
   VStack,
 } from "@chakra-ui/react";
-
-import { StarIcon } from "@chakra-ui/icons";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Mousewheel } from "swiper/modules";
+import { Mousewheel, Navigation } from "swiper/modules";
 import "swiper/css";
+import "swiper/css/navigation";
 import { ProductCard } from "./CategoriesSection";
 
 interface Category {
@@ -166,6 +164,7 @@ const PopularProductsSection: React.FC = () => {
   };
 
   return (
+    <>
     <Box py={4} fontFamily="Poppins">
       <VStack spacing={8} align="stretch">
         <Box px={{ base: 6, md: 16 }} pb={24}>
@@ -180,7 +179,8 @@ const PopularProductsSection: React.FC = () => {
             spaceBetween={30}
             grabCursor={true}
             mousewheel={true}
-            modules={[Mousewheel]}
+            modules={[Mousewheel, Navigation]}
+            navigation={true}
             breakpoints={{
               320: { slidesPerView: 1.2 },
               480: { slidesPerView: 2.2 },
@@ -228,6 +228,7 @@ const PopularProductsSection: React.FC = () => {
         </Box>
       </VStack>
     </Box>
+    </>
   );
 };
 

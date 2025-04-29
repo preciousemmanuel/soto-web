@@ -20,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { FaRegImages } from "react-icons/fa";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate, useParams } from "react-router-dom";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 const EditProduct: React.FC = () => {
   const {
@@ -35,6 +36,8 @@ const EditProduct: React.FC = () => {
   const [isDiscounted, setIsDiscounted] = useState(false);
   const [selectedImages, setSelectedImages] = useState<FileList | null>(null);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { useSingleProduct } = useProduct();
@@ -61,22 +64,36 @@ const EditProduct: React.FC = () => {
 
       if (product.images?.length) {
         setImagePreviews(product.images);
+        setExistingImages(product.images);
       }
     }
   }, [product, setValue]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      if (e.target.files.length > 5) {
-        alert("You can only upload a maximum of 5 images.");
-        return;
-      }
       setSelectedImages(e.target.files);
       const filesArray = Array.from(e.target.files);
       const previews = filesArray.map((file) => URL.createObjectURL(file));
-      setImagePreviews(previews);
+      setImagePreviews([...existingImages, ...previews]);
     }
   };
+
+  const handleRemoveImage = (index: number) => {
+    const updatedPreviews = [...imagePreviews];
+    updatedPreviews.splice(index, 1);
+    setImagePreviews(updatedPreviews);
+
+    if (index < existingImages.length) {
+      const updatedExisting = [...existingImages];
+      updatedExisting.splice(index, 1);
+      setExistingImages(updatedExisting);
+    } else {
+      const updatedSelected = Array.from(selectedImages || []);
+      updatedSelected.splice(index - existingImages.length, 1);
+      setSelectedImages(updatedSelected.length > 0 ? updatedSelected as unknown as FileList : null);
+    }
+  };
+
 
   const onSubmit = async (data: any) => {
     if (productId) {
@@ -109,13 +126,14 @@ const EditProduct: React.FC = () => {
       };
 
       const imagesToUpload = selectedImages
-        ? selectedImages
-        : new DataTransfer().files;
+        ? Array.from(selectedImages)
+        : [];
       const formData = createProductFormData(newProduct, imagesToUpload);
 
-      if (!selectedImages && product?.images) {
-        product.images.forEach((imageUrl: string, index: number) => {
-          formData.append(`existingImages[${index}]`, imageUrl);
+      // Append existing images to formData if they exist
+      if (existingImages.length > 0) {
+        existingImages.forEach((imageUrl: string, index: number) => {
+          formData.append(`existing_images[${index}]`, imageUrl);
         });
       }
 
@@ -127,7 +145,7 @@ const EditProduct: React.FC = () => {
   };
 
   return (
-    <Box py={{ base: "80px", md: "120px" }} px={{ base: 4, md: 8 }}>
+    <Box py={{ base: "80px", md: "150px" }} px={{ base: 4, md: 8 }}>
       <Text
         textAlign="center"
         bg={"#FFF2ED"}
@@ -362,23 +380,33 @@ const EditProduct: React.FC = () => {
             </FormLabel>
           </FormControl>
           <Box my={4} borderRadius="10px" w="full">
-            {(selectedImages || product?.images) && (
-              <Box mt={4}>
-                <Text fontSize={{ base: "sm", md: "md" }}>Product Images</Text>
-                <Box display="flex" flexWrap="wrap" justifyContent="center">
-                  {imagePreviews?.map((preview, index) => (
-                    <Box key={index} m={2} p={2} borderRadius="lg">
-                      <Image
-                        src={preview}
-                        alt={`Preview ${index}`}
-                        boxSize={{ base: "100px", md: "150px" }}
-                        objectFit="cover"
-                      />
-                    </Box>
-                  ))}
+          {(selectedImages || product?.images) && (
+          <Box mt={4}>
+            <Text fontSize={{ base: "sm", md: "md" }}>Product Images</Text>
+            <Box display="flex" flexWrap="wrap" justifyContent="center">
+              {imagePreviews?.map((preview, index) => (
+                <Box key={index} m={2} p={2} borderRadius="lg" position="relative">
+                  <Image
+                    src={preview}
+                    alt={`Preview ${index}`}
+                    boxSize={{ base: "100px", md: "150px" }}
+                    objectFit="cover"
+                  />
+                  <IconButton
+                    aria-label="Remove image"
+                    icon={<DeleteIcon />}
+                    colorScheme="red"
+                    size="sm"
+                    position="absolute"
+                    top="0"
+                    right="0"
+                    onClick={() => handleRemoveImage(index)}
+                  />
                 </Box>
-              </Box>
-            )}
+              ))}
+            </Box>
+          </Box>
+        )}
           </Box>
 
           <FormControl>

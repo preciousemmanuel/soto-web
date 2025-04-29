@@ -38,6 +38,7 @@ interface ProductData {
   images: string[];
   vendor: string;
   unit_price: number;
+  raw_price: number;
   product_quantity: number;
   height: number;
   width: number;
@@ -59,6 +60,7 @@ interface ProductDetails {
   colors?: string[];
   showOthers?: boolean;
   showColor?: boolean;
+  showPrice?: boolean;
   // onAddToCart: (product:any) => void;
 }
 
@@ -69,6 +71,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   total_reviews,
   showOthers = true,
   showColor = true,
+  showPrice = true,
 }) => {
   const [quantity, setQuantity] = useState(() => {
     const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -86,6 +89,11 @@ const ProductDetails: React.FC<ProductDetails> = ({
     currency: "NGN",
   }).format(product?.unit_price || 0);
 
+  const formattedRawPrice = new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+  }).format(product?.raw_price || 0);
+
   useEffect(() => {
     if (product?.product_quantity && product.product_quantity > 0) {
       updateCart(product, quantity);
@@ -102,9 +110,15 @@ const ProductDetails: React.FC<ProductDetails> = ({
         >
           {product?.product_name}
         </Text>
+      {showPrice ? (
         <Text fontSize={{ base: "20px", md: "25px" }} color="#FF5733">
           {formattedPrice}
         </Text>
+      ) : (
+        <Text fontSize={{ base: "20px", md: "25px" }} color="#FF5733">
+          {formattedRawPrice}
+        </Text>
+      )}
         <HStack spacing={1}>
           {Array(5)
             .fill("")

@@ -8,3 +8,43 @@
     font-family: "Poppins", sans-serif;
     font-style: normal;
 }
+
+.swiper-button-next,
+        .swiper-button-prev {
+          color: #000 !important;
+        }
+
+.custom-swiper-nav {
+    position: absolute;
+    top: 50%;
+    z-index: 10;
+    transform: translateY(-50%);
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .custom-swiper-prev {
+    left: -20px;
+  }
+  .custom-swiper-next {
+    right: -20px;
+  }
+  .custom-swiper-nav svg {
+    color: #000;
+    font-size: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .custom-swiper-prev {
+      left: -10px;
+    }
+    .custom-swiper-next {
+      right: -10px;
+    }
+  }

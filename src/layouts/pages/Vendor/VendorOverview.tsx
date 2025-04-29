@@ -380,8 +380,8 @@ const VendorOverview = () => {
                                 color="gray.500"
                               >
                                 Price:{" "}
-                                {product?.raw_price
-                                  ? `₦${product?.raw_price}`
+                                {product?.unit_price
+                                  ? `₦${product?.unit_price}`
                                   : "N/A"}
                               </Text>
                             </Box>

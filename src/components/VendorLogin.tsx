@@ -145,7 +145,7 @@ const VendorLogin = () => {
               Kindly enter your correct details
             </Text>
 
-            <Flex mb={4} gap={4} flexDirection={{ base: "column", sm: "row" }}>
+            {/* <Flex mb={4} gap={4} flexDirection={{ base: "column", sm: "row" }}>
               <Button
                 flex="1"
                 leftIcon={<Icon as={FaFacebook} color="blue" />}
@@ -171,7 +171,7 @@ const VendorLogin = () => {
                 or
               </Text>
               <Divider />
-            </Flex>
+            </Flex> */}
 
             <form onSubmit={formik.handleSubmit}>
               <FormControl

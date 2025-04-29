@@ -2,21 +2,21 @@ import { Box, Heading, Text } from "@chakra-ui/react";
 
 export default function Privacy() {
   return (
-    <Box mt={40} fontFamily="Poppins">
-      <Box bg="#FF5733" py={30}>
-        <Heading color="#ffff" textAlign="center">
+    <Box mt={{ base: 20, md: 40 }} fontFamily="Poppins">
+      <Box bg="#FF5733" py={{ base: 5, md: 30 }}>
+        <Heading color="#ffff" textAlign="center" fontSize={{ base: "xl", md: "2xl", lg: "3xl" }}>
           Privacy Policy
         </Heading>
       </Box>
-      <Box py={14} px={40}>
-        <Text pb={6} lineHeight={8}>
+      <Box py={{ base: 5, md: 14 }} px={{ base: 4, md: 10, lg: 40 }}>
+        <Text pb={6} lineHeight={{ base: 6, md: 8 }} fontSize={{ base: "sm", md: "md" }}>
           At Soto, we value your privacy and are committed to protecting your
           personal information. This Privacy Policy explains how we collect,
           use, disclose, and protect your information when you visit our
           website, use our services, or make purchases from our online store. By
           using our website, you agree to the terms outlined in this policy.
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={{ base: 6, md: 8 }} fontSize={{ base: "sm", md: "md" }}>
           <strong>Information We Collect</strong>
           <li>
             <strong>Personal Information</strong>
@@ -32,7 +32,7 @@ export default function Privacy() {
           Order Information: Details of the products you purchase, order
           history, and any special requests made during checkout.
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={{ base: 6, md: 8 }} fontSize={{ base: "sm", md: "md" }}>
           <strong>How We Use Your Information</strong>
           We use the information we collect for the following purposes:
           <li>
@@ -97,7 +97,6 @@ export default function Privacy() {
             <strong>Sharing Your Information</strong>
             <br />
             <p>
-              {" "}
               We do not sell, rent, or share your personal information with
               third parties for their own marketing purposes without your
               consent. However, we may share your information in the following
@@ -149,7 +148,7 @@ export default function Privacy() {
               Privacy Policy or the handling of your personal information,
               please contact us at:
               <br />
-              Soto <br /> [19b Da Silver Street, Lekki Phase 1, Lagos] <br />{" "}
+              Soto <br /> [19b Da Silver Street, Lekki Phase 1, Lagos] <br />
               Email: support@soto.ng Phone: [09012222232]
             </p>
           </Text>

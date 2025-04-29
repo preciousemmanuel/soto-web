@@ -19,7 +19,7 @@ const VendorProductDetailsPage = () => {
   }, [productId]);
 
   return (
-    <Box>
+    <Box sx={{ marginTop: "100px" }}>
       {isLoading ? (
         <Box
           display="flex"
@@ -52,6 +52,7 @@ const VendorProductDetailsPage = () => {
             mb={{ base: 6, md: 0 }}
           >
             <ProductDetails
+              showPrice={true}
               showOthers={false}
               product={{
                 _id: product?._id,
@@ -75,6 +76,7 @@ const VendorProductDetailsPage = () => {
               }}
             />
           </Box>
+          
           <Button
             bg="black"
             size={{ base: "md", sm: "lg" }}

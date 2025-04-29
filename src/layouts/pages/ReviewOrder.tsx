@@ -173,7 +173,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
           </Text>
         </GridItem>
       </Box>
-      <Flex
+      {/* <Flex
         direction={{ base: "row", md: "column" }}
         bg="gray.800"
         p={{ base: 2, md: 5 }}
@@ -216,7 +216,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
         >
           Delete Order
         </Button>
-      </Flex>
+      </Flex> */}
     </Flex>
   </Box>
 );
