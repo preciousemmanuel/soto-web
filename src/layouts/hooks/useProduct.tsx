@@ -353,7 +353,7 @@ export const useProduct = () => {
 
   const createProductFormData = (
     data: Record<string, any>,
-    images: FileList
+    images: File[]
   ): FormData => {
     const formData = new FormData();
 
@@ -361,10 +361,9 @@ export const useProduct = () => {
       formData.append(key, value);
     });
 
-    Array.from(images).forEach((image, index) => {
-      formData.append(`images`, image);
+    images.forEach((image, index) => {
+      formData.append(`images[${index}]`, image);
     });
-
     return formData;
   };
 

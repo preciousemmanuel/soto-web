@@ -201,6 +201,7 @@ const CheckoutPage = () => {
               borderRadius="full"
               mt={1}
               cursor="pointer"
+              onClick={() => navigate("/auth/shipping-address")}
             >
               <FaPencilAlt />
             </Text>
@@ -225,7 +226,7 @@ const CheckoutPage = () => {
                 {user?.PhoneNumber}
               </Text>
             </Text>
-            <Text
+            {/* <Text
               color="white"
               bg="#FF5733"
               fontSize={{ base: "xs", md: "sm" }}
@@ -237,7 +238,7 @@ const CheckoutPage = () => {
               cursor="pointer"
             >
               <FaPencilAlt />
-            </Text>
+            </Text> */}
           </Box>
 
           <Box>
