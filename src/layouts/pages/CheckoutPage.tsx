@@ -11,7 +11,7 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import { CartItem } from "./_subpages/CategoriesSection";
 import { useOrder } from "../hooks/useOrder";
@@ -201,7 +201,7 @@ const CheckoutPage = () => {
               borderRadius="full"
               mt={1}
               cursor="pointer"
-              onClick={() => navigate("/auth/shipping-address")}
+              onClick={() => navigate("/update-shipping-address")}
             >
               <FaPencilAlt />
             </Text>

@@ -30,29 +30,28 @@ const VendorOrder = () => {
     handlePageChange,
   } = useOrder();
   const { vendorOverviewData } = useVendor();
-  const orderData = ordersVendor?.data?.data;
+  const orderData = ordersVendor?.data?.data || [];
   const vendorId = vendorOverviewData?.data?.user?._id;
-  const filteredOrders = orderData?.filter(
+  const filteredOrders = orderData.filter(
     (order: any) => order.status === activeStatus
   );
 
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // console.log(orderData,"ORDER-DATA")
-
+  
   const handleProductClick = (orderId: string) => {
     navigate(`/vendor-orders/${orderId}`);
   };
 
   const renderStatusAndAction = (status: string, orderId: string) => {
-    // console.log(orderId,"orderId.")
     switch (status) {
       case "BOOKED":
         return {
           status: (
-            <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
+            <Text color="#28AD07" fontSize={{ base: "12px", md: "16px" }} fontWeight="semibold">
               BOOKED
             </Text>
           ),
@@ -60,7 +59,7 @@ const VendorOrder = () => {
             <Button
               color="white"
               bg="#FF5733"
-              size="sm"
+              size={{ base: "xs", md: "sm" }}
               onClick={() => handleProductClick(orderId)}
             >
               View
@@ -70,7 +69,7 @@ const VendorOrder = () => {
       case "PICKED_UP":
         return {
           status: (
-            <Text color="#28AD07" fontSize="18px" fontWeight="semibold">
+            <Text color="#28AD07" fontSize={{ base: "12px", md: "16px" }} fontWeight="semibold">
               PICKED UP
             </Text>
           ),
@@ -78,7 +77,7 @@ const VendorOrder = () => {
             <Button
               color="white"
               bg="#FF5733"
-              size="sm"
+              size={{ base: "xs", md: "sm" }}
               onClick={() => handleProductClick(orderId)}
             >
               View
@@ -88,14 +87,14 @@ const VendorOrder = () => {
       case "DELIVERED":
         return {
           status: (
-            <Text color="green.500" fontSize="18px" fontWeight="semibold">
+            <Text color="green.500" fontSize={{ base: "12px", md: "16px" }} fontWeight="semibold">
               DELIVERED
             </Text>
           ),
           action: (
             <Button
               colorScheme="red"
-              size="sm"
+              size={{ base: "xs", md: "sm" }}
               onClick={() => handleProductClick(orderId)}
             >
               View
@@ -105,14 +104,14 @@ const VendorOrder = () => {
       case "CANCELLED":
         return {
           status: (
-            <Text color="red.500" fontSize="18px" fontWeight="semibold">
+            <Text color="red.500" fontSize={{ base: "12px", md: "16px" }} fontWeight="semibold">
               CANCELLED
             </Text>
           ),
           action: (
             <Button
               colorScheme="red"
-              size="sm"
+              size={{ base: "xs", md: "sm" }}
               onClick={() => handleProductClick(orderId)}
             >
               View
@@ -122,7 +121,7 @@ const VendorOrder = () => {
       case "FAILED":
         return {
           status: (
-            <Text color="red.500" fontSize="18px" fontWeight="semibold">
+            <Text color="red.500" fontSize={{ base: "12px", md: "16px" }} fontWeight="semibold">
               FAILED
             </Text>
           ),
@@ -130,7 +129,7 @@ const VendorOrder = () => {
             <Button
               colorScheme="red"
               variant="outline"
-              size="sm"
+              size={{ base: "xs", md: "sm" }}
               onClick={() => handleProductClick(orderId)}
             >
               View

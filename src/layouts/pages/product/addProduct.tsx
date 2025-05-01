@@ -25,7 +25,7 @@ const AddProduct: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { useAddNewProduct, isLoading, createProductFormData, categories } =
+  const { useAddNewProduct, isLoading, categories } =
     useProduct();
   const category = categories?.data?.data;
   const [isInStock, setIsInStock] = useState(true);
@@ -61,21 +61,34 @@ const AddProduct: React.FC = () => {
         description,
       } = data;
 
-      const newProduct = {
-        product_name,
-        category,
-        product_quantity,
-        unit_price,
-        description,
-        is_discounted: isDiscounted,
-        in_stock: isInStock ? "YES" : "NO",
-        ...(weight && weight !== "" && { weight: Number(weight) }),
-        ...(length && length !== "" && { length: Number(length) }),
-        ...(height && height !== "" && { height: Number(height) }),
-        ...(width && width !== "" && { width: Number(width) }),
-        ...(discount_price && { discount_price: Number(discount_price) }),
-      };
-      const formData = createProductFormData(newProduct, selectedImages);
+      const formData = new FormData();
+      formData.append("product_name", product_name);
+      formData.append("category", category);
+      formData.append("product_quantity", product_quantity);
+      formData.append("unit_price", unit_price);
+      formData.append("description", description);
+      formData.append("is_discounted", String(isDiscounted));
+      formData.append("in_stock", isInStock ? "YES" : "NO");
+      if (weight && weight !== "") {
+        formData.append("weight", String(Number(weight)));
+      }
+      if (length && length !== "") {
+        formData.append("length", String(Number(length)));
+      }
+      if (height && height !== "") {
+        formData.append("height", String(Number(height)));
+      }
+      if (width && width !== "") {
+        formData.append("width", String(Number(width)));
+      }
+      if (discount_price) {
+        formData.append("discount_price", String(Number(discount_price)));
+      }
+      if (selectedImages) {
+        Array.from(selectedImages).forEach((file) => {
+          formData.append("images", file);
+        });
+      }
       useAddNewProduct.mutate(formData);
     }
   };

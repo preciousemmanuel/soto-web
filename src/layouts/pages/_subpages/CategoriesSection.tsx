@@ -15,6 +15,7 @@ import { ArrowForwardIcon, StarIcon } from "@chakra-ui/icons";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Product, useProduct } from "../../hooks/useProduct";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 export interface CartItem {
   productId: string;
@@ -28,10 +29,24 @@ export interface CartItem {
 export const ProductCard: React.FC<{
   product: Product;
   onAddToCart: (productId: string) => void;
-}> = ({ product, onAddToCart }) => {
+  showWishlist?: boolean;
+  showAddToCart?: boolean;
+  showRating?: boolean;
+  showBorder?: boolean;
+  showStatus?: boolean;
+}> = ({
+  product,
+  onAddToCart,
+  showWishlist = true,
+  showAddToCart = true,
+  showRating = true,
+  showBorder = false,
+  showStatus = false,
+}) => {
   const navigate = useNavigate();
   const [isWishlisted, setIsWishlisted] = React.useState(false);
   const { addToWishlist } = useProduct();
+  const { isAuthenticated } = useAuth();
   // console.log(product, "PRODUCT");
 
   const handleWishlistClick = async (e: React.MouseEvent) => {
@@ -52,7 +67,7 @@ export const ProductCard: React.FC<{
     if ((e.target as HTMLElement).closest("button")) {
       return;
     }
-    navigate(`/products/${product._id}`);
+    navigate(isAuthenticated ? `/products/${product._id}` : `/vendor-product/${product._id}`);
   };
   return (
     <Box
@@ -64,6 +79,7 @@ export const ProductCard: React.FC<{
         shadow: "lg",
         transform: "scale(1.01)",
       }}
+      border={showBorder ? "1px solid #E0E0E0" : "none"}
       cursor="pointer"
       onClick={handleProductClick}
       height="100%"
@@ -91,6 +107,32 @@ export const ProductCard: React.FC<{
             ? ""
             : "Out of Stock"}
         </Badge>
+
+        {showStatus && (
+          <Box
+            bg={
+              product?.status === "APPROVED"
+                ? "green"
+                : product?.status === "PENDING"
+                ? "#FFC900"
+                : "red"
+            }
+            color="white"
+            h="26px"
+            w="90px"
+            position="absolute"
+            top={2}
+            right={2}
+            borderRadius="full"
+            fontSize="12px"
+            fontWeight="bold"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {product?.status}
+          </Box>
+        )}
 
         <Box w="full">
           <Image
@@ -142,56 +184,62 @@ export const ProductCard: React.FC<{
               )}
             </HStack>
           </Box>
-          <IconButton
-            aria-label="Add to wishlist"
-            icon={
-              isWishlisted ? (
-                <FaHeart fill="#FF5733" fontSize={20} />
-              ) : (
-                <FaRegHeart fill="gray" fontSize={20} />
-              )
-            }
-            size="md"
-            rounded="full"
-            onClick={handleWishlistClick}
-            colorScheme="gray"
-            isDisabled={
-              product?.product_quantity ? product.product_quantity < 0 : true
-            }
-          />
+          {showWishlist && (
+            <IconButton
+              aria-label="Add to wishlist"
+              icon={
+                isWishlisted ? (
+                  <FaHeart fill="#FF5733" fontSize={20} />
+                ) : (
+                  <FaRegHeart fill="gray" fontSize={20} />
+                )
+              }
+              size="md"
+              rounded="full"
+              onClick={handleWishlistClick}
+              colorScheme="gray"
+              isDisabled={
+                product?.product_quantity ? product.product_quantity < 0 : true
+              }
+            />
+          )}
         </Flex>
-        <HStack spacing={24} my={4}>
-          <Box>
-            {Array(5)
-              .fill("")
-              .map((_, i) => (
-                <StarIcon
-                  key={i}
-                  color={i < 5 ? "#FF8A00" : "gray.200"}
-                  fontSize="sm"
-                />
-              ))}
-          </Box>
-        </HStack>
-        <Button
-          color="#FF5733"
-          borderWidth={1}
-          borderColor="#FF5733"
-          variant="outline"
-          size="md"
-          width="full"
-          // isDisabled={
-          //   product?.product_quantity ? product.product_quantity < 0 : true
-          // }
-          h="40px"
-          onClick={() => onAddToCart(product._id ?? "")}
-          _hover={{
-            background: "#FF5733",
-            color: "white",
-          }}
-        >
-          Add to Cart
-        </Button>
+        {showRating && (
+          <HStack spacing={24} my={4}>
+            <Box>
+              {Array(5)
+                .fill("")
+                .map((_, i) => (
+                  <StarIcon
+                    key={i}
+                    color={i < 5 ? "#FF8A00" : "gray.200"}
+                    fontSize="sm"
+                  />
+                ))}
+            </Box>
+          </HStack>
+        )}
+        {showAddToCart && (
+          <Button
+            color="#FF5733"
+            borderWidth={1}
+            borderColor="#FF5733"
+            variant="outline"
+            size="md"
+            width="full"
+            // isDisabled={
+            //   product?.product_quantity ? product.product_quantity < 0 : true
+            // }
+            h="40px"
+            onClick={() => onAddToCart(product._id ?? "")}
+            _hover={{
+              background: "#FF5733",
+              color: "white",
+            }}
+          >
+            Add to Cart
+          </Button>
+        )}
       </Box>
     </Box>
   );
@@ -250,13 +298,13 @@ const BestSelling: React.FC = () => {
         }}
         gap={6}
       >
-        {sortedProducts?.slice(0, 8).map((product: Product) => (
+        {sortedProducts?.slice(0, 20)?.map((product: Product) => (
           <ProductCard
             key={product._id}
             product={product}
             onAddToCart={() => handleAddToCart(product._id ?? "", product)}
           />
-        ))}
+      ))} 
       </Grid>
     </Box>
   );

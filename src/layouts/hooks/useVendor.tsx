@@ -9,7 +9,7 @@ export const useVendor = () => {
   const [search, setSearch] = useState("");
   const [selectedTimeframe, setSelectedTimeframe] = useState("THIS_MONTH");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const [itemsPerPage, setItemsPerPage] = useState<number>(50);
 
   const [isVendorAuthenticated] = useState(() => {
     return !!localStorage.getItem("vendorToken");
@@ -423,7 +423,7 @@ export const useVendor = () => {
       currentPage: allProductsByVendor?.data?.pagination?.currentPage || 1,
       totalPages: allProductsByVendor?.data?.pagination?.pageCount || 1,
       totalItems: allProductsByVendor?.data?.pagination?.totalCount || 0,
-      pageSize: allProductsByVendor?.data?.pagination?.pageSize || 10,
+      pageSize: allProductsByVendor?.data?.pagination?.pageSize || 100,
       hasNextPage: allProductsByVendor?.data?.pagination?.hasNext || false,
     },
     notificationsPagination: {

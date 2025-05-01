@@ -217,7 +217,7 @@ const PopularProductsSection: React.FC = () => {
             }}
             gap={4}
           >
-            {popluarProducts?.slice(0, 5)?.map((product) => (
+            {popluarProducts?.slice(0, 20)?.map((product) => (
               <ProductCard
                 key={product?._id}
                 product={product}

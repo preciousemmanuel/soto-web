@@ -66,7 +66,7 @@ export const useProduct = () => {
     categoryId: string,
     productName?: string
   ): Promise<ProductResponse> => {
-    let url = `/product/fetch?limit=${20}&page=${page}`;
+    let url = `/product/fetch?limit=${50}&page=${page}`;
 
     if (status) url += `&fetch_type=${status}`;
     if (categoryId) url += `&category=${categoryId}`;
@@ -82,7 +82,7 @@ export const useProduct = () => {
     error: PopularProductsError,
   } = useQuery({
     queryKey: ["PopularProducts", currentPage, itemsPerPage],
-    queryFn: () => fetchProducts(itemsPerPage, currentPage, "POPULAR", ""),
+    queryFn: () => fetchProducts(20, currentPage, "POPULAR", ""),
     enabled: true,
     retry: false,
   });
@@ -98,6 +98,8 @@ export const useProduct = () => {
     enabled: true,
     retry: false,
   });
+
+
 
   const fetchSingleProduct = async (
     productId: string
@@ -249,13 +251,14 @@ export const useProduct = () => {
   });
 
   const handleAddToCart = (productId: string, productData: any) => {
+   
     const existingCart = localStorage.getItem("cart");
     let cartItems: CartItem[] = existingCart ? JSON.parse(existingCart) : [];
 
     const productToAdd: any = Array.isArray(productData)
       ? productData.find((p: any) => p._id === productId)
       : productData;
-    console.log(productToAdd, "productToAdd");
+    // console.log(productToAdd, "productToAdd");
     // // Add validation for product quantity
     if (!productToAdd) {
       toast({
@@ -327,6 +330,7 @@ export const useProduct = () => {
   };
 
   const updateCart = (product: Product, quantity: number) => {
+   
     const existingCart = localStorage.getItem("cart");
     let cartItems: CartItem[] = existingCart ? JSON.parse(existingCart) : [];
 
@@ -353,20 +357,21 @@ export const useProduct = () => {
 
   const createProductFormData = (
     data: Record<string, any>,
-    images: File[]
+    images: FileList
   ): FormData => {
+    
     const formData = new FormData();
 
     Object.entries(data).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
-    images.forEach((image, index) => {
+    Array.from(images).forEach((image, index) => {
       formData.append(`images[${index}]`, image);
     });
+
     return formData;
   };
-
   const addNewProductApiCall = async (formData: FormData): Promise<Product> => {
     try {
       const response = await apiClient.post<Product>(
@@ -389,7 +394,7 @@ export const useProduct = () => {
     mutationFn: addNewProductApiCall,
     onSuccess: (response: any) => {
       toast({
-        title: `${response?.data?.message}`,
+        title: `${response?.message}`,
         description: "Product has been added successfully",
         status: "success",
         duration: 2000,
@@ -437,7 +442,7 @@ export const useProduct = () => {
     mutationFn: updateProductApiCall,
     onSuccess: (response: any) => {
       toast({
-        title: `${response?.data?.message}`,
+        title: `${response?.message}`,
         description: "Product has been updated successfully",
         status: "success",
         duration: 2000,

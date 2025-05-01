@@ -11,7 +11,7 @@ import {
   Icon,
   Stack,
 } from "@chakra-ui/react";
-import { FaFacebookF, FaTwitter, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaWhatsapp,FaInstagramSquare, FaTiktok } from "react-icons/fa";
 import Logo from "../assets/soto.svg";
 import { useNavigate } from "react-router-dom";
 import { useProduct } from "../layouts/hooks/useProduct";
@@ -43,7 +43,7 @@ const Footer = () => {
         position="relative"
       >
         {/* First Section: Logo and Subscription */}
-        <VStack spacing={4} align="start" w={{ base: "100%", md: "25%" }}>
+        {/* <VStack spacing={4} align="start" w={{ base: "100%", md: "25%" }}>
           <Image src={Logo} alt="Logo" boxSize="80px" mb={4} />
           <Flex
             gap={2}
@@ -76,7 +76,7 @@ const Footer = () => {
               Subscribe
             </Button>
           </Flex>
-        </VStack>
+        </VStack> */}
         <Box
           w="1px"
           position="absolute"
@@ -193,36 +193,55 @@ const Footer = () => {
         </HStack>
 
         <HStack spacing={4}>
-          <Icon
-            as={FaFacebookF}
-            boxSize={6}
-            color="white"
-            _hover={{ color: "blue.600" }}
-            py={1}
-            bg={"#FF5733"}
-            rounded={"full"}
-            cursor="pointer"
-          />
-          <Icon
-            as={FaTwitter}
-            boxSize={6}
-            color="white"
-            _hover={{ color: "blue.400" }}
-            py={1}
-            bg={"#FF5733"}
-            rounded={"full"}
-            cursor="pointer"
-          />
-          <Icon
-            as={FaLinkedinIn}
-            boxSize={6}
-            color="white"
-            _hover={{ color: "blue.700" }}
-            py={1}
-            bg={"#FF5733"}
-            rounded={"full"}
-            cursor="pointer"
-          />
+          <Link href="https://www.facebook.com/SotoNigerianServices/" isExternal>
+            <Icon
+              as={FaFacebookF}
+              boxSize={6}
+              color="white"
+              _hover={{ color: "blue.600" }}
+              py={1}
+              bg={"#FF5733"}
+              rounded={"full"}
+              cursor="pointer"
+            />
+          </Link>
+          
+          <Link href="https://www.instagram.com/soto.ngofficial/" isExternal>
+            <Icon
+              as={FaInstagramSquare}
+              boxSize={6}
+              color="white"
+              _hover={{ color: "pink.500" }}
+              py={1}
+              bg={"#FF5733"}
+              rounded={"full"}
+              cursor="pointer"
+            />
+          </Link>
+          <Link href="https://wa.me/2348023255042" isExternal>
+            <Icon
+              as={FaWhatsapp}
+              boxSize={6}
+              color="white"
+              _hover={{ color: "green.500" }}
+              py={1}
+              bg={"#FF5733"}
+              rounded={"full"}
+              cursor="pointer"
+            />
+          </Link>
+          <Link href="https://www.tiktok.com/@sotonigeria" isExternal>
+            <Icon
+              as={FaTiktok}
+              boxSize={6}
+              color="white"
+              _hover={{ color: "blue.400" }}
+              py={1}
+              bg={"#FF5733"}
+              rounded={"full"}
+              cursor="pointer"
+            />
+          </Link>
         </HStack>
 
         <Text fontSize="sm" color="gray.500" textAlign="center" pr={12}>

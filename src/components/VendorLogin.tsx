@@ -139,7 +139,7 @@ const VendorLogin = () => {
               fontFamily="Poppins"
               color="#FF5733"
             >
-              Vendor's Login
+              Seller's Login
             </Text>
             <Text color="black" mb={6} textAlign="center" fontFamily="Poppins">
               Kindly enter your correct details

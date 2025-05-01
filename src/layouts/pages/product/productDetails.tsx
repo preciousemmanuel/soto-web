@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import { FaFacebook, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useProduct } from "../../hooks/useProduct";
+import { useAuth } from "../../hooks/useAuth";
 
 interface ProductUser {
   FirstName: string;
@@ -50,6 +51,7 @@ interface ProductData {
   total_quantity_sold: number;
   rating: number;
   status?: any;
+  decline_product_note?: string;
 }
 
 interface ProductDetails {
@@ -82,6 +84,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   });
   const navigate = useNavigate();
   const { updateCart } = useProduct();
+  const { isVendorAuthenticated } = useAuth();
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const formattedPrice = new Intl.NumberFormat("en-NG", {
@@ -95,7 +98,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   }).format(product?.raw_price || 0);
 
   useEffect(() => {
-    if (product?.product_quantity && product.product_quantity > 0) {
+    if (!isVendorAuthenticated && product?.product_quantity && product.product_quantity > 0) {
       updateCart(product, quantity);
     }
   }, [quantity, product, updateCart]);
@@ -110,15 +113,15 @@ const ProductDetails: React.FC<ProductDetails> = ({
         >
           {product?.product_name}
         </Text>
-      {showPrice ? (
-        <Text fontSize={{ base: "20px", md: "25px" }} color="#FF5733">
-          {formattedPrice}
-        </Text>
-      ) : (
-        <Text fontSize={{ base: "20px", md: "25px" }} color="#FF5733">
-          {formattedRawPrice}
-        </Text>
-      )}
+        {showPrice ? (
+          <Text fontSize={{ base: "20px", md: "25px" }} color="#FF5733">
+            {formattedPrice}
+          </Text>
+        ) : (
+          <Text fontSize={{ base: "20px", md: "25px" }} color="#FF5733">
+            {formattedRawPrice}
+          </Text>
+        )}
         <HStack spacing={1}>
           {Array(5)
             .fill("")
@@ -171,6 +174,16 @@ const ProductDetails: React.FC<ProductDetails> = ({
           {product?.status}
         </Box>
       )}
+      {isVendorAuthenticated &&
+        product?.status === "DECLINED" &&
+        product?.decline_product_note && (
+          <Box mt={4} p={4} w="100%" bg="red.50" borderRadius="md">
+            <Text fontWeight="bold" color="red.500">
+              Decline Reason:
+            </Text>
+            <Text color="gray.600">{product?.decline_product_note}</Text>
+          </Box>
+        )}
       {showOthers && (
         <>
           {showColor && (

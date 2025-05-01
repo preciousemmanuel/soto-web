@@ -65,7 +65,7 @@ const RaiseDisputePage = () => {
   }, [success]);
 
   return (
-    <Box bg="white" borderRadius="md" mt={{ base: "80px", md: "120px" }}>
+    <Box bg="white" borderRadius="md" mt={{ base: "80px", md: "150px" }}>
       <Heading
         size="lg"
         mb={{ base: 4, md: 6 }}

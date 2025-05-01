@@ -25,7 +25,7 @@ const ProfileDetailsForm: React.FC = () => {
         FirstName: user.FirstName || "",
         LastName: user.LastName || "",
         Email: user.Email || "",
-        ShippingAddress: { country: user.ShippingAddress?.country || "" },
+        ShippingAddress: { country: user.ShippingAddress?.full_address || "" },
       });
     }
   }, [user]);

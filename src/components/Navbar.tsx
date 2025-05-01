@@ -76,9 +76,9 @@ const Navbar = () => {
         justifyContent="flex-end"
         alignItems="center"
         flexWrap="wrap"
-        fontSize={{ base: "12px", md: "14px" }}
+        fontSize={{ base: "12px", lg: "14px" }}
       >
-        <Flex alignItems="center" gap={{ base: 4, md: 8 }}>
+        <Flex alignItems="center" gap={{ base: 4, lg: 8 }}>
           <Flex gap={2} alignItems="center">
             <CiLocationOn color="gray" />
             <Text color="gray.500">Location</Text>
@@ -113,14 +113,14 @@ const Navbar = () => {
         <Box>
           <Image
             src={Logo}
-            width={{ base: "60px", md: "100px" }}
+            width={{ base: "60px", lg: "100px" }}
             cursor="pointer"
             onClick={() => navigate("/")}
           />
         </Box>
 
         {/* Hamburger Icon for Mobile */}
-        <Box display={{ base: "block", md: "none" }}>
+        <Box display={{ base: "block", lg: "none" }}>
           <Button onClick={onDrawerOpen} variant="ghost">
             <HamburgerIcon w={6} h={6} color="gray.600" />
           </Button>
@@ -128,7 +128,7 @@ const Navbar = () => {
 
         {/* Navigation links for larger screens */}
         <Flex
-          display={{ base: "none", md: "flex" }}
+          display={{ base: "none", lg: "flex" }}
           gap={6}
           alignItems="center"
         >
@@ -152,10 +152,10 @@ const Navbar = () => {
 
         {/* Search, Cart, and Account Icons */}
         <Flex
-          gap={{ base: 4, md: 8 }}
+          gap={{ base: 4, lg: 8 }}
           alignItems="center"
-          mt={{ base: 4, md: 0 }}
-          display={{ base: "none", md: "flex" }}
+          mt={{ base: 4, lg: 0 }}
+          display={{ base: "none", md: "none", lg: "flex" }}
         >
           <Box maxW="400px" width="100%" position="relative">
             <InputGroup>

@@ -36,7 +36,7 @@ function OrderHistoryPage() {
   useEffect(() => {
     refetchOrders();
   }, []);
-  console.log(orders, "helloo");
+  // console.log(orders, "helloo");
 
   const orderData = orders?.data?.data;
   const filteredOrders = orderData?.filter(
@@ -203,7 +203,7 @@ function OrderHistoryPage() {
         </Heading>
       </Flex>
 
-      <Flex justifyContent={{ base: "center", md: "left" }} alignItems="center">
+      <Flex justifyContent="center" alignItems="center">
         <Flex
           justifyContent="center"
           gap={{ base: 2, md: 4 }}
@@ -238,13 +238,14 @@ function OrderHistoryPage() {
         <LoadingSpinner />
       ) : (
         <Flex justifyContent="center" px={{ base: 2, md: 4 }} overflowX="auto">
-          <Box width="100%" overflowX="auto">
+          <Box width="100%" maxW="850px" overflowX="auto">
             <Table
               variant="simple"
-              w={{ base: "100%", md: "850px" }}
-              textAlign="left"
+              w="100%"
+              textAlign="center"
               size={{ base: "sm", md: "md" }}
               whiteSpace={{ base: "nowrap", md: "normal" }}
+              mx="auto"
             >
               <Thead>
                 <Tr>
@@ -265,16 +266,16 @@ function OrderHistoryPage() {
                       renderStatusAndAction(status, order?._id);
                     return (
                       <Tr key={order?._id}>
-                        <Td fontSize={{ base: "xs", md: "sm" }}>
+                        <Td fontSize={{ base: "xs", md: "sm" }} textAlign="center">
                           {order?.tracking_id}
                         </Td>
-                        <Td fontSize={{ base: "xs", md: "sm" }}>
+                        <Td fontSize={{ base: "xs", md: "sm" }} textAlign="center">
                           {new Date(order?.createdAt).toLocaleDateString()}
                         </Td>
-                        <Td fontSize={{ base: "xs", md: "sm" }}>
+                        <Td fontSize={{ base: "xs", md: "sm" }} textAlign="center">
                           {order?.items?.length}
                         </Td>
-                        <Td fontSize={{ base: "xs", md: "sm" }}>
+                        <Td fontSize={{ base: "xs", md: "sm" }} textAlign="center">
                           {statusText}
                         </Td>
                         <Td
