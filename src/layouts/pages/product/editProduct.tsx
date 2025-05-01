@@ -14,13 +14,14 @@ import {
   IconButton,
   Image,
   Select,
-  Stack,
+  Flex,
+  Heading,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { FaRegImages } from "react-icons/fa";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate, useParams } from "react-router-dom";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const EditProduct: React.FC = () => {
   const {
@@ -36,8 +37,6 @@ const EditProduct: React.FC = () => {
   const [isDiscounted, setIsDiscounted] = useState(false);
   const [selectedImages, setSelectedImages] = useState<FileList | null>(null);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-  const [existingImages, setExistingImages] = useState<string[]>([]);
-
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { useSingleProduct } = useProduct();
@@ -63,37 +62,22 @@ const EditProduct: React.FC = () => {
       setIsDiscounted(!!product.discount_price);
 
       if (product.images?.length) {
-        setImagePreviews(product.images);
-        setExistingImages(product.images);
+        setImagePreviews([...product.images]);
       }
     }
   }, [product, setValue]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      const totalImages = imagePreviews.length + e.target.files.length;
+     
       setSelectedImages(e.target.files);
-      const filesArray = Array.from(e.target.files);
-      const previews = filesArray.map((file) => URL.createObjectURL(file));
-      setImagePreviews([...existingImages, ...previews]);
+      const previews = Array.from(e.target.files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setImagePreviews((prev) => [...prev, ...previews]);
     }
   };
-
-  const handleRemoveImage = (index: number) => {
-    const updatedPreviews = [...imagePreviews];
-    updatedPreviews.splice(index, 1);
-    setImagePreviews(updatedPreviews);
-
-    if (index < existingImages.length) {
-      const updatedExisting = [...existingImages];
-      updatedExisting.splice(index, 1);
-      setExistingImages(updatedExisting);
-    } else {
-      const updatedSelected = Array.from(selectedImages || []);
-      updatedSelected.splice(index - existingImages.length, 1);
-      setSelectedImages(updatedSelected.length > 0 ? updatedSelected as unknown as FileList : null);
-    }
-  };
-
 
   const onSubmit = async (data: any) => {
     if (productId) {
@@ -110,34 +94,52 @@ const EditProduct: React.FC = () => {
         description,
       } = data;
 
-      const newProduct = {
-        product_name,
-        category,
-        product_quantity,
-        unit_price,
-        description,
-        is_discounted: isDiscounted,
-        in_stock: isInStock ? "YES" : "NO",
-        ...(weight && weight !== "" && { weight: Number(weight) }),
-        ...(length && length !== "" && { length: Number(length) }),
-        ...(height && height !== "" && { height: Number(height) }),
-        ...(width && width !== "" && { width: Number(width) }),
-        ...(discount_price && { discount_price: Number(discount_price) }),
-      };
+      const formData = new FormData();
+      formData.append("product_name", product_name);
+      formData.append("category", category);
+      formData.append("product_quantity", product_quantity);
+      formData.append("unit_price", unit_price);
+      formData.append("description", description);
+      formData.append("is_discounted", String(isDiscounted));
+      formData.append("in_stock", isInStock ? "YES" : "NO");
+      if (weight && weight !== "") {
+        formData.append("weight", String(Number(weight)));
+      }
+      if (length && length !== "") {
+        formData.append("length", String(Number(length)));
+      }
+      if (height && height !== "") {
+        formData.append("height", String(Number(height)));
+      }
+      if (width && width !== "") {
+        formData.append("width", String(Number(width)));
+      }
+      if (discount_price) {
+        formData.append("discount_price", String(Number(discount_price)));
+      }
 
-      const imagesToUpload = selectedImages
-        ? Array.from(selectedImages)
-        : [];
-      const formData = createProductFormData(newProduct, imagesToUpload);
+      // const totalImages =
+      //   (product?.images?.length || 0) + (selectedImages?.length || 0);
+      // if (totalImages < 2) {
+      //   alert("Product must have at least 2 images total");
+      //   return;
+      // }
 
-      // Append existing images to formData if they exist
-      if (existingImages.length > 0) {
-        existingImages.forEach((imageUrl: string, index: number) => {
-          formData.append(`existing_images[${index}]`, imageUrl);
+      // Append new images if any
+      if (selectedImages) {
+        Array.from(selectedImages).forEach((file) => {
+          formData.append("images[]", file);
         });
       }
 
-      formData.append("id", productId);
+      // Always include existing images
+      if (product?.images) {
+        product.images.forEach((imageUrl: string) => {
+          formData.append("existing_images[]", imageUrl);
+        });
+      }
+
+      formData.append("id", productId as string);
       await useUpdateProduct.mutateAsync(formData);
     } else {
       alert("Please ensure product ID is valid");
@@ -145,70 +147,72 @@ const EditProduct: React.FC = () => {
   };
 
   return (
-    <Box py={{ base: "80px", md: "150px" }} px={{ base: 4, md: 8 }}>
-      <Text
-        textAlign="center"
-        bg={"#FFF2ED"}
-        pt={4}
-        pb={4}
-        color="#FF5733"
-        fontSize={{ base: "xl", md: "2xl" }}
-        fontWeight="bold"
-        mb={{ base: 4, md: 8 }}
+    <Box py="150px">
+      <Flex
+        align="center"
+        justify="center"
+        position="relative"
+        bg="#FFF2ED"
+        p={{ base: 4, md: 6 }}
+        // mt={{ base: 10, md: 20 }}
+        mb={{ base: 4, md: 6 }}
       >
-        {useUpdateProduct.isSuccess === false
-          ? "Edit Product"
-          : "Review Product"}
-      </Text>
-      <Box my={{ base: 4, md: 6 }} textAlign="center">
-        <Text
-          fontSize={{ base: "sm", md: "md" }}
-          fontWeight="normal"
-          color="#908D8D"
+        <Button
+          position="absolute"
+          left={{ base: 2, md: 6 }}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+          size={{ base: "sm", md: "md" }}
         >
+          Back
+        </Button>
+        <Heading
+          size={{ base: "md", md: "lg" }}
+          fontFamily="Poppins"
+          color="#FF5753"
+        >
+          {useUpdateProduct.isSuccess === false
+            ? "Edit Product"
+            : "Review Product"}
+        </Heading>
+      </Flex>
+      <Box my={6} textAlign="center">
+        <Text fontSize="md" fontWeight="normal" color="#908D8D">
           Kindly enter your product details
         </Text>
       </Box>
       <Box
         bg="pink.50"
-        p={{ base: 4, md: 8 }}
+        p={8}
         borderWidth="1px"
         borderColor="#FF5733"
         borderRadius="md"
         boxShadow="md"
-        maxW={{ base: "100%", md: "750px" }}
+        maxW="750px"
         mx="auto"
       >
-        <VStack spacing={{ base: 2, md: 4 }} align="center">
+        <VStack spacing={4} align="center">
           <FormControl>
-            <FormLabel fontSize={{ base: "sm", md: "md" }}>
-              Product name
-            </FormLabel>
+            <FormLabel>Product name</FormLabel>
             <Input
-              h={{ base: "50px", md: "60px" }}
+              h="60px"
               bg="white"
               borderRadius="15px"
               placeholder="Enter name"
-              fontSize={{ base: "sm", md: "md" }}
               {...register("product_name", { required: true })}
             />
           </FormControl>
 
-          <Stack
-            direction={{ base: "column", md: "row" }}
-            spacing={{ base: 2, md: 4 }}
-            w="full"
-          >
+          <HStack spacing={4}>
             <FormControl>
-              <FormLabel fontSize={{ base: "sm", md: "md" }}>
-                Product Category
-              </FormLabel>
+              <FormLabel>Product Category</FormLabel>
               <Select
-                h={{ base: "50px", md: "60px" }}
+                h="60px"
                 bg="white"
                 borderRadius="15px"
                 placeholder="Select category"
-                fontSize={{ base: "sm", md: "md" }}
                 {...register("category", { required: true })}
               >
                 {category?.map((category: any) => (
@@ -220,121 +224,97 @@ const EditProduct: React.FC = () => {
             </FormControl>
 
             <FormControl>
-              <FormLabel fontSize={{ base: "sm", md: "md" }}>
-                Quantity
-              </FormLabel>
+              <FormLabel>Quantity</FormLabel>
               <Input
-                h={{ base: "50px", md: "60px" }}
+                h="60px"
                 bg="white"
                 borderRadius="15px"
                 placeholder="Enter quantity"
                 type="number"
-                fontSize={{ base: "sm", md: "md" }}
                 {...register("product_quantity")}
               />
             </FormControl>
-          </Stack>
+          </HStack>
 
-          <Stack
-            direction={{ base: "column", md: "row" }}
-            spacing={{ base: 2, md: 4 }}
-            w="full"
-          >
+          <HStack spacing={4}>
             <FormControl>
-              <FormLabel fontSize={{ base: "sm", md: "md" }}>
-                Unit Price
-              </FormLabel>
+              <FormLabel>Unit Price</FormLabel>
               <Input
-                h={{ base: "50px", md: "60px" }}
+                h="60px"
                 bg="white"
                 borderRadius="15px"
                 placeholder="Enter price"
                 type="number"
-                fontSize={{ base: "sm", md: "md" }}
                 {...register("unit_price")}
               />
             </FormControl>
             <FormControl>
-              <FormLabel fontSize={{ base: "sm", md: "md" }}>Weight</FormLabel>
+              <FormLabel>Weight</FormLabel>
               <Input
-                h={{ base: "50px", md: "60px" }}
+                h="60px"
                 bg="white"
                 borderRadius="15px"
                 placeholder="Enter weight"
                 type="number"
-                fontSize={{ base: "sm", md: "md" }}
                 {...register("weight")}
               />
             </FormControl>
             <FormControl>
-              <FormLabel fontSize={{ base: "sm", md: "md" }}>
-                Discount (optional)
-              </FormLabel>
+              <FormLabel>Discount (optional)</FormLabel>
               {isDiscounted ? null : (
                 <Switch
                   colorScheme="red"
-                  size={{ base: "md", md: "lg" }}
+                  size="lg"
                   isChecked={isDiscounted}
                   onChange={(e) => setIsDiscounted(e.target.checked)}
                 />
               )}
               {isDiscounted && (
                 <Input
-                  h={{ base: "50px", md: "60px" }}
+                  h="60px"
                   bg="white"
                   borderRadius="15px"
                   placeholder="0%"
                   type="number"
-                  fontSize={{ base: "sm", md: "md" }}
                   {...register("discount_price")}
                 />
               )}
             </FormControl>
-          </Stack>
+          </HStack>
 
           <FormControl>
-            <FormLabel fontSize={{ base: "sm", md: "md" }}>
-              Dimensions (optional)
-            </FormLabel>
-            <Stack
-              direction={{ base: "column", md: "row" }}
-              spacing={{ base: 2, md: 4 }}
-            >
+            <FormLabel>Dimensions (optional)</FormLabel>
+            <HStack spacing={4}>
               <Input
-                h={{ base: "50px", md: "60px" }}
+                h="60px"
                 bg="white"
                 borderRadius="15px"
                 placeholder="Length (mm)"
                 type="number"
-                fontSize={{ base: "sm", md: "md" }}
                 {...register("length")}
               />
               <Input
-                h={{ base: "50px", md: "60px" }}
+                h="60px"
                 bg="white"
                 borderRadius="15px"
                 placeholder="Height (mm)"
                 type="number"
-                fontSize={{ base: "sm", md: "md" }}
                 {...register("height")}
               />
               <Input
-                h={{ base: "50px", md: "60px" }}
+                h="60px"
                 bg="white"
                 borderRadius="15px"
                 placeholder="Width (mm)"
                 type="number"
-                fontSize={{ base: "sm", md: "md" }}
                 {...register("width")}
               />
-            </Stack>
+            </HStack>
           </FormControl>
 
           <FormControl>
-            <FormLabel fontSize={{ base: "sm", md: "md" }}>
-              Upload Product Image
-            </FormLabel>
-            <Text fontSize={{ base: "xs", md: "sm" }} py={2}>
+            <FormLabel>Upload Product Image</FormLabel>
+            <Text fontSize={12} py={4}>
               To upload multiple images, please select the multiple images from
               the image dialog
             </Text>
@@ -343,8 +323,8 @@ const EditProduct: React.FC = () => {
               multiple
               onChange={handleImageChange}
               accept=".jpg, .jpeg, .png"
-              p={2}
-              h={{ base: "120px", md: "150px" }}
+              p={4}
+              h="150px"
               bg="white"
               textAlign="center"
               borderRadius="lg"
@@ -358,7 +338,7 @@ const EditProduct: React.FC = () => {
               flexDirection="column"
               alignItems="center"
               justifyContent="center"
-              h={{ base: "120px", md: "150px" }}
+              h="150px"
               bg="white"
               borderRadius="lg"
               color="gray.500"
@@ -368,57 +348,46 @@ const EditProduct: React.FC = () => {
                 variant="outline"
                 aria-label="Images"
                 onClick={() => document.getElementById("file-upload")?.click()}
-                fontSize={{ base: "40px", md: "50px" }}
+                fontSize="50px"
                 icon={<FaRegImages color="#979797" />}
               />
-              <Text fontSize={{ base: "sm", md: "md" }}>
-                Upload Product Image
-              </Text>
-              <Text fontSize={{ base: "xs", md: "sm" }}>
-                Image should be under 5MB
-              </Text>
+              <Text fontSize="md">Upload Product Image</Text>
+              <Text fontSize="sm">Image should be under 5MB</Text>
             </FormLabel>
           </FormControl>
-          <Box my={4} borderRadius="10px" w="full">
-          {(selectedImages || product?.images) && (
-          <Box mt={4}>
-            <Text fontSize={{ base: "sm", md: "md" }}>Product Images</Text>
-            <Box display="flex" flexWrap="wrap" justifyContent="center">
-              {imagePreviews?.map((preview, index) => (
-                <Box key={index} m={2} p={2} borderRadius="lg" position="relative">
-                  <Image
-                    src={preview}
-                    alt={`Preview ${index}`}
-                    boxSize={{ base: "100px", md: "150px" }}
-                    objectFit="cover"
-                  />
-                  <IconButton
-                    aria-label="Remove image"
-                    icon={<DeleteIcon />}
-                    colorScheme="red"
-                    size="sm"
-                    position="absolute"
-                    top="0"
-                    right="0"
-                    onClick={() => handleRemoveImage(index)}
-                  />
+          <Box my={4} borderRadius="10px">
+            {imagePreviews.length > 0 && (
+              <Box mt={4}>
+                <Text fontSize="md">Product Images</Text>
+                <Box display="flex" flexWrap="wrap">
+                  {imagePreviews.map((preview, index) => (
+                    <Box
+                      key={index}
+                      m={2}
+                      p={2}
+                      borderRadius="lg"
+                      position="relative"
+                    >
+                      <Image
+                        src={preview}
+                        alt={`Preview ${index}`}
+                        boxSize="150px"
+                        objectFit="cover"
+                      />
+                    </Box>
+                  ))}
                 </Box>
-              ))}
-            </Box>
-          </Box>
-        )}
+              </Box>
+            )}
           </Box>
 
           <FormControl>
-            <FormLabel fontSize={{ base: "sm", md: "md" }}>
-              Description
-            </FormLabel>
+            <FormLabel>Description</FormLabel>
             <Textarea
               placeholder="Describe your product"
-              h={{ base: "120px", md: "150px" }}
+              h="150px"
               bg="white"
               borderRadius="15px"
-              fontSize={{ base: "sm", md: "md" }}
               {...register("description")}
             />
           </FormControl>
@@ -429,9 +398,7 @@ const EditProduct: React.FC = () => {
             justifyContent="space-between"
             my="12px"
           >
-            <FormLabel mb="0" fontSize={{ base: "sm", md: "md" }}>
-              Mark Product in stock
-            </FormLabel>
+            <FormLabel mb="0">Mark Product in stock</FormLabel>
             <Switch
               colorScheme="red"
               size="lg"

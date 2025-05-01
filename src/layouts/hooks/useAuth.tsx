@@ -256,6 +256,31 @@ export const useAuth = () => {
     },
   });
 
+  const updateShippingAddressMutation = useMutation({
+    mutationFn: (addressData: any) =>
+      apiClient.put("/user/update-shipping-address", addressData),
+    onSuccess: (response) => {
+      toast({
+        title: `${response?.data?.message}`,
+        description: "Your shipping address has been updated successfully.",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+      });
+      navigate(-1); 
+    },
+    onError: (error: any) => {
+      // console.error("Failed to add shipping address:", error);
+      toast({
+        title: `${error?.response?.data?.message}`,
+        description: "Please try again.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    },
+  });
+
   const updateProfileMutation = useMutation({
     mutationFn: (profileData: any) =>
       apiClient.put("/user/update-profile", profileData),
@@ -332,7 +357,8 @@ export const useAuth = () => {
       resetPasswordMutation.isPending ||
       addShippingAddressMutation.isPending ||
       validateOtpMutation.isPending ||
-      updateProfileMutation.isPending,
+      updateProfileMutation.isPending ||
+      updateShippingAddressMutation.isPending,
     login: loginMutation.mutate,
     vendorLogin: vendorLoginMutation.mutate,
     logout,
@@ -350,5 +376,6 @@ export const useAuth = () => {
     user,
     refetchProfile,
     switchToUser,
+    updateShippingAddress: updateShippingAddressMutation.mutate,
   };
 };

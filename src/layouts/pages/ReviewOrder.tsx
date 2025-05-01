@@ -6,14 +6,26 @@ import {
   Flex,
   Grid,
   GridItem,
+  // VStack,
+  // Checkbox,
 } from "@chakra-ui/react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { FaEye } from "react-icons/fa";
+import { ChevronLeftIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
+// import { FaEye } from "react-icons/fa";
 import { useOrder } from "../hooks/useOrder";
 // import { useNavigate } from "react-router-dom";
-import PaginationControls from "../../features/helpers/Pagination";
+// import PaginationControls from "../../features/helpers/Pagination";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useNavigate } from "react-router-dom";
 
-const ReviewNewOrder = ({ order }: { order: any }) => (
+const ReviewNewOrder = ({
+  order,
+  deleteSelectedButton,
+  onEditOrder,
+}: {
+  order: any;
+  onEditOrder: () => void;
+  deleteSelectedButton: () => void;
+}) => (
   <Box mt={{ base: 8, md: 8 }}>
     <Flex
       bg="pink.50"
@@ -173,7 +185,7 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
           </Text>
         </GridItem>
       </Box>
-      {/* <Flex
+      <Flex
         direction={{ base: "row", md: "column" }}
         bg="gray.800"
         p={{ base: 2, md: 5 }}
@@ -192,10 +204,11 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
           size={{ base: "xs", md: "sm" }}
           bg="gray.800"
           _hover="gray.800"
+          onClick={onEditOrder}
         >
           Edit Order
         </Button>
-        <Button
+        {/* <Button
           leftIcon={<FaEye />}
           bg="gray.800"
           color="white"
@@ -205,8 +218,12 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
           _hover="gray.800"
         >
           Review Order
-        </Button>
+        </Button> */}
         <Button
+          onClick={() => {
+            
+            deleteSelectedButton();
+          }}
           leftIcon={<DeleteIcon />}
           bg="gray.800"
           color="red"
@@ -216,69 +233,112 @@ const ReviewNewOrder = ({ order }: { order: any }) => (
         >
           Delete Order
         </Button>
-      </Flex> */}
+      </Flex>
     </Flex>
   </Box>
 );
 
 export default function ReviewOrder() {
-  const {
-    customOrdersData: orders,
-    customOrdersDataPagination,
-    handlePageChange,
-  } = useOrder();
-  const allOrder = orders;
-  const order = allOrder?.data?.data;
+  const [draftOrders, setDraftOrders] = useLocalStorage("draftOrders", []);
+  const {createCustomOrders, isCreatingOrder, } = useOrder();
+  // const [selectedOrders, setSelectedOrders] = useState<any[]>([]);
+  const navigate = useNavigate();
+
+  const handleSubmitOrders = async () => {
+    try {
+      if (draftOrders.length === 0) return;
+      await createCustomOrders({ orders: draftOrders });
+      setDraftOrders([]);
+      navigate("/custom-order");
+    } catch (error) {
+      console.error("Order submission failed:", error);
+    }
+  };
+
+  // console.log(draftOrders);
+
+  // const toggleSelectOrder = (id: string) => {
+  //   setSelectedOrders((prev) =>
+  //     prev.includes(id)
+  //       ? prev.filter((orderId) => orderId !== id)
+  //       : [...prev, id]
+  //   );
+  // };
+
+  const deleteOrder = (index: number) => {
+    setDraftOrders((prev:any) => {
+      const newOrders = prev.filter((_: any, i: number) => i !== index);
+      navigate("/custom-order");
+      return newOrders;
+    });
+  };
 
   return (
-    <Box mt={{ base: 20, md: 120 }}>
-      <Heading
-        size="lg"
-        textAlign="center"
-        mb={{ base: 4, md: 6 }}
-        bg={"#FFF2ED"}
-        color={"#FF5733"}
-        fontFamily={"Poppins"}
-        fontSize={{ base: "18px", md: "22px" }}
-        px={{ base: 3, md: 6 }}
-        py={{ base: 3, md: 4 }}
-      >
-        Review Order
-      </Heading>
+    <Box mt={{ base: 20, md: 180 }}>
       <Flex
-        justifyContent="space-between"
-        alignItems="center"
-        mb={{ base: 4, md: 6 }}
-        px={{ base: 4, md: 10 }}
+        align="center"
+        justify="center"
+        position="relative"
+        bg="#FFF2ED"
+        p={{ base: 4, md: 6 }}
+        mt={{ base: 6, md: 20 }}
+        mb={6}
       >
-        <Text
-          fontWeight=""
-          fontSize={{ base: "sm", md: "17px" }}
-          fontFamily={"Poppins"}
-          color={"gray"}
+        <Button
+          position="absolute"
+          left={{ base: 2, md: 6 }}
+          onClick={() => navigate(-1)}
+          leftIcon={<ChevronLeftIcon />}
+          variant="ghost"
+          color="#FF5753"
+          size={{ base: "sm", md: "md" }}
         >
-          Recently Added
-        </Text>
+          Back
+        </Button>
+        <Heading size="100px" fontFamily="Poppins" color="#FF5753">
+        Review Order
+        </Heading>
       </Flex>
-      <Box my={{ base: 8, md: 20 }} mx={{ base: 4, md: 12 }}>
-        {!order || order?.length === 0 ? (
-          <Text textAlign="center" color="gray" mt={{ base: 20, md: 120 }}>
-            No orders to review.
-          </Text>
-        ) : (
-          order?.map((orderItem: { _id: string }) => (
-            <ReviewNewOrder key={orderItem._id} order={orderItem} />
-          ))
-        )}
-      </Box>
-      <Box px={{ base: 4, md: 24 }} py={{ base: 4, md: 8 }}>
+    
+      {draftOrders.length === 0 ? (
+        <Text textAlign="center" color="gray" mt={{ base: 20, md: 120 }}>
+          No orders to review.
+        </Text>
+      ) : (
+        <Flex flexDirection="column" gap={6}>
+          {draftOrders.map((order, index) => (
+            <Box key={index} w="full" position="relative">
+              <ReviewNewOrder
+                onEditOrder={() => {
+                  navigate(`/edit-order?editIndex=${index}`);
+                }}
+                deleteSelectedButton={() => deleteOrder(index)}
+                order={order}
+              />
+            </Box>
+          ))}
+        </Flex>
+      )}
+      {/* <Box px={{ base: 4, md: 24 }} py={{ base: 4, md: 8 }}>
         <PaginationControls
           currentPage={customOrdersDataPagination.currentPage}
           totalPages={customOrdersDataPagination.totalPages}
           onPageChange={handlePageChange}
           hasNextPage={customOrdersDataPagination.hasNextPage}
         />
-      </Box>
+      </Box> */}
+      <Button
+        onClick={handleSubmitOrders}
+        isLoading={isCreatingOrder}
+        colorScheme="green"
+        size="md"
+        // width="100%"
+        m={6}
+      >
+        Submit All Orders
+      </Button>
     </Box>
   );
 }
+
+

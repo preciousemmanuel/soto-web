@@ -349,7 +349,7 @@ export const useOrder = () => {
   } = useQuery({
     queryKey: ["fetchOrdersVendor", currentPage, itemsPerPage],
     queryFn: () => fetchVendorOrders(itemsPerPage, currentPage, status),
-    enabled: false,
+    enabled: true,
     retry: true,
   });
 
@@ -366,7 +366,7 @@ export const useOrder = () => {
     return useQuery({
       queryKey: ["vendor-orders", orderId],
       queryFn: () => fetchOneVendorOrder(orderId),
-      enabled: false,
+      enabled: true,
       retry: true,
     });
   };
@@ -379,7 +379,7 @@ export const useOrder = () => {
     queryKey: ["fetchStates"],
     queryFn: fetchStates,
     retry: true,
-    enabled: false,
+    enabled: true,
   });
 
   const {
@@ -390,7 +390,7 @@ export const useOrder = () => {
     queryKey: ["fetchCities"],
     queryFn: () => fetchCities("NG", "LA"),
     retry: true,
-    enabled: false,
+    enabled: true,
   });
 
   const handlePageChange = (newPage: number) => {

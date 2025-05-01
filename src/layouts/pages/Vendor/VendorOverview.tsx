@@ -58,6 +58,7 @@ const VendorOverview = () => {
   const incomeStatAgg = vendorOverviewData?.data?.income_stat_agg;
   const topProduct = topProductsByVendor?.data?.data;
   const leastOrder = ordersByVendor?.data?.data;
+  // console.log(leastOrder,"leastOrder")
   const allTransactionLogs = transactionLogs?.data?.data;
   const chartRef = useRef<Chart | null>(null);
 
@@ -224,7 +225,7 @@ const VendorOverview = () => {
                 <TabPanel>
                   <Flex
                     gap={{ base: 4, md: 12 }}
-                    direction={{ base: "column", md: "row" }}
+                    direction={{ base: "column", md: "column", lg: "row" }}
                   >
                     <Flex direction="column" gap={6} width="100%">
                       <Flex
@@ -380,8 +381,8 @@ const VendorOverview = () => {
                                 color="gray.500"
                               >
                                 Price:{" "}
-                                {product?.unit_price
-                                  ? `₦${product?.unit_price}`
+                                {product?.raw_price
+                                  ? `₦${product?.raw_price}`
                                   : "N/A"}
                               </Text>
                             </Box>

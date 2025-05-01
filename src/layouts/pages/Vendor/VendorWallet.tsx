@@ -9,6 +9,7 @@ import {
   IconButton,
   SimpleGrid,
   Icon,
+  Badge,
 } from "@chakra-ui/react";
 import {
   FaEye,
@@ -28,12 +29,13 @@ const VendorWallet = () => {
   const { transactionLogs, isLoading } = useVendor();
   const transactions = transactionLogs?.data?.data || [];
 
+  // console.log(transactions,"transactions")
   const navigate = useNavigate();
 
   return (
     <Box
       px={{ base: 4, sm: 6, md: 8, lg: 12, xl: 20 }}
-      py={{ base: 8, sm: 12, md: 20, lg: 32, xl: 40 }}
+      py={{ base: 20, sm: 20, md: 20, lg: 40}}
       h="100%"
       bg="linear-gradient(161.91deg, #FF5733 -17.77%, #FFF8F7 36.84%, #FFFFFF 91.46%)"
     >
@@ -128,7 +130,7 @@ const VendorWallet = () => {
               leftIcon={<FaMoneyBill />}
               bg="#FF5733"
               color="white"
-              size={{ base: "sm", sm: "md", md: "lg" }}
+              size={{ base: "md", sm: "md", md: "lg" }}
               rounded="full"
               onClick={() => navigate("/vendor-withdraw")}
               width={{ base: "100%", sm: "auto" }}
@@ -159,7 +161,7 @@ const VendorWallet = () => {
             <LoadingSpinner />
           ) : transactions?.length > 0 ? (
             <Box
-              p={{ base: 2, md: 4 }}
+              p={{ base: 4, md: 4 }}
               bg="white"
               borderRadius="md"
               boxShadow="md"
@@ -186,14 +188,25 @@ const VendorWallet = () => {
                     <Text fontSize="xs" fontWeight="500">
                       Reference: {trx.reference}
                     </Text>
+                    <Badge
+                      colorScheme={
+                        trx.status === "PENDING" ? "yellow" :
+                        trx.status === "SUCCESSFUL" ? "green" :
+                        trx.status === "FAILED" ? "red" : "gray"
+                      }
+                      fontSize="xs"
+                      mt={1}
+                    >
+                      {trx.status}
+                    </Badge>
                   </VStack>
                   <VStack align="end" spacing={0} ml="auto">
                     <Text
                       fontSize={{ base: "xs", sm: "sm", md: "md" }}
                       fontWeight="500"
-                      color="green"
+                      color={trx.type === "DEBIT" ? "red.500" : "green.500"}
                     >
-                      ₦{trx.amount}
+                      {trx.type === "DEBIT" ? "-" : "+"}₦{trx.amount}
                     </Text>
                     <Text fontSize="xs" fontWeight="500">
                       {new Date(trx.createdAt).toLocaleDateString()}

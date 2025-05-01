@@ -79,6 +79,8 @@ import OtpVerification from "./layouts/pages/OtpVerificationPage";
 import OrderDetails from "./layouts/pages/Vendor/VendorOrderDetails";
 import RaiseDisputePage from "./layouts/pages/RaiseDispute";
 import EditProduct from "./layouts/pages/product/editProduct";
+import UpdateShippingAddress from "./layouts/pages/UpdateShippingAddress";
+import EditCustomOrder from "./layouts/pages/EditCustomOrder";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -202,6 +204,10 @@ const App = () => {
           element: <ReviewOrder />,
         },
         {
+          path: "edit-order",
+          element: <EditCustomOrder />,
+        },
+        {
           path: "track-order",
           element: <OrderDetailPage />,
         },
@@ -212,6 +218,10 @@ const App = () => {
         {
           path: "raise-dispute/:orderId",
           element: <RaiseDisputePage />,
+        },
+        {
+          path: "update-shipping-address",
+          element: <UpdateShippingAddress />,
         },
       ],
     },
