@@ -14,8 +14,9 @@ const HomePage = () => {
     <Box mt={20}>
       <HeroSection />
       <StatsSection />
-      <PopularProductsSection />
       <BestSelling />
+      <PopularProductsSection />
+      
       <Chance />
       {/* <BestPrice/> */}
       <TestimonialsSection />
