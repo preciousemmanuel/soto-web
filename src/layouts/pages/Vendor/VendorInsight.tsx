@@ -8,13 +8,14 @@ const VendorInsight = () => {
   return (
     <Box
       p={{ base: 4, md: 6 }}
-      minH="100vh"
+      h="100%"
       mt={{ base: 6, md: 12, lg: 32 }}
       px={{ base: 4, md: 6, lg: 34 }}
     >
       <Text
         fontSize={{ base: "xl", md: "2xl", lg: "33px" }}
         fontWeight="500"
+        my={{ base: "120px", md: "20px" }}
         mb={{ base: 4, md: 6 }}
       >
         Sales Analytics
