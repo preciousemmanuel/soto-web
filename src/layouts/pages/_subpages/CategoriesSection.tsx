@@ -34,6 +34,7 @@ export const ProductCard: React.FC<{
   showRating?: boolean;
   showBorder?: boolean;
   showStatus?: boolean;
+  showUnitPrice?: boolean;
 }> = ({
   product,
   onAddToCart,
@@ -42,6 +43,7 @@ export const ProductCard: React.FC<{
   showRating = true,
   showBorder = false,
   showStatus = false,
+  showUnitPrice = true,
 }) => {
   const navigate = useNavigate();
   const [isWishlisted, setIsWishlisted] = React.useState(false);
@@ -67,7 +69,11 @@ export const ProductCard: React.FC<{
     if ((e.target as HTMLElement).closest("button")) {
       return;
     }
-    navigate(isAuthenticated ? `/products/${product._id}` : `/vendor-product/${product._id}`);
+    navigate(
+      isAuthenticated
+        ? `/products/${product._id}`
+        : `/vendor-product/${product._id}`
+    );
   };
   return (
     <Box
@@ -134,45 +140,69 @@ export const ProductCard: React.FC<{
           </Box>
         )}
 
-        <Box w="full">
+        <Box w="full" h="160px">
           <Image
             src={product.images?.[0]}
             alt={product.product_name}
-            w="full"
-            h="160px"
-            objectFit="contain"
+            w="100%"
+            h="100%"
+            objectFit="cover"
           />
         </Box>
 
-        {product.is_discounted &&
-          product.unit_price &&
-          product.discount_price && (
-            <Badge
-              position="absolute"
-              top="4"
-              right="4"
-              bg="red"
-              color="white"
-              rounded="full"
-            >
-              {Math.round(
-                ((product.unit_price - product.discount_price) /
-                  product.unit_price) *
-                  100
-              )}
-              % off
-            </Badge>
-          )}
+        {product.is_discounted && showUnitPrice
+          ? product.unit_price
+          : product.raw_price && (
+              <Badge
+                position="absolute"
+                top={!isAuthenticated ? "10" : "4"}
+                right={!isAuthenticated ? "10" : "4"}
+                bg="red"
+                color="white"
+                rounded="full"
+              >
+                {product.discount_price !== undefined &&
+                product.unit_price !== undefined &&
+                product.raw_price !== undefined
+                  ? Math.round(
+                      (((showUnitPrice
+                        ? product.unit_price
+                        : product.raw_price) -
+                        product.discount_price) /
+                        (showUnitPrice
+                          ? product.unit_price
+                          : product.raw_price)) *
+                        100
+                    ) === 0
+                    ? null
+                    : `${Math.round(
+                        (((showUnitPrice
+                          ? product.unit_price
+                          : product.raw_price) -
+                          product.discount_price) /
+                          (showUnitPrice
+                            ? product.unit_price
+                            : product.raw_price)) *
+                          100
+                      )}% off`
+                  : null}
+              </Badge>
+            )}
       </Flex>
 
       <Box fontFamily="poppins" display="flex" flexDirection="column" flex="1">
         <Flex justify="space-between" align="start">
           <Box>
             <Text fontSize="sm" mb={1}>
-              {product.product_name}
+              {product.product_name ? product.product_name.slice(0, 14) : ''}
+              {product.product_name && product.product_name.length > 14 ? '...' : ''}
             </Text>
-            <HStack spacing={2} mb={2}>
-              <Text fontWeight="500">₦{product.unit_price}</Text>
+            <HStack spacing={2} mb={1}>
+              {showUnitPrice && product.unit_price !== undefined ? (
+                <Text fontWeight="500">₦{product.unit_price}</Text>
+              ) : (
+                <Text fontWeight="500">₦{product.raw_price}</Text>
+              )}
               {product.is_discounted && product.discount_price && (
                 <Text
                   fontSize="sm"
@@ -297,14 +327,16 @@ const BestSelling: React.FC = () => {
           lg: "repeat(4, 1fr)",
         }}
         gap={6}
+        alignItems="stretch"
       >
         {sortedProducts?.slice(0, 20)?.map((product: Product) => (
           <ProductCard
             key={product._id}
             product={product}
             onAddToCart={() => handleAddToCart(product._id ?? "", product)}
+            
           />
-      ))} 
+        ))}
       </Grid>
     </Box>
   );
