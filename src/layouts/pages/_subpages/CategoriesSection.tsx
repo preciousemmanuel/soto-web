@@ -194,8 +194,8 @@ export const ProductCard: React.FC<{
         <Flex justify="space-between" align="start">
           <Box>
             <Text fontSize="sm" mb={1}>
-              {product.product_name ? product.product_name.slice(0, 14) : ''}
-              {product.product_name && product.product_name.length > 14 ? '...' : ''}
+              {product.product_name ? product.product_name.slice(0, 16) : ''}
+              {product.product_name && product.product_name.length > 16 ? '...' : ''}
             </Text>
             <HStack spacing={2} mb={1}>
               {showUnitPrice && product.unit_price !== undefined ? (
