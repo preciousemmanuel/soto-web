@@ -77,6 +77,7 @@ const Navbar = () => {
         alignItems="center"
         flexWrap="wrap"
         fontSize={{ base: "12px", lg: "14px" }}
+        display={{ base: "none", lg: "flex" }}
       >
         <Flex alignItems="center" gap={{ base: 4, lg: 8 }}>
           <Flex gap={2} alignItems="center">

@@ -140,13 +140,13 @@ export const ProductCard: React.FC<{
           </Box>
         )}
 
-        <Box w="full" h="160px">
+        <Box w="full" h={{ base: "160px", md: "200px", lg: "240px" }}>
           <Image
             src={product.images?.[0]}
             alt={product.product_name}
             w="100%"
             h="100%"
-            objectFit="cover"
+            objectFit={{ base: "contain", md: "contain" }}
           />
         </Box>
 
@@ -291,17 +291,42 @@ const BestSelling: React.FC = () => {
   };
   return (
     <Box py={8} px={{ base: 6, md: 16 }}>
-      <Flex justify="space-between" align="center" mb={6}>
-        <Box>
-          <Heading fontSize="30px" mb={2}>
+      <Flex
+        justify="space-between"
+        align="center"
+        mb={6}
+        direction={{ base: "column", md: "row" }}
+        alignItems={{ base: "flex-start", md: "center" }}
+      >
+        <Box mb={{ base: 4, md: 0 }}>
+          <Heading
+            fontSize={{ base: "24px", md: "30px" }}
+            mb={2}
+            textAlign={{ base: "center", md: "left" }}
+          >
             Best Selling
           </Heading>
-          <Text color="gray.600" fontSize="20px" mb={4}>
+          <Text
+            color="gray.600"
+            fontSize={{ base: "16px", md: "20px" }}
+            mb={4}
+            textAlign={{ base: "center", md: "left" }}
+          >
             You have a choice to shop based on categories
           </Text>
         </Box>
-        <Flex gap={5}>
-          <Button onClick={toggleSortOrder} color="#FF5733" variant="ghost">
+        <Flex
+          gap={5}
+          flexDirection="row" 
+          alignItems="center"
+          mt={{ base: 4, md: 0 }}
+        >
+          <Button
+            onClick={toggleSortOrder}
+            color="#FF5733"
+            variant="ghost"
+            width={{ base: "100%", md: "auto" }}
+          >
             {sortOrder === "newest" ? "Newest" : "Oldest"}
           </Button>
           <Button
@@ -313,6 +338,7 @@ const BestSelling: React.FC = () => {
             }
             variant="link"
             color="#FF5733"
+            width={{ base: "100%", md: "auto" }}
           >
             View more
           </Button>

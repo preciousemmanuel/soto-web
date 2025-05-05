@@ -168,10 +168,10 @@ const PopularProductsSection: React.FC = () => {
     <Box py={4} fontFamily="Poppins">
       <VStack spacing={8} align="stretch">
         <Box px={{ base: 6, md: 16 }} pb={24}>
-          <Heading fontSize="30px" mb={2}>
+          <Heading fontSize={{ base: "24px", md: "30px" }} mb={{ base: 1, md: 2 }}>
             Popular Categories
           </Heading>
-          <Text color="gray.600" mb={4} fontSize="20px">
+          <Text color="gray.600" mb={{ base: 2, md: 4 }} fontSize={{ base: "16px", md: "20px" }}>
             You have a choice to shop based on categories
           </Text>
           <Swiper
@@ -203,10 +203,10 @@ const PopularProductsSection: React.FC = () => {
         </Box>
 
         <Box py={{ base: 10, md: 20 }} bg="#F1F1F3" px={{ base: 6, md: 16 }}>
-          <Heading fontSize="30px" mb={2}>
+          <Heading fontSize={{ base: "24px", md: "30px" }} mb={{ base: 2, md: 2 }}>
             Popular Products
           </Heading>
-          <Text color="gray.600" fontSize="20px" mb={4}>
+          <Text color="gray.600" fontSize={{ base: "16px", md: "20px" }} mb={{ base: 2, md: 4 }}>
             You have a choice to shop based on categories
           </Text>
           <Grid
