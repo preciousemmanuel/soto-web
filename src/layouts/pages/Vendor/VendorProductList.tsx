@@ -190,6 +190,7 @@ export default function VendorProductList() {
                 showBorder={true}
                 showRating={false}
                 showStatus={true}
+                showUnitPrice={false}
               />
             ))}
           </SimpleGrid>

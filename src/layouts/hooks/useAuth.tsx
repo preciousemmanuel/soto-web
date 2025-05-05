@@ -258,7 +258,7 @@ export const useAuth = () => {
 
   const updateShippingAddressMutation = useMutation({
     mutationFn: (addressData: any) =>
-      apiClient.put("/user/update-shipping-address", addressData),
+      apiClient.put("/user/add-shipping-address", addressData),
     onSuccess: (response) => {
       toast({
         title: `${response?.data?.message}`,

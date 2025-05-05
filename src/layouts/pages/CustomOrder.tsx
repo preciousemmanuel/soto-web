@@ -19,9 +19,11 @@ import { useForm } from "react-hook-form";
 import { useOrder } from "../hooks/useOrder";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { toast } from "react-toastify";
 
 function CustomOrder() {
   const [draftOrders, setDraftOrders] = useLocalStorage("draftOrders", []);
+  const { createCustomOrders, isCreatingOrder, orderSuccess, refetchOrders } = useOrder();
   const navigate = useNavigate();
 
   const CreateOrder = () => {
@@ -30,28 +32,29 @@ function CustomOrder() {
     const onSubmit = (data: any) => {
       const newDraftOrders:any = [...draftOrders, data];
       setDraftOrders(newDraftOrders);
+      toast.success("Order created successfully");
       navigate("/review-order");
     };
     useEffect(() => {
       window.scrollTo(0, 0);
     }, []);
 
-    // const onSubmit = async (data: any) => {
-    //   try {
-    //     const formattedData = {
-    //       orders: [data],
-    //     };
-    //     await createCustomOrders(formattedData);
-    //   } catch (error) {
-    //     console.error("Order creation failed:", error);
-    //   }
-    // };
-    // useEffect(() => {
-    //   if (orderSuccess) {
-    //     refetchOrders();
-    //     navigate("/review-order");
-    //   }
-    // }, [orderSuccess]);
+    const onSubmitSubmit = async (data: any) => {
+      try {
+        const formattedData = {
+          orders: [data],
+        };
+        await createCustomOrders(formattedData);
+      } catch (error) {
+        console.error("Order creation failed:", error);
+      }
+    };
+    useEffect(() => {
+      if (orderSuccess) {
+        refetchOrders();
+        navigate("/review-order");
+      }
+    }, [orderSuccess]);
 
     return (
       <Box w="full" mx="auto" bg="" rounded="lg" boxShadow="">
@@ -89,23 +92,37 @@ function CustomOrder() {
           Kindly enter your order details
         </Text>
         <Box px={{ base: 4, md: 6, lg: 300 }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
             {renderFormFields(register)}
+            <Flex flexDirection="row" gap={6} justifyContent="center">
             <Button
-              // isLoading={isCreatingOrder}
+              isLoading={isCreatingOrder}
               loadingText="Submitting..."
               bg="#FF5733"
               color="white"
               h={{ base: "40px", md: "50px" }}
               borderRadius="xl"
-              variant="outline"
-              type="submit"
+              variant="solid"
               mt={6}
               width={{ base: "full", md: "auto" }}
               fontSize={{ base: "sm", md: "md" }}
+              onClick={handleSubmit(onSubmitSubmit)}
             >
-              Submit
+              Save & Submit
             </Button>
+            <Button onClick={handleSubmit(onSubmit)} 
+              variant="outline"
+              loadingText="Submitting..."
+              border="1px solid #FF5733"
+              // bg="#FF5733"
+              color="#FF5733"
+              h={{ base: "40px", md: "50px" }}
+              borderRadius="xl"
+              type="submit"
+              mt={6}
+              width={{ base: "full", md: "auto" }}
+              fontSize={{ base: "sm", md: "md" }}>Save & Add</Button>
+              </Flex>
           </form>
         </Box>
       </Box>

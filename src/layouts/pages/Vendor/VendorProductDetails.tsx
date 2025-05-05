@@ -1,4 +1,4 @@
-import { Flex, Box, Button, Text, Heading } from "@chakra-ui/react";
+import { Flex, Box, Button, Heading } from "@chakra-ui/react";
 import ProductImageGallery from "../product/productImage";
 import ProductDetails from "../product/productDetails";
 import { useNavigate, useParams } from "react-router-dom";
@@ -82,7 +82,7 @@ const VendorProductDetailsPage = () => {
             mb={{ base: 6, md: 0 }}
           >
             <ProductDetails
-              showPrice={true}
+              showPrice={false}
               showOthers={false}
               product={{
                 _id: product?._id,
@@ -91,7 +91,7 @@ const VendorProductDetailsPage = () => {
                 width: product?.width || 0,
                 weight: product?.weight || 0,
                 product_name: product?.product_name || "",
-                unit_price: product?.raw_price || 0,
+                // unit_price: product?.raw_price || 0,
                 description: product?.description || "",
                 product_quantity: product?.product_quantity || 0,
                 category: product?.category?.name,

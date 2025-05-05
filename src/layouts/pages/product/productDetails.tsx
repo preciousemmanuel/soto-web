@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { StarIcon } from "@chakra-ui/icons";
 import {
   Box,
@@ -5,8 +6,6 @@ import {
   HStack,
   VStack,
   Button,
-  Select,
-  SimpleGrid,
   Badge,
   Flex,
   Link,
@@ -101,7 +100,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
     if (!isVendorAuthenticated && product?.product_quantity && product.product_quantity > 0) {
       updateCart(product, quantity);
     }
-  }, [quantity, product, updateCart]);
+  }, [quantity, product, updateCart,isVendorAuthenticated]);
   // console.log(quantity, "QUANTITY");
 
   return (
