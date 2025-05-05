@@ -16,6 +16,7 @@ import { useOrder } from "../hooks/useOrder";
 // import PaginationControls from "../../features/helpers/Pagination";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ReviewNewOrder = ({
   order,
@@ -26,7 +27,7 @@ const ReviewNewOrder = ({
   onEditOrder: () => void;
   deleteSelectedButton: () => void;
 }) => (
-  <Box mt={{ base: 8, md: 8 }}>
+  <Box mt={{ base: 8, md: 8 }} w="full">
     <Flex
       bg="pink.50"
       p={{ base: 3, md: 5 }}
@@ -43,7 +44,7 @@ const ReviewNewOrder = ({
         borderWidth="2px"
         borderColor="#908D8D"
         boxShadow="sm"
-        width={{ base: "100%", md: "auto" }}
+        width={{ base: "100%", md: "70%" }}
       >
         <Grid
           templateColumns={{
@@ -168,7 +169,7 @@ const ReviewNewOrder = ({
             </Text>
           </GridItem>
         </Grid>
-        <GridItem mt={{ base: 2, md: 3 }}>
+        {/* <GridItem mt={{ base: 2, md: 3 }}>
           <Text
             fontWeight="medium"
             color="#616060"
@@ -183,18 +184,20 @@ const ReviewNewOrder = ({
           >
             {order?.approval_status}
           </Text>
-        </GridItem>
+        </GridItem> */}
       </Box>
       <Flex
         direction={{ base: "row", md: "column" }}
         bg="gray.800"
         p={{ base: 2, md: 5 }}
         color="white"
+        justify="center"
         align="center"
-        justify="space-around"
+        gridGap={2}
         gap={{ base: 2, md: 0 }}
         width={{ base: "100%", md: "auto" }}
         borderRadius="md"
+        h="240px"
       >
         <Button
           leftIcon={<EditIcon />}
@@ -250,6 +253,7 @@ export default function ReviewOrder() {
       await createCustomOrders({ orders: draftOrders });
       setDraftOrders([]);
       navigate("/custom-order");
+      toast.success("Orders submitted successfully");
     } catch (error) {
       console.error("Order submission failed:", error);
     }
@@ -268,7 +272,7 @@ export default function ReviewOrder() {
   const deleteOrder = (index: number) => {
     setDraftOrders((prev:any) => {
       const newOrders = prev.filter((_: any, i: number) => i !== index);
-      navigate("/custom-order");
+      toast.success("Order deleted successfully");
       return newOrders;
     });
   };
@@ -307,7 +311,7 @@ export default function ReviewOrder() {
       ) : (
         <Flex flexDirection="column" gap={6}>
           {draftOrders.map((order, index) => (
-            <Box key={index} w="full" position="relative">
+            <Box key={index} w="full" position="relative" px={{base: 4, md: 24}}>
               <ReviewNewOrder
                 onEditOrder={() => {
                   navigate(`/edit-order?editIndex=${index}`);
@@ -327,16 +331,29 @@ export default function ReviewOrder() {
           hasNextPage={customOrdersDataPagination.hasNextPage}
         />
       </Box> */}
-      <Button
-        onClick={handleSubmitOrders}
-        isLoading={isCreatingOrder}
-        colorScheme="green"
-        size="md"
-        // width="100%"
-        m={6}
-      >
-        Submit All Orders
-      </Button>
+      <Flex justifyContent="center" my={6}>
+        <Button
+          onClick={handleSubmitOrders}
+          isLoading={isCreatingOrder}
+          variant="solid"
+          size="md"
+          rounded="14px"
+          width="20%"
+          h="50px"
+          _hover={{
+            bg: "#FF5753",
+            color: "white",
+          }}
+          _active={{
+            bg: "#FF5753",
+            color: "white",
+          }}
+          bg="#FF5753"
+          color="white"
+        >
+          Submit
+        </Button>
+      </Flex>
     </Box>
   );
 }

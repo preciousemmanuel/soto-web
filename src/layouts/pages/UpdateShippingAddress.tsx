@@ -20,7 +20,7 @@ export default function ShippingAddress() {
   const onSubmit = (data: any) => updateShippingAddress(data);
 
   return (
-    <Box pt={{ base: "15px", md: "25px" }}>
+    <Box pt={{ base: "15px", md: "125px" }}>
       <Image
         src={Logo}
         alt="Logo"

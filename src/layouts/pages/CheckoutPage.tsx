@@ -35,7 +35,7 @@ const CheckoutPage = () => {
     coupons,
     isFetchCoupons,
   } = useOrder();
-  const { user } = useAuth();
+  const { user ,refetchProfile} = useAuth();
   const [couponCode, setCouponCode] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // const onClose = () => setIsOpen(false);
@@ -48,6 +48,7 @@ const CheckoutPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    refetchProfile()
   }, []);
 
   // console.log(coupons, "coupons");

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import {
   Box,
@@ -10,7 +11,6 @@ import {
   VStack,
   HStack,
   Text,
-  Icon,
   IconButton,
   Image,
   Select,
@@ -18,20 +18,15 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
-import { FaRegImages } from "react-icons/fa";
+import { FaRegImages, FaTrash } from "react-icons/fa";
 import { useProduct } from "../../hooks/useProduct";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 
 const EditProduct: React.FC = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm();
-  const { useUpdateProduct, isLoading, createProductFormData, categories } =
-    useProduct();
+  const { register, handleSubmit, setValue } = useForm();
+  const { useUpdateProduct, isLoading, categories } = useProduct();
+  const [removedImages, setRemovedImages] = useState<string[]>([]);
   const category = categories?.data?.data;
   const [isInStock, setIsInStock] = useState(true);
   const [isDiscounted, setIsDiscounted] = useState(false);
@@ -40,9 +35,7 @@ const EditProduct: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const navigate = useNavigate();
   const { useSingleProduct } = useProduct();
-  const { data: oneProduct, isLoading: loadingNow } = useSingleProduct(
-    productId as string
-  );
+  const { data: oneProduct } = useSingleProduct(productId as string);
   const products = oneProduct?.data;
   const product = products?.product;
 
@@ -69,8 +62,6 @@ const EditProduct: React.FC = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const totalImages = imagePreviews.length + e.target.files.length;
-     
       setSelectedImages(e.target.files);
       const previews = Array.from(e.target.files).map((file) =>
         URL.createObjectURL(file)
@@ -135,7 +126,9 @@ const EditProduct: React.FC = () => {
       // Always include existing images
       if (product?.images) {
         product.images.forEach((imageUrl: string) => {
-          formData.append("existing_images[]", imageUrl);
+          if (!removedImages.includes(imageUrl)) {
+            formData.append("existing_images[]", imageUrl);
+          }
         });
       }
 
@@ -143,6 +136,27 @@ const EditProduct: React.FC = () => {
       await useUpdateProduct.mutateAsync(formData);
     } else {
       alert("Please ensure product ID is valid");
+    }
+  };
+
+  const handleRemoveImage = (index: number, imageUrl: string) => {
+    if (imageUrl.startsWith("blob:")) {
+      const newPreviews = [...imagePreviews];
+      newPreviews.splice(index, 1);
+      setImagePreviews(newPreviews);
+
+      if (selectedImages) {
+        const filesArray = Array.from(selectedImages);
+        filesArray.splice(index, 1);
+        const newFileList = new DataTransfer();
+        filesArray.forEach((file) => newFileList.items.add(file));
+        setSelectedImages(newFileList.files);
+      }
+    } else {
+      setRemovedImages((prev) => [...prev, imageUrl]);
+      const newPreviews = [...imagePreviews];
+      newPreviews.splice(index, 1);
+      setImagePreviews(newPreviews);
     }
   };
 
@@ -374,6 +388,16 @@ const EditProduct: React.FC = () => {
                         boxSize="150px"
                         objectFit="cover"
                       />
+                      <Button
+                        position="absolute"
+                        top="0"
+                        right="0"
+                        size="sm"
+                        colorScheme="red"
+                        onClick={() => handleRemoveImage(index, preview)}
+                      >
+                        <FaTrash />
+                      </Button>
                     </Box>
                   ))}
                 </Box>

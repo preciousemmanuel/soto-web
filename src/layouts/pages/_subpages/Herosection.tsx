@@ -98,9 +98,9 @@ const HeroSection: React.FC = () => {
 
   const responsiveStyles: Record<string, ResponsiveValue<string | number>> = {
     px: { base: 6, md: 10, lg: 16 },
-    py: { base: 10, md: 14, lg: 20 },
-    mt: { base: 10, md: 20 },
-    fontSize: { base: "18px", md: "20px", lg: "24px" },
+    py: { base: 6, md: 14, lg: 20 },
+    mt: { base: 8, md: 20 },
+    fontSize: { base: "14px", md: "20px", lg: "24px" },
   };
 
   return (
@@ -112,7 +112,7 @@ const HeroSection: React.FC = () => {
       mt={responsiveStyles.mt}
       direction={{ base: "column", md: "row" }}
       align="center"
-      wrap="wrap"
+      wrap={{ base: "nowrap", md: "wrap" }}
       position="relative"
     >
       <Box flex="1" pr={{ md: 8 }} mb={{ base: 8, md: 0 }}>
@@ -127,12 +127,13 @@ const HeroSection: React.FC = () => {
           >
             <Heading
               as="h1"
-              size="3xl"
+              size={{ base: "lg", md: "3xl" }}
               mb={6}
+              mt={24}
               bgGradient="linear(to-r, #FF5733, #FF4500)"
               bgClip="text"
               fontWeight="bold"
-              letterSpacing="3px"
+              letterSpacing={{ base: "2px", md: "3px" }}
             >
               <span style={{ color: currentTitles.line1?.first.color }}>
                 {currentTitles.line1?.first.text}
@@ -152,7 +153,7 @@ const HeroSection: React.FC = () => {
 
         <Text
           mb={4}
-          textAlign={{ base: "center", md: "left" }}
+          textAlign={{ base: "left", md: "left" }}
           fontSize={responsiveStyles.fontSize}
         >
           Browse our exclusive collection of products <br /> from top vendors
@@ -163,10 +164,10 @@ const HeroSection: React.FC = () => {
           as={RouterLink}
           to="/custom-order"
           bg="#FF5733"
-          size="lg"
+          size={{ base: "md", md: "lg" }}
           rounded="full"
-          height={{ base: "50px", md: "60px" }}
-          width={{ base: "200px", md: "250px" }}
+          height={{ base: "40px", sm: "45px", md: "50px", lg: "60px" }}
+          width={{ base: "150px", sm: "180px", md: "200px", lg: "250px" }}
           color="white"
           _hover={{ bg: "#FF4500" }}
         >

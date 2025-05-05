@@ -34,6 +34,7 @@ export const ProductCard: React.FC<{
   showRating?: boolean;
   showBorder?: boolean;
   showStatus?: boolean;
+  showUnitPrice?: boolean;
 }> = ({
   product,
   onAddToCart,
@@ -42,6 +43,7 @@ export const ProductCard: React.FC<{
   showRating = true,
   showBorder = false,
   showStatus = false,
+  showUnitPrice = true,
 }) => {
   const navigate = useNavigate();
   const [isWishlisted, setIsWishlisted] = React.useState(false);
@@ -67,7 +69,11 @@ export const ProductCard: React.FC<{
     if ((e.target as HTMLElement).closest("button")) {
       return;
     }
-    navigate(isAuthenticated ? `/products/${product._id}` : `/vendor-product/${product._id}`);
+    navigate(
+      isAuthenticated
+        ? `/products/${product._id}`
+        : `/vendor-product/${product._id}`
+    );
   };
   return (
     <Box
@@ -134,45 +140,69 @@ export const ProductCard: React.FC<{
           </Box>
         )}
 
-        <Box w="full">
+        <Box w="full" h={{ base: "160px", md: "200px", lg: "240px" }}>
           <Image
             src={product.images?.[0]}
             alt={product.product_name}
-            w="full"
-            h="160px"
-            objectFit="contain"
+            w="100%"
+            h="100%"
+            objectFit={{ base: "contain", md: "contain" }}
           />
         </Box>
 
-        {product.is_discounted &&
-          product.unit_price &&
-          product.discount_price && (
-            <Badge
-              position="absolute"
-              top="4"
-              right="4"
-              bg="red"
-              color="white"
-              rounded="full"
-            >
-              {Math.round(
-                ((product.unit_price - product.discount_price) /
-                  product.unit_price) *
-                  100
-              )}
-              % off
-            </Badge>
-          )}
+        {product.is_discounted && showUnitPrice
+          ? product.unit_price
+          : product.raw_price && (
+              <Badge
+                position="absolute"
+                top={!isAuthenticated ? "10" : "4"}
+                right={!isAuthenticated ? "10" : "4"}
+                bg="red"
+                color="white"
+                rounded="full"
+              >
+                {product.discount_price !== undefined &&
+                product.unit_price !== undefined &&
+                product.raw_price !== undefined
+                  ? Math.round(
+                      (((showUnitPrice
+                        ? product.unit_price
+                        : product.raw_price) -
+                        product.discount_price) /
+                        (showUnitPrice
+                          ? product.unit_price
+                          : product.raw_price)) *
+                        100
+                    ) === 0
+                    ? null
+                    : `${Math.round(
+                        (((showUnitPrice
+                          ? product.unit_price
+                          : product.raw_price) -
+                          product.discount_price) /
+                          (showUnitPrice
+                            ? product.unit_price
+                            : product.raw_price)) *
+                          100
+                      )}% off`
+                  : null}
+              </Badge>
+            )}
       </Flex>
 
       <Box fontFamily="poppins" display="flex" flexDirection="column" flex="1">
         <Flex justify="space-between" align="start">
           <Box>
             <Text fontSize="sm" mb={1}>
-              {product.product_name}
+              {product.product_name ? product.product_name.slice(0, 16) : ''}
+              {product.product_name && product.product_name.length > 16 ? '...' : ''}
             </Text>
-            <HStack spacing={2} mb={2}>
-              <Text fontWeight="500">₦{product.unit_price}</Text>
+            <HStack spacing={2} mb={1}>
+              {showUnitPrice && product.unit_price !== undefined ? (
+                <Text fontWeight="500">₦{product.unit_price}</Text>
+              ) : (
+                <Text fontWeight="500">₦{product.raw_price}</Text>
+              )}
               {product.is_discounted && product.discount_price && (
                 <Text
                   fontSize="sm"
@@ -261,17 +291,42 @@ const BestSelling: React.FC = () => {
   };
   return (
     <Box py={8} px={{ base: 6, md: 16 }}>
-      <Flex justify="space-between" align="center" mb={6}>
-        <Box>
-          <Heading fontSize="30px" mb={2}>
+      <Flex
+        justify="space-between"
+        align="center"
+        mb={6}
+        direction={{ base: "column", md: "row" }}
+        alignItems={{ base: "flex-start", md: "center" }}
+      >
+        <Box mb={{ base: 4, md: 0 }}>
+          <Heading
+            fontSize={{ base: "24px", md: "30px" }}
+            mb={2}
+            textAlign={{ base: "center", md: "left" }}
+          >
             Best Selling
           </Heading>
-          <Text color="gray.600" fontSize="20px" mb={4}>
+          <Text
+            color="gray.600"
+            fontSize={{ base: "16px", md: "20px" }}
+            mb={4}
+            textAlign={{ base: "center", md: "left" }}
+          >
             You have a choice to shop based on categories
           </Text>
         </Box>
-        <Flex gap={5}>
-          <Button onClick={toggleSortOrder} color="#FF5733" variant="ghost">
+        <Flex
+          gap={5}
+          flexDirection="row" 
+          alignItems="center"
+          mt={{ base: 4, md: 0 }}
+        >
+          <Button
+            onClick={toggleSortOrder}
+            color="#FF5733"
+            variant="ghost"
+            width={{ base: "100%", md: "auto" }}
+          >
             {sortOrder === "newest" ? "Newest" : "Oldest"}
           </Button>
           <Button
@@ -283,6 +338,7 @@ const BestSelling: React.FC = () => {
             }
             variant="link"
             color="#FF5733"
+            width={{ base: "100%", md: "auto" }}
           >
             View more
           </Button>
@@ -297,14 +353,16 @@ const BestSelling: React.FC = () => {
           lg: "repeat(4, 1fr)",
         }}
         gap={6}
+        alignItems="stretch"
       >
         {sortedProducts?.slice(0, 20)?.map((product: Product) => (
           <ProductCard
             key={product._id}
             product={product}
             onAddToCart={() => handleAddToCart(product._id ?? "", product)}
+            
           />
-      ))} 
+        ))}
       </Grid>
     </Box>
   );
