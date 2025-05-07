@@ -62,7 +62,7 @@ const EditProduct: React.FC = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setSelectedImages(e.target.files);
+      setSelectedImages(e.target.files); 
       const previews = Array.from(e.target.files).map((file) =>
         URL.createObjectURL(file)
       );
@@ -108,22 +108,14 @@ const EditProduct: React.FC = () => {
       if (discount_price) {
         formData.append("discount_price", String(Number(discount_price)));
       }
-
-      // const totalImages =
-      //   (product?.images?.length || 0) + (selectedImages?.length || 0);
-      // if (totalImages < 2) {
-      //   alert("Product must have at least 2 images total");
-      //   return;
-      // }
-
-      // Append new images if any
+        
       if (selectedImages) {
         Array.from(selectedImages).forEach((file) => {
-          formData.append("images[]", file);
+          formData.append("images", file);
         });
       }
 
-      // Always include existing images
+      
       if (product?.images) {
         product.images.forEach((imageUrl: string) => {
           if (!removedImages.includes(imageUrl)) {

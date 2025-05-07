@@ -331,7 +331,29 @@ export default function ReviewOrder() {
           hasNextPage={customOrdersDataPagination.hasNextPage}
         />
       </Box> */}
-      <Flex justifyContent="center" my={6}>
+      <Flex justifyContent="center" gap={6} my={6}>
+        <Button
+          onClick={() => navigate('/custom-order')}
+          variant="outline"
+          size="md"
+          rounded="14px"
+          width="20%"
+          h="50px"
+          _hover={{
+            bg: "#FF5753",
+            color: "white",
+            borderColor: "#FF5753",
+          }}
+          _active={{
+            bg: "#FF5753",
+            color: "white",
+            borderColor: "#FF5753",
+          }}
+          borderColor="#FF5753"
+          color="#FF5753"
+        >
+          Add More
+        </Button>
         <Button
           onClick={handleSubmitOrders}
           isLoading={isCreatingOrder}
