@@ -25,8 +25,7 @@ const AddProduct: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { useAddNewProduct, isLoading, categories } =
-    useProduct();
+  const { useAddNewProduct, isLoading, categories } = useProduct();
   const category = categories?.data?.data;
   const [isInStock, setIsInStock] = useState(true);
   const [isDiscounted, setIsDiscounted] = useState(false);
@@ -35,7 +34,7 @@ const AddProduct: React.FC = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setSelectedImages(e.target.files); 
+      setSelectedImages(e.target.files);
       const previews = Array.from(e.target.files).map((file) =>
         URL.createObjectURL(file)
       );
