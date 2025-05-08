@@ -25,8 +25,7 @@ const AddProduct: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { useAddNewProduct, isLoading, categories } =
-    useProduct();
+  const { useAddNewProduct, isLoading, categories } = useProduct();
   const category = categories?.data?.data;
   const [isInStock, setIsInStock] = useState(true);
   const [isDiscounted, setIsDiscounted] = useState(false);
@@ -35,14 +34,11 @@ const AddProduct: React.FC = () => {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      if (e.target.files.length > 5) {
-        alert("You can only upload a maximum of 5 images.");
-        return;
-      }
       setSelectedImages(e.target.files);
-      const filesArray = Array.from(e.target.files);
-      const previews = filesArray.map((file) => URL.createObjectURL(file));
-      setImagePreviews(previews);
+      const previews = Array.from(e.target.files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setImagePreviews((prev) => [...prev, ...previews]);
     }
   };
 

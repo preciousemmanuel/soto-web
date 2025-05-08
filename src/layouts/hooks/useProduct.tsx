@@ -422,10 +422,10 @@ export const useProduct = () => {
 
       const response = await apiClient.put<Product>(
         `/product/update/${productId}`,
-        formData
-        // {
-        //   headers: { "Content-Type": "multipart/form-data" },
-        // }
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
       );
       return response.data;
     } catch (error) {
