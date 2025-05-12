@@ -10,7 +10,6 @@ import {
   VStack,
   HStack,
   Text,
-  Icon,
   IconButton,
   Image,
   Select,
@@ -23,7 +22,6 @@ const AddProduct: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm();
   const { useAddNewProduct, isLoading, categories } = useProduct();
   const category = categories?.data?.data;
