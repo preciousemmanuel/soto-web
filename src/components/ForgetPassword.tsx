@@ -19,9 +19,27 @@ import { Link, useNavigate } from "react-router-dom";
 const ForgetPassword = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const navigate = useNavigate();
+  const [canResend, setCanResend] = useState(false);
+  const [timer, setTimer] = useState(60);
   const [otp, setOtp] = useState(["", "", "", ""]);
   const { requestOtp, isSuccesRequest, isSuccessOTP, loading, validateOtp } =
     useAuth();
+
+  useEffect(() => {
+    if (isSuccesRequest) {
+      const countdown = setInterval(() => {
+        setTimer((prev) => {
+          if (prev === 0) {
+            clearInterval(countdown);
+            setCanResend(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(countdown);
+    }
+  }, [isSuccesRequest]);
 
   const handleRequestOtp = async () => {
     await requestOtp({
@@ -34,6 +52,14 @@ const ForgetPassword = () => {
   const handleValidateOTP = async () => {
     await validateOtp({ otp: otpResult, otp_purpose: "CHANGE_PASSWORD" });
     localStorage.setItem("otp", otpResult);
+  };
+
+  const handleResendOtp = async () => {
+    await requestOtp({
+      email_or_phone_number: emailOrPhone,
+    });
+    setCanResend(false);
+    setTimer(60);
   };
 
   useEffect(() => {
@@ -181,6 +207,20 @@ const ForgetPassword = () => {
                 >
                   Continue
                 </Button>
+                <Text mt={2} color="gray.500">
+                  {canResend ? (
+                    <Button
+                      variant="link"
+                      color="#FF5733"
+                      onClick={handleResendOtp}
+                      disabled={!canResend}
+                    >
+                      Resend OTP
+                    </Button>
+                  ) : (
+                    `Resend OTP in ${timer} seconds`
+                  )}
+                </Text>
               </Flex>
             )}
           </Box>

@@ -25,6 +25,7 @@ export default function OtpVerification() {
       otp={otp}
       setOtp={setOtp}
       onClick={handleValidateOTP}
+      onResend={handleValidateOTP}
     />
   );
 }
