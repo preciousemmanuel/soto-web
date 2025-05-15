@@ -3,18 +3,37 @@ import { Text, Icon } from "@chakra-ui/react";
 import { FaGlobe, FaMapMarkerAlt } from "react-icons/fa";
 import AuthImage from "../assets/for.png";
 import OtpInput from "./OtpInupt";
-
+import React, { useState, useEffect } from "react";
 const OtpPage = ({
   loading,
   onClick,
   otp,
   setOtp,
+  onResend,
 }: {
   loading: boolean;
   onClick: () => void;
   otp: any;
   setOtp: (otp: any) => void;
+  onResend: () => void;
 }) => {
+  const [timeLeft, setTimeLeft] = React.useState(60);
+  const [showResend, setShowResend] = useState(false);
+
+  React.useEffect(() => {
+    if (timeLeft > 0) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowResend(true);
+    }
+  }, [timeLeft]);
+
+  const handleResend = () => {
+    setTimeLeft(60);
+    setShowResend(false);
+    onResend();
+  };
   return (
     <Box height="100%">
       <Flex
@@ -98,6 +117,21 @@ const OtpPage = ({
               bg="#FFFBF8"
             >
               <OtpInput otp={otp} setOtp={setOtp} />
+              {showResend ? (
+                <Button
+                  mt={2}
+                  variant="link"
+                  color="#FF5733"
+                  onClick={handleResend}
+                  fontSize={{ base: "sm", md: "md" }}
+                >
+                  Resend OTP
+                </Button>
+              ) : (
+                <Text mt={2} color="gray.500" fontSize={{ base: "sm", md: "md" }}>
+                  Resend OTP in {timeLeft} seconds
+                </Text>
+              )}
               <Button
                 mt={{ base: 4, md: 6 }}
                 w={{ base: "250px", md: "300px" }}
