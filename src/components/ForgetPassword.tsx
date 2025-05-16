@@ -1,14 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Text,
   Input,
   Button,
-  VStack,
   Flex,
-  // Flex,
   Icon,
-  HStack,
 } from "@chakra-ui/react";
 import { useAuth } from "../layouts/hooks/useAuth";
 import { FaGlobe, FaMapMarkerAlt } from "react-icons/fa";
@@ -68,10 +65,6 @@ const ForgetPassword = () => {
     }
   }, [isSuccessOTP]);
 
-  //   {
-  //     "otp":"5205",
-  //     "otp_purpose": "CHANGE_PASSWORD" // CHANGE_PASSWORD | FORGOT_PASSWORD | SIGNUP_COMPLETE | PASSWORD_RESET | ACCOUNT_VALIDATION
-  // }
 
   return (
     <Box height="100%">
