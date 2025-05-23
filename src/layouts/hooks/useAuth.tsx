@@ -10,6 +10,15 @@ export const useAuth = () => {
   const location = useLocation();
   const queryClient = useQueryClient();
 
+  const [isVendor, setIsVendor] = useState(() => {
+    return localStorage.getItem("isVendor") === "true";
+  });
+
+  const setVendorStatus = (status: boolean) => {
+    localStorage.setItem("isVendor", status.toString());
+    setIsVendor(status);
+  };
+
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return !!(
       localStorage.getItem("userToken") || localStorage.getItem("token")
@@ -209,6 +218,7 @@ export const useAuth = () => {
     mutationFn: (payload: { new_password: string; otp: string }) =>
       apiClient.put("/user/reset-password", payload),
     onSuccess: (response) => {
+      
       toast({
         title: `${response?.data?.message}`,
         description:
@@ -217,7 +227,12 @@ export const useAuth = () => {
         duration: 2000,
         isClosable: true,
       });
-      navigate("/auth");
+      if (isVendor) {
+        const origin = "/auth/vendor-login";
+      navigate(origin);
+      } else {
+        navigate("/auth");
+      }
     },
     onError: (error: any) => {
       // console.error("Password reset failed:", error);
@@ -308,6 +323,7 @@ export const useAuth = () => {
   const logout = () => {
     localStorage.removeItem("userToken");
     setIsAuthenticated(false);
+    setIsVendor(false);
     queryClient.clear();
     navigate("/auth");
   };
@@ -315,6 +331,7 @@ export const useAuth = () => {
   const vendorLogout = () => {
     localStorage.removeItem("vendorToken");
     setIsVendorAuthenticated(false);
+    setIsVendor(false);
     queryClient.clear();
     navigate("/auth/vendor-login");
   };
@@ -322,6 +339,7 @@ export const useAuth = () => {
   const switchToUser = () => {
     localStorage.removeItem("vendorToken");
     localStorage.removeItem("cart");
+    setIsVendor(false);
     setIsAuthenticated(false);
     queryClient.clear();
     navigate("/auth");
@@ -330,6 +348,7 @@ export const useAuth = () => {
   const switchToVendor = () => {
     localStorage.removeItem("userToken");
     localStorage.removeItem("cart");
+    setIsVendor(true);
     setIsAuthenticated(false);
     queryClient.clear();
     navigate("/auth/vendor-login");
@@ -340,15 +359,21 @@ export const useAuth = () => {
       localStorage.getItem("userToken") || localStorage.getItem("token");
     if (userToken) {
       setIsAuthenticated(true);
+      setIsVendor(false);
     }
     const vendorToken = localStorage.getItem("vendorToken");
 
-    if (vendorToken) setIsVendorAuthenticated(true);
+    if (vendorToken) {
+      setIsVendorAuthenticated(true);
+      setIsVendor(true);
+    }
   }, []);
 
   return {
     isAuthenticated,
     isVendorAuthenticated,
+    isVendor,
+    setVendorStatus,
     loading:
       loginMutation.isPending ||
       vendorLoginMutation.isPending ||
