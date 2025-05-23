@@ -30,7 +30,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import AuthImage from "../assets/auth.png";
 import Logo from "../assets/soto.svg";
-import { FcGoogle } from "react-icons/fc";
+
 import { useAuth } from "../layouts/hooks/useAuth";
 
 const validationSchema = Yup.object().shape({
@@ -43,7 +43,7 @@ const validationSchema = Yup.object().shape({
 const VendorLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const { vendorLogin, loading } = useAuth();
+  const { vendorLogin, loading, setVendorStatus } = useAuth();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -93,7 +93,9 @@ const VendorLogin = () => {
             <Text>ENG</Text>
           </Flex>
           <RouterLink to="/auth/signup">
-            <Text color="#FF5733" fontWeight="bold" textDecoration="underline">Buy on Soto</Text>
+            <Text color="#FF5733" fontWeight="bold" textDecoration="underline">
+              Buy on Soto
+            </Text>
           </RouterLink>
         </Flex>
       </Flex>
@@ -243,7 +245,11 @@ const VendorLogin = () => {
                   fontSize="sm"
                   mt={2}
                 >
-                  <Link as={RouterLink} to="/auth/forget-password">
+                  <Link
+                    as={RouterLink}
+                    to="/auth/forget-password"
+                    onClick={() => setVendorStatus(true)}
+                  >
                     Forgot password?
                   </Link>
                 </Text>

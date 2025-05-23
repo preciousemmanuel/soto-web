@@ -2,14 +2,14 @@ import { Box, Heading, Text } from "@chakra-ui/react";
 
 export default function Terms() {
   return (
-    <Box mt={40} fontFamily="Poppins">
-      <Box bg="#FF5733" py={30}>
-        <Heading color="#ffff" textAlign="center">
+    <Box mt={{ base: 20, md: 40 }} fontFamily="Poppins">
+      <Box bg="#FF5733" py={{ base: 5, md: 30 }}>
+        <Heading color="#ffff" textAlign="center" fontSize={{ base: "xl", md: "3xl" }}>
           Terms and Conditions
         </Heading>
       </Box>
-      <Box py={14} px={40}>
-        <Text pb={6} lineHeight={8}>
+      <Box py={{ base: 5, md: 14 }} px={{ base: 4, md: 10, lg: 20, xl: 40 }}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           These Terms and Conditions ("Agreement") govern the use of our
           e-commerce platform [Soto Nigeria] which consists of a Website and
           Mobile Application ("marketplace"). These terms and conditions shall
@@ -20,7 +20,7 @@ export default function Terms() {
           Terms carefully before using the Website or Marketplace. If you do not
           agree to these Terms, you may not use the Website or Marketplace.
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>General Terms for Buyers and Vendors </strong>
           <br />
           <strong>Eligibility </strong>
@@ -32,14 +32,14 @@ export default function Terms() {
           necessary permits and legal documentation to sell the products they
           offer.
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>Agreement Binding</strong>
           <br />
           By using the Marketplace, you agree to comply with and be bound by
           these Terms. This applies to both buyers and Vendors, who may also be
           referred to as "users" within this Agreement.
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong> Modifications to Terms</strong>
           <br />
           We reserve the right to modify or update these Terms at any time. Any
@@ -48,7 +48,7 @@ export default function Terms() {
           after changes are posted constitutes your acceptance of the updated
           Terms.
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>Buyer-Specific Terms</strong>
           <br />
           <strong>Account Registration and Security</strong>
@@ -76,7 +76,7 @@ export default function Terms() {
             You may cancel your account on our marketplace by contacting us
           </li>
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>Orders and Payment Processing</strong>
           <li>
             When placing an order, buyers must select products, provide billing
@@ -94,7 +94,7 @@ export default function Terms() {
             and handling fees.
           </li>
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>Order Acceptance and Confirmation</strong>
           <li>
             Once an order is placed, buyers will receive an order acceptance
@@ -107,7 +107,7 @@ export default function Terms() {
             is sent.
           </li>
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>Buyer Responsibilities</strong>
           <li>
             Buyers agree to provide accurate information, respect the rights of
@@ -121,7 +121,7 @@ export default function Terms() {
             justification, or harassing Vendors.
           </li>
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>Seller-Specific Terms</strong>
           <li>Seller-Specific Terms</li>
           You acknowledge and agree that:
@@ -140,7 +140,7 @@ export default function Terms() {
             not be held liable for transaction with the buyer.
           </li>
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>Product Listings</strong>
 
           <li>
@@ -178,7 +178,7 @@ export default function Terms() {
             seller has the right to supply the digital products to the buyer.
           </li>
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>Pricing and Fees</strong>
           <li>
             Vendors are responsible for setting their product prices, which must
@@ -189,7 +189,7 @@ export default function Terms() {
             for using the platform unless otherwise stated.
           </li>
         </Text>
-        <Text pb={6} lineHeight={8}>
+        <Text pb={6} lineHeight={8} fontSize={{ base: "sm", md: "md" }}>
           <strong>Order Fulfillment and Shipping</strong>
           <li>
             <strong>Shipping Timeframe:</strong> Vendors are required to make
