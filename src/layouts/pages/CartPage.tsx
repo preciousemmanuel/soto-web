@@ -236,41 +236,43 @@ const CartPage = () => {
               </>
             );
           })()}
-          <Flex
-            flexDirection="column"
-            gap={[2, 3, 4]}
-            mt={["20px", "25px", "30px"]}
-          >
-            <Button
-              width="full"
-              color="#FF5733"
-              border="2px"
-              borderColor="#FF5733"
-              _hover={{ bg: "#FF5733", color: "#ffff" }}
-              borderRadius="md"
-              variant="outline"
-              h={["44px", "48px", "54px"]}
-              fontSize={["sm", "md", "md"]}
-              onClick={() => {
-                navigate("/product-list");
-              }}
+          {cart.length > 0 && (
+            <Flex
+              flexDirection="column"
+              gap={[2, 3, 4]}
+              mt={["20px", "25px", "30px"]}
             >
-              Continue Shopping
-            </Button>
-            <Button
-              width="full"
-              bg="#FF5733"
-              color="#FFFF"
-              _hover={{ bg: "#FF5733", color: "#ffff" }}
-              borderRadius="md"
-              variant="outline"
-              h={["44px", "48px", "54px"]}
-              fontSize={["sm", "md", "md"]}
-              onClick={() => navigate("/checkout")}
-            >
-              Proceed to Checkout
-            </Button>
-          </Flex>
+              <Button
+                width="full"
+                color="#FF5733"
+                border="2px"
+                borderColor="#FF5733"
+                _hover={{ bg: "#FF5733", color: "#ffff" }}
+                borderRadius="md"
+                variant="outline"
+                h={["44px", "48px", "54px"]}
+                fontSize={["sm", "md", "md"]}
+                onClick={() => {
+                  navigate("/product-list");
+                }}
+              >
+                Continue Shopping
+              </Button>
+              <Button
+                width="full"
+                bg="#FF5733"
+                color="#FFFF"
+                _hover={{ bg: "#FF5733", color: "#ffff" }}
+                borderRadius="md"
+                variant="outline"
+                h={["44px", "48px", "54px"]}
+                fontSize={["sm", "md", "md"]}
+                onClick={() => navigate("/checkout")}
+              >
+                Proceed to Checkout
+              </Button>
+            </Flex>
+          )}
         </Box>
       </Flex>
     </Box>

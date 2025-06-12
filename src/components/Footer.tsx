@@ -119,8 +119,8 @@ const Footer = () => {
             {
               title: "Categories",
               links:
-                Array.isArray(categories?.data?.data) &&
-                categories?.data?.data
+                Array.isArray(categories?.data) &&
+                categories?.data
                   ?.slice(0, 5)
                   .map((category: any, index: any) => ({
                     name: category.name,
