@@ -51,8 +51,8 @@ const CategoriesModal = () => {
           <ModalCloseButton />
           <ModalBody>
             <Flex wrap="wrap" justify="space-between">
-              {Array.isArray(categories?.data?.data) &&
-                categories?.data?.data?.map((category: any, index: any) => (
+              {Array.isArray(categories?.data) &&
+                categories?.data?.map((category: any, index: any) => (
                   <Flex
                     key={category.name}
                     direction="row"
